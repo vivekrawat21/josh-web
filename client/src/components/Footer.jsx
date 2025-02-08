@@ -2,7 +2,7 @@
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 const Footer = () => {
   return (
-    <section className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white text-center p-4 flex flex-col items-center rounded-lg">
+    <section className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white text-center p-4 flex flex-col items-center rounded-lg mb-1">
       <div className=" flex flex-col items-center justify-between text-justify py-2 px-2 md:flex-row">
         <div className="my-2 md:w-7/12 ">
           <h1 className="text-3xl font-bold mb-4">JoshGuru</h1>
