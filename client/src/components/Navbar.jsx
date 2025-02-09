@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaChevronDown, FaBars, FaTimes } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "@fontsource/fugaz-one"; 
 
 const Navbar = () => {
@@ -17,7 +18,7 @@ const Navbar = () => {
    
         <ul className="hidden md:flex items-center space-x-6 pt-2 ml-2 text-gray-900 font-medium text-[16px]">
           <li>
-            <a href="#" className="hover:text-orange-500 transition">About</a>
+            <Link to="/about" className="hover:text-orange-500 transition">About</Link>
           </li>
           <li className="relative group">
             <button className="flex items-center space-x-2 hover:text-orange-500 transition">
@@ -50,12 +51,16 @@ const Navbar = () => {
 
         {!isLogin && (
           <div className="hidden md:flex space-x-4">
-            <button className="px-5 py-2 bg-white text-orange-600 text-base font-semibold rounded-lg shadow-md hover:bg-orange-100 transition">
-              Login
-            </button>
-            <button className="px-5 py-2 bg-orange-600 text-white text-base font-semibold rounded-lg shadow-md hover:bg-orange-700 transition">
-              Sign Up
-            </button>
+            <Link to="/login">
+              <button className="px-5 py-2 bg-white text-orange-600 text-base font-semibold rounded-lg shadow-md hover:bg-orange-100 transition">
+                Login
+              </button>
+            </Link>
+            <Link to="/signup"> 
+              <button className="px-5 py-2 bg-orange-600 text-white text-base font-semibold rounded-lg shadow-md hover:bg-orange-700 transition">
+                Sign Up
+              </button>
+            </Link> 
           </div>
         )}
         <button 
@@ -66,11 +71,9 @@ const Navbar = () => {
         </button>
       </div>
       <div className={`md:hidden flex flex-col bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-5 absolute w-full top-16 left-0 transition-all duration-300 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
-        <a href="#" className="text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition">About</a>
-        <button 
-          className="flex items-center justify-between w-full text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition"
-          onClick={() => setIsCoursesOpen(!isCoursesOpen)}
-        >
+        <Link to="/about" className="text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition">About</Link>
+        <button className="flex items-center justify-between w-full text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition"
+          onClick={() => setIsCoursesOpen(!isCoursesOpen)} >
           Courses <FaChevronDown className={`transition-transform duration-300 ${isCoursesOpen ? "rotate-180" : ""}`} />
         </button>
         
@@ -90,12 +93,16 @@ const Navbar = () => {
         )}
         {!isLogin && (
           <div className="mt-4">
-            <button className="w-full py-2 bg-white text-orange-600 text-lg font-semibold rounded-lg shadow-md hover:bg-orange-100 transition mb-2">
-              Login
-            </button>
-            <button className="w-full py-2 bg-orange-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-orange-700 transition">
-              Sign Up
-            </button>
+            <Link to="/login">
+              <button className="w-full py-2 bg-white text-orange-600 text-lg font-semibold rounded-lg shadow-md hover:bg-orange-100 transition mb-2">
+                Login
+              </button>
+            </Link>
+            <Link to="/signup">
+              <button className="w-full py-2 bg-orange-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-orange-700 transition">
+                Sign Up
+              </button>
+            </Link>
           </div>
         )}
       </div>
