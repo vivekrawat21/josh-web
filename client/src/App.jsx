@@ -6,6 +6,7 @@ import About from './pages/About';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Course from './pages/Course';
+import TopCourses from './pages/TopCourses';
 
 
 function App() {
@@ -14,12 +15,7 @@ function App() {
   <>
    <BrowserRouter basename='/'>
     <Routes>
-      <Route path='/login'
-        element={<Login />}
-      />
-      <Route path='/signup'
-        element={<Signup />}
-      />
+     
       <Route path='/' element={
         <Wrapper>
           <Body />
@@ -28,9 +24,10 @@ function App() {
         <Route>
           <Route path='/' element={<Home />}></Route>
           <Route path='/about' element={<About />}></Route>
-          <Route path='/login' element={<Login />}></Route>
-          <Route path='/course/:id'
-            element={<Course />}/>
+          <Route path='/topcourse/:coursename' element={<TopCourses />}></Route>
+          <Route path='/course/:id' element={<Course />}/>
+          <Route path='/login'element={<Login />}/>
+          <Route path='/signup' element={<Signup />} />
           <Route path='*' element={<div>404</div>}/>
         </Route>
       </Route>
