@@ -49,10 +49,10 @@ const Footer = () => {
         <div className="my-2 text-justify md:my-2">
           <h2 className="text-xl font-bold">Quick Links</h2>
           <ul className="">
-            <li className="hover:underline">About Us</li>
-            <li className="hover:underline">Courses</li>
-            <li className="hover:underline">Join Us</li>
-            <li className="hover:underline">Blogs </li>
+            <li className="hover:underline cursor-pointer">About Us</li>
+            <li className="hover:underline cursor-pointer">Courses</li>
+            <li className="hover:underline cursor-pointer">Join Us</li>
+            <li className="hover:underline cursor-pointer">Blogs </li>
           </ul>
         </div>
         <div className="my-2 text-justify md:my-2">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaChevronDown, FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "@fontsource/fugaz-one";
+import { FaCartShopping } from "react-icons/fa6";
 
 const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -12,9 +13,11 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 mx-auto w-[94%] backdrop-blur-md bg-white/40 shadow-xl p-4 rounded-xl z-50 transition-all duration-300">
       <div className="relative flex justify-between items-center font-['Fugaz One']">
         <div className="flex items-center space-x-10">
+          <Link to="/">
           <span className="bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent text-3xl font-extrabold">
             Logo
           </span>
+          </Link>
    
         <ul className="hidden md:flex items-center space-x-6 pt-2 ml-2 text-gray-900 font-medium text-[16px]">
           <li>
@@ -48,8 +51,11 @@ const Navbar = () => {
           </li>
         </ul>
         </div>
-
-        {!isLogin && (
+        <div className="flex items-center space-x-6">
+          <Link to={"/cart"}>
+          <FaCartShopping className="text-3xl text-gray-900" />
+          </Link>
+          {!isLogin && (
           <div className="hidden md:flex space-x-4">
             <Link to="/login">
               <button className="px-5 py-2 bg-white text-orange-600 text-base font-semibold rounded-lg shadow-md hover:bg-orange-100 transition">
@@ -69,6 +75,9 @@ const Navbar = () => {
         >
           {isMenuOpen ? <FaTimes /> : <FaBars />}
         </button>
+        </div>
+        
+        
       </div>
       <div className={`md:hidden flex flex-col bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-5 absolute w-full top-16 left-0 transition-all duration-300 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
 

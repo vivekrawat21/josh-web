@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Course from './pages/Course';
 import TopCourses from './pages/TopCourses';
+import Cart from './pages/Cart';
 
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
           <Route path='/course/:id' element={<Course />}/>
           <Route path='/login'element={<Login />}/>
           <Route path='/signup' element={<Signup />} />
+          <Route path='/cart' element={<Cart />} />
+
           <Route path='*' element={<div>404</div>}/>
         </Route>
       </Route>
