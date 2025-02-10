@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { FaChevronDown, FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import "@fontsource/fugaz-one"; 
-import { Link } from "react-router-dom";
+import "@fontsource/fugaz-one";
 
 const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
