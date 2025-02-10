@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaChevronDown, FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "@fontsource/fugaz-one"; 
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -71,6 +72,7 @@ const Navbar = () => {
         </button>
       </div>
       <div className={`md:hidden flex flex-col bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-5 absolute w-full top-16 left-0 transition-all duration-300 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
+
         <Link to="/about" className="text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition">About</Link>
         <button className="flex items-center justify-between w-full text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition"
           onClick={() => setIsCoursesOpen(!isCoursesOpen)} >
