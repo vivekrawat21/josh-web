@@ -53,7 +53,10 @@ const Navbar = () => {
         </div>
         <div className="flex items-center space-x-6">
           <Link to={"/cart"}>
-          <FaCartShopping className="text-3xl text-gray-900" />
+          {/* <FaCartShopping className="text-3xl bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent" /> */}
+          <img src="/shopping-cart.png" alt="Shopping cart"
+          className="w-8 " />
+
           </Link>
           {!isLogin && (
           <div className="hidden md:flex space-x-4">

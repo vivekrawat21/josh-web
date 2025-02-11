@@ -45,7 +45,8 @@ const Cart = () => {
         
         <div>
           {cartItems.map((item) => (
-            <div key={item.id} className="flex items-center justify-between py-4 font-semibold">
+            <div key={item.id} >
+            <div className="flex items-center justify-between py-4 font-semibold">
               <div className="flex items-center">
                 {/* First div: Image placeholder */}
                 <div className="w-20 h-20 bg-gray-300 rounded-lg"></div>
@@ -60,10 +61,12 @@ const Cart = () => {
               {/* Third div: Price and Delete button */}
               <div className="flex items-center space-x-4">
                 <p>${item.price}</p>
-                <button className="bg-red-600 p-2 rounded-md text-white">
-                  <MdDelete />
+                <button className="bg-red-600 p-4 rounded-md text-white cursor-pointer">
+                  <MdDelete className=" md:w-4 md:h-4"/>
                 </button>
               </div>
+            </div>
+            <hr />
             </div>
           ))}
         </div>
