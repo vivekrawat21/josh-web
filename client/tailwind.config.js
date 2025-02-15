@@ -51,9 +51,18 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			}
-  		}
+  		},
+		animation:{
+			"loop-scroll": "loop-scroll 30s linear infinite",
+		},
+		keyframes:{
+			"loop-scroll": {
+				from: { transform: "translateX(0)" },
+				to: { transform: "translateX(-100%)" }
+		}
   	}
   },
+},
   plugins: [
       require("tailwindcss-animate")
 ],
