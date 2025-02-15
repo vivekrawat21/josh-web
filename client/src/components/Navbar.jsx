@@ -35,8 +35,12 @@ const Navbar = () => {
                 <div>
                   <h4 className="font-semibold text-gray-700 mb-2">Top Courses</h4>
                   <ul className="space-y-2 text-gray-800">
+                    <Link to="/topcourse/fullstack">
                     <li className="hover:text-orange-500 transition cursor-pointer">Full Stack Development</li>
+                    </Link>
+                    <Link to="/topcourse/digitalmarketing">
                     <li className="hover:text-orange-500 transition cursor-pointer">Digital Marketing</li>
+                    </Link>
                   </ul>
                 </div>
                 <div>
@@ -94,8 +98,8 @@ const Navbar = () => {
           <div className="bg-white p-3 mt-2 rounded-lg shadow">
             <h4 className="text-orange-600 font-bold border-b pb-2">Top Courses</h4>
             <ul className="space-y-2 text-gray-800 mt-2">
-              <li className="hover:text-orange-500 transition cursor-pointer">Full Stack Development</li>
-              <li className="hover:text-orange-500 transition cursor-pointer">Digital Marketing</li>
+             <Link to="/topcourse/fullstack"><li className="hover:text-orange-500 transition cursor-pointer">Full Stack Development</li></Link> 
+             <Link to="/topcourse/digitalmarketing"> <li className="hover:text-orange-500 transition cursor-pointer">Digital Marketing</li></Link>
             </ul>
             <h4 className="text-orange-600 font-bold border-b pb-2 mt-4">Other Courses</h4>
             <ul className="space-y-2 text-gray-800 mt-2">

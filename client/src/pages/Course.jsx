@@ -1,22 +1,8 @@
-import { useState } from "react";
 import { FaCertificate, FaInfinity, FaShoppingCart, FaBook, FaLaptopCode, FaRegClock } from "react-icons/fa";
-import AccordionItem from "../components/Accordian";
+import FAQ from "../components/FAQ";
 
 const Course = () => {
    
-  const faqData = [
-    { id: 1, title: "What is the duration of the course?",content: "The course duration is 6 weeks." },
-    { id: 2, title: "What is the refund policy?", content: "You can request a refund within 7 days of purchase." },
-    { id: 3, title: "Is there a certificate provided?",  content: "Yes, a certificate of completion is provided." }
-  ];
-
-  const [faqOpen, setFaqOpen] = useState(null);
-
-  const toggleFAQ = (index) => {
-    setFaqOpen(faqOpen === index ? null : index);
-  };
-
-
 
   return (
     <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -87,18 +73,8 @@ const Course = () => {
       </div>
 
       {/* FAQ Section */}
-      <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-900">Frequently Asked Questions</h2>
-        <div className="space-y-4">
-          {faqData.map((faq, index) => (
-            <AccordionItem key={faq.id} 
-            title={faq.title}
-            isOpen={faqOpen === index}
-            child={faq.content}
-            onClick= {() => toggleFAQ(index)}
-            />
-          ))}
-        </div>
+      <div className="lg:col-span-2 bg-white p-6 ">
+      <FAQ/>
       </div>
 
       {/* Instructor Section */}
