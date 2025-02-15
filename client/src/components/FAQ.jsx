@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { FaChevronDown } from "react-icons/fa";
 
 const faqs = [
   {
@@ -28,35 +30,47 @@ const faqs = [
     answer:
       "You can ask questions anytime in our community forum or during dedicated doubt-clearing sessions with mentors.",
   },
-]
+];
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold mb-12">Frequently Asked Questions</h2>
-        <div className="max-w-3xl  space-y-4">
+    <section className="py-10">
+      <div className="container mx-auto px-4 max-w-3xl">
+        <h2 className="text-3xl font-bold text-orange-600 text-center mb-8">Frequently Asked Questions</h2>
+        <div className="space-y-3">
           {faqs.map((faq, index) => (
-            <div key={index} className="border border-orange-200 rounded-lg overflow-hidden">
+            <motion.div
+              key={index}
+              className="border border-orange-200 rounded-lg overflow-hidden bg-white shadow-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+            >
               <button
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-orange-50"
+                className="w-full px-5 py-3 text-left flex items-center justify-between hover:bg-orange-100 transition-all"
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
-                <span className="font-medium">{faq.question}</span>
-                <span className="text-2xl text-orange-600">{openIndex === index ? "−" : "+"}</span>
+                <span className="font-medium text-gray-800">{faq.question}</span>
+                <motion.span animate={{ rotate: openIndex === index ? 180 : 0 }}>
+                  <FaChevronDown className="text-orange-600" />
+                </motion.span>
               </button>
-              {openIndex === index && (
-                <div className="px-6 py-4 bg-orange-50/50">
-                  <p className="text-gray-600">{faq.answer}</p>
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={openIndex === index ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
+              >
+                <div className="px-5 py-3 text-gray-600">
+                  <p>{faq.answer}</p>
                 </div>
-              )}
-            </div>
+              </motion.div>
+            </motion.div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
-

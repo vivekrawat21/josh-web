@@ -25,6 +25,7 @@ const FullStack = () => {
           <Mentor />
           <Certificate />
           <Bonuses />
+  
         </main>
       )
     }
