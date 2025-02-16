@@ -70,7 +70,7 @@ const About = () => {
           </div>
           <div className="text-sm md:text-base lg:text-lg text-gray-700 md:w-1/2">
             <p className="leading-relaxed text-justify">
-            At JoshGuru, we believe that education is the key to unlocking
+            At JoshGuru,"Masters Of Education Online", "Education Degrees" ,we believe that education is the key to unlocking
             opportunities and achieving success. Our platform offers a range of
             courses in technology, business, and design, providing learners with
             the skills they need to thrive in the digital world. We are
@@ -78,7 +78,7 @@ const About = () => {
             experience that is accessible to all, connecting students with
             top-notch instructors and industry professionals. Whether you are
             looking to start a new career, enhance your skills, or pursue a
-            passion, JoshGuru is here to help you reach your goals.
+            passion, JoshGuru is here to help you reach your goals, "General Education Requirements".
             </p>
           </div>
         </div>
@@ -97,7 +97,7 @@ const About = () => {
               gain valuable insights into current industry practices. By
               fostering critical thinking, creativity, and problem-solving
               skills, we empower learners to adapt to evolving environments and
-              prepare them for the future of work.
+              prepare them for the future of work. "Executive Education"
             </p>
           </div>
         </div>
