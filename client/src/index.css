@@ -58,6 +58,11 @@
     --chart-5: 340 75% 55%
   }
 }
+@layer utilities{
+  .paused{
+    animation-play-state:paused;
+  }
+}
 @layer base {
   * {
     @apply border-border;
