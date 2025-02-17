@@ -38,7 +38,7 @@ export default function FAQ() {
   return (
     <section className="py-10">
       <div className="container mx-auto px-4 max-w-3xl">
-        <h2 className="text-3xl font-bold text-orange-600 text-center mb-8">Frequently Asked Questions</h2>
+      <h2 className="text-4xl font-semibold text-center mb-12 text-gray-900">Frequenly <span className='text-4xl text-orange-500 font-semibold font-sans'>Asked Questions</span></h2>
         <div className="space-y-3">
           {faqs.map((faq, index) => (
             <motion.div

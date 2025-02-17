@@ -42,20 +42,20 @@ const Partner = () => {
   return (
     <>
       <div className="my-20">
-        <h2 className="text-3xl font-bold text-orange-600 text-center">Our Partners</h2>
-        <div className="relative flex space-x-16 overflow-hidden rounded-lg my-6 bg-orange-50">
+      <h2 className="text-4xl font-semibold text-center mb-12 text-gray-900">Our <span className='text-4xl text-orange-500 font-semibold font-sans'>Partners</span></h2>
+        <div className="relative flex space-x-16 overflow-hidden rounded-lg my-6  group">
           {/* Left blurred gradient */}
-          <div className="absolute inset-y-0 left-0 w-16 z-10 bg-gradient-to-r from-white via-white to-transparent blur-5xl pointer-events-none"></div>
+          <div className="absolute inset-y-0 left-0 w-16 z-10 bg-gradient-to-r from-white via-white to-transparent blur-5xl pointer-events-none "></div>
 
           {/* Scrolling content */}
-          <div className='flex space-x-16 animate-loop-scroll h-24 my-6'>
+          <div className='flex space-x-16 animate-loop-scroll h-28 my-4 group-hover:paused'>
             {partners.map((partner) => (
               <img src={partner.image} alt={partner.name} key={partner.id} className="w-16 h-16 md:w-24 md:h-24 mx-16 max-w-32 object-contain" />
             ))}
           </div>
 
           {/* Duplicate scrolling content */}
-          <div className='flex space-x-16 animate-loop-scroll my-6' aria-hidden="true">
+          <div className='flex space-x-16 animate-loop-scroll my-6 group-hover:paused ' aria-hidden="true">
             {partners.map((partner) => (
               <img src={partner.image} alt={partner.name} key={partner.id} className="w-16 h-16 md:w-24 md:h-24 mx-8 max-w-32 object-contain" />
             ))}
