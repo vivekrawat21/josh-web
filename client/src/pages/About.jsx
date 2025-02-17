@@ -1,6 +1,5 @@
 // Vite + React with Framer Motion for Animations
 
-import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const About = () => {
@@ -31,6 +30,7 @@ const About = () => {
   return (
     <section className='py-16 px-8 bg-gradient-to-b from-gray-50 to-white'>
       <div className='flex flex-col items-center justify-center gap-16'>
+        
         {/* About Section */}
         <motion.div
           className='w-full max-w-6xl'
@@ -47,13 +47,13 @@ const About = () => {
 
         {/* About section text */}
         <motion.div
-          className='text-justify text-base md:text-lg lg:text-xl mt-6 '
+          className='text-justify text-base md:text-lg lg:text-xl mt-6'
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
           <p className='leading-relaxed text-gray-600'>
-            Our Founder and CEO is a visionary leader with a passion for education and technology. With a background in computer science and years of experience in the tech industry, he saw the need for a platform that would provide high-quality education to learners around the world. He founded JoshGuru with the goal of making learning accessible and engaging, empowering students to achieve their dreams and build a better future.
+            Our Founder and CEO is "Masters Of Online Education",a visionary leader with a passion for education and technology. With a background in computer science and years of experience in the tech industry, he saw the need for a platform that would provide high-quality education to learners around the world. He founded JoshGuru with the goal of making learning accessible and engaging, empowering students to achieve their dreams and build a better future.
           </p>
         </motion.div>
 
@@ -74,35 +74,37 @@ const About = () => {
               />
             </div>
           </motion.div>
-          <motion.div
-            className='text-sm md:text-base lg:text-lg text-gray-700 md:w-1/2'
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <p className='leading-relaxed text-justify'>
-              At JoshGuru, we believe that education is the key to unlocking opportunities and achieving success. Our platform offers a range of courses in technology, business, and design, providing learners with the skills they need to thrive in the digital world.
+          <div className="text-sm md:text-base lg:text-lg text-gray-700 md:w-1/2">
+            <p className="leading-relaxed text-justify">
+              At JoshGuru,"Executive Education","Education Degrees" ,we believe that education is the key to unlocking opportunities and achieving success. Our platform offers "Education Online" a range of courses in technology, business, and design, providing 'Masters Of Education" learners with the skills they need to thrive in the digital world. We are committed to creating an engaging and interactive learning experience that is accessible to all, connecting students with top-notch instructors and industry professionals. Whether you are looking to start a new career, enhance your skills, or pursue a passion, JoshGuru is here to help you reach your goals.
             </p>
-          </motion.div>
+          </div>
         </div>
 
         {/* Mission Section */}
+        <motion.div
+          className="w-full max-w-6xl text-center"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2 className="text-2xl md:text-3xl lg:text-4xl text-orange-500 font-bold mb-6">
+            Our Mission
+          </h2>
+          <div className="text-sm md:text-base lg:text-lg text-gray-700">
+            <p className="leading-relaxed text-justify">
+              Our mission is to provide accessible, high-quality education that meets industry standards and prepares learners for real-world challenges. We focus on delivering practical, hands-on learning experiences through the guidance of top mentors, ensuring students gain valuable insights into current industry practices. By fostering critical thinking, creativity, and problem-solving skills, we empower learners to adapt to evolving environments and prepare them for the future of work with "General Education Requirements ".
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Team Section */}
         <motion.div
           className='w-full max-w-6xl text-center'
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className='text-3xl md:text-4xl lg:text-5xl text-orange-500 font-bold mb-8'>Our Mission</h2>
-          <div className='text-sm md:text-base lg:text-lg text-gray-700 bg-white p-8 rounded-lg shadow-xl'>
-            <p className='leading-relaxed text-justify'>
-              Our mission is to provide accessible, high-quality education that meets industry standards and prepares learners for real-world challenges. We focus on delivering practical, hands-on learning experiences through the guidance of top mentors, ensuring students gain valuable insights into current industry practices.
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Team Section */}
-        <div className='w-full max-w-6xl text-center'>
           <h2 className='text-3xl md:text-4xl lg:text-5xl text-orange-500 font-bold mb-12'>Meet Our Team</h2>
           <div className='grid grid-cols-1 gap-12 md:grid-cols-3'>
             {teamMembers.map((member, index) => (
@@ -116,7 +118,7 @@ const About = () => {
                 <img
                   src={member.imageUrl || '/placeholder.svg'}
                   alt={member.name}
-                  className='w-48 h-48 mx-auto  mb-6 rounded-full'
+                  className='w-48 h-48 mx-auto mb-6 rounded-full'
                 />
                 <h2 className='text-xl md:text-2xl font-bold text-gray-800 mb-2'>{member.name}</h2>
                 <p className='text-orange-500 font-semibold mb-4'>{member.role}</p>
@@ -124,10 +126,11 @@ const About = () => {
               </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 };
 
 export default About;
+
