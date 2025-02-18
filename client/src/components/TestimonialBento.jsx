@@ -49,8 +49,8 @@ const testimonials = [
 
 const TestimonialBento = () => {
   return (
-    <div className="p-6 md:p-10 bg-orange-50 min-h-screen">
-      <h2 className="text-4xl font-semibold text-center mb-12 text-gray-900">Students <span className='text-4xl text-orange-500 font-semibold font-sans'>Testimonials</span></h2>
+    <div className="p-6 md:p-10 bg-orange-50 rounded-2xl shadow-lg ">
+      <h2 className="text-[2.70rem] font-semibold text-center mb-5 text-gray-900">Students <span className='text-[2.70rem] text-orange-500 font-semibold font-sans'>Testimonials</span></h2>
       <div className="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {testimonials.map((testimonial, index) => (
           <motion.div

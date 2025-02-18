@@ -52,9 +52,9 @@ export default function TopMentors() {
   }, []);
 
   return (
-    <section className="py-16 px-10 w-full mx-auto text-center relative overflow-hidden my-16">
-      <h2 className="text-4xl font-semibold text-center mb-12 text-gray-900">
-        Meet <span className="text-4xl text-orange-500 font-semibold font-sans">Top Mentors</span>
+    <section className="py-16 px-10 w-full mx-auto text-center relative overflow-hidden my-14">
+      <h2 className="text-[2.70rem] font-semibold text-center mb-5 text-gray-900">
+        Meet <span className="text-[2.70rem] text-orange-500 font-semibold font-sans">Top Mentors</span>
       </h2>
       <div className="relative flex items-center justify-center w-full">
         {/* Left Arrow */}
