@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaTwitter, FaThreads, FaTelegram } from "react-icons/fa6";
 
 const Footer = () => {
@@ -27,39 +28,39 @@ const Footer = () => {
           <h2 className="text-xl font-bold text-justify">Social Links</h2>
           <ul className="flex flex-wrap justify-center md:justify-start gap-4 text-2xl my-4">
             <li>
-              <a href="https://www.instagram.com/joshguru.in?igsh=Nnd5aXVxejlqbnA4" target="_blank" rel="noopener noreferrer">
+              <Link to="https://www.instagram.com/joshguru.in?igsh=Nnd5aXVxejlqbnA4" target="_blank">
                 <FaInstagram className="transition-transform duration-300 hover:-translate-y-2" />
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="https://www.facebook.com/share/18GRUQxohy/" target="_blank" rel="noopener noreferrer">
+              <Link to="https://www.facebook.com/share/18GRUQxohy/" target="_blank">
                 <FaFacebook className="transition-transform duration-300 hover:-translate-y-2" />
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="https://www.linkedin.com/company/joshguru/" target="_blank" rel="noopener noreferrer">
+              <Link to="https://www.linkedin.com/company/joshguru/" target="_blank">
                 <FaLinkedin className="transition-transform duration-300 hover:-translate-y-2" />
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="https://youtube.com/@joshguruofficial?si=ZJ9JV4GK9wIN1ZLg" target="_blank" rel="noopener noreferrer">
+              <Link to="https://youtube.com/@joshguruofficial?si=ZJ9JV4GK9wIN1ZLg" target="_blank">
                 <FaYoutube className="transition-transform duration-300 hover:-translate-y-2" />
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="https://x.com/JoshguruOffice?t=a33I7drosaWUg6z8SDrnuA&s=09" target="_blank" rel="noopener noreferrer">
+              <Link to="https://x.com/JoshguruOffice?t=a33I7drosaWUg6z8SDrnuA&s=09" target="_blank">
                 <FaTwitter className="transition-transform duration-300 hover:-translate-y-2" />
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="https://www.threads.net/@joshguru.in" target="_blank" rel="noopener noreferrer">
+              <Link to="https://www.threads.net/@joshguru.in" target="_blank">
                 <FaThreads className="transition-transform duration-300 hover:-translate-y-2" />
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="https://t.me/JoshguruEducation" target="_blank" rel="noopener noreferrer">
+              <Link to="https://t.me/JoshguruEducation" target="_blank">
                 <FaTelegram className="transition-transform duration-300 hover:-translate-y-2" />
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -68,10 +69,18 @@ const Footer = () => {
         <div className="my-2 text-justify md:my-2">
           <h2 className="text-xl font-bold">Quick Links</h2>
           <ul>
-            <li className="hover:underline cursor-pointer">About Us</li>
-            <li className="hover:underline cursor-pointer">Courses</li>
-            <li className="hover:underline cursor-pointer">Join Us</li>
-            <li className="hover:underline cursor-pointer">Blogs</li>
+            <li className="hover:underline cursor-pointer">
+              <Link to="/about">About Us</Link>
+            </li>
+            <li className="hover:underline cursor-pointer">
+              <Link to="/courses">Courses</Link>
+            </li>
+            <li className="hover:underline cursor-pointer">
+              <Link to="/join">Join Us</Link>
+            </li>
+            <li className="hover:underline cursor-pointer">
+              <Link to="/blogs">Blogs</Link>
+            </li>
           </ul>
         </div>
 
@@ -79,10 +88,18 @@ const Footer = () => {
         <div className="my-2 text-justify md:my-2">
           <h2 className="text-xl font-bold">Support</h2>
           <ul>
-            <li className="hover:underline"><a href="#">Contact Us</a></li>
-            <li className="hover:underline"><a href="#">Disclaimer</a></li>
-            <li className="hover:underline"><a href="#">Refund Policy</a></li>
-            <li className="hover:underline"><a href="#">License And Agreements</a></li>
+            <li className="hover:underline">
+              <Link to="/contact">Contact Us</Link>
+            </li>
+            <li className="hover:underline">
+              <Link to="/disclaimer">Disclaimer</Link>
+            </li>
+            <li className="hover:underline">
+              <Link to="/refund-policy">Refund Policy</Link>
+            </li>
+            <li className="hover:underline">
+              <Link to="/license">License And Agreements</Link>
+            </li>
           </ul>
         </div>
       </div>
@@ -95,7 +112,9 @@ const Footer = () => {
           <h2 className="text-xl font-bold">JoshGuru</h2>
         </div>
         <div>All Rights Reserved &#169; 2025 | JoshGuru Private Limited</div>
-        <a href="#" className="hover:underline">Terms & Conditions</a>
+        <Link to="/terms" className="hover:underline">
+          Terms & Conditions
+        </Link>
       </div>
     </section>
   );
