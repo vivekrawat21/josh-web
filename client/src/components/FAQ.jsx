@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -38,7 +38,34 @@ export default function FAQ() {
   return (
     <section className="py-10">
       <div className="container mx-auto px-4 max-w-3xl">
-      <h2 className="text-4xl font-semibold text-center mb-12 text-gray-900">Frequenly <span className='text-4xl text-orange-500 font-semibold font-sans'>Asked Questions</span></h2>
+        <h2 className="text-[2.70rem] font-semibold text-center mb-8 text-gray-900 relative inline-block ">
+          Frequently{" "}
+          <span className="text-[2.70rem] text-orange-500 font-semibold font-sans relative inline-block">
+            Asked Questions
+            {/* Swiggly Underline */}
+            <svg
+              className="absolute left-1/2 -bottom-4 transform -translate-x-1/2 w-[120%] h-6"
+              viewBox="0 0 220 30"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2 15 C50 40, 170 -10, 218 15"
+                stroke="url(#gradient)"
+                strokeWidth="6"
+                strokeLinecap="round"
+                fill="none"
+              />
+              <defs>
+                <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#FF9800" />
+                  <stop offset="100%" stopColor="#FF5722" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </span>
+        </h2>
+
         <div className="space-y-3">
           {faqs.map((faq, index) => (
             <motion.div
