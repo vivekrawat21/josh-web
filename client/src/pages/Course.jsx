@@ -88,7 +88,7 @@ const Course = () => {
       <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md mt-8 mb-20">
         <h2 className="text-2xl font-semibold mb-4 text-gray-900">Meet Your Instructor</h2>
         <div className="flex items-center gap-6 ">
-          <img src="/instructor.jpg" alt="Instructor" className="w-24 h-24 rounded-full shadow-md" />
+          <img src="/founder.jpeg" alt="Instructor" className="w-24 h-24 rounded-full shadow-md" />
           <p className="text-gray-700 text-md leading-relaxed font-serif">John Doe, an industry expert with over 10 years of experience, has trained thousands of students worldwide. His passion for teaching and deep understanding of the subject make learning engaging and insightful.</p>
         </div>
       </div>
