@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaChevronDown, FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "@fontsource/fugaz-one";
-import { FaCartShopping } from "react-icons/fa6";
+
 import { useLocation } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 
@@ -18,9 +18,9 @@ const Navbar = () => {
       <div className="relative flex justify-between items-center font-['Fugaz One']">
         <div className="flex items-center space-x-10">
           <Link to="/">
-            <span className="bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent text-3xl font-extrabold">
-              <img src="/logo1.png"  alt="Logo" className="w-[50px]" />
-            </span>
+           
+              <img src="/logo1.png"  alt="Logo" className="w-[60px]" />
+            
           </Link>
 
           <ul className="hidden md:flex items-center space-x-6 pt-2 ml-2 text-gray-900 font-medium text-[16px]">
@@ -81,7 +81,7 @@ const Navbar = () => {
             <img
               src="/shopping-cart.png"
               alt="Shopping cart"
-              className="w-8 "
+              className="w-7 "
             />
           </Link>
           {currentRoute.startsWith("/dashboard") ? (
