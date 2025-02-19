@@ -53,7 +53,16 @@ const About = () => {
           transition={{ duration: 0.8 }}
         >
           <p className='leading-relaxed text-gray-600'>
-            Our Founder and CEO is "Masters Of Online Education",a visionary leader with a passion for education and technology. With a background in computer science and years of experience in the tech industry, he saw the need for a platform that would provide high-quality education to learners around the world. He founded JoshGuru with the goal of making learning accessible and engaging, empowering students to achieve their dreams and build a better future.
+          
+
+          Joshguru is an Ed-Tech Platform that Provides Skills development program to all youth in India.
+            Joshguru has various types of courses available for Skills enhancement like Public Speaking,
+            Personality Development, English Speaking, Communication Skills, Preparation for Interviews,
+            Attraction Marketing, MS Excel, Social Media Mastery, Website Designing, Graphic Designing,
+            Finance Mastery, Artificial Intelligence mastery, Stock Market, etc.
+            Joshguru also provide you an Opportunity to become an Affiliates with Joshguru and Earn
+            Commission on the promotion of Courses available on Joshguru.in
+
           </p>
         </motion.div>
 
@@ -76,7 +85,10 @@ const About = () => {
           </motion.div>
           <div className="text-sm md:text-base lg:text-lg text-gray-700 md:w-1/2">
             <p className="leading-relaxed text-justify">
-              At JoshGuru,"Executive Education","Education Degrees" ,we believe that education is the key to unlocking opportunities and achieving success. Our platform offers "Education Online" a range of courses in technology, business, and design, providing 'Masters Of Education" learners with the skills they need to thrive in the digital world. We are committed to creating an engaging and interactive learning experience that is accessible to all, connecting students with top-notch instructors and industry professionals. Whether you are looking to start a new career, enhance your skills, or pursue a passion, JoshGuru is here to help you reach your goals.
+            Kamal Joshi is The Founder, Managing Director of'Joshguru Pvt Ltd’. He has 10 year of experience in
+          marketing industry. He is a professional networker and marketing expert who built his career in marketing industry last 11 Years and direct selling
+          industry which he entered at a young age of 24 in 2017. He created history by touching the heights of success and by supporting youth in becoming
+          successful.
             </p>
           </div>
         </div>
@@ -93,7 +105,10 @@ const About = () => {
           </h2>
           <div className="text-sm md:text-base lg:text-lg text-gray-700">
             <p className="leading-relaxed text-justify">
-              Our mission is to provide accessible, high-quality education that meets industry standards and prepares learners for real-world challenges. We focus on delivering practical, hands-on learning experiences through the guidance of top mentors, ensuring students gain valuable insights into current industry practices. By fostering critical thinking, creativity, and problem-solving skills, we empower learners to adapt to evolving environments and prepare them for the future of work with "General Education Requirements ".
+            Joshguru’s MISSION is to provide skills development education to youth in every village and corner of India. Joshguru will help all capableyouth to change their skills,
+            their presence of mind and the lives of their families . Our VISION is to make more and more youth
+            independent so that theydo not bother for jobs after 12th, and can live
+            their life in a better way ,"General Education Requirements ".
             </p>
           </div>
         </motion.div>

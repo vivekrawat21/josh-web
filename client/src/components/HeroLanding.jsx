@@ -17,7 +17,13 @@ const HeroLanding = () => {
           Welcome to JoshGuru
         </h1>
         <p className=" text-lg md:text-base lg:text-lg text-gray-700 leading-relaxed text-justify mb-6">
-          JoshGuru is one of the leading education platforms offering a wide range of courses at competitive prices. Learn anytime, anywhere, and explore courses tailored to your needs. We specialize in Web Development and Digital Marketing, empowering you with the skills to excel in the digital world.
+        Joshguru is an Ed-Tech Platform that Provides Skills development program to all youth in India.
+        Joshguru has various types of courses available for Skills enhancement like Public Speaking,
+        Personality Development, English Speaking, Communication Skills, Preparation for Interviews,
+        Attraction Marketing, MS Excel, Social Media Mastery, Website Designing, Graphic Designing,
+        Finance Mastery, Artificial Intelligence mastery, Stock Market, etc.
+        Joshguru also provide you an Opportunity to become an Affiliates with Joshguru and Earn
+        Commission on the promotion of Courses available on Joshguru.in
         </p>
         <button className="bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg px-4  md:px-6 md:py-1 font-semibold text-lg md:text-lg text-white hover:shadow-md my-4">
           Get Started
