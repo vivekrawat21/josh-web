@@ -1,4 +1,4 @@
-import { FaCertificate, FaInfinity, FaShoppingCart, FaBook, FaLaptopCode, FaRegClock } from "react-icons/fa";
+import { FaCertificate, FaInfinity, FaShoppingCart, FaBook, FaLaptopCode, FaRegClock, FaRegBell, FaRegArrowAltCircleRight } from "react-icons/fa";
 import FAQ from "../components/FAQ";
 
 const Course = () => {
@@ -8,7 +8,7 @@ const Course = () => {
     <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Main Content */}
       <div className="lg:col-span-2">
-        <h1 className="text-4xl font-bold mb-6 text-gray-900">Course Name</h1>
+        <h1 className="text-4xl font-bold mb-6 text-gray-900">Personality Development</h1>
         
         {/* Video Section */}
         <div className="mb-8 relative">
@@ -22,17 +22,24 @@ const Course = () => {
         
         {/* About the Course */}
         <div className="mb-8 bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-3 text-gray-900">About the Course</h2>
-          <p className="text-gray-700 text-lg">This course provides in-depth knowledge of XYZ, covering fundamental and advanced topics with hands-on experience and practical skills.</p>
+          <h2 className="text-2xl font-semibold mb-3 text-gray-900">What IsPersonality Development ?</h2>
+          <p className="text-gray-700 text-lg">Personality development is a multifaceted process
+                                              encompassing various aspects of an individual's life.
+                                              From social skills to emotional intelligence, every facet
+                                              plays a crucial role in shaping who we are. It's
+                                              essential to recognize that personal growth is an
+                                              ongoing journey, and embracing change is key.</p>
         </div>
 
         {/* What You Get/Learn */}
         <div className="mb-8 bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-3 text-gray-900">What You'll Learn</h2>
+          <h2 className="text-2xl font-semibold mb-3 text-gray-900">What you’ll Learn from us:</h2>
           <ul className="space-y-3 text-gray-700 text-lg">
-            <li className="flex items-center gap-2"><FaBook className="text-orange-500" /> Key concept 1 - Explanation</li>
-            <li className="flex items-center gap-2"><FaLaptopCode className="text-orange-500" /> Key concept 2 - Explanation</li>
-            <li className="flex items-center gap-2"><FaRegClock className="text-orange-500" /> Key concept 3 - Explanation</li>
+            <li className="flex items-center gap-2"><FaRegArrowAltCircleRight className="text-orange-500" /> BuildingConfidenceandSelf-Esteem</li>
+            <li className="flex items-center gap-2"><FaRegArrowAltCircleRight className="text-orange-500" /> Dress to Impress</li>
+            <li className="flex items-center gap-2"><FaRegArrowAltCircleRight className="text-orange-500" />Grooming and Manners</li>
+            <li className="flex items-center gap-2"><FaRegArrowAltCircleRight className="text-orange-500" />Sittingand Walking Postures</li>
+            <li className="flex items-center gap-2"><FaRegArrowAltCircleRight className="text-orange-500" />Corporate Ettiquettes</li>
           </ul>
         </div>
         
@@ -81,7 +88,7 @@ const Course = () => {
       <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md mt-8 mb-20">
         <h2 className="text-2xl font-semibold mb-4 text-gray-900">Meet Your Instructor</h2>
         <div className="flex items-center gap-6 ">
-          <img src="/instructor.jpg" alt="Instructor" className="w-24 h-24 rounded-full shadow-md" />
+          <img src="/founder.jpeg" alt="Instructor" className="w-24 h-24 rounded-full shadow-md" />
           <p className="text-gray-700 text-md leading-relaxed font-serif">John Doe, an industry expert with over 10 years of experience, has trained thousands of students worldwide. His passion for teaching and deep understanding of the subject make learning engaging and insightful.</p>
         </div>
       </div>
