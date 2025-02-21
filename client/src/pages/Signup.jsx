@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-
+import {FiEye, FiEyeOff} from 'react-icons/fi';
 const Signup = () => {
   // State variables for input fields
+  const [showPassword, setShowPassword] = useState(false);  
   const [fullName, setFullName] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [email, setEmail] = useState('');
@@ -14,7 +15,9 @@ const Signup = () => {
     const userInfo = { fullName, mobileNumber, email, password, referralCode };
     console.log(userInfo); // Log the user information
   };
-
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  }
   return (
     <div className="h-screen flex">
       {/* Left Section - Image */}
@@ -64,15 +67,22 @@ const Signup = () => {
                 className="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:outline-none"
               />
             </div>
-            <div className="mb-4">
+            <div className=" relative mb-4">
               <label className="block text-sm font-medium text-gray-700">Password</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
                 className="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:outline-none"
               />
+              <button 
+              type="button"
+              onClick={handleShowPassword}
+              className="absolute right-2 top-10 text-gray-500">
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+
+              </button>
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">Referral Code (Optional)</label>

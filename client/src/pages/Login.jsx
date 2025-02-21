@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import {FiEye, FiEyeOff} from 'react-icons/fi';
 
 const images = [
   '../../signupimage.jpg',
@@ -8,12 +9,16 @@ const images = [
 ];
 
 const Login = () => {
+    const [showPassword, setShowPassword] = useState(false);  
+  
   const [loginMethod, setLoginMethod] = useState('email');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [number, setNumber] = useState('');
   const [currentImage, setCurrentImage] = useState(0);
-
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  }
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
@@ -74,16 +79,23 @@ const Login = () => {
                     className="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:outline-none"
                   />
                 </div>
-                <div className="mb-4">
+                <div className="relative mb-4">
                   <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter Password"
                     className="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:outline-none"
                   />
+                  <button 
+                                type="button"
+                                onClick={handleShowPassword}
+                                className="absolute right-2 top-10 text-gray-500">
+                                  {showPassword ? <FiEyeOff /> : <FiEye />}
+                  
+                                </button>
                   <a href="#" className="text-sm text-blue-500 hover:underline mt-1 block text-right">
                     Forgot Password?
                   </a>
