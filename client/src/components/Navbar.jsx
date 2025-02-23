@@ -3,15 +3,33 @@ import { FaChevronDown, FaBars, FaTimes } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import "@fontsource/fugaz-one";
 import { CgProfile } from "react-icons/cg";
-
+// import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const location = useLocation();
   const currentRoute = location.pathname;
+  const [loggedIn, setLoggedIn] = useState(true);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleCourses = () => setIsCoursesOpen(!isCoursesOpen);
+  const logout = () => {
+    setLoggedIn(false);
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 mx-auto w-[94%] backdrop-blur-md bg-white/40 shadow-xl p-4 rounded-xl z-50 transition-all duration-300">
@@ -93,8 +111,49 @@ const Navbar = () => {
             <img src="/shopping-cart.png" alt="Shopping cart" className="w-7" />
           </Link>
 
-          {currentRoute.startsWith("/dashboard") ? (
-            <CgProfile className="text-3xl cursor-pointer" />
+          {loggedIn ? (
+            <div className="hidden md:flex space-x-4 items-center" >
+             
+              <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+              <CgProfile className="text-3xl cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="" sideOffset={5} className="relative w-full bg-white p-4 rounded-lg shadow-lg mt-8 right-12">
+              <DropdownMenuItem>
+                <Link to="/dashboard/profile/personalinformation">
+                  <p>Personal Information</p>
+                  {/* <span className="hidden hover:inline hover:underline w-5 h-2"></span> */}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/dashboard/mycourses">
+                  <p>My Courses</p>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/dashboard/helpandsupport">
+                  <p>Help and Support</p>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                {/* <Link to="/dashboard/logout">
+                  <p>Logout</p>
+                </Link> */}
+                <button onClick={logout}>
+                  logout
+                </button>
+              </DropdownMenuItem>
+             
+                </DropdownMenuContent>
+            
+              </DropdownMenu>
+            
+            
+            {/* <button className="px-5 py-2 bg-orange-600 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition" onClick={logout}>
+               Logout
+            </button> */}
+
+            </div>
           ) : (
             <div className="hidden md:flex space-x-4">
               <Link to="/login">
@@ -126,7 +185,7 @@ const Navbar = () => {
           isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       >
-        {currentRoute.startsWith("/dashboard") ? (
+        {loggedIn ? (
           <div className="flex flex-col">
             <button
               onClick={toggleCourses}
