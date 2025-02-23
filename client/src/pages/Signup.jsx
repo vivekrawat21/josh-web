@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Signup = () => {
   // State variables for input fields
   const [showPassword, setShowPassword] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [name, setname] = useState('');
+  const [mobilenumber, setmobilenumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [referralCode, setReferralCode] = useState('');
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault(); // Prevent default form behavior
-    const userInfo = { fullName, mobileNumber, email, password, referralCode };
+    const userInfo = { name, mobilenumber, email, password, referralCode };
+    try{
+      const res = await axios.post('http://localhost:3000/api/v1/auth/register',userInfo);
+      console.log(res.data);
+    }
+    catch(error){
+      console.log(error);
+    }
     console.log(userInfo); // Log the user information
   };
 
@@ -23,9 +31,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-5">
+    <div className="flex h-screen w-full items-center justify-center flex-col md:flex-row  lg:space-y-0 lg:space-x-5 mb-4 bg">
       {/* Left Section - Image */}
-      <div className=" hidden md:w-full lg:w-2/5 md:flex items-center justify-center">
+      <div className=" hidden md:w-2/5  md:flex items-center justify-center">
         <img
           src="/signup.jpg" // Replace with your image path
           alt="Signup Illustration"
@@ -34,7 +42,7 @@ const Signup = () => {
       </div>
 
       {/* Right Section - Signup Form */}
-      <div className="w-full lg:w-2/5 min-h-[90%] flex items-center justify-center">
+      <div className="w-full md:w-2/5  flex items-center justify-center">
         <div className="p-8 rounded-lg shadow-md max-w-sm w-full">
           {/* Title */}
           <h2 className="text-3xl font-bold text-center text-orange-500 mb-6">Sign Up</h2>
@@ -45,8 +53,8 @@ const Signup = () => {
               <label className="block text-sm font-medium text-gray-700">Full Name</label>
               <input
                 type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                value={name}
+                onChange={(e) => setname(e.target.value)}
                 placeholder="Full name"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
@@ -55,8 +63,8 @@ const Signup = () => {
               <label className="block text-sm font-medium text-gray-700">Mobile Number</label>
               <input
                 type="text"
-                value={mobileNumber}
-                onChange={(e) => setMobileNumber(e.target.value)}
+                value={mobilenumber}
+                onChange={(e) => setmobilenumber(e.target.value)}
                 placeholder="Enter your mobile"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />

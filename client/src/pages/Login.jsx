@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import axios from "axios";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,12 +15,25 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission
+    const userInfo = { email, password };
+    console.log(userInfo)
+    try {
+        const res = axios.post('http://localhost:3000/api/v1/auth/login',userInfo
+          ,{
+            withCredentials: true
+          }
+        );
+        console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center flex-col lg:flex-row space-y-0 lg:space-y-0 lg:space-x-5 ">
+    <div className="flex h-screen w-full items-center justify-center flex-col md:flex-row space-y-0 lg:space-y-0 lg:space-x-5 ">
       {/* Image Section */}
-      <div className="hidden w-full lg:w-2/5 md:flex items-center justify-center">
+      <div className="hidden w-full md:w-2/5  md:flex items-center justify-center">
         <img
           src="/login.png"
           alt="login"
@@ -28,7 +42,7 @@ const Login = () => {
       </div>
 
       {/* Form Section */}
-      <div className="w-full lg:w-2/5 min-h-[90%] flex items-center justify-center ">
+      <div className="w-full md:h-[90%] md:w-2/5 lg:w-3/5  flex items-center justify-center ">
         <div className="bg-white p-8 rounded-lg shadow-md max-w-sm w-full">
           <h1 className="text-3xl font-bold mb-6 text-center text-gray-700">
             Welcome Back
