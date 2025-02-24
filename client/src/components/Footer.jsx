@@ -6,7 +6,13 @@ const Footer = () => {
     <section className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white text-center p-6 flex flex-col items-center rounded-lg mb-2">
       <div className="w-full flex flex-col md:flex-row justify-between items-center py-4 px-6">
         <div className="text-center md:text-left md:w-7/12">
-          <h1 className="text-3xl font-bold mb-2">JoshGuru</h1>
+          <Link to="/">
+           
+           <img src="/logo1.png"  alt="Logo" className="w-[150px]" />
+        
+         
+       </Link>
+
           <p className="text-lg">Learn Anything, Anywhere, Anytime</p>
           <p className="mt-2 text-sm leading-relaxed">
             JoshGuru is one of the leading education platforms with various courses at reasonable prices. 
@@ -64,11 +70,18 @@ const Footer = () => {
 
       {/* Footer Bottom Section */}
       <div className="w-full flex flex-col md:flex-row justify-between items-center px-6 text-sm">
-        <div>
-          <h2 className="text-lg font-bold">JoshGuru</h2>
+        <div className="text-center md:text-left md:w-1/3">
+          <h2 className="text-lg font-bold">JoshGuru powered by NIITF</h2>
+          <p className="text-sm">
+            Uttarakhand Office Address:<br />
+            Plot no 86, Heera Nagar, Haldwani<br />
+            Dist. Nainital (Uttarakhand) 263139
+          </p>
         </div>
-        <div className="text-center md:text-right">All Rights Reserved &#169; 2025 | JoshGuru Private Limited</div>
-        <Link to="/terms" className="hover:underline">Terms & Conditions</Link>
+        <div className="text-center md:w-1/3">All Rights Reserved &#169; 2025 | JoshGuru Private Limited</div>
+        <div className="text-center md:w-1/3 md:text-right">
+          <Link to="/terms" className="hover:underline">Terms & Conditions</Link>
+        </div>
       </div>
     </section>
   );
