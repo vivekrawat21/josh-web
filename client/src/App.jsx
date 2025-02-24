@@ -17,6 +17,7 @@ import PersonalInformation from "./components/PersonalInformation"
 import Invoices from "./components/Invoices";
 import PrivacyAndSecurity from "./components/PrivacyAndSecurity";
 import DashboardLayout from "./components/DashboardLayout";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -54,6 +55,8 @@ function App() {
               <Route path="/course/:id" element={<Course />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/forgotpassword" element={<ForgotPassword/>} />
+
 
               <Route path="/cart" element={<Cart />} />
 
