@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "axios";
+import { baseUrl } from "../utils/utils";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +19,7 @@ const Login = () => {
     const userInfo = { email, password };
     console.log(userInfo)
     try {
-        const res = axios.post('http://localhost:3000/api/v1/auth/login',userInfo
+        const res = axios.post(`${baseUrl}/auth/login `,userInfo
           ,{
             withCredentials: true
           }
