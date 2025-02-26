@@ -30,7 +30,7 @@ const courses = [
 
 export default function TopCourses() {
   return (
-    <section className="py-3 px-10 w-full ">
+    <section className=" px-10 w-full  ">
       <h2 className="text-[2.70rem] font-semibold text-center mb-5  text-gray-900">Explore<span className='text-orange-500 text-[2.70rem] font-sans font-semibold'>Top Courses</span>  </h2>
       {courses.map((course, index) => (
         <motion.div
@@ -50,7 +50,7 @@ export default function TopCourses() {
             <p className="text-lg mb-6 text-gray-700">{course.description}</p>
             <ul className="grid grid-cols-2 gap-4 mb-6">
               {course.topics.map((topic, idx) => (
-                <li key={idx} className="flex items-center gap-3 text-lg font-medium bg-white p-3 rounded-lg shadow">
+                <li key={idx} className="flex items-center gap-3  text-base lg:text-lg font-medium bg-white p-3  rounded-lg shadow overflow-hidden">
                   {topic.icon}
                   {topic.name}
                 </li>

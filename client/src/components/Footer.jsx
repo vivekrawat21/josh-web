@@ -3,10 +3,28 @@ import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaTwitter, FaThreads, F
 
 const Footer = () => {
   return (
-    <section className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white text-center p-6 flex flex-col items-center rounded-lg mb-2">
+    <section className="w-full bg-gray-700 text-white text-center p-6 flex flex-col items-center rounded-lg mb-2">
       <div className="w-full flex flex-col md:flex-row justify-between items-center py-4 px-6">
-        <div className="text-center md:text-left md:w-7/12">
-          <h1 className="text-3xl font-bold mb-2">JoshGuru</h1>
+        <div className="text-center md:text-left md:w-7/12 ">
+          <Link to="/">
+           <div className="relative">
+           <img src="/logo1.png"  alt="Logo" className="w-[150px] "  />
+           <span
+              className="absolute text-[16px] text-center font-bold"
+              style={{
+                width: "140px",
+                color: "#57FEFF", // Lighter sky blue shade
+                top: "75%",
+                left:"0.2%",
+              
+              }}
+            >
+              Powered by <span className="text-white">NIITF</span>
+            </span>
+            </div>
+         
+       </Link>
+
           <p className="text-lg">Learn Anything, Anywhere, Anytime</p>
           <p className="mt-2 text-sm leading-relaxed">
             JoshGuru is one of the leading education platforms with various courses at reasonable prices. 
@@ -32,8 +50,8 @@ const Footer = () => {
             <Link to="https://www.linkedin.com/company/joshguru/" target="_blank"><FaLinkedin className="hover:scale-110 transition-transform" /></Link>
             <Link to="https://youtube.com/@joshguruofficial?si=ZJ9JV4GK9wIN1ZLg" target="_blank"><FaYoutube className="hover:scale-110 transition-transform" /></Link>
             <Link to="https://x.com/JoshguruOffice?t=a33I7drosaWUg6z8SDrnuA&s=09" target="_blank"><FaTwitter className="hover:scale-110 transition-transform" /></Link>
-            <Link to="https://www.threads.net/@joshguru.in" target="_blank"><FaThreads className="hover:scale-110 transition-transform" /></Link>
-            <Link to="https://t.me/JoshguruEducation" target="_blank"><FaTelegram className="hover:scale-110 transition-transform" /></Link>
+            
+            
           </div>
         </div>
 
@@ -64,11 +82,18 @@ const Footer = () => {
 
       {/* Footer Bottom Section */}
       <div className="w-full flex flex-col md:flex-row justify-between items-center px-6 text-sm">
-        <div>
-          <h2 className="text-lg font-bold">JoshGuru</h2>
+        <div className="text-center md:text-left md:w-1/3">
+          <h2 className="text-lg font-bold">JoshGuru powered by NIITF</h2>
+          <p className="text-sm">
+            Uttarakhand Office Address:<br />
+            Plot no 86, Heera Nagar, Haldwani<br />
+            Dist. Nainital (Uttarakhand) 263139
+          </p>
         </div>
-        <div className="text-center md:text-right">All Rights Reserved &#169; 2025 | JoshGuru Private Limited</div>
-        <Link to="/terms" className="hover:underline">Terms & Conditions</Link>
+        <div className="text-center md:w-1/3">All Rights Reserved &#169; 2025 | JoshGuru Private Limited</div>
+        <div className="text-center md:w-1/3 md:text-right">
+          <Link to="/terms" className="hover:underline">Terms & Conditions</Link>
+        </div>
       </div>
     </section>
   );
