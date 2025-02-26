@@ -36,7 +36,7 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <section className="py-10">
+    <section className="py-2 pb-6">
       <div className="container mx-auto px-4 max-w-3xl">
         <h2 className="text-[2.70rem] font-semibold text-center mb-8 text-gray-900 relative inline-block ">
           Frequently{" "}

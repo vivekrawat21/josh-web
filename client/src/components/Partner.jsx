@@ -41,7 +41,7 @@ const Partner = () => {
     ]
   return (
     <>
-      <div className="mt-12 mb-8">
+      <div className="mt-4 mb-2">
       <h2 className="text-[2.70rem] font-semibold text-center  text-gray-900">Our <span className=' text-orange-500 font-semibold font-sans'>Partners</span></h2>
         <div className="relative flex  overflow-hidden rounded-lg   group">
           {/* Left blurred gradient */}

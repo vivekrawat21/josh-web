@@ -15,7 +15,7 @@ const Navbar = () => {
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const location = useLocation();
   const currentRoute = location.pathname;
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleCourses = () => setIsCoursesOpen(!isCoursesOpen);
@@ -27,27 +27,27 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 mx-auto w-[94%] backdrop-blur-md bg-white/40 shadow-xl p-4 rounded-xl z-50 transition-all duration-300">
       <div className="flex justify-between items-center font-['Fugaz One']">
         {/* Logo and Navigation Links */}
-        <div className="flex items-center space-x-10 relative">
+        <div className="flex items-center space-x-24 relative">
           <div className="flex flex-col items-center">
           <div className="flex flex-col items-center relative">
             <Link to="/">
               <img src="/logo1.png" alt="Logo" className="w-[60px]" />
             </Link>
             <p
-              className="absolute text-[11px]  text-center font-bold"
+              className="absolute text-[11px]  text-center font-bold text-gray-900"
               style={{
                 width: "130px",
-                color: "#57FEFF", // Lighter sky blue shade
+                
                 top: "75%",
                 left: "-50%",
               }}
             >
-              Powered by <span className="text-orange-400 ">NIITF</span>
+              Powered by <span className="text-gray-900 ">NIITF</span>
             </p>
           </div>
           </div>
 
-          <ul className="hidden md:flex items-center space-x-6 text-gray-900 font-medium text-[16px]">
+          <ul className="hidden md:flex items-center space-x-12 text-gray-900 font-medium text-[16px]">
             <li>
               <Link to="/about" className="hover:text-orange-400 transition">
                 About
