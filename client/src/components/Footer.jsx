@@ -3,7 +3,7 @@ import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaTwitter, FaThreads, F
 
 const Footer = () => {
   return (
-    <section className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white text-center p-6 flex flex-col items-center rounded-lg mb-2">
+    <section className="w-full bg-gray-700 text-white text-center p-6 flex flex-col items-center rounded-lg mb-2">
       <div className="w-full flex flex-col md:flex-row justify-between items-center py-4 px-6">
         <div className="text-center md:text-left md:w-7/12 ">
           <Link to="/">
@@ -50,8 +50,8 @@ const Footer = () => {
             <Link to="https://www.linkedin.com/company/joshguru/" target="_blank"><FaLinkedin className="hover:scale-110 transition-transform" /></Link>
             <Link to="https://youtube.com/@joshguruofficial?si=ZJ9JV4GK9wIN1ZLg" target="_blank"><FaYoutube className="hover:scale-110 transition-transform" /></Link>
             <Link to="https://x.com/JoshguruOffice?t=a33I7drosaWUg6z8SDrnuA&s=09" target="_blank"><FaTwitter className="hover:scale-110 transition-transform" /></Link>
-            <Link to="https://www.threads.net/@joshguru.in" target="_blank"><FaThreads className="hover:scale-110 transition-transform" /></Link>
-            <Link to="https://t.me/JoshguruEducation" target="_blank"><FaTelegram className="hover:scale-110 transition-transform" /></Link>
+            
+            
           </div>
         </div>
 
