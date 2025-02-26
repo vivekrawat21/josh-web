@@ -18,6 +18,7 @@ import Invoices from "./components/Invoices";
 import PrivacyAndSecurity from "./components/PrivacyAndSecurity";
 import DashboardLayout from "./components/DashboardLayout";
 import ForgotPassword from "./pages/ForgotPassword";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
