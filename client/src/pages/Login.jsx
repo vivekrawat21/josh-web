@@ -19,7 +19,7 @@ const Login = () => {
     const userInfo = { email, password };
     console.log(userInfo)
     try {
-        const res = axios.post(`${baseUrl}/auth/login `,userInfo
+        const res = axios.post(`api/auth/login `,userInfo
           ,{
             withCredentials: true
           }
