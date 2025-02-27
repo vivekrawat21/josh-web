@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "axios";
-import { baseUrl } from "../utils/utils";
+import { BASE_URL } from "../utils/utils";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);

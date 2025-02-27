@@ -183,7 +183,7 @@ const Navbar = () => {
               <Link to="/login" className="w-full text-center py-2 bg-orange-500 text-white rounded-lg font-medium">
                 Login
               </Link>
-              <Link to="/register" className="w-full text-center py-2 border border-orange-500 text-orange-500 rounded-lg font-medium">
+              <Link to="/signup" className="w-full text-center py-2 border border-orange-500 text-orange-500 rounded-lg font-medium">
                 Register
               </Link>
             </>
