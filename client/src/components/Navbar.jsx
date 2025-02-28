@@ -157,17 +157,18 @@ const Navbar = () => {
 
           <ul className="hidden md:flex items-center space-x-10 text-gray-900 font-medium text-[16px]">
             <li>
-              <Link to="/about" className="hover:text-orange-400 transition cursor-pointer">
+              <Link to="/about" className="hover:text-orange-400 text-md transition cursor-pointer font-semibold">
                 About
               </Link>
             </li>
             <li className="relative group">
             <button
-                className="flex items-center space-x-2 hover:text-orange-500 transition cursor-pointer"
+                className="flex items-center space-x-2 hover:text-orange-500 transition cursor-pointerg"
                 onMouseEnter={() => setIsRotating(true)}
                 onMouseLeave={() => setIsRotating(false)}
               >
-                <span>Courses</span>
+                
+                <span className="text-md font-semibold">Courses</span>
                 <motion.div animate={{ rotate: isRotating ? 180 : 0 }}>
                   <FaChevronDown className="text-base transition-transform duration-300" />
                 </motion.div>
@@ -187,8 +188,6 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-
-        {/* Cart and User Authentication */}
         <div className="flex items-center space-x-6">
           <Link to="/cart">
             <FaShoppingCart className="text-4xl text-gray-900 shadow-md rounded-lg p-2 bg-transparent mr-5" />

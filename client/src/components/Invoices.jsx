@@ -10,53 +10,49 @@ const Invoices = () => {
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="p-6 min-h-screen bg-gray-100"
-    >
-      <motion.h1
+    <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-start">
+      <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-3xl font-bold text-gray-800 mb-6"
+        className="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl"
       >
-        Invoices
-      </motion.h1>
-      
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="bg-white shadow-lg rounded-lg p-6 overflow-hidden"
-      >
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-orange-500 text-white">
-              <th className="p-4 text-left">Course Name</th>
-              <th className="p-4 text-left">Type</th>
-              <th className="p-4 text-left">Total (INR)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoices.map((invoice, index) => (
-              <motion.tr 
-                key={invoice.id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="border-b bg-gray-50 hover:bg-gray-100 transition-colors"
-              >
-                <td className="p-4 text-gray-700 font-medium">{invoice.course}</td>
-                <td className="p-4 text-gray-600">{invoice.type}</td>
-                <td className="p-4 font-semibold text-orange-600">{invoice.total}</td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">Invoices</h1>
+        <p className="text-gray-600 mb-4">Here are your purchased course invoices.</p>
+
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="overflow-hidden rounded-lg shadow-sm"
+        >
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-orange-500 text-white">
+                <th className="p-4 text-left">Course Name</th>
+                <th className="p-4 text-left">Type</th>
+                <th className="p-4 text-left">Total (INR)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {invoices.map((invoice, index) => (
+                <motion.tr
+                  key={invoice.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  className="border-b bg-gray-50 hover:bg-gray-100 transition-colors"
+                >
+                  <td className="p-4 text-gray-700 font-medium">{invoice.course}</td>
+                  <td className="p-4 text-gray-600">{invoice.type}</td>
+                  <td className="p-4 font-semibold text-orange-600">{invoice.total}</td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 

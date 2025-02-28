@@ -1,88 +1,92 @@
 import React, { useState } from "react";
-import { FaChevronDown, FaBars, FaTimes } from "react-icons/fa";
-import { Link, Outlet } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../features/user/userSlice" // Adjust import path
+import { FaChevronDown, FaWallet, FaBook, FaGift, FaHeadset, FaUser, FaSignOutAlt } from "react-icons/fa";
+
 const Dashboard = () => {
   const [profileMenu, setProfileMenu] = useState(false);
-  // const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // const toggleMenu = () => {
-
-  //   setProfileMenu(!profileMenu);
-  // };
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/signin"); // Redirect to Sign In page
+  };
 
   return (
-    <div className="w-full min-h-screen bg-gray-100 flex  relative">
-      <div
-        className={`hidden  md:flex flex-col bg-white/90 backdrop-blur-md p-5 w-1/5 top-16 left-0 transition-all duration-300 `}
+    <div className="w-full min-h-screen bg-gray-100 flex">
+      {/* Sidebar */}
+      <motion.div
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="hidden md:flex flex-col bg-white shadow-lg p-5 w-1/5 min-h-screen text-base"
       >
+        {/* Profile Dropdown */}
         <button
-          className="flex items-center justify-between w-full text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition"
+          className="flex items-center justify-between w-full text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
           onClick={() => setProfileMenu(!profileMenu)}
         >
-          My Profile
-          <FaChevronDown
-            className={`transition-transform duration-300 ${
-              profileMenu ? "rotate-180" : ""
-            }`}
-          />
+          <div className="flex items-center gap-2">
+            <FaUser className="text-gray-600" /> My Profile
+          </div>
+          <FaChevronDown className={`transition-transform duration-300 ${profileMenu ? "rotate-180" : ""}`} />
         </button>
+
         {profileMenu && (
-          <div className="bg-white p-3 mt-2  ">
-            <ul className="space-y-2 text-gray-800 mt-2">
-              <Link to="/dashboard/profile/personalinformation">
-                <li className="hover:text-orange-500 transition cursor-pointer">
-                  Personal Information
-                </li>
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            transition={{ duration: 0.3 }}
+            className="bg-gray-50 rounded-lg p-3 mt-2"
+          >
+            <ul className="space-y-2">
+              <Link to="/dashboard/profile/personalinformation" className="flex items-center gap-2 hover:text-orange-500 transition">
+                <FaUser /> Personal Info
               </Link>
-              <Link to="/dashboard/profile/invoices">
-                {" "}
-                <li className="hover:text-orange-500 transition cursor-pointer">
-                  Invoices
-                </li>
+              <Link to="/dashboard/profile/invoices" className="flex items-center gap-2 hover:text-orange-500 transition">
+                <FaWallet /> Invoices
               </Link>
-              <Link to="/dashboard/profile/privacyandsecurity">
-                {" "}
-                <li className="hover:text-orange-500 transition cursor-pointer">
-                  Privacy and Security
-                </li>
+              <Link to="/dashboard/profile/privacyandsecurity" className="flex items-center gap-2 hover:text-orange-500 transition">
+                <FaBook /> Privacy & Security
               </Link>
             </ul>
-          </div>
+          </motion.div>
         )}
-        <Link
-          to="/dashboard/mywallet"
-          className="text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition"
-        >
-          My Wallet
-        </Link>
-        <Link
-          to="/dashboard/mycourses"
-          className="text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition"
-        >
-          My Courses
-        </Link>
-        <Link
-          to="/dashboard/refer&earn"
-          className="text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition"
-        >
-          Refer and Earn
-        </Link>
-        <Link
-          to="/dashboard/helpandsupport"
-          className="text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition"
-        >
-          Help and support
-        </Link>
-      </div>
-      <div className="border">
 
+        {/* Sidebar Links */}
+        <Link to="/dashboard/mywallet" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
+          <FaWallet /> My Wallet
+        </Link>
+        <Link to="/dashboard/mycourses" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
+          <FaBook /> My Courses
+        </Link>
+        <Link to="/dashboard/refer&earn" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
+          <FaGift /> Refer & Earn
+        </Link>
+        <Link to="/dashboard/helpandsupport" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
+          <FaHeadset /> Help & Support
+        </Link>
+
+        {/* Logout Button - Positioned Above the Bottom */}
+        <div className="mt-64">
+          <button
+            onClick={handleLogout}
+            className="border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-3 px-5 rounded-lg hover:bg-orange-500 hover:text-white transition text-lg w-full"
+          >
+            <FaSignOutAlt /> Logout
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Main Content */}
+      <div className="w-full md:w-4/5 p-6">
+        <Outlet />
       </div>
-      <div className="w-full md:w-4/5">
-      <Outlet />
-      </div>
-     
     </div>
-  )
+  );
 };
 
 export default Dashboard;

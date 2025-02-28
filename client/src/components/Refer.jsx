@@ -1,8 +1,9 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { FaCopy, FaGift } from 'react-icons/fa';
 
 const ReferAndEarn = () => {
   const referralCode = 'ABC123XYZ';
-  const referralLink = `https://yourwebsite.com/refer/${referralCode}`;
 
   const rewards = [
     { id: 1, description: 'Friend 1 joined', reward: 100 },
@@ -11,46 +12,46 @@ const ReferAndEarn = () => {
   ];
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Refer & Earn</h1>
-      <div className="mb-6">
-        <p className="text-lg">Your Referral Code:</p>
-        <div className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
-          <span className="text-xl font-semibold">{referralCode}</span>
+    <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-start">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl"
+      >
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">Refer & Earn</h1>
+        <p className="text-gray-600 mb-4">Invite your friends and earn rewards when they join!</p>
+
+        <h2 className="text-lg font-semibold text-gray-700 mb-3">Your Referral Code</h2>
+        <div className="flex items-center justify-between bg-gray-200 p-4 rounded-lg shadow-sm">
+          <span className="text-lg font-semibold">{referralCode}</span>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+            className="bg-orange-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-600"
             onClick={() => navigator.clipboard.writeText(referralCode)}
           >
-            Copy Code
+            <FaCopy /> <span>Copy</span>
           </button>
         </div>
-      </div>
-      <div className="mb-6">
-        <p className="text-lg">Referral Link:</p>
-        <div className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
-          <span className="text-sm">{referralLink}</span>
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-            onClick={() => navigator.clipboard.writeText(referralLink)}
-          >
-            Copy Link
-          </button>
-        </div>
-      </div>
-      <div>
-        <h2 className="text-xl font-semibold mb-2">Referral Rewards</h2>
-        <ul className="space-y-2">
+
+        <h2 className="text-lg font-semibold text-gray-700 mt-6 mb-4">Your Rewards</h2>
+        <ul className="space-y-3">
           {rewards.map((reward) => (
-            <li
+            <motion.li
               key={reward.id}
-              className="flex justify-between bg-white p-3 rounded-lg shadow-sm"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: reward.id * 0.1 }}
+              className="flex justify-between bg-gray-200 p-4 rounded-lg shadow-sm"
             >
-              <span>{reward.description}</span>
+              <span className="flex items-center space-x-2">
+                <FaGift className="text-orange-500" />
+                <span>{reward.description}</span>
+              </span>
               <span className="font-semibold text-green-600">${reward.reward}</span>
-            </li>
+            </motion.li>
           ))}
         </ul>
-      </div>
+      </motion.div>
     </div>
   );
 };
