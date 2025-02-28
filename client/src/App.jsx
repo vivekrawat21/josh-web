@@ -27,11 +27,7 @@ function App() {
       <BrowserRouter basename="/">
         <Routes>
         <Route path="/dashboard" element={<DashboardLayout />}>
-        {/* Default route for /dashboard */}
         <Route index element={<PersonalInformation />} />
-        
-        {/* Nested Routes */}
-
         <Route path="profile/personalinformation" element={<PersonalInformation />} />
         <Route path="profile/invoices" element={<Invoices />} />
         <Route path="profile/privacyandsecurity" element={<PrivacyAndSecurity />} />
