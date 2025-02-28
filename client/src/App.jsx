@@ -19,6 +19,7 @@ import PrivacyAndSecurity from "./components/PrivacyAndSecurity";
 import DashboardLayout from "./components/DashboardLayout";
 import ForgotPassword from "./pages/ForgotPassword";
 import Mywallet from "./components/Mywallet";
+import Courses from "./pages/Courses";
 
 function App() {
   return (
@@ -52,6 +53,8 @@ function App() {
                 element={<TopCourses />}
               ></Route>
               <Route path="/course/:id" element={<Course />} />
+              <Route path="/courses/:category/:id" element={<Courses />} />
+
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/forgotpassword" element={<ForgotPassword/>} />
