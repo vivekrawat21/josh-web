@@ -7,6 +7,7 @@ import { BASE_URL } from "@/utils/utils";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/features/user/userSlice";
+import { setUser } from "@/features/user/userSlice";
 import axios from "axios";
 import {
   DropdownMenu,
@@ -59,11 +60,25 @@ const Navbar = () => {
 
   const user = useSelector((state) => state.user);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  // const fetchUser = async ()=>{
+  //   try{
+  //     const res = await axios.post(`${BASE_URL}/user `,{
+  //         withCredentials: true
+  //       }
+  //     );
+      
+  //     dispatch(setUser(res.data.data.user));
+  //     console.log(res)
+  //   }
+  //   catch(error){
+  //     setLoggedIn(false);
+  //   }
+  // }
   const logout = async () => {
     try{
       const res = await axios.post(`${BASE_URL}/auth/logout`,{},{withCredentials: true});
       // const res2 = await axios.post("http://localhost:3000/api/v1/auth/logout",{},{withCredentials: true});
-      // dispatch(logoutUser());
+      dispatch(logoutUser());
       // console.log(res2.data.data.user);
       setLoggedIn(false);
       navigator("/login");
@@ -74,12 +89,54 @@ const Navbar = () => {
     }
     
   };
+ 
+  // useEffect(() => {
+  //   fetchUser();
+    
+  //   if (user) {
+  //     setLoggedIn(true);
+  //   }
+  
+  // },[user])
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/user`, { withCredentials: true });
+        const fetchedUser = res.data.data.user;
+
+        // Update Redux store with fetched user
+        // if(!user){
+        //   setLoggedIn(false);
+        // }
+        setLoggedIn(true);
+        dispatch(setUser(fetchedUser));
+      } catch (error) {
+        console.log(error);
+        // setLoggedIn(false);
+        // If error occurs (e.g., user is not authenticated), clear the Redux store
+        dispatch(logoutUser());
+      }
+    };
+
+    if (!user) {
+
+      // setLoggedIn(false); 
+         if(loggedIn){
+          fetchUser();
+
+         }
+
+      
+      // Fetch the user if not present in the Redux store
+    }
+  }, [user, dispatch]);
   useEffect(() => {
     if (user) {
-      setLoggedIn(true);
+      setLoggedIn(true); // User exists, set loggedIn to true
+    } else {
+      setLoggedIn(false); // No user in store, set loggedIn to false
     }
-    // console.log(loggedIn)
-  },[user])
+  }, [ user]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 mx-auto backdrop-blur-md bg-white/40 shadow-sm p-4 rounded-xl z-50 transition-all duration-300 ">
@@ -149,7 +206,7 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/dashboard/profile/personalinformation">
+                  <Link to="/dashboard/profile/mywallet">
                     <p>My Wallet</p>
                   </Link>
                 </DropdownMenuItem>
