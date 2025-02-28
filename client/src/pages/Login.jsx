@@ -5,7 +5,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/utils";
 import { useDispatch } from "react-redux";
 import { setUser} from "../features/user/userSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);

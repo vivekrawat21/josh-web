@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import  useNaviator from "react-router-dom";
+import  {useNavigate} from "react-router-dom";
 import { motion } from "framer-motion";
 
 
@@ -55,7 +55,7 @@ const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
   const dispatch = useDispatch();
-  const navigator = useNaviator();
+  const navigator = useNavigate();
 
   const user = useSelector((state) => state.user);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
