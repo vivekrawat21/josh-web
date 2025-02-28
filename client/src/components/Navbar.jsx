@@ -14,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import  {useNavigate} from "react-router-dom";
 import { motion } from "framer-motion";
 
 
@@ -54,6 +55,7 @@ const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
   const dispatch = useDispatch();
+  const navigator = useNavigate();
 
   const user = useSelector((state) => state.user);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -61,10 +63,11 @@ const Navbar = () => {
     try{
       const res = await axios.post(`${BASE_URL}/auth/logout`,{},{withCredentials: true});
       // const res2 = await axios.post("http://localhost:3000/api/v1/auth/logout",{},{withCredentials: true});
-      dispatch(logoutUser());
+      // dispatch(logoutUser());
       // console.log(res2.data.data.user);
-
+      navigator("/login");
     }
+
     catch(error){
       console.log(error);
     }
@@ -74,6 +77,7 @@ const Navbar = () => {
     if (user) {
       setLoggedIn(true);
     }
+    console.log(loggedIn)
   },[user])
 
   return (
@@ -135,12 +139,17 @@ const Navbar = () => {
           {loggedIn ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <CgProfile className="text-3xl cursor-pointer" />
+                <CgProfile className="text-3xl cursor-pointer " />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="" sideOffset={5} className="relative w-full bg-white p-4 rounded-lg shadow-lg mt-8 right-12">
+              <DropdownMenuContent align="" sideOffset={5} className="relative w-full bg-white p-4 rounded-lg shadow-lg mt-8 right-12 ">
                 <DropdownMenuItem>
                   <Link to="/dashboard/profile/personalinformation">
-                    <p>Personal Information</p>
+                    <p>My Profile</p>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/dashboard/profile/personalinformation">
+                    <p>My Wallet</p>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
@@ -189,6 +198,9 @@ const Navbar = () => {
             <>
               <Link to="/dashboard/profile/personalinformation" className=" hover:text-orange-400 transition cursor-pointer">
                 Personal Information
+              </Link>
+              <Link to="/dashboard/profile/personalinformation" className=" hover:text-orange-400 transition cursor-pointer">
+                My Wallet
               </Link>
               <Link to="/dashboard/mycourses" className="hover:text-orange-400 transition cursor-pointer">
                 My Courses

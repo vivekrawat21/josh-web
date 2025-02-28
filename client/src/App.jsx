@@ -19,6 +19,7 @@ import PrivacyAndSecurity from "./components/PrivacyAndSecurity";
 import DashboardLayout from "./components/DashboardLayout";
 import ForgotPassword from "./pages/ForgotPassword";
 import Navbar from "./components/Navbar";
+import Mywallet from "./components/Mywallet";
 
 function App() {
   return (
@@ -35,6 +36,8 @@ function App() {
         <Route path="profile/invoices" element={<Invoices />} />
         <Route path="profile/privacyandsecurity" element={<PrivacyAndSecurity />} />
         <Route path="mycourses" element={<MyCourses />} />
+        <Route path="mywallet" element={<Mywallet />} />
+
         <Route path="refer&earn" element={<Refer />} />
         <Route path="helpandsupport" element={<Help />} />
       </Route>

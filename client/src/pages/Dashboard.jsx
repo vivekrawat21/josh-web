@@ -11,7 +11,7 @@ const Dashboard = () => {
   // };
 
   return (
-    <div className="w-full min-h-screen bg-gray-300 flex  relative">
+    <div className="w-full min-h-screen bg-gray-100 flex  relative">
       <div
         className={`hidden  md:flex flex-col bg-white/90 backdrop-blur-md p-5 w-1/5 top-16 left-0 transition-all duration-300 `}
       >
@@ -49,6 +49,12 @@ const Dashboard = () => {
             </ul>
           </div>
         )}
+        <Link
+          to="/dashboard/mywallet"
+          className="text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition"
+        >
+          My Wallet
+        </Link>
         <Link
           to="/dashboard/mycourses"
           className="text-gray-900 text-lg font-medium py-2 hover:text-orange-500 transition"
