@@ -65,19 +65,20 @@ const Navbar = () => {
       // const res2 = await axios.post("http://localhost:3000/api/v1/auth/logout",{},{withCredentials: true});
       // dispatch(logoutUser());
       // console.log(res2.data.data.user);
+      setLoggedIn(false);
       navigator("/login");
     }
 
     catch(error){
       console.log(error);
     }
-    setLoggedIn(false);
+    
   };
   useEffect(() => {
     if (user) {
       setLoggedIn(true);
     }
-    console.log(loggedIn)
+    // console.log(loggedIn)
   },[user])
 
   return (
