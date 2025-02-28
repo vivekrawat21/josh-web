@@ -2,28 +2,35 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "axios";
+import { BASE_URL } from "../utils/utils";
+import { useDispatch } from "react-redux";
+import { setUser} from "../features/user/userSlice";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const dispatch = useDispatch();
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle form submission
     const userInfo = { email, password };
     console.log(userInfo)
     try {
-        const res = axios.post('http://localhost:3000/api/v1/auth/login',userInfo
+        const res = await axios.post(`${BASE_URL}/auth/login `,userInfo
           ,{
             withCredentials: true
           }
         );
-        console.log(res.data);
+        // const res2 = await axios.post("http://localhost:3000/api/v1/auth/login",userInfo,{
+        //   withCredentials: true
+        // })
+        dispatch(setUser(res.data.data.user));
+        console.log(res.data.data.user);
     } catch (error) {
       console.log(error);
     }

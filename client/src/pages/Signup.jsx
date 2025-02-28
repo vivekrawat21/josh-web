@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import { BASE_URL } from "../utils/utils"
 const Signup = () => {
   // State variables for input fields
   const [showPassword, setShowPassword] = useState(false);
@@ -17,8 +17,7 @@ const Signup = () => {
     e.preventDefault(); // Prevent default form behavior
     const userInfo = { name, mobilenumber, email, password, referralCode };
     try{
-      const res = await axios.post('http://localhost:3000/api/v1/auth/register',userInfo);
-      console.log(res.data);
+      const res = await axios.post(`${BASE_URL}/auth/register`,userInfo);
     }
     catch(error){
       console.log(error);
