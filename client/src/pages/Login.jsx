@@ -5,11 +5,13 @@ import axios from "axios";
 import { BASE_URL } from "../utils/utils";
 import { useDispatch } from "react-redux";
 import { setUser} from "../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -30,6 +32,7 @@ const Login = () => {
         //   withCredentials: true
         // })
         dispatch(setUser(res.data.data.user));
+        navigate("/dashboard");
         console.log(res.data.data.user);
     } catch (error) {
       console.log(error);

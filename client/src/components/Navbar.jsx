@@ -14,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import  useNaviator from "react-router-dom";
 import { motion } from "framer-motion";
 
 
@@ -54,6 +55,7 @@ const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
   const dispatch = useDispatch();
+  const navigator = useNaviator();
 
   const user = useSelector((state) => state.user);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -61,10 +63,11 @@ const Navbar = () => {
     try{
       const res = await axios.post(`${BASE_URL}/auth/logout`,{},{withCredentials: true});
       // const res2 = await axios.post("http://localhost:3000/api/v1/auth/logout",{},{withCredentials: true});
-      dispatch(logoutUser());
+      // dispatch(logoutUser());
       // console.log(res2.data.data.user);
-
+      navigator("/login");
     }
+
     catch(error){
       console.log(error);
     }
@@ -74,6 +77,7 @@ const Navbar = () => {
     if (user) {
       setLoggedIn(true);
     }
+    console.log(loggedIn)
   },[user])
 
   return (
