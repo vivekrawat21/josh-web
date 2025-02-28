@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaChevronDown, FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import "@fontsource/fugaz-one";
 import { CgProfile } from "react-icons/cg";
+import { BASE_URL } from "@/utils/utils";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "@/features/user/userSlice";
+import axios from "axios";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,11 +53,28 @@ const Navbar = () => {
   const currentRoute = location.pathname;
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
+  const dispatch = useDispatch();
 
+  const user = useSelector((state) => state.user);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const logout = () => {
+  const logout = async () => {
+    try{
+      const res = await axios.post(`${BASE_URL}/auth/logout`,{},{withCredentials: true});
+      // const res2 = await axios.post("http://localhost:3000/api/v1/auth/logout",{},{withCredentials: true});
+      dispatch(logoutUser());
+      // console.log(res2.data.data.user);
+
+    }
+    catch(error){
+      console.log(error);
+    }
     setLoggedIn(false);
   };
+  useEffect(() => {
+    if (user) {
+      setLoggedIn(true);
+    }
+  },[user])
 
   return (
     <nav className="fixed top-0 left-0 right-0 mx-auto backdrop-blur-md bg-white/40 shadow-sm p-4 rounded-xl z-50 transition-all duration-300 ">
