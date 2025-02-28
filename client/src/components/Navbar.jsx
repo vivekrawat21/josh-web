@@ -135,12 +135,17 @@ const Navbar = () => {
           {loggedIn ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <CgProfile className="text-3xl cursor-pointer" />
+                <CgProfile className="text-3xl cursor-pointer " />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="" sideOffset={5} className="relative w-full bg-white p-4 rounded-lg shadow-lg mt-8 right-12">
+              <DropdownMenuContent align="" sideOffset={5} className="relative w-full bg-white p-4 rounded-lg shadow-lg mt-8 right-12 ">
                 <DropdownMenuItem>
                   <Link to="/dashboard/profile/personalinformation">
-                    <p>Personal Information</p>
+                    <p>My Profile</p>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/dashboard/profile/personalinformation">
+                    <p>My Wallet</p>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
@@ -189,6 +194,9 @@ const Navbar = () => {
             <>
               <Link to="/dashboard/profile/personalinformation" className=" hover:text-orange-400 transition cursor-pointer">
                 Personal Information
+              </Link>
+              <Link to="/dashboard/profile/personalinformation" className=" hover:text-orange-400 transition cursor-pointer">
+                My Wallet
               </Link>
               <Link to="/dashboard/mycourses" className="hover:text-orange-400 transition cursor-pointer">
                 My Courses
