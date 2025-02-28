@@ -168,42 +168,42 @@ const Navbar = () => {
   }, [user]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 mx-auto backdrop-blur-md bg-white/40 shadow-sm p-4 rounded-xl z-50 transition-all duration-300 ">
+    <nav className="fixed top-0 left-0 right-0 mx-auto  bg-white shadow-sm  rounded-xl z-50 transition-all duration-300 py-1 px-5 ">
       <div className="flex justify-between items-center font-['Fugaz One'] mx-4">
-        {/* Logo and Navigation Links */}
+        {/* Logo and Navigation Links */} 
         <div className="flex items-center space-x-20 relative ">
-          <div className="flex flex-col items-center pb-4">
+          <div className="flex flex-col items-center ">
             <div className="flex flex-col items-center relative md:ml-8 ml-4">
               <Link to="/">
                 <img
                   src="/logo1.png"
                   alt="Logo"
-                  className="w-[55px] md:w-[60px] "
+                  className="w-[50px] md:w-[60px] ml-3 "
                 />
               </Link>
               <p
-                className="absolute md:text-[11px] text-center font-bold 
-              text-[8px] top-[80%] text-gray-900 md:w-[130px] md:top-[75%] md:left-[-50%] "
+                className="absolute text-center font-bold 
+              text-[6px] md:text-[8px] top-[80%] text-gray-900 md:w-[130px] md:top-[75%] md:left-[-35%] "
               >
                 Powered by <span className="text-gray-900">NIITF</span>
               </p>
             </div>
           </div>
 
-          <ul className="hidden md:flex items-center space-x-10 text-gray-900 font-medium text-[16px]">
+          <ul className="hidden md:flex items-center space-x-10 text-gray-900 font-medium text-[16px] pt-4">
             <li>
-              <Link to="/about" className="hover:text-orange-400 text-md transition cursor-pointer font-semibold">
+              <Link to="/about" className="hover:text-orange-400 text-md transition cursor-pointer font-extralight">
                 About
               </Link>
             </li>
             <li className="relative group">
             <button
-                className="flex items-center space-x-2 hover:text-orange-500 transition cursor-pointerg"
+                className="flex items-center space-x-2 hover:text-orange-500 transition cursor-pointer"
                 onMouseEnter={() => setIsRotating(true)}
                 onMouseLeave={() => setIsRotating(false)}
               >
                 
-                <span className="text-md font-semibold">Courses</span>
+                <span className="text-md font-extralight">Courses</span>
                 <motion.div animate={{ rotate: isRotating ? 180 : 0 }}>
                   <FaChevronDown className="text-base transition-transform duration-300" />
                 </motion.div>
