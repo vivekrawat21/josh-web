@@ -20,6 +20,11 @@ import DashboardLayout from "./components/DashboardLayout";
 import ForgotPassword from "./pages/ForgotPassword";
 import Mywallet from "./components/Mywallet";
 import Courses from "./pages/Courses";
+import JoinUs from "./pages/JoinUs";
+import ContactUs from "./pages/ContactUs";
+import Blogs from "./pages/Blogs";
+import RefundAndPolicy from "./pages/RefundAndPolicy";
+import LicenceAndAgreement from "./pages/LicenceAndAgreement";
 
 function App() {
   return (
@@ -57,6 +62,14 @@ function App() {
 
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/joinus" element={<JoinUs />} />
+              <Route path="/blogs" element={<Blogs />} />
+
+
+              <Route path="/contactus" element={<ContactUs />} />
+              <Route path="/refundandpolicy" element={<RefundAndPolicy />} />
+              <Route path="/licenceandagreement" element={<LicenceAndAgreement />} />
+
               <Route path="/forgotpassword" element={<ForgotPassword/>} />
 
 

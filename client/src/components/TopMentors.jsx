@@ -1,97 +1,80 @@
-import { motion } from 'framer-motion';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
+import React from "react";
 
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { useInView } from "react-intersection-observer";
+
+import { motion } from "framer-motion";
 const mentors = [
   {
-    name: 'John Doe',
-    role: 'Senior Full Stack Developer',
-    image: 'https://picsum.photos/400/500?random=1',
+    id: 1,
+    name: "John Doe",
+    role: "Senior Full Stack Developer",
+    image: "https://picsum.photos/400/500?random=1",
   },
   {
-    name: 'Jane Smith',
-    role: 'Expert Digital Marketer',
-    image: 'https://picsum.photos/400/500?random=2',
+    id: 2,
+    name: "Jane Smith",
+    role: "Expert Digital Marketer",
+    image: "https://picsum.photos/400/500?random=2",
   },
   {
-    name: 'Robert Brown',
-    role: 'AI & ML Specialist',
-    image: 'https://picsum.photos/400/500?random=3',
+    id: 3,
+    name: "Robert Brown",
+    role: "AI & ML Specialist",
+    image: "https://picsum.photos/400/500?random=3",
   },
   {
-    name: 'Emily Davis',
-    role: 'Cloud & DevOps Engineer',
-    image: 'https://picsum.photos/400/500?random=4',
+    id: 4,
+    name: "Emily Davis",
+    role: "Cloud & DevOps Engineer",
+    image: "https://picsum.photos/400/500?random=4",
   },
   {
-    name: 'Michael Lee',
-    role: 'Cybersecurity Expert',
-    image: 'https://picsum.photos/400/500?random=5',
+    id: 5,
+    name: "Michael Lee",
+    role: "Cybersecurity Expert",
+    image: "https://picsum.photos/400/500?random=5",
   },
 ];
 
-export default function TopMentors() {
-  const [current, setCurrent] = useState(0);
-  const visibleMentors = 3;
-
-  // Duplicate slides to create the infinite loop effect
-  const extendedMentors = [...mentors, ...mentors];
-
-  const nextSlide = () => {
-    setCurrent((prev) => (prev + 1) % mentors.length);
-  };
-
-  const prevSlide = () => {
-    setCurrent((prev) => (prev - 1 + mentors.length) % mentors.length);
-  };
-
-  useEffect(() => {
-    const interval = setInterval(nextSlide, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
+const TopMentor = () => {
+  
   return (
-    <section className="mt-10 pb-2 px-10 w-full mx-auto text-center relative overflow-hidden my-14">
-      <h2 className="text-[1.80rem] lg:text[2.20rem] font-bold text-center mb-4 text-gray-900">
-        Meet <span className=" text-orange-500 font-semibold font-sans">Top Mentors</span>
+    <section className="mt-8 pb-2 px-10 w-full mx-auto text-center relative overflow-hidden my-14">
+      <h2 className=" text-[1.70rem] sm:text-[2.70rem] font-semibold text-center mb-5 text-gray-900">
+        Meet{" "}
+        <span className="text-[1.70rem] sm:text-[2.70rem] text-orange-500 font-semibold font-sans">
+          Top Mentors
+        </span>
       </h2>
-      <div className="relative flex items-center justify-center w-full">
-        {/* Left Arrow */}
-        <button
-          onClick={prevSlide}
-          className="absolute -left-10 lg:left-10 z-10 p-3 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700  "
-        >
-          <FaArrowLeft className="text-xl" />
-        </button>
-        <div className="flex w-full max-w-6xl overflow-hidden relative">
-          <motion.div
-            className="flex gap-6"
-            initial={{ x: 0 }}
-            animate={{ x: `-${current * (100 / visibleMentors)}%` }}
-            transition={{ type: 'tween', duration: 0.6, ease: 'easeInOut' }}
-            style={{
-              width: `${extendedMentors.length * (100 / visibleMentors)}%`,
-              display: 'flex',
-            }}
-          >
-            {extendedMentors.map((mentor, index) => (
-              <MentorCard key={index} mentor={mentor} />
-            ))}
-          </motion.div>
-        </div>
-        {/* Right Arrow */}
-        <button
-          onClick={nextSlide}
-          className="absolute -right-10  lg:right-10 p-3 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700  md:block"
-        >
-          <FaArrowRight className="text-xl" />
-        </button>
-      </div>
+
+      <Carousel className="relative flex items-center justify-center w-full">
+        <CarouselContent>
+          {mentors.map((mentor) => (
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3" key={mentor.id}>
+            
+                <Card className="w-[80%] h-[70%] md:w-[80%] mx-auto">
+                  {/* <CardContent className="flex aspect-square items-center justify-center p-6"> */}
+                    <MentorCard key={mentor.id} mentor={mentor} />
+                  {/* </CardContent> */}
+                </Card>
+              {/* </div> */}
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
     </section>
   );
-}
-
+};
 function MentorCard({ mentor }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
 
@@ -100,20 +83,20 @@ function MentorCard({ mentor }) {
       ref={ref}
       initial={{ opacity: 0, y: 50, scale: 0.9 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className="relative flex-shrink-0 w-1/3 px-4 group"
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="relative flex-shrink-0  group" // Changed to w-full
     >
       <div className="relative overflow-hidden rounded-lg shadow-lg ">
         {/* Image */}
         <img
           src={mentor.image}
           alt={mentor.name}
-          className="w-full h-96 object-cover transform transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-[80%] object-cover transform transition-transform duration-300 group-hover:scale-105" // Ensure full width and height
         />
         {/* Overlay */}
         <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/90 to-transparent transition-all duration-300 group-hover:from-black/95 flex items-end p-6">
           {/* Name & Role */}
-          <div className="w-full text-left">
+          <div className=" text-left">
             <motion.h3
               initial={{ opacity: 0, y: 10 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -136,3 +119,5 @@ function MentorCard({ mentor }) {
     </motion.div>
   );
 }
+
+export default TopMentor; 
