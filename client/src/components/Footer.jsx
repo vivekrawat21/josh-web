@@ -10,7 +10,7 @@ const Footer = () => {
           <Link to="/">
             <div className="relative">
               <img src="/logo1.png" alt="Logo" className="w-[150px]" />
-              <span className="absolute text-[16px] font-bold text-cyan-400 top-[75%] left-[2%]">
+              <span className="absolute text-[16px] font-bold text-white top-[75%] left-[2%]">
                 Powered by <span className="text-white">NIITF</span>
               </span>
             </div>
