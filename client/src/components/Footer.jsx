@@ -6,11 +6,11 @@ const Footer = () => {
     <section className="w-full bg-gradient-to-b from-gray-900 to-gray-800 text-white p-6 flex flex-col items-center rounded-lg mb-2">
       <div className="w-full flex flex-col md:flex-row justify-between items-center py-4 px-6">
         {/* Logo and Description */}
-        <div className="text-center md:text-left md:w-7/12">
+        <div className="text-center  md:text-left md:w-7/12">
           <Link to="/">
             <div className="relative">
-              <img src="/logo1.png" alt="Logo" className="w-[150px]" />
-              <span className="absolute text-[16px] font-bold text-white top-[75%] left-[2%]">
+              <img src="/logo1.png" alt="Logo" className="w-[150px]  md:m-0 m-auto "/>
+              <span className="absolute items text-[16px] font-bold text-white md:top-[75%] md:left-[2%] top-[74%] left-[32%] ">
                 Powered by <span className="text-white">NIITF</span>
               </span>
             </div>
