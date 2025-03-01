@@ -1,65 +1,96 @@
-import { motion } from 'framer-motion';
-import { FaCheckCircle } from 'react-icons/fa';
-import { Button } from '@/components/ui/button';
-import { SiReact, SiNextdotjs, SiTailwindcss, SiNodedotjs, SiMongodb, SiGooglemarketingplatform, SiSocialblade, SiMarketo, SiGoogletagmanager, SiAppian } from 'react-icons/si';
+import { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight, Download, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
 const courses = [
   {
-    title: 'Full Stack Development',
-    description: 'Master frontend and backend development with the latest technologies and build real-world applications.',
+    title: "Full Stack Development",
+    duration: "36 Months",
+    description: "Master front-end and back-end technologies with real-world projects.",
     image: 'https://www.cdmi.in/courses@2x/full-stack.webp',
-    topics: [
-      { name: 'React, Next.js & TailwindCSS', icon: <SiReact className="text-blue-500 text-xl" /> },
-      { name: 'Node.js, Express & MongoDB', icon: <SiNodedotjs className="text-green-600 text-xl" /> },
-      { name: 'Authentication & Security', icon: <SiMongodb className="text-green-500 text-xl" /> },
-      { name: 'Deploying Full Stack Apps', icon: <SiNextdotjs className="text-black text-xl" /> },
-    ],
   },
   {
-    title: 'Digital Marketing Mastery',
-    description: 'Learn SEO, Social Media Marketing, and advanced digital marketing strategies to grow your brand.',
+    title: "Digital Marketing",
+    duration: "24 Months",
+    description: "Learn SEO, social media, and paid advertising to grow businesses online.",
     image: 'https://theincmagazine.com/wp-content/uploads/2023/11/Digital-Marketing-Strategies-Unlocking-Success-in-the-Online-Realm.jpg',
-    topics: [
-      { name: 'SEO & Content Marketing', icon: <SiGooglemarketingplatform className="text-orange-500 text-xl" /> },
-      { name: 'Social Media & Ads', icon: <SiSocialblade className="text-red-500 text-xl" /> },
-      { name: 'Email & Affiliate Marketing', icon: <SiMarketo className="text-purple-600 text-xl" /> },
-      { name: 'Marketing Analytics & Strategies', icon: <SiGoogletagmanager className="text-blue-600 text-xl" /> },
-    ],
   },
+  {
+    title: "Data Science",
+    duration: "30 Months",
+    description: "Analyze data and build AI models to solve complex business problems.",
+    image: "https://imgs.search.brave.com/V1rthFn3fU4KL4sh4XldDz5lFenFzq-RfXWJMnvxIfE/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9kYXRhLXNjaWVu/Y2UtYnVzaW5lc3Mt/aW50ZXJuZXQtdGVj/aG5vbG9neS1jb25j/ZXB0LXNlcnZlci1y/b29tLWJhY2tncm91/bmRfMTYxNDUyLTk3/NTguanBnP3NlbXQ9/YWlzX2h5YnJpZA"
+  }
 ];
 
-export default function TopCourses() {
+export default function TopCoursesCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerPage(window.innerWidth >= 768 ? 2 : 1);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? courses.length - 1 : prev - 1));
+  };
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + itemsPerPage) % courses.length);
+  };
+
   return (
-    <section className=" px-10 w-full  ">
-      <h2 className="text-[2.70rem] font-semibold text-center mb-5  text-gray-900">Explore<span className='text-orange-500 text-[2.70rem] font-sans font-semibold'>Top Courses</span>  </h2>
-      {courses.map((course, index) => (
-        <motion.div
-          key={index}
-          className={`flex flex-col md:flex-row items-center gap-12 mb-16 bg-gradient-to-r from-orange-100 to-white shadow-xl rounded-2xl overflow-hidden p-8 w-full ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-          <motion.img
-            src={course.image}
-            alt={course.title}
-            className="w-full md:w-1/2 rounded-lg shadow-lg transform hover:scale-105 transition duration-500 border-4 border-white"
-          />
-          <div className="w-full md:w-1/2 text-gray-800">
-            <h3 className="text-3xl font-bold mb-4 text-gray-900">{course.title}</h3>
-            <p className="text-lg mb-6 text-gray-700">{course.description}</p>
-            <ul className="grid grid-cols-2 gap-4 mb-6">
-              {course.topics.map((topic, idx) => (
-                <li key={idx} className="flex items-center gap-3  text-base lg:text-lg font-medium bg-white p-3  rounded-lg shadow overflow-hidden">
-                  {topic.icon}
-                  {topic.name}
-                </li>
-              ))}
-            </ul>
-            <Button className="bg-orange-500 text-white text-lg px-8 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300">Enroll Now</Button>
-          </div>
-        </motion.div>
-      ))}
-    </section>
+    <div className="w-full mb-10">
+      <h2 className="text-[2.70rem] font-semibold text-center mb-2 text-gray-900">Top <span className=' text-orange-500 font-semibold font-sans'>Courses</span></h2>
+      <div className="relative flex items-center justify-center overflow-hidden">
+        <button onClick={prevSlide} className="absolute left-0 z-10 p-2 bg-white shadow-md rounded-full">
+          <ChevronLeft size={24} />
+        </button>
+
+        <div className="flex space-x-4 overflow-hidden">
+          <AnimatePresence initial={false} custom={currentIndex}>
+            {courses.slice(currentIndex, currentIndex + itemsPerPage).map((course) => (
+              <motion.div
+                key={course.title}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="w-full max-w-md p-6 bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center transform hover:scale-105 transition-transform"
+              >
+                <img src={course.image} alt={course.title} className="w-full h-40 object-cover rounded-lg" />
+                <h3 className="mt-4 text-xl font-semibold">{course.title}</h3>
+                <p className="mt-1 text-sm italic text-gray-500">{course.description}</p>
+                
+                {/* Duration Section with Icon */}
+                <div className="mt-3 flex items-center space-x-2 text-gray-700 font-medium">
+                  <Clock size={18} className="text-orange-500" />
+                  <span>Duration: {course.duration}</span>
+                </div>
+
+                {/* Buttons - Adjusted spacing */}
+                <div className="mt-6 flex justify-center w-full space-x-3">
+                  <Button className="bg-gradient-to-r from-orange-400 to-orange-600 text-white px-4 py-2 rounded-lg shadow-md">View Program</Button>
+                  <Button className="bg-gradient-to-r from-orange-500 to-orange-700 text-white px-4 py-2 rounded-lg shadow-md flex items-center">
+                    <Download size={16} className="mr-2" /> Syllabus
+                  </Button>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        <button onClick={nextSlide} className="absolute right-0 z-10 p-2 bg-white shadow-md rounded-full">
+          <ChevronRight size={24} />
+        </button>
+      </div>
+    </div>
   );
 }
