@@ -37,10 +37,10 @@ const TestimonialBento = () => {
         {testimonials.map((testimonial, i) => (
           <motion.div
             key={i}
-            className="w-full p-6 mx-auto rounded-2xl shadow-lg bg-white border-l-4 border-orange-500 hover:scale-[1.05] transition-all snap-start"
+            className="w-full p-6 mx-auto rounded-2xl shadow-lg bg-white border-l-4 border-orange-500 snap-start"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.07 }}
+          
             transition={{ duration: 0.5, delay: i * 0.2 }}
             style={{ minWidth: "100%", textAlign: "center" }}
           >
