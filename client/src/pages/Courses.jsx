@@ -291,8 +291,8 @@ const Courses = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Explore Courses</h1>
+    <div className="container mx-auto px-4 md:py-8">
+      <h1 className="text-3xl font-bold mb-8"><span className="text-orange-500">Explore</span> Courses</h1>
 
       {/* Search bar */}
       <form onSubmit={handleSearch} className="mb-6 flex gap-2">
