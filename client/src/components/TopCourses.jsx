@@ -48,7 +48,7 @@ export default function TopCoursesCarousel() {
 
   return (
     <div className="w-full mb-10">
-      <h2 className="text-[2.70rem] font-semibold text-center mb-2 text-gray-900">Top <span className=' text-orange-500 font-semibold font-sans'>Courses</span></h2>
+      <h2 className="text-[1.80rem] lg:text[2.20rem] font-bold text-center text-gray-900  mb-4 ">Top <span className=' text-orange-500 font-semibold font-sans'>Courses</span></h2>
       <div className="relative flex items-center justify-center overflow-hidden">
         <button onClick={prevSlide} className="absolute left-0 z-10 p-2 bg-white shadow-md rounded-full">
           <ChevronLeft size={24} />

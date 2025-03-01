@@ -10,4 +10,4 @@ const TopCourses = () => {
   return <div>404</div>
 }
 
-export default TopCourses
+export default TopCourses;

@@ -265,7 +265,7 @@ const SearchComponent = () => {
   );
 
   return (
-    <div className="flex flex-col items-center justify-center py-8 px-4 space-y-6">
+    <div className="flex flex-col items-center justify-center  px-4 space-y-6">
       {/* Search Input */}
       <div className="relative w-full max-w-xl">
         <input
@@ -313,7 +313,7 @@ const SearchComponent = () => {
           </div>
         )}
       </div>
-      <p className='sm:text-lg'>Popular learning goals</p>
+      <p className='text-[1.60rem] lg:text[1.80rem] font-semibold text-center'>Popular learning goals</p>
       {/* Goal Options */}
       <div className="grid cols-span-3 sm:flex  flex-wrap grid-cols-4 gap-2 justify-center text- sm:w-auto">
         {[

@@ -52,9 +52,9 @@ export default function TopMentors() {
   }, []);
 
   return (
-    <section className="mt-8 pb-2 px-10 w-full mx-auto text-center relative overflow-hidden my-14">
-      <h2 className="text-[2.70rem] font-semibold text-center mb-5 text-gray-900">
-        Meet <span className="text-[2.70rem] text-orange-500 font-semibold font-sans">Top Mentors</span>
+    <section className="mt-10 pb-2 px-10 w-full mx-auto text-center relative overflow-hidden my-14">
+      <h2 className="text-[1.80rem] lg:text[2.20rem] font-bold text-center mb-4 text-gray-900">
+        Meet <span className=" text-orange-500 font-semibold font-sans">Top Mentors</span>
       </h2>
       <div className="relative flex items-center justify-center w-full">
         {/* Left Arrow */}
@@ -103,7 +103,7 @@ function MentorCard({ mentor }) {
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className="relative flex-shrink-0 w-1/3 px-4 group"
     >
-      <div className="relative overflow-hidden rounded-lg shadow-lg">
+      <div className="relative overflow-hidden rounded-lg shadow-lg ">
         {/* Image */}
         <img
           src={mentor.image}

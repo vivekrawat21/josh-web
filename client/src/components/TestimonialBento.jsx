@@ -28,8 +28,8 @@ const TestimonialBento = () => {
 
   return (
     <div className="p-6 md:p-12 bg-orange-100 rounded-2xl shadow-lg">
-      <h2 className="text-[2.70rem] font-semibold text-center mb-5 text-gray-900">
-        Students <span className="text-[2.70rem] text-orange-500 font-semibold font-sans">Testimonials</span>
+      <h2 className="text-[1.80rem] lg:text[2.20rem] font-bold text-center text-gray-900 mb-4">
+        Students <span className=" text-orange-500  ">Testimonials</span>
       </h2>
 
       {/* Mobile - Swipeable single view */}
