@@ -58,7 +58,7 @@ const Bundles = () => {
 
   return (
     <section className="py-12 px-4">
-      <h2 className="text-3xl font-bold text-center mb-6">
+      <h2 className="text-[1.80rem] lg:text[2.20rem] font-bold text-center  mb-4 text-gray-900">
         Digital <span className="text-orange-500">Learning Bundles</span>
       </h2>
 

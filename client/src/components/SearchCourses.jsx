@@ -245,98 +245,86 @@ const coursesData = [
       image: "https://source.unsplash.com/random/200x300?corporate-branding",
     }]
   
-
-const SearchComponent = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showResults, setShowResults] = useState(false);
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    setShowResults(e.target.value.length > 2);
-  };
-
- 
-
-  
-
-  // Filter courses based on the search term
-  const filteredCourses = coursesData.filter((course) =>
-    course.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  return (
-    <div className="flex flex-col items-center justify-center py-8 px-4 space-y-6">
-      {/* Search Input */}
-      <div className="relative w-full max-w-xl">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          placeholder="Tell us what you're looking to learn"
-          className="w-full p-4 pl-10 rounded-full border-2  border-red-400 "
-        />
-
-        {/* Search Results */}
-        {showResults && (
-          <div className="absolute mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-md z-50">
-            <div className="p-4">
-              <h4 className="font-semibold text-gray-800">Courses</h4>
-
-              {/* Check if there are no filtered courses */}
-              {filteredCourses.length > 0 ? (
-                <ul className="space-y-4">
-                  {filteredCourses.map((course) => (
-                    <li
-                      key={course.id}
-                      className="flex items-center cursor-pointer hover:bg-gray-100 p-2 rounded-lg"
-                    
-                    >
-                      <img
-                        src={course.image}
-                        alt={course.title}
-                        className="w-8 h-8 mr-4"
-                      />
-                      <div>
-                        <Link to={`/courses/${course.category}/${course.id}`}>
-                        <p className="text-gray-700">{course.title}</p>
-                        <p className="text-sm text-gray-500">{course.description}</p>
-                        </Link>
-                       
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-700">No courses found.</p>
-              )}
-            </div>
+    
+    const SearchComponent = () => {
+      const [searchTerm, setSearchTerm] = useState('');
+      const [showResults, setShowResults] = useState(false);
+    
+      const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+        setShowResults(e.target.value.length > 2);
+      };
+    
+      const filteredCourses = coursesData.filter((course) =>
+        course.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    
+      return (
+        <div className="flex flex-col items-center justify-center px-4 space-y-6">
+          {/* Search Input */}
+          <div className="relative w-full max-w-xl">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              placeholder="Tell us what you're looking to learn"
+              className="w-full p-4 pl-10 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-red-400 outline-none"
+            />
+    
+            {/* Search Results */}
+            {showResults && (
+              <div className="absolute mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-md z-50">
+                <div className="p-4">
+                  <h4 className="font-semibold text-gray-800 text-sm sm:text-base">Courses</h4>
+    
+                  {/* Check if there are no filtered courses */}
+                  {filteredCourses.length > 0 ? (
+                    <ul className="space-y-3">
+                      {filteredCourses.map((course) => (
+                        <li key={course.id} className="flex items-center cursor-pointer hover:bg-gray-100 p-2 rounded-lg">
+                          <img src={course.image} alt={course.title} className="w-6 h-6 sm:w-8 sm:h-8 mr-3" />
+                          <div>
+                            <Link to={`/courses/${course.category}/${course.id}`}>
+                              <p className="text-gray-700 text-xs sm:text-sm">{course.title}</p>
+                              <p className="text-[10px] sm:text-xs text-gray-500">{course.description}</p>
+                            </Link>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-700 text-xs sm:text-sm">No courses found.</p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <p className='sm:text-lg'>In-Demand  <span className='text-orange-600 sm:text-xl font-bold'>Skills</span></p>
-      {/* Goal Options */}
-      <div className="grid cols-span-3 sm:flex  flex-wrap grid-cols-4 gap-2 justify-center text- sm:w-auto">
-        {[
-          'Advance to a higher role',
-          'Earn a professional certificate',
-          'Transition to a new career field',
-          'Pursue entrepreneurship',
-          'Free Course',
-          'Gear up for your first job',
-          'Ace interviews skills',
-          'Get ready for Government exams',
-        ].map((goal, index) => (
-          <button
-            key={index}
-            className="h-14 sm:py-2 px-2 border-2  rounded-md  sm:rounded-xl text-gray-800 hover:bg-gray-200 focus:ring-2 focus:ring-red-400 w-full sm:w-auto text-xs py-1"
-        
-          >
-            {goal}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default SearchComponent;
+    
+          <p className="text-lg sm:text-xl font-semibold text-center">Popular learning goals</p>
+    
+          {/* Goal Options */}
+          <div className="grid grid-cols-2 sm:flex flex-wrap gap-2 justify-center w-full sm:w-auto">
+            {[
+              'Advance to a higher role',
+              'Earn a professional certificate',
+              'Transition to a new career field',
+              'Pursue entrepreneurship',
+              'Free Course',
+              'Gear up for your first job',
+              'Ace interviews skills',
+              'Get ready for Government exams',
+            ].map((goal, index) => (
+              <button
+                key={index}
+                className="h-12 sm:h-14 py-2 px-2 border-2 rounded-md sm:rounded-xl text-gray-800 hover:bg-gray-200 focus:ring-2 focus:ring-red-400 w-full sm:w-auto text-[10px] sm:text-xs"
+              >
+                {goal}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    };
+    
+    export default SearchComponent;
+    
