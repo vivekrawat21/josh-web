@@ -89,9 +89,16 @@ const Navbar = () => {
           </div>
         </div>
 
-        <ul className="hidden md:flex items-center space-x-10 text-gray-900 font-medium text-[16px] pt-4">
+        <ul className="hidden md:flex items-center space-x-10 text-gray-600  text-[16px] pt-4">
+
           <li>
-            <Link to="/about" className="hover:text-orange-400 text-md transition cursor-pointer font-extralight">
+            <Link to="/" className="hover:text-orange-400 text-md transition cursor-pointer ">
+              Home
+            </Link>
+
+          </li>
+          <li>
+            <Link to="/about" className="hover:text-orange-400 text-md transition cursor-pointer ">
               About
             </Link>
           </li>
@@ -102,7 +109,7 @@ const Navbar = () => {
               onMouseLeave={() => setIsRotating(false)}
             >
               
-              <span className="text-md font-extralight">Courses</span>
+              <span className="text-md ">Courses</span>
               <motion.div animate={{ rotate: isRotating ? 180 : 0 }}>
                 <FaChevronDown className="text-base transition-transform duration-300" />
               </motion.div>
@@ -144,7 +151,7 @@ const Navbar = () => {
           )}
 
           {/* Mobile: Show Hamburger Menu Instead */}
-          <button onClick={toggleSidebar} className="md:hidden text-3xl text-gray-900">
+          <button onClick={toggleSidebar} className="md:hidden text-2xl text-gray-900">
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>

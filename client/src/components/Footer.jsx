@@ -62,7 +62,7 @@ const Footer = () => {
           <h2 className="text-lg font-semibold mb-2 text-gray-300">Quick Links</h2>
           <ul className="text-sm space-y-1 text-gray-400">
             <li><Link to="/about" className="hover:text-cyan-400 transition">About Us</Link></li>
-            <li><Link to="/courses" className="hover:text-cyan-400 transition">Courses</Link></li>
+            <li><Link to="#" className="hover:text-cyan-400 transition">Courses</Link></li>
             <li><Link to="/join" className="hover:text-cyan-400 transition">Join Us</Link></li>
             <li><Link to="/blogs" className="hover:text-cyan-400 transition">Blogs</Link></li>
           </ul>
@@ -72,10 +72,11 @@ const Footer = () => {
         <div className="w-full md:w-1/3 text-center md:text-left">
           <h2 className="text-lg font-semibold mb-2 text-gray-300">Support</h2>
           <ul className="text-sm space-y-1 text-gray-400">
-            <li><Link to="/contact" className="hover:text-cyan-400 transition">Contact Us</Link></li>
+            <li><Link to="/contactus" className="hover:text-cyan-400 transition">Contact Us</Link></li>
             <li><Link to="/disclaimer" className="hover:text-cyan-400 transition">Disclaimer</Link></li>
-            <li><Link to="/refund-policy" className="hover:text-cyan-400 transition">Refund Policy</Link></li>
-            <li><Link to="/license" className="hover:text-cyan-400 transition">License & Agreements</Link></li>
+            <li><Link to="/refundandpolicy" className="hover:text-cyan-400 transition">Refund Policy</Link></li>
+            <li><Link to="/licenseandagreement" className="hover:text-cyan-400 transition">License & Agreements</Link></li>
+
           </ul>
         </div>
       </div>

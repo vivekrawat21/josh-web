@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaTimes, FaChevronDown, FaChevronUp, FaWallet, FaBook, FaGift, FaHeadset, FaUser, FaSignOutAlt, FaInfoCircle, FaUsers, FaVideo, FaBlog, FaUserPlus, FaSignInAlt } from "react-icons/fa";
+import { FaTimes, FaChevronDown, FaChevronUp, FaWallet, FaBook, FaGift, FaHeadset, FaUser, FaSignOutAlt, FaInfoCircle, FaUsers, FaVideo, FaBlog,  FaSignInAlt } from "react-icons/fa";
+import { MdHome } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/features/user/userSlice";
 import axios from "axios";
@@ -105,6 +106,9 @@ const Sidebar = ({ isOpen, toggleSidebar, isLoggedIn }) => {
               </>
             ) : (
               <>
+                <Link to="/" className="flex items-center gap-3 hover:text-orange-500 transition">
+                   <MdHome />  Home
+                </Link>
                 <Link to="/about" className="flex items-center gap-3 hover:text-orange-500 transition">
                   <FaInfoCircle /> About
                 </Link>

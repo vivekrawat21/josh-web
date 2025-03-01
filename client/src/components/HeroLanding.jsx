@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Hero1 from '/Hero1.jpeg';
+import {useSelector} from 'react-redux';
 
 const HeroLanding = () => {
+  const user = useSelector(state=>state.user);
   return (
     <div className="relative flex flex-col-reverse items-center justify-between h-auto md:flex-row md:space-x-12 px-6 md:px-12">
       
@@ -37,13 +39,13 @@ const HeroLanding = () => {
           with expert instruction to help you achieve your goals.
         </p>
 
-        <motion.button
+       {user==null? <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           className="bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg px-5 py-2 sm:px-6 sm:py-3 font-semibold text-sm sm:text-lg text-white transition-transform duration-200 mt-6 md:mb-0 mb-4"
         >
           Get Started
-        </motion.button>
+        </motion.button>:null}
       </motion.div>
 
       {/* Image Section */}
