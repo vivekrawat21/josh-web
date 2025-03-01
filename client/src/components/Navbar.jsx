@@ -28,6 +28,18 @@ const coursesData = [
       { id: 8, title: "Business Mastery" },
     ],
   },
+  {
+        category: "UPSKILLING COURSES",
+        courses: [
+          { id: 9, title: "Python Programming" },
+          { id: 10, title: "React Development" },
+          { id: 11, title: "Node.js Development" },
+          { id: 12, title: "MongoDB Development" },
+          { id: 13, title: "Express Development" },
+          { id: 14, title: "JavaScript Development" },
+        ],
+  },
+
 ];
 
 const Navbar = () => {
