@@ -143,6 +143,9 @@ const Sidebar = ({ isOpen, toggleSidebar, isLoggedIn }) => {
                 <Link to="/login" className="text-center border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-2 px-3 rounded-lg hover:bg-orange-500 hover:text-white transition text-sm">
                   <FaSignInAlt /> Login
                 </Link>
+                <Link to="/signup" className="text-center border  bg-orange-500 flex items-center justify-center gap-2 py-2 px-3 rounded-lg hover:bg-orange-500 hover:text-white transition text-sm">
+                  <FaSignInAlt /> SignUp
+                </Link>
                 
               </>
             )}

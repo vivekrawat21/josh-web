@@ -11,7 +11,7 @@ const MyWallet = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-start">
+    <div className="min-h-screen bg-gray-100 px-6 flex flex-col items-start">
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}

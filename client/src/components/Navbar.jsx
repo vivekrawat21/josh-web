@@ -8,6 +8,14 @@ import axios from "axios";
 import Sidebar from "./Sidebar";
 import { motion } from "framer-motion";
 import { BASE_URL } from "@/utils/utils";
+import { FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const coursesData = [
   {
@@ -49,22 +57,56 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const loggedIn = !!user?.email; // Check if user exists
+  const [loggedInUser,setLoggedInUser]= useState(false);
   const [isRotating, setIsRotating] = useState(false);
+  const navigator = useNavigate();
 
   // Toggle Sidebar
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-
+  const showProfile  = ()=>{
+    console.log("Profile")
+  }
+  const logout = async() => {
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+      // const res2 = await axios.post("http://localhost:3000/api/v1/auth/logout",{},{withCredentials: true});
+      dispatch(logoutUser());
+      // console.log(res2.data.data.user);
+      setLoggedInUser(false);
+      navigator("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/user`, { withCredentials: true });
-        dispatch(setUser(res.data.data.user));
+        const fetchedUser = res.data.data.user;
+
+        dispatch(setUser(fetchedUser));
       } catch (error) {
         dispatch(logoutUser());
       }
     };
-    if (!user) fetchUser();
+    if (!user) {
+
+    if(loggedInUser){
+      fetchUser();
+    }
+    }
   }, [dispatch, user]);
+  useEffect(() => {
+    if (user) {
+      setLoggedInUser(true); // User exists, set loggedIn to true
+    } else {
+      setLoggedInUser(false); // No user in store, set loggedIn to false
+    }
+  }, [user]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 mx-auto  bg-white shadow-sm  rounded-xl z-50 transition-all duration-300 py-1 px-5 ">
@@ -117,7 +159,7 @@ const Navbar = () => {
             <div className="absolute left-0 top-full mt-2 bg-white shadow-lg rounded-lg p-6 w-[600px] grid grid-cols-3 gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto">
               {coursesData.map((category, index) => (
                 <div key={index} className="border-r border-gray-300 pr-4">
-                  <h3 className="font-semibold text-orange-500 mb-4">
+                  <h3 className=" text-orange-500 mb-4">
                     {category.category}
                   </h3>
                   <ul className="space-y-2 text-sm">
@@ -143,10 +185,48 @@ const Navbar = () => {
           <FaShoppingCart className="text-4xl text-gray-900 shadow-md rounded-lg p-2 bg-transparent mr-5" />
         </Link>
           {/* Desktop Login/Register (Hidden on Small Screens) */}
-          {!loggedIn && (
+          {!loggedIn ? (
             <div className="hidden md:flex space-x-4">
               <Link to="/login" className="bg-orange-500 text-white px-4 py-2 rounded-lg">Login</Link>
               <Link to="/signup" className="border border-orange-500 text-orange-500 px-4 py-2 rounded-lg">Register</Link>
+            </div>
+          ) : (
+            <div className="hidden md:inline ">
+              
+              <DropdownMenu  className="hidden md:inline">
+              <DropdownMenuTrigger asChild>
+                <FaUser className="text-3xl cursor-pointer " />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align=""
+                sideOffset={5}
+                className="relative w-full bg-white p-4 rounded-lg shadow-lg mt-8 right-12 "
+              >
+                <DropdownMenuItem>
+                  <Link to="/dashboard/profile/personalinformation">
+                    <p>My Profile</p>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/dashboard/mywallet">
+                    <p>My Wallet</p>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/dashboard/mycourses">
+                    <p>My Courses</p>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/dashboard/helpandsupport">
+                    <p>Help and Support</p>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <button onClick={logout}>Logout</button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             </div>
           )}
 

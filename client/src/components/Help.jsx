@@ -6,7 +6,7 @@ const HelpSupport = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10 flex flex-col items-start">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-start">
       {/* Main Help Section */}
       <motion.div 
         initial={{ opacity: 0, x: -20 }}

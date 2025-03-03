@@ -4,15 +4,21 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../features/user/userSlice" // Adjust import path
 import { FaChevronDown, FaWallet, FaBook, FaGift, FaHeadset, FaUser, FaSignOutAlt } from "react-icons/fa";
-
+import { BASE_URL } from "../utils/utils"; // Adjust import path
+import axios from "axios";
 const Dashboard = () => {
   const [profileMenu, setProfileMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
+    const res = await axios.post(
+      `${BASE_URL}/auth/logout`,
+      {},
+      { withCredentials: true }
+    );
     dispatch(logoutUser());
-    navigate("/signin"); // Redirect to Sign In page
+    navigate("/login"); // Redirect to Sign In page
   };
 
   return (

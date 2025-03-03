@@ -89,11 +89,11 @@ const Bundles = () => {
                 <motion.img
                   src={bookImages[index]}
                   alt={bundle.title}
-                  className="w-32 h-44 sm:w-40 sm:h-56 rounded-lg shadow-md"
+                  className="w-[80%] h-80 sm:w-[80%] sm:h-80 rounded-lg shadow-md"
                   whileHover={{ scale: 1.1 }}
                 />
               ) : (
-                <div className="w-32 h-44 sm:w-40 sm:h-56 bg-gray-300 rounded-lg animate-pulse" />
+                <div className="w-[80%] h-44 sm:w-[80%] sm:h-80 bg-gray-300 rounded-lg animate-pulse" />
               )}
             </div>
 

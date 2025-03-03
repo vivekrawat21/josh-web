@@ -25,11 +25,13 @@ import ContactUs from "./pages/ContactUs";
 import Blogs from "./pages/Blogs";
 import RefundAndPolicy from "./pages/RefundAndPolicy";
 import LicenceAndAgreement from "./pages/LicenceAndAgreement";
-
+import Scroll from "./Scroll";
 function App() {
   return (
     <>
+
       <BrowserRouter basename="/">
+        <Scroll />
         <Routes>
         <Route path="/dashboard" element={<DashboardLayout />}>
         <Route index element={<PersonalInformation />} />
