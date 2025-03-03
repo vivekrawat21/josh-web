@@ -41,7 +41,7 @@ const MyCourses = () => {
   ];
 
   return (
-    <div className='w-full container  px-4 py-8 bg-gradient-to-b from-gray-50 to-white min-h-screen'>
+    <div className='w-full container  px-4 py-4 bg-gradient-to-b from-gray-50 to-white min-h-screen'>
       <h1 className='text-4xl font-bold mb-8 text-center text-gray-800'>My Learning Journey</h1>
       <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
         <div className='md:col-span-2 space-y-8'>

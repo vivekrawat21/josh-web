@@ -41,7 +41,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center flex-col md:flex-row space-y-0 lg:space-y-0 lg:space-x-5 ">
+    <div className="flex md:h-screen h-auto w-full md:items-center md:justify-center flex-col md:flex-row space-y-0 lg:space-y-0 lg:space-x-5   ">
       {/* Image Section */}
       <div className="hidden w-full md:w-2/5  md:flex items-center justify-center">
         <img
@@ -52,7 +52,7 @@ const Login = () => {
       </div>
 
       {/* Form Section */}
-      <div className="w-full md:h-[90%] md:w-2/5 lg:w-3/5  flex items-center justify-center ">
+      <div className="w-full md:h-[90%] md:w-2/5 lg:w-3/5 py-4 flex items-center justify-center ">
         <div className="bg-white p-8 rounded-lg shadow-md max-w-sm w-full">
           <h1 className="text-3xl font-bold mb-6 text-center text-gray-700">
             Welcome Back
