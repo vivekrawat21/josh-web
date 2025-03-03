@@ -3,6 +3,8 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from "../utils/utils"
+import { Loader } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 const Signup = () => {
   // State variables for input fields
   const [showPassword, setShowPassword] = useState(false);
@@ -11,16 +13,26 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [referralCode, setReferralCode] = useState('');
-
+  const [loading, setLoading] = useState(false);
+  const Navigate = useNavigate();
   // Handle form submission
   const handleSubmit = async(e) => {
     e.preventDefault(); // Prevent default form behavior
     const userInfo = { name, mobilenumber, email, password, referralCode };
     try{
+      setLoading(true);
       const res = await axios.post(`${BASE_URL}/auth/register`,userInfo);
+      if(res.data.data.user){
+        Navigate("/login");
+        setLoading(false);
+        console.log(res.data.data.user);
+      }
     }
     catch(error){
       console.log(error);
+    }
+    finally{
+      setLoading(false);
     }
     console.log(userInfo); // Log the user information
   };
@@ -108,8 +120,9 @@ const Signup = () => {
             <button
               type="submit"
               className="w-full bg-orange-500 text-white py-2 px-4 rounded-md text-lg font-semibold hover:bg-orange-600 transition duration-200"
-            >
-              Sign Up
+              disabled={loading}
+              >
+                {loading ? <Loader size={20} color="orange" className="m-auto"/> : "SIgn Up"}
             </button>
             <p className="text-center text-sm text-gray-600 mt-4">
               Already have an account?{' '}

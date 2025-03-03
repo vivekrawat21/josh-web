@@ -52,8 +52,7 @@ const coursesData = [
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const location = useLocation();
+  const [isOpenCourse, setIsOpenCourse] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const loggedIn = !!user?.email; // Check if user exists
@@ -147,8 +146,11 @@ const Navbar = () => {
           <li className="relative group">
           <button
               className="flex items-center space-x-2 hover:text-orange-500 transition cursor-pointer"
-              onMouseEnter={() => setIsRotating(true)}
-              onMouseLeave={() => setIsRotating(false)}
+              onClick={() => {
+                setIsOpenCourse(prev=>!prev)
+                setIsRotating(prev=>!prev)
+              }}
+
             >
               
               <span className="text-md ">Courses</span>
@@ -156,27 +158,26 @@ const Navbar = () => {
                 <FaChevronDown className="text-base transition-transform duration-300" />
               </motion.div>
             </button>
-            <div className="absolute left-0 top-full mt-2 bg-white shadow-lg rounded-lg p-6 w-[600px] grid grid-cols-3 gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto">
-              {coursesData.map((category, index) => (
-                <div key={index} className="border-r border-gray-300 pr-4">
-                  <h3 className=" text-orange-500 mb-4">
-                    {category.category}
-                  </h3>
-                  <ul className="space-y-2 text-sm">
-                    {category.courses.map((course) => (
-                      <li
-                        key={course.id}
-                        className="hover:text-blue-500 transition cursor-pointer"
-                      >
-                        <Link to={`/courses/${course.title}/${course.id}`}>
-                          {course.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            {isOpenCourse && (
+        <div className="absolute lg:left-[400%] left-1/2  top-full transform -translate-x-1/2 mt-4 bg-white shadow-2xl rounded-2xl p-8 w-[60vw] h-[60vh] grid grid-cols-3 gap-8 opacity-100 transition-opacity duration-300 pointer-events-auto overflow-y-auto border border-gray-200">
+          {coursesData.map((category, index) => (
+            <div key={index} className="pr-6">
+              <h3 className="text-orange-500 text-xl font-bold mb-15 my-[40px] ">{category.category}</h3>
+              <ul className="space-y-4 text-md">
+                {category.courses.map((course) => (
+                  <li key={course.id} className="hover:text-blue-500 transition cursor-pointer" onClick={() => {setIsOpenCourse(false);
+                  setIsRotating(false)
+                  }
+                  }>
+                    <Link to={`/courses/${course.title}/${course.id}`}>{course.title}</Link>
+                  </li>
+                ))}
+              </ul>
             </div>
+          ))}
+        </div>
+      )}
+
           </li>
         </ul>
       </div>

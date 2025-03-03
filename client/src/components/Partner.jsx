@@ -42,7 +42,7 @@ const Partner = () => {
   return (
     <>
       <div className="py-8 ">
-      <h2 className="text-[1.80rem] lg:text[2.20rem] font-bold text-center text-gray-900">Our <span className=' text-orange-500 font-semibold font-sans'>Partners</span></h2>
+      <h2 className="text-[1.80rem] lg:text[2.20rem] font-bold text-center mb-4 text-gray-900">Our <span className=' text-orange-500 font-semibold font-sans'>Partners</span></h2>
         <div className="relative flex  overflow-hidden rounded-lg   group">
           {/* Left blurred gradient */}
           <div className="absolute inset-y-0 left-0 w-16 z-10 bg-gradient-to-r from-white via-white to-transparent blur-5xl pointer-events-none "></div>

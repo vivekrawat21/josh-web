@@ -2,11 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Hero1 from '/Hero1.jpeg';
 import {useSelector} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 const HeroLanding = () => {
   const user = useSelector(state=>state.user);
   return (
-    <div className="relative flex flex-col-reverse items-center justify-between h-auto md:flex-row md:space-x-12 px-6 md:px-12">
+    <div className="relative flex flex-col-reverse items-center justify-between h-auto md:flex-row md:space-x-12  md:px-12 ">
       
       {/* Text Section */}
       <motion.div
@@ -15,7 +16,7 @@ const HeroLanding = () => {
         animate={{ opacity: 1, x: 0 }}    
         transition={{ duration: 0.8 }}
       >
-        <h1 className="relative text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 leading-snug">
+        <h1 className="relative text-xl  md:text-5xl font-extrabold tracking-tight text-gray-900 leading-snug">
           <motion.span
             className="block text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
             initial={{ opacity: 0, y: -20 }}
@@ -44,13 +45,13 @@ const HeroLanding = () => {
           whileTap={{ scale: 0.95 }}
           className="bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg px-5 py-2 sm:px-6 sm:py-3 font-semibold text-sm sm:text-lg text-white transition-transform duration-200 mt-6 md:mb-0 mb-4"
         >
-          Get Started
+          <Link to="/login" >Get Started </Link>
         </motion.button>:null}
       </motion.div>
 
       {/* Image Section */}
       <motion.div
-        className="w-4/5 sm:w-2/3 md:w-1/2 flex justify-center md:mb-0 h-auto  md:mt-0"
+        className="w-4/5 sm:w-2/3 md:w-1/2 flex justify-center md:mb-0 h-auto  mt-0"
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}

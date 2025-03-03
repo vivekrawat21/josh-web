@@ -6,6 +6,7 @@ import { BASE_URL } from "../utils/utils";
 import { useDispatch } from "react-redux";
 import { setUser} from "../features/user/userSlice";
 import { useNavigate} from "react-router-dom";
+import { Loader } from "lucide-react";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,6 +14,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -23,6 +25,7 @@ const Login = () => {
     const userInfo = { email, password };
     console.log(userInfo)
     try {
+      setLoading(true);
         const res = await axios.post(`${BASE_URL}/auth/login `,userInfo
           ,{
             withCredentials: true
@@ -31,13 +34,20 @@ const Login = () => {
         // const res2 = await axios.post("http://localhost:3000/api/v1/auth/login",userInfo,{
         //   withCredentials: true
         // })
+        if(res.data.data.user){
+          setLoading(false);
+          dispatch(setUser(res.data.data.user));
+          navigate("/dashboard");
+          console.log(res.data.data.user);
+        }
         dispatch(setUser(res.data.data.user));
         navigate("/dashboard");
         console.log(res.data.data.user);
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false);
     }
-
   };
 
   return (
@@ -102,8 +112,9 @@ const Login = () => {
               <button
                 type="submit"
                 className="w-full bg-orange-500 text-white py-2 px-4 rounded-md text-lg font-semibold hover:bg-orange-600 transition duration-200"
+                disabled={loading}
               >
-                Log In
+                {loading ? <Loader size={20} color="orange" className="m-auto"/> : "Login"}
               </button>
             </div>
             <p className="text-center text-sm text-gray-600 mt-4">

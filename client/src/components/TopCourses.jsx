@@ -61,17 +61,14 @@ const courses = [
 const TopCourses = () => {
   return (
     <section className="mt-8 pb-6 px-4 md:px-10 w-full mx-auto text-center relative overflow-hidden my-14">
-      <h2 className="text-[1.6rem] md:text-[2.20rem] font-bold text-center mb-6 text-gray-900">
-        Meet{" "}
-        <span className="text-[1.7rem] sm:text-[2.70rem] text-orange-500 font-semibold font-sans">
-          Top Courses
-        </span>
+     <h2 className="text-[1.80rem] lg:text[2.20rem] font-bold text-center mb-4 text-gray-900">
+        Trending <span className=" text-orange-500  ">Courses</span>
       </h2>
 
       <div className="relative">
         <Carousel className="relative flex items-center justify-center w-full">
           <CarouselPrevious className="absolute left-0 z-10  p-2 bg-gray-100 rounded-full shadow-lg hover:bg-gray-300 focus:outline-none">
-            &#8592; {/* Left arrow */}
+            &#8592; 
           </CarouselPrevious>
 
           <CarouselContent>

@@ -37,10 +37,10 @@ export default function FAQ() {
 
   return (
     <section className="py-2 pb-6">
-      <div className="container mx-auto px-4 max-w-3xl">
-        <h2 className="text-[1.30rem] lg:text[2.20rem] font-bold text-center mb-8 text-gray-900 relative inline-block ">
-          Frequently{" "}
-          <span className=" text-[1.30rem] lg:text[2.20rem]   text-orange-500 font-semibold font-sans relative inline-block">
+      <div className="mx-auto px-4 max-w-3xl text-center" >
+        <h2 className="text-[1.76rem] lg:text[2.20rem]   text-center mb-6 font-bold  text-gray-900 relative inline-block ">
+          Frequently {" "}
+          <span className="    text-orange-500 font-semibold font-sans relative inline-block">
             Asked Questions
             {/* Swiggly Underline */}
             <svg

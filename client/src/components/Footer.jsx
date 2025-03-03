@@ -28,7 +28,7 @@ const Footer = () => {
 
     {/* Join as Instructor Button */}
     <button className="border-2 py-2 px-5 bg-white text-orange-500 font-bold rounded-lg hover:bg-orange-100 transition duration-300">
-      Join as Instructor
+     <Link to="/login" >Join Us</Link>
     </button>
   </div>
 
@@ -105,7 +105,7 @@ const Footer = () => {
       {/* Footer Bottom */}
       <div className="w-full flex flex-col md:flex-row justify-between items-center px-6 text-sm text-gray-400 space-y-3 py-2">
         {/* Copyright */}
-        <div className="text-center md:w-1/2">
+        <div >
           &#169; 2025 JoshGuru Private Limited. All Rights Reserved.
         </div>
 
