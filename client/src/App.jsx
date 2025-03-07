@@ -26,6 +26,13 @@ import Blogs from "./pages/Blogs";
 import RefundAndPolicy from "./pages/RefundAndPolicy";
 import LicenceAndAgreement from "./pages/LicenceAndAgreement";
 import Scroll from "./Scroll";
+import Admin from "./pages/Admin";
+import AllCourses from "./components/AllCourses"
+import AdminLogin from "./components/AdminLogin";
+import AdminSettings from "./components/AdminSettings";
+import Students from "./components/Students";
+import AdminLayout from "./components/AdminLayout";
+import AdminDashboard from "./components/AdminDashboard";
 function App() {
   return (
     <>
@@ -33,6 +40,17 @@ function App() {
       <BrowserRouter basename="/">
         <Scroll />
         <Routes>
+          <Route path="/admin" element={<AdminLayout />} >
+          <Route index element={<AdminLogin />} />
+          <Route path="/admin/courses" element={<AllCourses />} />
+
+          <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/admin/students" element={<Students />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+
+          
+          </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
         <Route index element={<PersonalInformation />} />
         <Route path="profile/personalinformation" element={<PersonalInformation />} />
