@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils"
 import axios from "axios"
 import { BASE_URL } from "@/utils/utils"
 
-const AddNewCourse = ()=> {
+const AddNewCourse = ({addCourse , setAddCourse})=> {
   const [date, setDate] = useState()
   const [title,setTitle]= useState("");
   const [category,setCategory]= useState("");
@@ -35,6 +35,9 @@ const AddNewCourse = ()=> {
     setCourseMentorName("")
     setTitle("")
     setDate("")
+  }
+  const closeAddCourse = ()=>{
+    setAddCourse(false)
   }
   const uploadCourse = async(e)=>{
     e.preventDefault();
@@ -141,7 +144,7 @@ const AddNewCourse = ()=> {
 
 
       <div className="flex justify-end gap-2">
-        <Button type="button" variant="outline" >
+        <Button type="button" variant="outline" onClick={closeAddCourse} >
           Cancel
         </Button>
         <Button  onClick={uploadCourse}type="submit">Upload Course</Button>

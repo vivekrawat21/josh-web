@@ -41,8 +41,9 @@ function App() {
         <Scroll />
         <Routes>
           <Route path="/admin" element={<AdminLayout />} >
-          <Route index element={<AdminLogin />} />
+          <Route index element={<AdminLogin  />} />
           <Route path="/admin/courses" element={<AllCourses />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
 
           <Route path="/admin/settings" element={<AdminSettings />} />
           <Route path="/admin/students" element={<Students />} />

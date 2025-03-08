@@ -27,6 +27,7 @@ const AllCourse = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addCourse,setAddCourse]=useState(false);
   const [courses,setCourses]= useState([])
+  // const [closeAddCourse,setCloseAddCourse]=useState(false)
   const handleCourseAddButton= ()=>{
     // console.log("")
     setAddCourse(!addCourse)
@@ -62,7 +63,7 @@ const AllCourse = () => {
       </div>
       {addCourse && (
    <div className='my-2 py-2  px-4 border-2 bg-white rounded-lg'>
-    <AddNewCourse/>
+    <AddNewCourse addCourse={addCourse} setAddCourse={setAddCourse}/>
    </div>
           )}
        <div>
@@ -92,7 +93,7 @@ const AllCourse = () => {
               <TableHead>Price</TableHead>
               <TableHead>Bundle</TableHead>
               {/* <TableHead>Status</TableHead> */}
-              <TableHead>Last Updated</TableHead>
+              <TableHead>Added </TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -103,6 +104,8 @@ const AllCourse = () => {
                 <TableCell>{course.category}</TableCell>
                 <TableCell>₹{course.price}</TableCell>
                 <TableCell>{course.bundleName}</TableCell>
+                <TableCell>{course.date}</TableCell>
+                
                 <TableCell>
                   <span
                     className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
