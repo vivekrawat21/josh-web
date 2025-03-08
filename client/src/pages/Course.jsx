@@ -12,12 +12,7 @@ const Course = () => {
         
         {/* Video Section */}
         <div className="mb-8 relative">
-          <iframe
-            className="w-full h-72 md:h-[450px] rounded-lg shadow-xl"
-            src="https://www.youtube.com/embed/example"
-            title="Course Video"
-            allowFullScreen
-          ></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/Dhpb0rz8fjU?si=5leyB-1ehX_3MAIi" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         
         {/* About the Course */}
