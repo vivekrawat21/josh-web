@@ -26,7 +26,7 @@ import Blogs from "./pages/Blogs";
 import RefundAndPolicy from "./pages/RefundAndPolicy";
 import LicenceAndAgreement from "./pages/LicenceAndAgreement";
 import Scroll from "./Scroll";
-import Admin from "./pages/Admin";
+// import Admin from "./pages/Admin";
 import AllCourses from "./components/AllCourses"
 import AdminLogin from "./components/AdminLogin";
 import AdminSettings from "./components/AdminSettings";

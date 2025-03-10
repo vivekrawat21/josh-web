@@ -348,7 +348,7 @@ const SearchComponent = () => {
         ].map((goal, index) => (
           <button
             key={index}
-            className="inline-flex h-auto text-center py-1 sm:py-2 sm:h-auto px-2 border-2 rounded-md sm:rounded-xl  hover:bg-gray-200 focus:ring-2 focus:ring-red-400 text-[10px] sm:text-xs"
+            className="inline-flex h-auto text-center py-1 sm:py-2 sm:h-auto px-2 border-2 rounded-md sm:rounded-xl text-gray700 hover:bg-gray-200 focus:ring-2 focus:ring-red-400 text-[12px] sm:text-sm"
           >
             {goal}
           </button>
