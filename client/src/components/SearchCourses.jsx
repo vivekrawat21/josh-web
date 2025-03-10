@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState , useEffect, use} from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 // Sample coursesData
 const coursesData = [
   // Excel and Earn using AI and ChatGPT
@@ -261,6 +262,7 @@ const SearchComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showResults, setShowResults] = useState(false);
 
+
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
     setShowResults(e.target.value.length > 2);
@@ -348,7 +350,7 @@ const SearchComponent = () => {
         ].map((goal, index) => (
           <button
             key={index}
-            className="inline-flex h-auto text-center py-1 sm:py-2 sm:h-auto px-2 border-2 rounded-md sm:rounded-xl  hover:bg-gray-200 focus:ring-2 focus:ring-red-400 text-[10px] sm:text-xs"
+            className="inline-flex h-auto text-center py-1 sm:py-2 sm:h-auto px-2 border-2 rounded-md sm:rounded-xl text-gray700 hover:bg-gray-200 focus:ring-2 focus:ring-red-400 text-[12px] sm:text-sm"
           >
             {goal}
           </button>

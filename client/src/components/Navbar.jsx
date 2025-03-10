@@ -112,18 +112,18 @@ const Navbar = () => {
     <div className="flex justify-between items-center font-['Fugaz One'] mx-4">
       {/* Logo and Navigation Links */} 
       <div className="flex items-center space-x-20 relative ">
-        <div className="flex flex-col items-center ">
+        <div className="flex flex-col items-center  ">
           <div className="flex flex-col items-center relative md:ml-8 ml-4">
             <Link to="/">
               <img
                 src="/logo1.png"
-                alt="Logo"
-                className="w-[50px] md:w-[60px] ml-3 "
+                alt="joshguru"
+                className="w-[50px] md:w-[60px]  h-[50px] md:h-[60px] object-cover"
               />
             </Link>
             <p
               className="absolute text-center font-bold 
-            text-[6px] md:text-[8px] top-[80%] text-gray-900 md:w-[130px] md:top-[75%] md:left-[-35%] "
+            text-[6px] md:text-[8px] top-[80%] text-gray-900 md:w-[130px] md:top-[75%] md:left-[-%] "
             >
               Powered by <span className="text-gray-900">NIITF</span>
             </p>
@@ -181,9 +181,9 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center space-x-4">
         <Link to="/cart">
-          <FaShoppingCart className="text-4xl text-gray-900 shadow-md rounded-lg p-2 bg-transparent mr-5" />
+          <FaShoppingCart className="text-4xl text-gray-900 shadow-md rounded-lg p-2 bg-transparent " />
         </Link>
           {/* Desktop Login/Register (Hidden on Small Screens) */}
           {!loggedIn ? (
@@ -232,7 +232,7 @@ const Navbar = () => {
           )}
 
           {/* Mobile: Show Hamburger Menu Instead */}
-          <button onClick={toggleSidebar} className="md:hidden text-2xl text-gray-900">
+          <button onClick={toggleSidebar} className="md:hidden text-2xl text-gray-900  ">
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>

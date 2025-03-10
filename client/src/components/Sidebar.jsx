@@ -67,7 +67,7 @@ const Sidebar = ({ isOpen, toggleSidebar, isLoggedIn }) => {
             <FaTimes />
           </button>
 
-          <nav className="mt-2 flex flex-col space-y-5 text-lg">
+          <nav className="mt-2 flex flex-col space-y-5 text-lg text-gray-700">
             {isLoggedIn ? (
               <>
                 <Link to="/dashboard/profile/personalinformation" className="flex items-center gap-3 hover:text-orange-500 transition">
@@ -106,7 +106,7 @@ const Sidebar = ({ isOpen, toggleSidebar, isLoggedIn }) => {
               </>
             ) : (
               <>
-                <Link to="/" className="flex items-center gap-3 hover:text-orange-500 transition">
+                <Link to="/" className="flex items-center gap-3 hover:text-orange-500 transition text-gray-700">
                    <MdHome />  Home
                 </Link>
                 <Link to="/about" className="flex items-center gap-3 hover:text-orange-500 transition">
@@ -120,7 +120,7 @@ const Sidebar = ({ isOpen, toggleSidebar, isLoggedIn }) => {
                     <motion.div className="ml-6 flex flex-col space-y-2 text-sm">
                       {coursesData.map((category, index) => (
                         <div key={index}>
-                          <h3 className="text-black font-semibold text-xs">{category.category}</h3>
+                          <h3 className=" font-semibold text-xs">{category.category}</h3>
                           {category.courses.map((course) => (
                             <Link key={course.id} to={`/courses/${course.title}/${course.id}`} className="block text-gray-600 text-xs hover:text-blue-500">
                               {course.title}
@@ -143,7 +143,7 @@ const Sidebar = ({ isOpen, toggleSidebar, isLoggedIn }) => {
                 <Link to="/login" className="text-center border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-2 px-3 rounded-lg hover:bg-orange-500 hover:text-white transition text-sm">
                   <FaSignInAlt /> Login
                 </Link>
-                <Link to="/signup" className="text-center border  bg-orange-500 flex items-center justify-center gap-2 py-2 px-3 rounded-lg hover:bg-orange-500 hover:text-white transition text-sm">
+                <Link to="/signup" className=" text-black text-center border  bg-orange-500 flex items-center justify-center gap-2 py-2 px-3 rounded-lg hover:bg-orange-500 hover:text-white transition text-sm">
                   <FaSignInAlt /> SignUp
                 </Link>
                 
