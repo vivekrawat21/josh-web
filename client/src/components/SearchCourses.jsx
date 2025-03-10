@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState , useEffect, use} from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 // Sample coursesData
 const coursesData = [
   // Excel and Earn using AI and ChatGPT
@@ -260,6 +261,7 @@ const coursesData = [
 const SearchComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showResults, setShowResults] = useState(false);
+
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
