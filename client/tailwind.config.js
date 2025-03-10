@@ -53,7 +53,7 @@ export default {
   			}
   		},
 		animation:{
-			"loop-scroll": "loop-scroll 8s linear infinite",
+			"loop-scroll": "loop-scroll 10s linear infinite",
 		},
 		keyframes:{
 			"loop-scroll": {

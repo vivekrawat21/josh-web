@@ -1,6 +1,4 @@
-"use client"
-
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../components/ui/card"
@@ -8,287 +6,64 @@ import { Badge } from "../components/ui/badge"
 import { Search } from "lucide-react"
 import { useNavigate } from "react-router-dom"  // Use navigate instead of useParams
 import { useParams } from "react-router-dom"
-// Mock course data
-const coursesData = [
-  // Excel and Earn using AI and ChatGPT
-  {
-    id: 1,
-    title: "Mastering AI with Excel and ChatGPT",
-    description: "Leverage AI and Excel to automate processes and enhance productivity.",
-    category: "Excel and Earn using AI and ChatGPT",
-    level: "Beginner",
-    price: 4999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?excel-ai",
-  },
-  {
-    id: 2,
-    title: "Excel Automation with ChatGPT",
-    description: "Automate repetitive Excel tasks using ChatGPT and boost your efficiency.",
-    category: "Excel and Earn using AI and ChatGPT",
-    level: "Intermediate",
-    price: 5999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?automation-excel",
-  },
-  {
-    id: 3,
-    title: "AI-Powered Excel Dashboards",
-    description: "Create dynamic dashboards in Excel powered by AI insights.",
-    category: "Excel and Earn using AI and ChatGPT",
-    level: "Advanced",
-    price: 6999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?dashboard-excel",
-  },
-  
-  // Content Creation Mastery
-  {
-    id: 4,
-    title: "Become a Content Creation Pro",
-    description: "Master content creation techniques to build a strong online presence.",
-    category: "Content Creation Mastery",
-    level: "Intermediate",
-    price: 5999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?content-creation",
-  },
-  {
-    id: 5,
-    title: "Social Media Content Mastery",
-    description: "Create engaging social media content and grow your audience.",
-    category: "Content Creation Mastery",
-    level: "Advanced",
-    price: 7999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?social-media",
-  },
-  {
-    id: 6,
-    title: "Video Content Creation 101",
-    description: "Learn how to create impactful video content for your brand.",
-    category: "Content Creation Mastery",
-    level: "Beginner",
-    price: 4999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?video-creation",
-  },
-  
-  // Marketing Mastery
-  {
-    id: 7,
-    title: "Complete Marketing Strategies",
-    description: "Learn cutting-edge marketing strategies to promote your business.",
-    category: "Marketing Mastery",
-    level: "Advanced",
-    price: 7999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?marketing",
-  },
-  {
-    id: 8,
-    title: "Email Marketing for Beginners",
-    description: "Start with email marketing to reach and engage your audience.",
-    category: "Marketing Mastery",
-    level: "Beginner",
-    price: 4999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?email-marketing",
-  },
-  {
-    id: 9,
-    title: "SEO Strategies for Content Creators",
-    description: "Master SEO to improve your website's ranking and traffic.",
-    category: "Marketing Mastery",
-    level: "Intermediate",
-    price: 6999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?seo",
-  },
-
-  // Branding Mastery
-  {
-    id: 10,
-    title: "Ultimate Guide to Branding",
-    description: "Build a strong brand identity to leave a lasting impression.",
-    category: "Branding Mastery",
-    level: "Intermediate",
-    price: 6999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?branding",
-  },
-  {
-    id: 11,
-    title: "Personal Branding Success",
-    description: "Develop your personal brand and create a unique presence.",
-    category: "Branding Mastery",
-    level: "Beginner",
-    price: 4999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?personal-branding",
-  },
-  {
-    id: 12,
-    title: "Corporate Branding Strategies",
-    description: "Learn corporate branding strategies to enhance business reputation.",
-    category: "Branding Mastery",
-    level: "Advanced",
-    price: 8999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?corporate-branding",
-  },
-
-  // Traffic Mastery
-  {
-    id: 13,
-    title: "Traffic Generation Techniques",
-    description: "Learn proven strategies to drive consistent traffic to your website.",
-    category: "Traffic Mastery",
-    level: "Advanced",
-    price: 8999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?website-traffic",
-  },
-  {
-    id: 14,
-    title: "Organic Traffic Boost",
-    description: "Master the art of generating organic traffic to your website.",
-    category: "Traffic Mastery",
-    level: "Intermediate",
-    price: 6999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?organic-traffic",
-  },
-  {
-    id: 15,
-    title: "Social Media Traffic Growth",
-    description: "Drive traffic from social media platforms to your website.",
-    category: "Traffic Mastery",
-    level: "Beginner",
-    price: 4999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?social-traffic",
-  },
-
-  // Influence Mastery
-  {
-    id: 16,
-    title: "Influence Building for Entrepreneurs",
-    description: "Master the art of influence and grow your network.",
-    category: "Influence Mastery",
-    level: "Advanced",
-    price: 9999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?influence",
-  },
-  {
-    id: 17,
-    title: "Networking Skills for Success",
-    description: "Build a network of meaningful connections for career growth.",
-    category: "Influence Mastery",
-    level: "Intermediate",
-    price: 7999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?networking",
-  },
-  {
-    id: 18,
-    title: "Social Influence and Persuasion",
-    description: "Learn social influence techniques to drive behavior and success.",
-    category: "Influence Mastery",
-    level: "Beginner",
-    price: 5999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?persuasion",
-  },
-  
-  // Finance Mastery
-  {
-    id: 19,
-    title: "Finance Fundamentals for Business",
-    description: "Develop strong financial management skills to grow your business.",
-    category: "Finance Mastery",
-    level: "Intermediate",
-    price: 7999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?finance-business",
-  },
-  {
-    id: 20,
-    title: "Personal Finance Management",
-    description: "Take control of your personal finances and build wealth.",
-    category: "Finance Mastery",
-    level: "Beginner",
-    price: 4999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?personal-finance",
-  },
-  {
-    id: 21,
-    title: "Investing for Beginners",
-    description: "Learn how to invest wisely and grow your wealth over time.",
-    category: "Finance Mastery",
-    level: "Beginner",
-    price: 5999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?investing",
-  },
-
-  // Development
-  {
-    id: 22,
-    title: "Web Development Essentials",
-    description: "Learn to build modern web applications with the latest technologies.",
-    category: "Development",
-    level: "Intermediate",
-    price: 6999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?web-development",
-  },
-  {
-    id: 23,
-    title: "JavaScript Masterclass",
-    description: "Master JavaScript and develop dynamic web applications.",
-    category: "Development",
-    level: "Advanced",
-    price: 7999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?javascript",
-  },
-  {
-    id: 24,
-    title: "Full Stack Development",
-    description: "Learn to build full-stack web applications from scratch.",
-    category: "Development",
-    level: "Advanced",
-    price: 8999, // in rupees
-    image: "https://source.unsplash.com/random/200x300?full-stack",
-  },
-
-  // Business Mastery
-  {
-    id: 25,
-    title: "Business Strategy Masterclass",
-    description: "Gain a competitive edge with expert business strategies.",
-    category: "Business Mastery",
-    level: "Advanced",
-    price: 8999, 
-    image: "https://source.unsplash.com/random/200x300?corporate-branding",
-  }]
-
-// Get unique categories for filter buttons
-const categories = Array.from(new Set(coursesData.map((course) => course.category)))
+import { BASE_URL } from "@/utils/utils"
+import axios from "axios"
 
 const Courses = () => {
-  const [searchTerm, setSearchTerm] = useState("")
-  const navigate = useNavigate()  // Initialize the navigate hook
-  const category = useParams().category  // Get the category from the URL params
-  const id = useParams().id  // Get the id from the URL params
-  console.log(category, id)  // Log the category and id
-  const [selectedCategory, setSelectedCategory] = useState(category)
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate(); 
+   // Initialize the navigate hook
+   let category = 'all';
+  category = useParams().category;  // Get the category from the URL params
+  const id = useParams().id;  // Get the id from the URL params
+  const [selectedCategory, setSelectedCategory] = useState(category);
+  const [bundleData, setBundleData] = useState([]);
+  const categories = Array.from(new Set(bundleData.map((bundle) => bundle?.bundleName)));
 
   // Filter courses based on search term and selected category
-  const filteredCourses = coursesData.filter((course) => {
-    const matchesSearch =
-      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCourses = bundleData.flatMap((bundle) => {
+    // Filter by category if a category is selected
+    const matchesCategory = selectedCategory ? bundle.bundleName === selectedCategory : true;
 
-    const matchesCategory = selectedCategory ? course.category === selectedCategory : true
+    // Filter courses by search term (checking title or description)
+    const filteredBundleCourses = bundle.courses.filter((course) => {
+      return (
+        course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        course.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
 
-    return matchesSearch && matchesCategory
-  })
+    // Return the courses that match the search term and the selected category
+    return matchesCategory && filteredBundleCourses.length > 0 ? filteredBundleCourses : [];
+  });
 
   // Handle search
   const handleSearch = (e) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   // Handle category filter
   const handleCategoryFilter = (category) => {
-    setSelectedCategory(category === selectedCategory ? null : category)
-  }
+    setSelectedCategory(category === selectedCategory ? null : category);
+  };
 
   // Handle course card click (navigate to a course details page)
   const handleCourseClick = (id) => {
-    navigate(`/courses/${id}`)
-  }
+    navigate(`/course/${id}`);
+  };
+
+  const fetchBundles = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/course/getBundles`, { withCredentials: true });
+      setBundleData(res.data.data.bundles);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBundles();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 md:py-8">
@@ -317,13 +92,13 @@ const Courses = () => {
         >
           All
         </Button>
-        {categories.map((category) => (
+        {categories.map((bundle) => (
           <Button
-            key={category}
-            variant={selectedCategory === category ? "default" : "outline"}
-            onClick={() => handleCategoryFilter(category)}
+            key={bundle}
+            variant={selectedCategory === bundle ? "default" : "outline"}
+            onClick={() => handleCategoryFilter(bundle)}
           >
-            {category}
+            {bundle}
           </Button>
         ))}
       </div>
@@ -332,7 +107,7 @@ const Courses = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCourses.length > 0 ? (
           filteredCourses.map((course) => (
-            <Card key={course.id} className="overflow-hidden cursor-pointer" onClick={() => handleCourseClick(course.id)}>
+            <Card key={course._id} className="overflow-hidden cursor-pointer" onClick={() => handleCourseClick(course._id)}>
               <img src={course.image || "/placeholder.svg"} alt={course.title} className="w-full h-48 object-cover" />
               <CardHeader>
                 <div className="flex justify-between items-start">
@@ -356,7 +131,7 @@ const Courses = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Courses
+export default Courses;

@@ -26,7 +26,7 @@ const Login = () => {
     console.log(userInfo)
     try {
       setLoading(true);
-        const res = await axios.post(`${BASE_URL}/auth/login `,userInfo
+        const res = await axios.post(`${BASE_URL}/auth/login`,userInfo
           ,{
             withCredentials: true
           }
@@ -44,6 +44,7 @@ const Login = () => {
         navigate("/dashboard");
         console.log(res.data.data.user);
     } catch (error) {
+      
       console.log(error);
     }finally{
       setLoading(false);

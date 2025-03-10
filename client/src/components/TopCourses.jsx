@@ -62,7 +62,7 @@ const TopCourses = () => {
   return (
     <section className="mt-8 pb-6 px-4 md:px-10 w-full mx-auto text-center relative overflow-hidden my-14">
      <h2 className="text-[1.80rem] lg:text[2.20rem] font-bold text-center mb-4 text-gray-900">
-        Trending <span className=" text-orange-500  ">Courses</span>
+        Monetized <span className=" text-orange-500  ">Courses</span>
       </h2>
 
       <div className="relative">

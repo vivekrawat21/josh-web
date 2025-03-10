@@ -11,19 +11,19 @@ const HeroLanding = () => {
       
       {/* Text Section */}
       <motion.div
-        className="w-full md:w-1/2 text-center md:text-left px-4"
+        className="w-full md:w-1/2 text-center md:text-left px-2"
         initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}    
         transition={{ duration: 0.8 }}
       >
-        <h1 className="relative text-xl  md:text-5xl font-extrabold tracking-tight text-gray-900 leading-snug">
+        <h1 className="relative text-xl  lg:text-5xl font-extrabold tracking-tight text-gray-900 leading-snug">
           <motion.span
             className="block text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
           >
-            Transform Your Future
+            Learn Today, Lead Tomorrow
           </motion.span>
           <motion.span
             className="block md:mt-2  text-gray-900"
@@ -31,7 +31,7 @@ const HeroLanding = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
           >
-            With Expert-Led Courses
+            Empower Your Future with JoshGuru!
           </motion.span>
         </h1>
 
@@ -45,7 +45,7 @@ const HeroLanding = () => {
           whileTap={{ scale: 0.95 }}
           className="bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg px-5 py-2 sm:px-6 sm:py-3 font-semibold text-sm sm:text-lg text-white transition-transform duration-200 mt-6 md:mb-0 mb-4"
         >
-          <Link to="/login" >Get Started </Link>
+          <Link to="/login" > Start Learning Now </Link>
         </motion.button>:null}
       </motion.div>
 
@@ -58,7 +58,7 @@ const HeroLanding = () => {
       >
         <img
           src={Hero1}
-          alt="Hero Landing"
+          alt="joshguru Landing image"
           className="w-full max-w-xs sm:max-w-md md:max-w-full h-auto object-contain mb-3 "
         />
       </motion.div>

@@ -13,7 +13,7 @@ const Footer = () => {
   {/* Logo */}
   <img
     src="/logo1.png"
-    alt="Logo"
+    alt="joshguru"
     className="w-[150px] md:m-0 m-auto mb-0"
   />
 
