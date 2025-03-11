@@ -54,7 +54,7 @@ const Courses = () => {
 
   const fetchBundles = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/course/getBundles`, { withCredentials: true });
+      const res = await axios.get(`${BASE_URL}/course/getAllBundles`, { withCredentials: true });
       setBundleData(res.data.data.bundles);
     } catch (error) {
       console.log(error);

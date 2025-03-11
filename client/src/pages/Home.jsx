@@ -6,6 +6,7 @@ import TopCourses from '@/components/TopCourses'
 import TopMentors from '@/components/TopMentors'
 import SearchCourses from '@/components/SearchCourses'
 import Bundles from '@/components/Bundles'
+import DiscountPopup from '@/components/DiscountPopup'
 const Home = () => {
   return (
     <div className="min-h-screen my-0">
@@ -17,6 +18,7 @@ const Home = () => {
     <TestimonialBento />
     <TopMentors/>
     <FAQ />
+    <DiscountPopup />
     </div>
   )
 }

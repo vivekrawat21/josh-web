@@ -13,15 +13,16 @@ const AdminOffers = () => {
   const [courses, setCourses] = useState([]);
   const [popupMessage, setPopupMessage] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [discount, setDiscount] = useState("");
+  const [discount, setDiscount] = useState(0);
   const [popups, setPopups] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Fetch Courses from Backend
   const getAllCourses = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/course`, { withCredentials: true });
-      setCourses(res.data.data.courses || []);
+      const res = await axios.get(`${BASE_URL}/course/getAllBundles`, { withCredentials: true });
+      console.log("Courses:", res.data.data.bundles);
+      setCourses(res.data.data.bundles || []);
     } catch (error) {
       console.error("Error fetching courses:", error);
     }
@@ -48,7 +49,7 @@ const AdminOffers = () => {
       };
 
       // Update backend
-      await axios.patch(`${BASE_URL}/discount`, {
+      await axios.put(`${BASE_URL}/discount`, {
         courseId: selectedCourse._id,
         discount: Number(discount),
       },
@@ -76,7 +77,7 @@ const AdminOffers = () => {
     setLoading(true);
 
     try {
-      await axios.delete(`${BASE_URL}/discount`, {  courseId  },{
+      await axios.put(`${BASE_URL}/discount/remove`, { courseId: courseId  },{
         withCredentials: true,
       });
 
@@ -171,7 +172,7 @@ const AdminOffers = () => {
             <SelectContent>
               {courses.map((course) => (
                 <SelectItem key={course?._id} value={JSON.stringify(course)}>
-                  {course?.title} (Current Discount: {course.discount}%)
+                  {course?.bundleName} (Current Discount: {course.discount}%)
                 </SelectItem>
               ))}
             </SelectContent>
@@ -210,7 +211,7 @@ const AdminOffers = () => {
               {courses.map((course) =>
                 course.discount > 0 ? (
                   <TableRow key={course._id}>
-                    <TableCell>{course.title}</TableCell>
+                    <TableCell>{course?.bundleName}</TableCell>
                     <TableCell className="line-through text-gray-500">${course.price}</TableCell>
                     <TableCell className="text-green-500 font-bold">
                       ${course.discountedPrice || (course.price - (course.price * course.discount) / 100).toFixed(2)}
