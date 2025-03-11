@@ -33,6 +33,7 @@ import AdminSettings from "./components/AdminSettings";
 import Students from "./components/Students";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./components/AdminDashboard";
+import AdminOffers from "./components/AdminOffers.jsx";
 function App() {
   return (
     <>
@@ -48,6 +49,7 @@ function App() {
           <Route path="/admin/settings" element={<AdminSettings />} />
           <Route path="/admin/students" element={<Students />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/offers" element={<AdminOffers />} />
 
 
           

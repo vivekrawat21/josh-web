@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaBook, FaGift, FaHeadset, FaSignOutAlt } from 'react-icons/fa';
+import {BiSolidOffer} from 'react-icons/bi';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../features/user/userSlice';
@@ -46,6 +47,11 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
       </Link>
       <Link to="/admin/settings" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
         <FaHeadset /> Settings
+      </Link>
+      <Link to="/admin/offers"
+        className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
+      >
+        <BiSolidOffer /> Offers
       </Link>
       <div className="mt-64">
         <button
