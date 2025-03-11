@@ -34,7 +34,7 @@ const AllCourse = () => {
   }
   const fetchCourses = async()=>{
     try {
-      const res = await axios.get(`${BASE_URL}/course`,{withCredentials:true})
+      const res = await axios.get(`${BASE_URL}/course/getCourses`,{withCredentials:true})
     console.log(res)
     setCourses(res.data.data.courses)
     } catch (error) {
