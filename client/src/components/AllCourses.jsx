@@ -43,7 +43,10 @@ const AllCourse = () => {
     
   
   }
+
+ 
   useEffect(()=>{
+    // fetchCourseAndBundle()
     fetchCourses()
   },[])
 

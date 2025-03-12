@@ -12,7 +12,7 @@ const Students = () => {
       });
       setStudents(res.data.data.users);
     } catch (error) {
-      console.error("Error fetching students", error);
+      console.error('Error fetching students', error);
     }
   };
 
@@ -31,15 +31,27 @@ const Students = () => {
         {students?.map((student) => (
           <div
             key={student._id}
-            className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300"
+            className='bg-white shadow-lg rounded-xl p-6 transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl'
           >
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">{student.name}</h3>
-            <p className="text-gray-600">Email: {student.email}</p>
-            <p className="text-gray-600">Mobile: {student.mobilenumber}</p>
-            {/* Uncomment this section when there are courses available
-            {student.courses?.map((course) => (
-              <li key={course}>{course}</li>
-            ))} */}
+            {/* Student Info */}
+            <h3 className='text-xl md:text-2xl font-semibold text-gray-800 mb-3'>
+              {student.name}
+            </h3>
+            <p className='text-sm md:text-base text-gray-600 mb-2'>
+              Email: {student.email}
+            </p>
+            <p className='text-sm md:text-base text-gray-600 mb-4'>
+              Mobile: {student.mobilenumber}
+            </p>
+
+            {/* Action buttons for assigning course/bundle */}
+            <div className='flex justify-between space-x-2'>
+              {/* Assign Course */}
+              <AssignCourse assignType='course' studentId={student._id} />
+
+              {/* Assign Bundle */}
+              <AssignCourse assignType='bundle' studentId={student._id} />
+            </div>
           </div>
         ))}
       </div>
