@@ -5,6 +5,8 @@ import { BASE_URL } from '../utils/utils';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../features/user/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const AdminLogin = ({ setIsLoggedIn }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,7 +15,7 @@ const AdminLogin = ({ setIsLoggedIn }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const user = useSelector((state) => state.user);
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -40,7 +42,14 @@ const AdminLogin = ({ setIsLoggedIn }) => {
       setLoading(false);
     }
   };
-
+  useEffect(()=>{
+    if(user){
+      if(user.role === "admin"){
+        navigate("/admin/dashboard")
+      }
+    }
+    
+  })
   return (
     <div className="w-full md:h-[90%] md:w-2/5 lg:w-3/5 py-4 flex items-center justify-center mx-auto my-auto">
       <div className="bg-white p-8 rounded-lg shadow-md max-w-sm w-full">
