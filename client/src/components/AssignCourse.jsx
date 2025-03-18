@@ -99,7 +99,7 @@ const AssignCourse = ({ assignType, studentId }) => {
       );
 
       if (response.status === 200) {
-        // alert(`${assignType} assigned successfully!`);
+        alert(`${assignType} assigned successfully!`);
         resetDialog(); // Close the dialog and reset the form on success
       } else {
         console.error(`Error assigning ${assignType}`);

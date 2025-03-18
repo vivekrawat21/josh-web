@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { BASE_URL } from "@/utils/utils";
-import { Button } from "../components/ui/button";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { BASE_URL } from '@/utils/utils';
+import AssignCourse from '../components/AssignCourse';
+
 const Students = () => {
   const [students, setStudents] = useState([]);
 
@@ -21,13 +22,13 @@ const Students = () => {
   }, []);
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center"><h2 className="text-3xl font-bold text-center mb-8">Students Data</h2>
-      <Button className="mb-8" >Assign course</Button>
-      </div>
-      
+    <div className='container mx-auto p-6'>
+      <h2 className='text-3xl font-bold text-center mb-8 text-gray-900 tracking-tight sm:text-4xl md:text-5xl lg:text-6xl'>
+        Students Data
+      </h2>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* Grid container */}
+      <div className='grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
         {students?.map((student) => (
           <div
             key={student._id}
