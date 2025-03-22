@@ -108,7 +108,7 @@ const Navbar = () => {
   }, [user]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 mx-auto  bg-white shadow-sm  rounded-xl z-50 transition-all duration-300 py-1 px-5 ">
+    <nav className="fixed top-0 left-0 right-0 mx-auto  bg-white shadow-sm  rounded-xl z-50 transition-all duration-300 py-1 px-auto ">
     <div className="flex justify-between items-center font-['Fugaz One'] mx-4">
       {/* Logo and Navigation Links */} 
       <div className="flex items-center space-x-20 relative ">
@@ -232,8 +232,8 @@ const Navbar = () => {
           )}
 
           {/* Mobile: Show Hamburger Menu Instead */}
-          <button onClick={toggleSidebar} className="md:hidden text-2xl text-gray-900  ">
-            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+          <button onClick={toggleSidebar} className="md:hidden text-2xl ml-auto text-gray-900 mr-4">
+            {isSidebarOpen ? <FaTimes className=""/> : <FaBars />}
           </button>
         </div>
       </div>

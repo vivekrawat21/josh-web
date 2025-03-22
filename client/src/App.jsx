@@ -34,6 +34,8 @@ import Students from "./components/Students";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminOffers from "./components/AdminOffers.jsx";
+import Blog from "./pages/Blog";
+import Webinars from "./pages/Webinars";
 function App() {
   return (
     <>
@@ -87,6 +89,10 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/joinus" element={<JoinUs />} />
               <Route path="/blogs" element={<Blogs />} />
+              <Route path="/webinars" element={<Webinars />} />
+
+              <Route path="/blogs/:id" element={<Blog />} />
+
 
 
               <Route path="/contactus" element={<ContactUs />} />
