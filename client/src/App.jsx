@@ -36,6 +36,9 @@ import AdminDashboard from "./components/AdminDashboard";
 import AdminOffers from "./components/AdminOffers.jsx";
 import Blog from "./pages/Blog";
 import Webinars from "./pages/Webinars";
+import IntermediateBundle from "./pages/IntermediateBundle";
+import BasicBundle from "./pages/BasicBundle";
+import AdvanceBundle from "./pages/AdvanceBundle";
 function App() {
   return (
     <>
@@ -90,6 +93,10 @@ function App() {
               <Route path="/joinus" element={<JoinUs />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/webinars" element={<Webinars />} />
+              <Route path="/basicBundle" element={<BasicBundle />} />
+              <Route path="/intermediateBundle" element={<IntermediateBundle/>} />
+              <Route path="/advanceBundle" element={<AdvanceBundle />} />
+
 
               <Route path="/blogs/:id" element={<Blog />} />
 

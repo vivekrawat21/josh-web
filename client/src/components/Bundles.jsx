@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const bundles = [
   {
     title: "Basic Bundle",
     description: "Start your journey with essential knowledge.",
-    link: "/basic-bundle",
+    link: "/basicBundle",
     bgColor: "bg-gray-200", // Faded look
     textColor: "text-gray-700",
     btnColor: "bg-gradient-to-r from-gray-400 to-gray-500", // Less vibrant
@@ -18,7 +19,7 @@ const bundles = [
   {
     title: "Intermediate Bundle",
     description: "Take your skills to the next level.",
-    link: "/intermediate-bundle",
+    link: "/intermediateBundle",
     bgColor: "bg-orange-100",
     textColor: "text-orange-800",
     btnColor: "bg-gradient-to-r from-orange-500 to-orange-700",
@@ -31,7 +32,7 @@ const bundles = [
   {
     title: "Pro Bundle",
     description: "Master your craft with expert insights.",
-    link: "/pro-bundle",
+    link: "/advanceBundle",
     bgColor: "bg-blue-100",
     textColor: "text-blue-800",
     btnColor: "bg-gradient-to-r from-yellow-400 to-yellow-600", // Gold Gradient
@@ -45,7 +46,9 @@ const bundles = [
 
 const Bundles = () => {
   const [bookImages, setBookImages] = useState([]);
-
+  // const handleClick = (link)=>{
+  //   Navigate(`/${link} `)
+  // }
   useEffect(() => {
     fetch("https://www.googleapis.com/books/v1/volumes?q=technology")
       .then((response) => response.json())
@@ -62,8 +65,10 @@ const Bundles = () => {
         Digital <span className="text-orange-500">Learning Bundles</span>
       </h2>
 
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {bundles.map((bundle, index) => (
+          <Link to={bundle.link}>
           <motion.div
             key={index}
             initial={{ opacity: 0, x: bundle.direction }}
@@ -107,6 +112,7 @@ const Bundles = () => {
               </motion.a>
             </div>
           </motion.div>
+          </Link>
         ))}
       </div>
     </section>
