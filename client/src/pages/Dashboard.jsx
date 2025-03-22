@@ -9,7 +9,6 @@ import axios from "axios";
 import DashboardSidebar from "@/components/DashboardSidebar";
 const Dashboard = () => {
   const [profileMenu, setProfileMenu] = useState(false);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = async() => {

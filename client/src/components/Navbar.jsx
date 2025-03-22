@@ -92,13 +92,13 @@ const Navbar = () => {
         dispatch(logoutUser());
       }
     };
-    if (!user) {
+   
 
-    if(loggedInUser){
+    if(!user){
       fetchUser();
+    
     }
-    }
-  }, [dispatch, user]);
+  }, []);
   useEffect(() => {
     if (user) {
       setLoggedInUser(true); // User exists, set loggedIn to true
