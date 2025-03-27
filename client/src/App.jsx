@@ -39,6 +39,7 @@ import Webinars from "./pages/Webinars";
 import IntermediateBundle from "./pages/IntermediateBundle";
 import BasicBundle from "./pages/BasicBundle";
 import AdvanceBundle from "./pages/AdvanceBundle";
+import Goals from "./pages/Goals";
 function App() {
   return (
     <>
@@ -94,6 +95,8 @@ function App() {
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/webinars" element={<Webinars />} />
               <Route path="/basicBundle" element={<BasicBundle />} />
+              <Route path="/goal/:id" element={<Goals />} />
+
               <Route path="/intermediateBundle" element={<IntermediateBundle/>} />
               <Route path="/advanceBundle" element={<AdvanceBundle />} />
 

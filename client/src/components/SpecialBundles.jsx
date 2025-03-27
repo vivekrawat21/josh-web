@@ -44,7 +44,7 @@ const bundles = [
   },
 ];
 
-const Bundles = () => {
+const SpecialBundles = () => {
   const [bookImages, setBookImages] = useState([]);
   // const handleClick = (link)=>{
   //   Navigate(`/${link} `)
@@ -68,7 +68,7 @@ const Bundles = () => {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {bundles.map((bundle, index) => (
-          <Link to={bundle.link}>
+          <Link to={bundle.link} key={index}>
           <motion.div
             key={index}
             initial={{ opacity: 0, x: bundle.direction }}
@@ -119,4 +119,4 @@ const Bundles = () => {
   );
 };
 
-export default Bundles;
+export default SpecialBundles;
