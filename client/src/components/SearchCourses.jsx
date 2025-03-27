@@ -257,6 +257,91 @@ const coursesData = [
     image: "https://source.unsplash.com/random/200x300?corporate-branding",
   },
 ];
+const goalsData = [
+  {
+    id: 1,
+    title: "Advance to a higher role",
+    features: [
+      "Climb the corporate ladder",
+      "Take on leadership responsibilities",
+      "Enhance management skills",
+      "Get promoted"
+    ]
+  },
+  {
+    id: 2,
+    title: "Earn a professional certificate",
+    features: [
+      "Boost your qualifications",
+      "Enhance expertise in a specific field",
+      "Increase job opportunities",
+      "Access advanced learning resources"
+    ]
+  },
+  {
+    id: 3,
+    title: "Transition to a new career field",
+    features: [
+      "Acquire new skills",
+      "Understand industry trends",
+      "Get professional guidance",
+      "Explore job opportunities in a different field"
+    ]
+  },
+  {
+    id: 4,
+    title: "Pursue entrepreneurship",
+    features: [
+      "Start your own business",
+      "Develop a business plan",
+      "Learn to secure funding",
+      "Manage a startup"
+    ]
+  },
+  {
+    id: 5,
+    title: "Free Course",
+    features: [
+      "No-cost learning opportunities",
+      "Access valuable resources",
+      "Flexible study schedule",
+      "Earn a certificate upon completion"
+    ]
+  },
+  {
+    id: 6,
+    title: "Gear up for your first job",
+    features: [
+      "Prepare a strong resume",
+      "Improve interview skills",
+      "Understand workplace expectations",
+      "Build professional connections"
+    ]
+  },
+  {
+    id: 7,
+    title: "Ace interview skills",
+    features: [
+      "Master common interview questions",
+      "Learn communication techniques",
+      "Handle difficult interview scenarios",
+      "Impress potential employers"
+    ]
+  },
+  {
+    id: 8,
+    title: "Get ready for Government exams",
+    features: [
+      "Prepare for competitive exams",
+      "Access study materials",
+      "Learn time management techniques",
+      "Stay updated on government job notifications"
+    ]
+  }
+];
+
+
+
 
 const SearchComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -337,24 +422,19 @@ const SearchComponent = () => {
 
       {/* Goal Options */}
       <div className="flex flex-wrap gap-2 justify-center w-full sm:w-auto">
-        {[
-          "Advance to a higher role",
-          "Earn a professional certificate",
-          "Transition to a new career field",
-          "Pursue entrepreneurship",
-          "Free Course",
-          "Gear up for your first job",
-          "Ace interviews skills",
-          "Get ready for Government exams",
-          
-        ].map((goal, index) => (
+        {goalsData.map((goal, index) => (
           <button
             key={index}
             className="inline-flex h-auto text-center py-1 sm:py-2 sm:h-auto px-2 border-2 rounded-md sm:rounded-xl text-gray700 hover:bg-gray-200 focus:ring-2 focus:ring-red-400 text-[12px] sm:text-sm"
           >
-            {goal}
+          <Link  to={`/goal/${goal.id}`}>
+
+            {goal.title}
+          </Link>
+
           </button>
         ))}
+
       </div>
     </div>
   );

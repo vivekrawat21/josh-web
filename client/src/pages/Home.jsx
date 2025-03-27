@@ -5,7 +5,7 @@ import FAQ from '@/components/FAQ'
 import TopCourses from '@/components/TopCourses'
 import TopMentors from '@/components/TopMentors'
 import SearchCourses from '@/components/SearchCourses'
-import Bundles from '@/components/Bundles'
+import SpecialBundles from '@/components/SpecialBundles'
 import DiscountPopup from '@/components/DiscountPopup'
 
 
@@ -16,7 +16,7 @@ const Home = () => {
     <HeroLanding/>
     <Partner/>
     <SearchCourses/>
-    <Bundles />
+    <SpecialBundles />
     <TopCourses />
     <TestimonialBento />
     <TopMentors/>
