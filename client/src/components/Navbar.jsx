@@ -136,12 +136,14 @@ const Navbar = () => {
               </button>
 
               {isOpenCourse && (
-                <div className="absolute lg:left-[400%] left-1/2 top-full transform -translate-x-1/2 mt-4 bg-white shadow-2xl rounded-2xl p-8 w-[60vw] h-[60vh] grid grid-cols-3 gap-8 opacity-100 transition-opacity duration-300 pointer-events-auto overflow-y-auto border border-gray-200">
+                <div className="absolute lg:left-[400%] left-1/2 top-full transform -translate-x-1/2 mt-2 bg-white shadow-2xl rounded-2xl p-8 w-[60vw] h-[60vh] grid grid-cols-3 gap-8 opacity-100 transition-opacity duration-300 pointer-events-auto overflow-y-auto border border-gray-200">
                   <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-15 my-[40px]">SPECIAL BUNDLES</h3>
-                    <ul className="space-y-4 text-md">
+                    <h3 className="text-orange-500 text-md md:text-xl font-bold  mb-7">SPECIAL BUNDLES</h3>
+                    <ul className="space-y-2 text-md ">
                       {specialBundles.map((bundle) => (
-                        <li key={bundle.id} className="hover:text-blue-500 transition cursor-pointer">
+                        <li key={bundle.id} className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
+                        after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
+                        after:duration-300 hover:after:w-full">
                           <Link to={`/bundles/${bundle.id}`}>{bundle.title}</Link>
                         </li>
                       ))}
@@ -149,21 +151,30 @@ const Navbar = () => {
                   </div>
 
                   <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-15 my-[40px]">TRENDING COURSES</h3>
-                    <ul className="space-y-4 text-md">
+                    <h3 className="text-orange-500 text-md md:text-xl font-bold  mb-7 ">TRENDING COURSES</h3>
+                    <ul className="space-y-2 text-md  ">
                       {trendingCourses.map((course) => (
-                        <li key={course._id} className="hover:text-blue-500 transition cursor-pointer">
+                        <li key={course._id} className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
+                        after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
+                        after:duration-300 hover:after:w-full">
                           <Link to={`/courses/${course.title}/${course._id}`}>{course.title}</Link>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-15 my-[40px]">ALL BUNDLES</h3>
-                    <ul className="space-y-4 text-md">
+                    <h3 className="text-orange-500 text-md md:text-xl font-bold mb-7 ">ALL BUNDLES</h3>
+                    <ul className="space-y-2 text-md">
                       {bundles.map((bundle) => (
-                        <li key={bundle._id} className="hover:text-blue-500 transition cursor-pointer">
-                          <Link to={`/courses/${bundle.bundleName}/${bundle._id}`}>{bundle.bundleName}</Link>
+                        <li key={bundle._id} className="hover:text-orange-500 transition cursor-pointer">
+                          <Link
+                            to={`/courses/${bundle.bundleName}/${bundle._id}`}
+                            className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
+                                  after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
+                                  after:duration-300 hover:after:w-full"
+                          >
+                            {bundle.bundleName}
+                          </Link>
                         </li>
                       ))}
                     </ul>
