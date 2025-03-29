@@ -94,11 +94,11 @@ function App() {
               <Route path="/joinus" element={<JoinUs />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/webinars" element={<Webinars />} />
-              <Route path="/basicBundle" element={<BasicBundle />} />
+              
               <Route path="/goal/:id" element={<Goals />} />
-
-              <Route path="/intermediateBundle" element={<IntermediateBundle/>} />
-              <Route path="/advanceBundle" element={<AdvanceBundle />} />
+              <Route path="/specialBundle/:id" element={<BasicBundle />} />
+              {/* <Route path="/intermediateBundle" element={<IntermediateBundle/>} />
+              <Route path="/advanceBundle" element={<AdvanceBundle />} /> */}
 
 
               <Route path="/blogs/:id" element={<Blog />} />
