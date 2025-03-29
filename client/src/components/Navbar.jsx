@@ -52,16 +52,18 @@ const Navbar = () => {
         dispatch(logoutUser());
       }
     };
-
+    
     const fetchBundles = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/course/getBundles`, { withCredentials: true });
         const allBundles = res.data.data.bundles;
         // Filter special bundles
         // console.log(allBundles)
-        const filteredSpecialBundles = allBundles.filter(bundle => bundle.specialBundle);
-        setBundles(allBundles);
-        setSpecialBundles(filteredSpecialBundles);
+        console.log(allBundles)
+        // setSpecialBundlesData(allBundles);
+        setBundles(allBundles)
+        // setSpecialBundles(filteredSpecialBundles);
+        // console.log(specialBundles)
       } catch (error) {
         console.error("Error fetching bundles:", error);
       }
@@ -87,7 +89,14 @@ const Navbar = () => {
     fetchBundles();
     fetchCourses();
   }, []);
-
+  const setSpecialBundlesData = (allBundles)=>{
+    const filteredSpecialBundles = allBundles.filter(bundle => bundle.isSpecial);
+    setSpecialBundles(filteredSpecialBundles);
+    console.log(specialBundles)
+  }
+  useEffect (()=>{
+    setSpecialBundlesData(bundles)
+  },[bundles])
   useEffect(() => {
     if (user) {
       setLoggedInUser(true);
@@ -95,7 +104,9 @@ const Navbar = () => {
       setLoggedInUser(false);
     }
   }, [user]);
-
+  // useEffect(() => {
+  //   fetchBundles();
+  // },[specialBundles])
   return (
     <nav className="fixed top-0 left-0 right-0 mx-auto bg-white shadow-sm rounded-xl z-50 transition-all duration-300 py-1 px-auto ">
       <div className="flex justify-between items-center font-['Fugaz One'] mx-4">
@@ -141,10 +152,10 @@ const Navbar = () => {
                     <h3 className="text-orange-500 text-md md:text-xl font-bold  mb-7">SPECIAL BUNDLES</h3>
                     <ul className="space-y-2 text-md ">
                       {specialBundles.map((bundle) => (
-                        <li key={bundle.id} className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
+                        <li key={bundle._id} className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
                         after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
                         after:duration-300 hover:after:w-full">
-                          <Link to={`/bundles/${bundle.id}`}>{bundle.title}</Link>
+                          <Link to={`/specialBundle/${bundle._id}`}>{bundle.bundleName}</Link>
                         </li>
                       ))}
                     </ul>
