@@ -108,20 +108,20 @@ const Navbar = () => {
   //   fetchBundles();
   // },[specialBundles])
   return (
-    <nav className="fixed top-0 left-0 right-0 mx-auto bg-white shadow-sm rounded-xl z-50 transition-all duration-300 py-1 px-auto ">
+    <nav className="fixed top-0 left-0 right-0 mx-auto bg-white shadow-sm rounded-xl z-50 transition-all duration-300 py-1 px-auto max-w-[90%]">
       <div className="flex justify-between items-center font-['Fugaz One'] mx-4">
         {/* Logo and Navigation Links */}
         <div className="flex items-center space-x-20 relative">
           <div className="flex flex-col items-center">
             <Link to="/">
-              <img src="/logo1.png" alt="joshguru" className="w-[50px] md:w-[60px] h-[50px] md:h-[60px] object-cover" />
+              <img src="/logo1.png" alt="joshguru" className="w-[60px] md:w-[60px] h-[60px] md:h-[60px] object-cover" />
             </Link>
             <p className="absolute text-center font-bold text-[6px] md:text-[8px] top-[80%] text-gray-900 md:w-[130px] md:top-[75%]">
               Powered by <span className="text-gray-900">NIITF</span>
             </p>
           </div>
 
-          <ul className="hidden md:flex items-center space-x-10 text-gray-600 text-[16px] pt-4">
+          <ul className="hidden md:flex items-center space-x-10 text-[16px] pt-4">
             <li>
               <Link to="/" className="hover:text-orange-400 text-md transition cursor-pointer">
                 Home
