@@ -40,6 +40,7 @@ import IntermediateBundle from "./pages/IntermediateBundle";
 import BasicBundle from "./pages/BasicBundle";
 import AdvanceBundle from "./pages/AdvanceBundle";
 import Goals from "./pages/Goals";
+import Gallery from "./pages/Gallery";
 function App() {
   return (
     <>
@@ -97,6 +98,8 @@ function App() {
               
               <Route path="/goal/:id" element={<Goals />} />
               <Route path="/specialBundle/:id" element={<BasicBundle />} />
+              <Route path="/gallery/:type" element={<Gallery />} />
+
               {/* <Route path="/intermediateBundle" element={<IntermediateBundle/>} />
               <Route path="/advanceBundle" element={<AdvanceBundle />} /> */}
 
