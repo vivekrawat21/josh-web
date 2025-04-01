@@ -1,7 +1,7 @@
 // Vite + React with Framer Motion for Animations
 
 import { motion } from "framer-motion";
-
+import { Link } from "react-router-dom";
 const About = () => {
   const teamMembers = [
     {
@@ -184,6 +184,32 @@ const About = () => {
             ))}
           </div>
         </motion.div>
+        <section class=" h-auto w-full p-6">
+    <div class=" w-full h-auto mx-auto ">
+        <h2 class="text-3xl font-bold mb-6">Gallery</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <Link to ="/gallery/events" class="block  rounded-lg shadow-md p-4 hover:shadow-lg transition">
+                <h3 class="text-xl font-semibold mb-2">Events</h3>
+                <div class="h-auto  flex items-center justify-center">
+                  <img src="/event1.webp" alt="" />
+                </div>
+            </Link>
+            <Link to ="/gallery/Trips" class="block  rounded-lg shadow-md p-4 hover:shadow-lg transition">
+                <h3 class="text-xl font-semibold mb-2">Trips</h3>
+                <div class="h-auto  flex items-center justify-center">
+                  <img src="/event2.webp" alt="" />
+                </div>
+            </Link>
+            <Link to ="/gallery/occassions" class="block  rounded-lg shadow-md p-4 hover:shadow-lg transition">
+                <h3 class="text-xl font-semibold mb-2">Occassions</h3>
+                <div class="h-auto flex items-center justify-center">
+                  <img src="/event3.webp" alt="" />
+                </div>
+            </Link>
+        </div>
+    </div>
+</section>
+
       </div>
     </section>
   );
