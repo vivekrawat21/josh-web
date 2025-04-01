@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { color, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const bundles = [
@@ -45,29 +45,65 @@ const bundles = [
 ];
 
 const SpecialBundles = () => {
-  const [bookImages, setBookImages] = useState([]);
+  // const [bookImages, setBookImages] = useState([]);
   // const handleClick = (link)=>{
   //   Navigate(`/${link} `)
   // }
-  useEffect(() => {
-    fetch("https://www.googleapis.com/books/v1/volumes?q=technology")
-      .then((response) => response.json())
-      .then((data) => {
-        const images = data.items.slice(0, 3).map((item) => item.volumeInfo.imageLinks?.thumbnail);
-        setBookImages(images);
-      })
-      .catch((error) => console.error("Error fetching book images:", error));
-  }, []);
+  // useEffect(() => {
+  //   fetch("https://www.googleapis.com/books/v1/volumes?q=technology")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const images = data.items.slice(0, 3).map((item) => item.volumeInfo.imageLinks?.thumbnail);
+  //       setBookImages(images);
+  //     })
+  //     .catch((error) => console.error("Error fetching book images:", error));
+  // }, []);
+
+  const bookDetails = [
+    {
+      title: "Freelancing Road To 50K",
+      image: '/freelancing_50k.png',
+      titleColor: "#C1EDD5",
+      link: "/basicBundle",
+    },
+    
+    {
+      title: "Freelancing Road To 2 Lakhs",
+      image: '/freelancing_2lakh.png',
+      titleColor: "#C7C9E9",
+      link: "/intermediateBundle",
+    },
+
+    {
+      title: "Freelancing Road To 5 Lakhs",
+      image: '/freelancing_5lakh.png',
+      titleColor: "#F3D4C1",
+      link: "/advanceBundle",
+    }
+  ];
+
 
   return (
     <section className="py-12 px-4">
-      <h2 className="text-[1.80rem] lg:text[2.20rem] font-bold text-center  mb-4 text-gray-900">
+      <h2 className="text-[1.80rem] lg:text-7xl font-semibold text-center  mb-24 text-gray-900">
         Digital <span className="text-orange-500">Learning Bundles</span>
       </h2>
 
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {bundles.map((bundle, index) => (
+      <div className="grid grid-cols-1 items-center sm:grid-cols-2 md:grid-cols-3 gap-20 max-w-[95%] mx-auto">
+        {bookDetails.map((book, index) => (
+          <Link to={book.link} key={index}>
+            <div key={index} className="text-center">
+              <div className="flex justify-center items-center rounded-t-md mb-1 " style={{ background: book.titleColor }}>
+                <h3 className="my-2 text-xl font-semibold text-gray-700">
+                  {book.title}
+                </h3>
+              </div>
+              <img src={book.image} alt={book.title} className=" h-[80%] max-w-full object-contain rounded-lg " />
+            </div>
+          </Link>
+        ))}
+        {/* {bundles.map((bundle, index) => (
           <Link to={bundle.link} key={index}>
           <motion.div
             key={index}
@@ -78,7 +114,7 @@ const SpecialBundles = () => {
             className={`relative p-5 rounded-xl ${bundle.bgColor} shadow-lg transition-all text-center`}
           >
             {/* Stylish Ribbon (Visible in Small Screens Too) */}
-            <div
+            {/* <div
               className={`absolute -top-2 right-2 px-5 py-2 ${bundle.ribbonBg} ${bundle.ribbonTextColor} text-xs sm:text-sm font-bold rounded-tl-lg rounded-br-lg shadow-md`}
             >
               {bundle.ribbonText}
@@ -113,7 +149,7 @@ const SpecialBundles = () => {
             </div>
           </motion.div>
           </Link>
-        ))}
+        ))} */} 
       </div>
     </section>
   );

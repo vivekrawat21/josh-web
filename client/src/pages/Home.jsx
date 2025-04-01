@@ -13,15 +13,15 @@ const Home = () => {
   return (
     
     <div className="min-h-screen my-0">
-    <HeroLanding/>
-    <Partner/>
-    <SearchCourses/>
-    <SpecialBundles />
-    <TopCourses />
-    <TestimonialBento />
-    <TopMentors/>
-    <FAQ />
-    <DiscountPopup/>
+      <HeroLanding/>
+      <Partner/>
+      <SearchCourses/>
+      <SpecialBundles />
+      <TopCourses />
+      <TestimonialBento />
+      <TopMentors/>
+      <FAQ />
+      <DiscountPopup/>
     </div>
    
   )
