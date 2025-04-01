@@ -6,7 +6,7 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Course from "./pages/Course";
-import TopCourses from "./pages/TopCourses";
+import Bundle from "./pages/Bundle.jsx";
 import Cart from "./pages/Cart";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./components/Profile";
@@ -83,8 +83,8 @@ function App() {
               <Route path="/" element={<Home />}></Route>
               <Route path="/about" element={<About />}></Route>
               <Route
-                path="/topcourse/:coursename"
-                element={<TopCourses />}
+                path="/bundle/:bundleId"
+                element={<Bundle />}
               ></Route>
               <Route path="/course/:id" element={<Course />} />
               <Route path="/courses/:category/:id" element={<Courses />} />

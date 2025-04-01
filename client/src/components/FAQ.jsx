@@ -38,7 +38,7 @@ export default function FAQ() {
   return (
     <section className="py-2 pb-6">
       <div className="mx-auto px-4 max-w-3xl text-center" >
-        <h2 className="text-[1.76rem] lg:text[2.20rem]   text-center mb-6 font-bold  text-gray-900 relative inline-block ">
+       <h2 className="text-[1.80rem] lg:text-5xl font-semibold text-center  my-10 text-gray-900">
           Frequently {" "}
           <span className="    text-orange-500 font-semibold font-sans relative inline-block">
             Asked Questions

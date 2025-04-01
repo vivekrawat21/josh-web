@@ -9,7 +9,7 @@ const bundles = [
     link: "/basicBundle",
     bgColor: "bg-gray-200", // Faded look
     textColor: "text-gray-700",
-    btnColor: "bg-gradient-to-r from-gray-400 to-gray-500", // Less vibrant
+    btnColor: "bg-gradient-to-r from-gray-400 to-gray-500", // Less vibrantp
     headingBg: "bg-gray-300",
     ribbonBg: "bg-gradient-to-r from-yellow-800 to-yellow-600", // Brownish & faded
     ribbonText: "Basic",
@@ -85,7 +85,7 @@ const SpecialBundles = () => {
 
   return (
     <section className="py-12 px-4">
-      <h2 className="text-[1.80rem] lg:text-7xl font-semibold text-center  mb-24 text-gray-900">
+      <h2 className="text-[1.80rem] lg:text-7xl font-semibold text-center  my-10 text-gray-900">
         Digital <span className="text-orange-500">Learning Bundles</span>
       </h2>
 
