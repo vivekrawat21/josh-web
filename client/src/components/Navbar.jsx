@@ -14,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { setBundle } from "@/features/bundles/BundleSlice";
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -57,11 +58,13 @@ const Navbar = () => {
       try {
         const res = await axios.get(`${BASE_URL}/course/getBundles`, { withCredentials: true });
         const allBundles = res.data.data.bundles;
+
         // Filter special bundles
         // console.log(allBundles)
-        console.log(allBundles)
+
         // setSpecialBundlesData(allBundles);
         setBundles(allBundles)
+        dispatch(setBundle(allBundles));
         // setSpecialBundles(filteredSpecialBundles);
         // console.log(specialBundles)
       } catch (error) {
@@ -92,7 +95,7 @@ const Navbar = () => {
   const setSpecialBundlesData = (allBundles)=>{
     const filteredSpecialBundles = allBundles.filter(bundle => bundle.isSpecial);
     setSpecialBundles(filteredSpecialBundles);
-    console.log(specialBundles)
+    // console.log(specialBundles)
   }
   useEffect (()=>{
     setSpecialBundlesData(bundles)
@@ -152,10 +155,11 @@ const Navbar = () => {
                     <h3 className="text-orange-500 text-md md:text-xl font-bold  mb-7">SPECIAL BUNDLES</h3>
                     <ul className="space-y-2 text-md ">
                       {specialBundles.map((bundle) => (
-                        <li key={bundle._id} className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
-                        after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
-                        after:duration-300 hover:after:w-full">
-                          <Link to={`/specialBundle/${bundle._id}`}>{bundle.bundleName}</Link>
+                        <li key={bundle._id} className="hover:text-orange-500 transition cursor-pointer">
+                          <Link to={`/specialBundle/${bundle._id}`}
+                          className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
+                                  after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
+                                  after:duration-300 hover:after:w-full">{bundle.bundleName}</Link>
                         </li>
                       ))}
                     </ul>
@@ -165,10 +169,11 @@ const Navbar = () => {
                     <h3 className="text-orange-500 text-md md:text-xl font-bold  mb-7 ">TRENDING COURSES</h3>
                     <ul className="space-y-2 text-md  ">
                       {trendingCourses.map((course) => (
-                        <li key={course._id} className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
-                        after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
-                        after:duration-300 hover:after:w-full">
-                          <Link to={`/courses/${course.title}/${course._id}`}>{course.title}</Link>
+                        <li key={course._id} className="hover:text-orange-500 transition cursor-pointer">
+                          <Link to={`/course/${course._id}`}
+                          className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
+                                  after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
+                                  after:duration-300 hover:after:w-full">{course.title}</Link>
                         </li>
                       ))}
                     </ul>
@@ -179,7 +184,7 @@ const Navbar = () => {
                       {bundles.map((bundle) => (
                         <li key={bundle._id} className="hover:text-orange-500 transition cursor-pointer">
                           <Link
-                            to={`/courses/${bundle.bundleName}/${bundle._id}`}
+                            to={`/bundle/${bundle._id}`}
                             className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
                                   after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
                                   after:duration-300 hover:after:w-full"

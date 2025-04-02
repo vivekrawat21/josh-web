@@ -19,9 +19,9 @@ const Home = () => {
       <SearchCourses/>
       <SpecialBundles />
       <TopCourses />
-      <TestimonialBento />
       {/* <DownloadApp /> */}
       <TopMentors/>
+      <TestimonialBento />
 
       <FAQ />
       <DiscountPopup/>
