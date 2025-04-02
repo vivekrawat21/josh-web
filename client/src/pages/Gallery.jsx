@@ -2,7 +2,7 @@ import React from 'react';
 
 const Gallery = () => {
   return (
-    <div className="space-y-16 mb-8">
+    <div className="space-y-16 mb-8 px-4 md:px-8 lg:px-16">
       {/* Hero image - full width */}
       <div className="relative w-full h-[400px] overflow-hidden rounded-xl">
         <img
@@ -19,7 +19,7 @@ const Gallery = () => {
       </div>
       
       {/* 3-column grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {[1, 2, 3].map((i) => (
           <div key={i} className="group relative overflow-hidden rounded-lg aspect-square">
             <img
@@ -32,7 +32,7 @@ const Gallery = () => {
       </div>
 
       {/* 2-column feature */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div className="relative aspect-square overflow-hidden rounded-lg">
           <img
             src="https://images.pexels.com/photos/158607/cairn-fog-mystical-background-158607.jpeg"
@@ -43,9 +43,9 @@ const Gallery = () => {
       </div>
 
       {/* Masonry-style grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className={`relative ${i > 2 ? 'col-span-2 aspect-video' : 'aspect-square'} overflow-hidden rounded-lg`}>
+          <div key={i} className={`relative ${i > 2 ? 'col-span-2 sm:col-span-1 aspect-video' : 'aspect-square'} overflow-hidden rounded-lg`}>
             <img
               src={`https://picsum.photos/600/600?random=${i + 10}`}
               alt={`Grid image ${i}`}

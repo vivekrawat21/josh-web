@@ -7,6 +7,7 @@ import TopMentors from '@/components/TopMentors'
 import SearchCourses from '@/components/SearchCourses'
 import SpecialBundles from '@/components/SpecialBundles'
 import DiscountPopup from '@/components/DiscountPopup'
+import DownloadApp from '@/components/DownloadApp'
 
 
 const Home = () => {
@@ -19,7 +20,9 @@ const Home = () => {
       <SpecialBundles />
       <TopCourses />
       <TestimonialBento />
+      {/* <DownloadApp /> */}
       <TopMentors/>
+
       <FAQ />
       <DiscountPopup/>
     </div>
