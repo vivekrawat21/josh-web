@@ -108,8 +108,8 @@ const Navbar = () => {
   //   fetchBundles();
   // },[specialBundles])
   return (
-    <nav className="fixed top-0 left-0 right-0 mx-auto bg-white shadow-sm rounded-xl z-50 transition-all duration-300 py-1 px-auto max-w-[90%]">
-      <div className="flex justify-between items-center font-['Fugaz One'] mx-4">
+    <nav className="fixed top-0 left-0 right-0 mx-auto bg-white shadow-sm rounded-xl z-50 transition-all duration-300 py-1 px-auto">
+      <div className="flex justify-between items-center font-['Fugaz One'] mx-auto max-w-[90%]">
         {/* Logo and Navigation Links */}
         <div className="flex items-center space-x-20 relative">
           <div className="flex flex-col items-center">
