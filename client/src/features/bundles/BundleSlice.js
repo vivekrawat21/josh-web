@@ -1,16 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const bundleSlice = createSlice({
-    name: "bundles",
+    name: "bundle",
     initialState: {
-        course: [],
+        bundles: [],
     },
     reducers: {
-        setBundles: (state, action) => {
-            state.course.push(action.payload);
+        setBundle: (state, action) => {
+            state.bundles.push(action.payload);
         },
     },
 });
 
-export const { setBundles } = bundleSlice.actions;
+export const { setBundle } = bundleSlice.actions;
 export default bundleSlice.reducer;

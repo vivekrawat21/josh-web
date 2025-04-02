@@ -28,7 +28,25 @@ const mentors = [
     name: "Robert Brown",
     role: "AI & ML Specialist",
     image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGVyc29ufGVufDB8fDB8fHww",
-  }
+  },
+  {
+    id: 4,
+    name: "Maria Johnson",
+    role: "Cyber Security Expert",
+    image: "https://images.unsplash.com/photo-1606780291228-3a3a6a5b6d9d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww",
+  },
+  {
+    id: 5,
+    name: "Michael Williams",
+    role: "Data Scientist",
+    image: "https://images.unsplash.com/photo-1606780291228-3a3a6a5b6d9d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww",
+  },
+  {
+    id: 6,
+    name: "Jennifer Brown",
+    role: "UX/UI Designer",
+    image: "https://images.M3wxMjA3fDB8MHxzZWFyY2h8OXx8cGVyc29ufGVufDB8fDB8fHww.com/photo-1599566150163-29194dcaad36?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGVyc29ufGVufDB8fDB8fHww",
+  },
 ];
 
 const TopMentor = () => {
