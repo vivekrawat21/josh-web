@@ -59,7 +59,7 @@ const HeroLanding = () => {
         <motion.img
             src="/Hero bg line.svg" 
             alt="Hero Background Line"
-            className="absolute top-0 -left-32 w-[90%] h-auto object-cover opacity-20 -z-10"
+            className="absolute top-0 -left-28 w-[85%] h-auto object-cover opacity-20 -z-10"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
