@@ -15,6 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { setBundle } from "@/features/bundles/BundleSlice";
+import { addCourse,addTrendingCourses } from "@/features/courses/courseSlice";
+
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -80,6 +82,9 @@ const Navbar = () => {
         // Filter trending courses
         const filteredTrendingCourses = allCourses.filter(course => course.isTrending);
         setTrendingCourses(filteredTrendingCourses);
+        // console.log(allCourses)
+        dispatch(addCourse(allCourses));
+        // dispatch(addTrendingCourses(filteredTrendingCourses));
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
