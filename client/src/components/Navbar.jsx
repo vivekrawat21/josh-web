@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FaChevronDown, FaBars, FaTimes, FaShoppingCart, FaUser } from "react-icons/fa";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "@fontsource/fugaz-one";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser, setUser } from "@/features/user/userSlice";
@@ -22,24 +22,45 @@ const Navbar = () => {
   const [bundles, setBundles] = useState([]);
   const [specialBundles, setSpecialBundles] = useState([]);
   const [trendingCourses, setTrendingCourses] = useState([]);
+  const [isRotating, setIsRotating] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const loggedIn = !!user?.email; // Check if user exists
-  const [loggedInUser, setLoggedInUser] = useState(false);
-  const [isRotating, setIsRotating] = useState(false);
+  const loggedIn = !!user?.email;
   const navigate = useNavigate();
+
+  const coursesDropdownRef = useRef(null);
+  const coursesButtonRef = useRef(null);
 
   // Toggle Sidebar
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+  // Handle clicks outside the courses dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isOpenCourse &&
+        coursesDropdownRef.current &&
+        !coursesDropdownRef.current.contains(event.target) &&
+        !coursesButtonRef.current.contains(event.target)
+      ) {
+        setIsOpenCourse(false);
+        setIsRotating(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpenCourse]);
 
   const logout = async () => {
     try {
       await axios.post(`${BASE_URL}/auth/logout`, {}, { withCredentials: true });
       dispatch(logoutUser());
-      setLoggedInUser(false);
       navigate("/login");
     } catch (error) {
-      console.log(error);
+      console.error("Error during logout:", error);
     }
   };
 
@@ -47,26 +68,18 @@ const Navbar = () => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/user`, { withCredentials: true });
-        const fetchedUser = res.data.data.user;
-        dispatch(setUser(fetchedUser));
+        dispatch(setUser(res.data.data.user));
       } catch (error) {
         dispatch(logoutUser());
       }
     };
-    
+
     const fetchBundles = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/course/getBundles`, { withCredentials: true });
         const allBundles = res.data.data.bundles;
-
-        // Filter special bundles
-        // console.log(allBundles)
-
-        // setSpecialBundlesData(allBundles);
-        setBundles(allBundles)
+        setBundles(allBundles);
         dispatch(setBundle(allBundles));
-        // setSpecialBundles(filteredSpecialBundles);
-        // console.log(specialBundles)
       } catch (error) {
         console.error("Error fetching bundles:", error);
       }
@@ -76,9 +89,7 @@ const Navbar = () => {
       try {
         const res = await axios.get(`${BASE_URL}/course/getCourses`, { withCredentials: true });
         const allCourses = res.data.data.courses;
-        // console.log(allCourses)
-        // Filter trending courses
-        const filteredTrendingCourses = allCourses.filter(course => course.isTrending);
+        const filteredTrendingCourses = allCourses.filter((course) => course.isTrending);
         setTrendingCourses(filteredTrendingCourses);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -91,25 +102,13 @@ const Navbar = () => {
 
     fetchBundles();
     fetchCourses();
-  }, []);
-  const setSpecialBundlesData = (allBundles)=>{
-    const filteredSpecialBundles = allBundles.filter(bundle => bundle.isSpecial);
-    setSpecialBundles(filteredSpecialBundles);
-    // console.log(specialBundles)
-  }
-  useEffect (()=>{
-    setSpecialBundlesData(bundles)
-  },[bundles])
+  }, [user, dispatch]);
+
   useEffect(() => {
-    if (user) {
-      setLoggedInUser(true);
-    } else {
-      setLoggedInUser(false);
-    }
-  }, [user]);
-  // useEffect(() => {
-  //   fetchBundles();
-  // },[specialBundles])
+    const filteredSpecialBundles = bundles.filter((bundle) => bundle.isSpecial);
+    setSpecialBundles(filteredSpecialBundles);
+  }, [bundles]);
+
   return (
     <nav className="fixed top-0 left-0 right-0 mx-auto bg-white shadow-sm rounded-xl z-50 transition-all duration-300 py-1 px-auto">
       <div className="flex justify-between items-center font-['Fugaz One'] mx-auto max-w-[90%]">
@@ -117,7 +116,11 @@ const Navbar = () => {
         <div className="flex items-center space-x-20 relative">
           <div className="flex flex-col items-center">
             <Link to="/">
-              <img src="/logo1.png" alt="joshguru" className="w-[60px] md:w-[60px] h-[60px] md:h-[60px] object-cover" />
+              <img
+                src="/logo1.png"
+                alt="joshguru"
+                className="w-[60px] md:w-[60px] h-[60px] md:h-[60px] object-cover"
+              />
             </Link>
             <p className="absolute text-center font-bold text-[6px] md:text-[8px] top-[80%] text-gray-900 md:w-[130px] md:top-[75%]">
               Powered by <span className="text-gray-900">NIITF</span>
@@ -137,10 +140,11 @@ const Navbar = () => {
             </li>
             <li className="relative group">
               <button
+                ref={coursesButtonRef}
                 className="flex items-center space-x-2 hover:text-orange-500 transition cursor-pointer"
                 onClick={() => {
-                  setIsOpenCourse(prev => !prev);
-                  setIsRotating(prev => !prev);
+                  setIsOpenCourse((prev) => !prev);
+                  setIsRotating((prev) => !prev);
                 }}
               >
                 <span className="text-md">Courses</span>
@@ -150,36 +154,47 @@ const Navbar = () => {
               </button>
 
               {isOpenCourse && (
-                <div className="absolute lg:left-[400%] left-1/2 top-full transform -translate-x-1/2 mt-2 bg-white shadow-2xl rounded-2xl p-8 w-[60vw] h-[60vh] grid grid-cols-3 gap-8 opacity-100 transition-opacity duration-300 pointer-events-auto overflow-y-auto border border-gray-200">
+                <div
+                  ref={coursesDropdownRef}
+                  className="absolute lg:left-[400%] left-1/2 top-full transform -translate-x-1/2 mt-2 bg-white shadow-2xl rounded-2xl p-8 w-[60vw] h-[60vh] grid grid-cols-3 gap-8 opacity-100 transition-opacity duration-300 pointer-events-auto overflow-y-auto border border-gray-200"
+                >
                   <div className="pr-6">
-                    <h3 className="text-orange-500 text-md md:text-xl font-bold  mb-7">SPECIAL BUNDLES</h3>
-                    <ul className="space-y-2 text-md ">
+                    <h3 className="text-orange-500 text-md md:text-xl font-bold mb-7">SPECIAL BUNDLES</h3>
+                    <ul className="space-y-2 text-md">
                       {specialBundles.map((bundle) => (
                         <li key={bundle._id} className="hover:text-orange-500 transition cursor-pointer">
-                          <Link to={`/specialBundle/${bundle._id}`}
-                          className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
+                          <Link
+                            to={`/specialBundle/${bundle._id}`}
+                            className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
                                   after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
-                                  after:duration-300 hover:after:w-full">{bundle.bundleName}</Link>
+                                  after:duration-300 hover:after:w-full"
+                          >
+                            {bundle.bundleName}
+                          </Link>
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   <div className="pr-6">
-                    <h3 className="text-orange-500 text-md md:text-xl font-bold  mb-7 ">TRENDING COURSES</h3>
-                    <ul className="space-y-2 text-md  ">
+                    <h3 className="text-orange-500 text-md md:text-xl font-bold mb-7">TRENDING COURSES</h3>
+                    <ul className="space-y-2 text-md">
                       {trendingCourses.map((course) => (
                         <li key={course._id} className="hover:text-orange-500 transition cursor-pointer">
-                          <Link to={`/course/${course._id}`}
-                          className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
+                          <Link
+                            to={`/course/${course._id}`}
+                            className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
                                   after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
-                                  after:duration-300 hover:after:w-full">{course.title}</Link>
+                                  after:duration-300 hover:after:w-full"
+                          >
+                            {course.title}
+                          </Link>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div className="pr-6">
-                    <h3 className="text-orange-500 text-md md:text-xl font-bold mb-7 ">ALL BUNDLES</h3>
+                    <h3 className="text-orange-500 text-md md:text-xl font-bold mb-7">ALL BUNDLES</h3>
                     <ul className="space-y-2 text-md">
                       {bundles.map((bundle) => (
                         <li key={bundle._id} className="hover:text-orange-500 transition cursor-pointer">
@@ -203,14 +218,17 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-4">
           <Link to="/cart">
-            <FaShoppingCart className="text-4xl text-gray-900 shadow-md rounded-lg p-2 bg-transparent " />
+            <FaShoppingCart className="text-4xl text-gray-900 shadow-md rounded-lg p-2 bg-transparent" />
           </Link>
 
-          {/* Desktop Login/Register (Hidden on Small Screens) */}
           {!loggedIn ? (
             <div className="hidden md:flex space-x-4">
-              <Link to="/login" className="bg-orange-500 text-white px-4 py-2 rounded-lg">Login</Link>
-              <Link to="/signup" className="border border-orange-500 text-orange-500 px-4 py-2 rounded-lg">Register</Link>
+              <Link to="/login" className="bg-orange-500 text-white px-4 py-2 rounded-lg">
+                Login
+              </Link>
+              <Link to="/signup" className="border border-orange-500 text-orange-500 px-4 py-2 rounded-lg">
+                Register
+              </Link>
             </div>
           ) : (
             <DropdownMenu className="hidden md:inline">
@@ -249,14 +267,12 @@ const Navbar = () => {
             </DropdownMenu>
           )}
 
-          {/* Mobile: Show Hamburger Menu Instead */}
           <button onClick={toggleSidebar} className="md:hidden text-2xl ml-auto text-gray-900 mr-4">
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
       </div>
 
-      {/* Sidebar Component */}
       <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} loggedIn={loggedIn} logout={logout} />
     </nav>
   );
