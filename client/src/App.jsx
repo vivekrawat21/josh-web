@@ -70,7 +70,7 @@ function App() {
         <Route path="mywallet" element={<Mywallet />} />
 
         <Route path="refer&earn" element={<Refer />} />
-        <Route path="helpandsupport" element={<Help />} />
+        <Route path="help&support" element={<Help />} />
       </Route>
           <Route
             path="/"

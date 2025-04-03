@@ -27,7 +27,7 @@ const Navbar = () => {
   const [isRotating, setIsRotating] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const loggedIn = !!user?.email;
+  const [loggedIn ,setIsLoggedIn] = useState(!!user?.email);
   const navigate = useNavigate();
 
   const coursesDropdownRef = useRef(null);
@@ -47,9 +47,9 @@ const Navbar = () => {
       ) {
         setIsOpenCourse(false);
         setIsRotating(false);
+       
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -60,6 +60,7 @@ const Navbar = () => {
     try {
       await axios.post(`${BASE_URL}/auth/logout`, {}, { withCredentials: true });
       dispatch(logoutUser());
+      
       navigate("/login");
     } catch (error) {
       console.error("Error during logout:", error);
@@ -71,6 +72,7 @@ const Navbar = () => {
       try {
         const res = await axios.get(`${BASE_URL}/user`, { withCredentials: true });
         dispatch(setUser(res.data.data.user));
+        setIsLoggedIn(true);
       } catch (error) {
         dispatch(logoutUser());
       }
@@ -278,7 +280,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} loggedIn={loggedIn} logout={logout} />
+      <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} isLoggedIn={loggedIn} logout={logout} bundles={bundles} specialBundles={specialBundles} trendingCourses={trendingCourses} />
     </nav>
   );
 };
