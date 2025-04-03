@@ -61,23 +61,23 @@ const SpecialBundles = () => {
 
   const bookDetails = [
     {
-      title: "Freelancing Road To 50K",
-      image: '/freelancing_50k.png',
-      titleColor: "#C1EDD5",
+      title: "Freelancing Road To 1 lakhs",
+      image: '/specialBundle1.jpg',
+      titleColor: "#DAD5DD",
       link: "/basicBundle",
     },
     
     {
-      title: "Freelancing Road To 2 Lakhs",
-      image: '/freelancing_2lakh.png',
-      titleColor: "#C7C9E9",
+      title: "Freelancing Road To 3 Lakhs",
+      image: '/specialBundle2.jpg',
+      titleColor: "#AAB2D1",
       link: "/intermediateBundle",
     },
 
     {
       title: "Freelancing Road To 5 Lakhs",
-      image: '/freelancing_5lakh.png',
-      titleColor: "#F3D4C1",
+      image: '/specialBundle3.jpg',
+      titleColor: "#c7ccce",
       link: "/advanceBundle",
     }
   ];
@@ -99,7 +99,7 @@ const SpecialBundles = () => {
                   {book.title}
                 </h3>
               </div>
-              <img src={book.image} alt={book.title} className=" h-[80%] max-w-full object-contain rounded-lg " />
+              <img src={book.image} alt={book.title} className=" h-[80%] max-w-full object-contain rounded-lg z-10" />
             </div>
           </Link>
         ))}
