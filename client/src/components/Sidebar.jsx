@@ -20,8 +20,14 @@ import {
   FaLightbulb,
   FaArrowRight,
   FaStar,
+  FaStackOverflow,
 } from "react-icons/fa"
 import { MdHome, MdExplore } from "react-icons/md"
+import { Link } from "react-router-dom"
+import { FaArrowTrendUp, FaBookBible } from "react-icons/fa6"
+import Bundle from "@/pages/Bundle"
+import SpecialBundles from "./SpecialBundles"
+import { id } from "date-fns/locale"
 
 // Animation variants
 const slideIn = {
@@ -64,49 +70,59 @@ const itemVariants = {
 }
 
 // Mock data - replace with your actual data source
-const coursesData = [
-  {
-    category: "MONETIZATION SERIES",
-    id: "monetization",
-    icon: <FaWallet />,
-    courses: [
-      {
-        id: 1,
-        title: "Excel and Earn using AI and ChatGPT",
-      },
-      {
-        id: 2,
-        title: "Content Creation Mastery",
-      },
-    ],
-  },
-  {
-    category: "DIGITAL ENTREPRENEURSHIP BUNDLE",
-    id: "entrepreneurship",
-    icon: <FaLightbulb />,
-    courses: [
-      {
-        id: 1,
-        title: "Marketing Mastery",
-      },
-      {
-        id: 2,
-        title: "Branding Mastery",
-      },
-      {
-        id: 3,
-        title: "Traffic Mastery",
-      },
-    ],
-  },
-]
 
-const Sidebar = ({ isOpen, onClose, isLoggedIn = false }) => {
+
+const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles,specialBundles, trendingCourses,logout  }) => {
   const [view, setView] = useState("main") // main, courses, subcourses
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [selectedCourse, setSelectedCourse] = useState(null)
   const [breadcrumbs, setBreadcrumbs] = useState([])
-  const [activeItem, setActiveItem] = useState("")
+  const [activeItem, setActiveItem] = useState("");
+
+  // console.log(trendingCourses[0].title)
+ 
+  const coursesData = [
+    {
+      category: "SPECIAL BUNDLES",
+      id: "special",
+      icon: <FaStar />,
+      courses: specialBundles?.map((bundle) => {
+        return{
+        key: bundle?._id,
+        id: bundle?._id,
+        title: bundle?.bundleName,
+        link: `/specialBundle/${bundle?._id}`,
+        }
+      })
+    },
+    {
+      category: "TRENDING COURSES",
+      id: "trending",
+      icon: <FaArrowTrendUp />,
+      courses: trendingCourses?.map((course)=>{
+        return {
+          key: course?._id,
+          id: course?._id,
+          title: course?.title,
+          link: `/course/${course?._id}`,
+        }
+      })
+    },
+    {
+      category: "ALL BUNDLES",
+      id: "all",
+      icon: <FaBook />,
+      courses: bundles.map((bundle) => {
+        return{
+        key: bundle?._id,
+        id: bundle?._id,
+        title: bundle?.bundleName,
+        link: `/bundle/${bundle?._id}`
+        
+      }
+      })
+    }
+  ]
 
   // Reset to main view when sidebar closes
   useEffect(() => {
@@ -134,7 +150,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn = false }) => {
         const sidebar = document.getElementById("sidebar")
         const overlay = document.getElementById("sidebar-overlay")
         
-        if (isOpen && !sidebar.contains(event.target) && overlay.contains(event.target)) {
+        if (isOpen && !sidebar.contains(event.target) && overlay.contains(event.target)) {isOpen
           onClose(false)
         }
       }
@@ -147,11 +163,6 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn = false }) => {
         document.removeEventListener("mousedown", handleClickOutside)
       }
     }, [isOpen, onClose])
-
-  const handleLogout = () => {
-    // Replace with your actual logout logic
-    handleRouteChange("/login")
-  }
 
   const navigateToCategories = () => {
     setView("categories");
@@ -195,20 +206,19 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn = false }) => {
     >
       {isLoggedIn ? (
         <>
-          <MenuItem icon={<FaUser />} label="Personal Info" path="/dashboard/profile" />
-          <MenuItem icon={<FaInfoCircle />} label="About" path="/about" />
-          <MenuItem icon={<FaWallet />} label="My Wallet" path="/dashboard/wallet" />
-          <MenuItem icon={<FaBook />} label="My Courses" path="/dashboard/courses" />
-          <MenuItem icon={<FaGraduationCap />} label="All Courses" path="/courses" onClick={navigateToCategories} />
-          <MenuItem icon={<FaGift />} label="Refer & Earn" path="/dashboard/refer" />
-          <MenuItem icon={<FaHeadset />} label="Help & Support" path="/dashboard/support" />
-          <MenuItem icon={<FaUsers />} label="Community" path="/community" />
-          <MenuItem icon={<FaVideo />} label="Webinars" path="/webinars" />
-          <MenuItem icon={<FaBlog />} label="Blogs" path="/blogs" />
+          <Link to={"dashboard/profile/personalinformation"}><MenuItem icon={<FaUser />} label="Personal Info" path="/dashboard/profile" /></Link>
+          <Link to={"/about"}><MenuItem icon={<FaInfoCircle />} label="About" path="/about" /></Link>
+          <Link to={"/dashboard/mywallet"}><MenuIisOpentem icon={<FaWallet />} label="My Wallet" path="/dashboard/wallet" /></Link>
+          <Link to={"/dashboard/mycourses"}><MenuItem icon={<FaBook />} label="My Courses" path="/dashboard/courses" /></Link>
+          <Link to={"/"}><MenuItem icon={<FaGift />} label="Refer & Earn" path="/dashboard/refer&earn" /></Link>
+          <Link to={"/dashboard/help&support"}><MenuItem icon={<FaHeadset />} label="Help & Support" path="/dashboard/support" /></Link>
+          <Link to={"/community"}><MenuItem icon={<FaUsers />} label="Community" path="/community" /></Link>
+          <Link to={"/webinars"}><MenuItem icon={<FaVideo />} label="Webinars" path="/webinars" /></Link>
+          <Link to={"/blogs"}><MenuItem icon={<FaBlog />} label="Blogs" path="/blogs" /></Link>
 
           <motion.div variants={itemVariants} className="pt-4 px-3">
             <button
-              onClick={handleLogout}
+              onClick={logout}
               className="w-full text-center border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-3 px-4 rounded-xl hover:bg-orange-500 hover:text-white transition-all duration-300 text-sm font-medium"
             >
               <FaSignOutAlt className="w-4 h-4" /> Logout
@@ -217,13 +227,13 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn = false }) => {
         </>
       ) : (
         <>
-          <MenuItem icon={<MdHome />} label="Home" path="/" />
-          <MenuItem icon={<FaInfoCircle />} label="About" path="/about" />
+        <Link to={"/"}>  <MenuItem icon={<MdHome />} label="Home" path="/" /></Link>
+          <Link to={"/about"}><MenuItem icon={<FaInfoCircle />} label="About" path="/about" /></Link>
           <MenuItem icon={<FaGraduationCap />} label="Courses" path="/courses" onClick={navigateToCategories} />
-          <MenuItem icon={<MdExplore />} label="Explore" path="/explore" />
-          <MenuItem icon={<FaUsers />} label="Community" path="/community" />
-          <MenuItem icon={<FaVideo />} label="Webinars" path="/webinars" />
-          <MenuItem icon={<FaBlog />} label="Blogs" path="/blogs" />
+          {/* <Link to={"/"}><MenuItem icon={<MdExplore />} label="Explore" path="/explore" /></Link> */}
+          <Link to={"/community"}><MenuItem icon={<FaUsers />} label="Community" path="/community" /></Link>
+          <Link to={"/webinars"}><MenuItem icon={<FaVideo />} label="Webinars" path="/webinars" /></Link>
+          <Link to={"/blogs"}><MenuItem icon={<FaBlog />} label="Blogs" path="/blogs" /></Link>
 
           <motion.div variants={itemVariants} className="pt-4 px-3 space-y-3">
             <button
@@ -295,18 +305,22 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn = false }) => {
         {selectedCategory?.category}
       </h3>
       {selectedCategory?.courses.map((course) => (
+        <Link to={course.link} key={course.id}>
         <motion.div
-          key={course.id}
           variants={itemVariants}
           className="flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-orange-50 rounded-lg"
         >
+          
           <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 text-gray-600">
             <FaBook />
           </div>
           <h4 className="text-sm text-gray-800">{course.title}</h4>
+        
         </motion.div>
+        </Link>
       ))}
     </motion.div>
+    
   );
 
   return (

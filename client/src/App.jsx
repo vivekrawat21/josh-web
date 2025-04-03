@@ -70,7 +70,7 @@ function App() {
         <Route path="mywallet" element={<Mywallet />} />
 
         <Route path="refer&earn" element={<Refer />} />
-        <Route path="helpandsupport" element={<Help />} />
+        <Route path="help&support" element={<Help />} />
       </Route>
           <Route
             path="/"
@@ -100,9 +100,9 @@ function App() {
               <Route path="/specialBundle/:id" element={<BasicBundle />} />
               <Route path="/gallery/:type" element={<Gallery />} />
 
-              <Route path="/basicBundle" element={<BasicBundle/>} />
-             <Route path="/intermediateBundle" element={<IntermediateBundle/>} />
-              <Route path="/advanceBundle" element={<AdvanceBundle />} />
+              <Route path="/basicBundle/:id" element={<BasicBundle/>} />
+             <Route path="/intermediateBundle/:id" element={<IntermediateBundle/>} />
+              <Route path="/advanceBundle/:id" element={<AdvanceBundle />} />
 
 
               <Route path="/blogs/:id" element={<Blog />} />

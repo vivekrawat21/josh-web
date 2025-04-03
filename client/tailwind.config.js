@@ -50,7 +50,22 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+			  basic: {
+				DEFAULT: '#E53935', // Bold Red (Text)
+				hover: '#B71C1C', // Darker Red (Hover)
+				bg: '#FFEBEE', // Light Red Background
+			  },
+			  intermediate: {
+				DEFAULT: '#FB8C00', // Deep Orange (Text)
+				hover: '#E65100', // Darker Orange (Hover)
+				bg: '#FFF3E0', // Light Orange Background
+			  },
+			  advanced: {
+				DEFAULT: '#1E88E5', // Deep Blue (Text)
+				hover: '#0D47A1', // Darker Blue (Hover)
+				bg: '#E3F2FD', // Light Blue Background
+			  },
   		},
 		animation:{
 			"loop-scroll": "loop-scroll 10s linear infinite",
@@ -62,6 +77,9 @@ export default {
 		}
   	}
   },
+  
+
+  
 },
   plugins: [
       require("tailwindcss-animate")

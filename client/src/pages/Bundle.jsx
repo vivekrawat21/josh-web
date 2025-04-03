@@ -4,12 +4,6 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
-const dummyStudents = [
-  "https://randomuser.me/api/portraits/men/1.jpg",
-  "https://randomuser.me/api/portraits/women/2.jpg",
-  "https://randomuser.me/api/portraits/men/3.jpg",
-  "https://randomuser.me/api/portraits/women/4.jpg"
-];
 
 const Bundle = () => {
   let { bundleId } = useParams();
@@ -20,7 +14,7 @@ const Bundle = () => {
   useEffect(() => {
     const selected = bundles?.filter((bundle) => bundle._id === bundleId);
     setBundle(selected[0]);
-  }, [bundles]);
+  }, [bundles,bundleId]);
 
   return (
     <motion.div 
