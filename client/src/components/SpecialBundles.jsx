@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { color, motion } from "framer-motion";
 import { Link } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 const bundles = [
   {
     title: "Basic Bundle",
@@ -81,8 +81,14 @@ const SpecialBundles = () => {
       link: "/advanceBundle",
     }
   ];
+  const { bundles, loading, error } = useSelector((state) => state.bundle);
 
-
+  const specialBundles = bundles[0]?.filter((bundle) => bundle.isSpecial) || [];
+  console.log("Trending Courses:", specialBundles);
+  const mergedBundles = bookDetails.map((book, index) => ({
+    ...book,
+    _id: specialBundles[index]?._id || `fallback-${index}`, // Assign `_id` or fallback value
+  }));
   return (
     <section className="py-12 px-4">
       <h2 className="text-[1.80rem] lg:text-7xl font-semibold text-center  my-10 text-gray-900">
@@ -91,8 +97,8 @@ const SpecialBundles = () => {
 
       
       <div className="grid grid-cols-1 items-center sm:grid-cols-2 md:grid-cols-3 gap-20 max-w-[95%] mx-auto">
-        {bookDetails.map((book, index) => (
-          <Link to={book.link} key={index}>
+        {mergedBundles.map((book, index) => (
+          <Link to={`${book.link}/${book._id}`} key={index}>
             <div key={index} className="text-center">
               <div className="flex justify-center items-center rounded-t-md mb-1 " style={{ background: book.titleColor }}>
                 <h3 className="my-2 text-xl font-semibold text-gray-700">
