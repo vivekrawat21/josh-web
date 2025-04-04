@@ -44,7 +44,7 @@ export default function DiscountPopup() {
               <DialogTitle className="text-2xl sm:text-3xl font-bold mb-4">🔥 Exclusive Offers! 🔥</DialogTitle>
 
               {offers.length > 0 && offers.map((offer) => {
-                const bundleLink = `http://localhost:5173/courses/${encodeURIComponent(offer.bundle.bundleName)}/1`;
+                const bundleLink = `courses/${encodeURIComponent(offer.bundle.bundleName)}/1`;
                 const discountAmount = (offer.bundle.price - offer.bundle.discountedPrice).toFixed(1);
                 const discountPercentage = offer.bundle.discount.toFixed(1);
                 const offertext = offer.text.trim()==""?`${offer.bundle.bundleName} has ${discountPercentage}% discount!`:offer.text;
