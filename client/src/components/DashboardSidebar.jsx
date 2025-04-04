@@ -68,7 +68,7 @@ const DashboardSidebar = () => {
         <Link to="/dashboard/refer&earn" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
           <FaGift /> Refer & Earn
         </Link>
-        <Link to="/dashboard/helpandsupport" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
+        <Link to="/dashboard/help&support" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
           <FaHeadset /> Help & Support
         </Link>
 
@@ -76,7 +76,7 @@ const DashboardSidebar = () => {
         <div className="mt-64">
           <button
             onClick={handleLogout}
-            className="border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-3 px-5 rounded-lg hover:bg-orange-500 hover:text-white transition text-lg w-full"
+            className="border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-3 px-5 rounded-lg hover:bg-orange-500 hover:text-white transition text-lg w-full "
           >
             <FaSignOutAlt /> Logout
           </button>

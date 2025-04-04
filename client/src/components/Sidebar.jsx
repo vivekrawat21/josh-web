@@ -208,7 +208,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles,specialBundles, trending
         <>
           <Link to={"dashboard/profile/personalinformation"}><MenuItem icon={<FaUser />} label="Personal Info" path="/dashboard/profile" /></Link>
           <Link to={"/about"}><MenuItem icon={<FaInfoCircle />} label="About" path="/about" /></Link>
-          <Link to={"/dashboard/mywallet"}><MenuIisOpentem icon={<FaWallet />} label="My Wallet" path="/dashboard/wallet" /></Link>
+          <Link to={"/dashboard/mywallet"}><MenuItem icon={<FaWallet />} label="My Wallet" path="/dashboard/wallet" /></Link>
           <Link to={"/dashboard/mycourses"}><MenuItem icon={<FaBook />} label="My Courses" path="/dashboard/courses" /></Link>
           <Link to={"/"}><MenuItem icon={<FaGift />} label="Refer & Earn" path="/dashboard/refer&earn" /></Link>
           <Link to={"/dashboard/help&support"}><MenuItem icon={<FaHeadset />} label="Help & Support" path="/dashboard/support" /></Link>
