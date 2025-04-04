@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { color, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { ArrowRight } from "lucide-react";
 const bundles = [
   {
     title: "Basic Bundle",
@@ -84,7 +85,7 @@ const SpecialBundles = () => {
   const { bundles, loading, error } = useSelector((state) => state.bundle);
 
   const specialBundles = bundles[0]?.filter((bundle) => bundle.isSpecial) || [];
-  console.log("Trending Courses:", specialBundles);
+  // console.log("Trending Courses:", specialBundles);
   const mergedBundles = bookDetails.map((book, index) => ({
     ...book,
     _id: specialBundles[index]?._id || `fallback-${index}`, // Assign `_id` or fallback value
@@ -98,16 +99,27 @@ const SpecialBundles = () => {
       
       <div className="grid grid-cols-1 items-center sm:grid-cols-2 md:grid-cols-3 gap-20 max-w-[95%] mx-auto">
         {mergedBundles.map((book, index) => (
-          <Link to={`${book.link}/${book._id}`} key={index}>
-            <div key={index} className="text-center">
-              <div className="flex justify-center items-center rounded-t-md mb-1 " style={{ background: book.titleColor }}>
-                <h3 className="my-2 text-xl font-semibold text-gray-700">
-                  {book.title}
-                </h3>
-              </div>
-              <img src={book.image} alt={book.title} className=" h-[80%] max-w-full object-contain rounded-lg z-10" />
-            </div>
-          </Link>
+         <Link to={`${book.link}/${book._id}`} key={index}>
+         <div key={index} className="text-center relative">
+           <div
+             className="flex justify-center items-center rounded-t-md mb-1"
+             style={{ background: book.titleColor }}
+           >
+             <h3 className="my-2 text-xl font-semibold text-gray-700">
+               {book.title}
+             </h3>
+           </div>
+           <div className="relative">
+             <img
+               src={book.image}
+               alt={book.title}
+               className="h-[80%] max-w-full object-contain   border"
+             />
+            
+           </div>
+         </div>
+       </Link>
+       
         ))}
         {/* {bundles.map((bundle, index) => (
           <Link to={bundle.link} key={index}>
