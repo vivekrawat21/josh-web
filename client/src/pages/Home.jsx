@@ -8,6 +8,7 @@ import SearchCourses from '@/components/SearchCourses'
 import SpecialBundles from '@/components/SpecialBundles'
 import DiscountPopup from '@/components/DiscountPopup'
 import DownloadApp from '@/components/DownloadApp'
+import SkillUpCourses from '@/components/SkillUpCourses'
 
 
 const Home = () => {
@@ -18,7 +19,9 @@ const Home = () => {
       <Partner/>
       <SearchCourses/>
       <SpecialBundles />
+      <SkillUpCourses/>
       <TopCourses />
+      
       {/* <DownloadApp /> */}
       <TopMentors/>
       <TestimonialBento />

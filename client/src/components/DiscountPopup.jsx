@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { BASE_URL } from "@/utils/utils";
+import { Link } from "react-router-dom";
 
 export default function DiscountPopup() {
   const [showPopup, setShowPopup] = useState(false);
@@ -44,7 +45,7 @@ export default function DiscountPopup() {
               <DialogTitle className="text-2xl sm:text-3xl font-bold mb-4">🔥 Exclusive Offers! 🔥</DialogTitle>
 
               {offers.length > 0 && offers.map((offer) => {
-                const bundleLink = `courses/${encodeURIComponent(offer.bundle.bundleName)}/1`;
+               
                 const discountAmount = (offer.bundle.price - offer.bundle.discountedPrice).toFixed(1);
                 const discountPercentage = offer.bundle.discount.toFixed(1);
                 const offertext = offer.text.trim()==""?`${offer.bundle.bundleName} has ${discountPercentage}% discount!`:offer.text;
@@ -70,11 +71,12 @@ export default function DiscountPopup() {
                         Save ${discountAmount} ({discountPercentage}%)
                       </span>
                     </p>
-                    <Button 
-                      onClick={() => window.location.href = bundleLink} 
+                    <Link to={/bundle/+offer?.bundle?._id} >
+                    <Button  
                       className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold mt-4 w-full transition-all duration-300 transform hover:scale-105 shadow-md">
                       🚀 Grab This Deal
                     </Button>
+                    </Link>
                   </motion.div>
                 );
               })}

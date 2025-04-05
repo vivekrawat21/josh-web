@@ -17,16 +17,13 @@ import {
   FaBlog,
   FaSignInAlt,
   FaGraduationCap,
-  FaLightbulb,
-  FaArrowRight,
+
   FaStar,
-  FaStackOverflow,
 } from "react-icons/fa"
 import { MdHome, MdExplore } from "react-icons/md"
 import { Link } from "react-router-dom"
-import { FaArrowTrendUp, FaBookBible } from "react-icons/fa6"
-import Bundle from "@/pages/Bundle"
-import SpecialBundles from "./SpecialBundles"
+import { FaArrowTrendUp } from "react-icons/fa6"
+
 import { id } from "date-fns/locale"
 
 // Animation variants
@@ -229,8 +226,9 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles,specialBundles, trending
         <>
         <Link to={"/"}>  <MenuItem icon={<MdHome />} label="Home" path="/" /></Link>
           <Link to={"/about"}><MenuItem icon={<FaInfoCircle />} label="About" path="/about" /></Link>
+          
           <MenuItem icon={<FaGraduationCap />} label="Courses" path="/courses" onClick={navigateToCategories} />
-          {/* <Link to={"/"}><MenuItem icon={<MdExplore />} label="Explore" path="/explore" /></Link> */}
+          <Link to={"/courses"}><MenuItem icon={<MdExplore />} label="Explore" path="/course" /></Link>
           <Link to={"/community"}><MenuItem icon={<FaUsers />} label="Community" path="/community" /></Link>
           <Link to={"/webinars"}><MenuItem icon={<FaVideo />} label="Webinars" path="/webinars" /></Link>
           <Link to={"/blogs"}><MenuItem icon={<FaBlog />} label="Blogs" path="/blogs" /></Link>

@@ -70,6 +70,7 @@ const TestimonialBento = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: i * 0.2 }}
             >
+              <img src={testimonial.image} alt={testimonial.name} className="w-16 h-16 rounded-full" />
               <h3 className="text-xl font-semibold text-gray-800">{testimonial.name}</h3>
               <p className="text-sm text-gray-500">{testimonial.course}</p>
               <p className="text-gray-700 italic mt-2">"{testimonial.feedback}"</p>
