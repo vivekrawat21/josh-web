@@ -22,7 +22,7 @@ const Home = () => {
       <SkillUpCourses/>
       <TopCourses />
       
-      {/* <DownloadApp /> */}
+      <DownloadApp />
       <TopMentors/>
       <TestimonialBento />
 
