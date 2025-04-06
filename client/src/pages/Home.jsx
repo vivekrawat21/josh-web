@@ -21,7 +21,6 @@ const Home = () => {
       <SpecialBundles />
       <SkillUpCourses/>
       <TopCourses />
-      
       <DownloadApp />
       <TopMentors/>
       <TestimonialBento />
