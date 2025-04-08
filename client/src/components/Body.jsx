@@ -6,11 +6,9 @@ import { Outlet } from "react-router-dom";
 const Body = () => {
   return (
     <>
-   
-    <Navbar /> 
-    <Outlet/>
-    <Footer /> 
-   
+      <Navbar />
+      <Outlet />
+      <Footer />
     </>
   )
 }
