@@ -250,12 +250,12 @@ const Navbar = () => {
           ) : (
             <DropdownMenu className="hidden md:inline">
               <DropdownMenuTrigger asChild>
-                <FaUser className="text-3xl cursor-pointer" />
+                <FaUser className="text-2xl cursor-pointer" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align=""
-                sideOffset={5}
-                className="relative w-full bg-white p-4 rounded-lg shadow-lg mt-8 right-12"
+                sideOffset={3}
+                className="relative  bg-white p-4 rounded-lg shadow-lg  right-5 "
               >
                 <DropdownMenuItem>
                   <Link to="/dashboard/profile/personalinformation">
@@ -273,7 +273,7 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/dashboard/helpandsupport">
+                  <Link to="/dashboard/help&support">
                     <p>Help and Support</p>
                   </Link>
                 </DropdownMenuItem>

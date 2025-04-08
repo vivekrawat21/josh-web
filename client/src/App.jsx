@@ -24,7 +24,7 @@ import JoinUs from "./pages/JoinUs";
 import ContactUs from "./pages/ContactUs";
 import Blogs from "./pages/Blogs";
 import RefundAndPolicy from "./pages/RefundAndPolicy";
-import LicenceAndAgreement from "./pages/LicenceAndAgreement";
+import LicenseAndAgreement from "./pages/LicenseAndAgreement";
 import Scroll from "./Scroll";
 // import Admin from "./pages/Admin";
 import AllCourses from "./components/AllCourses"
@@ -41,6 +41,8 @@ import BasicBundle from "./pages/BasicBundle";
 import AdvanceBundle from "./pages/AdvanceBundle";
 import Goals from "./pages/Goals";
 import Gallery from "./pages/Gallery";
+import Disclaimer from "./pages/Disclaimer";
+import Terms from "./pages/Terms";
 function App() {
   return (
     <>
@@ -98,6 +100,13 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/joinus" element={<JoinUs />} />
+              <Route path="/disclaimer" element={<Disclaimer />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/licenseAndAgreement" element={<LicenseAndAgreement/>} />
+
+              <Route path="/refund" element={<RefundAndPolicy />} />
+
+
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/webinars" element={<Webinars />} />
               
@@ -112,7 +121,7 @@ function App() {
 
               <Route path="/contactus" element={<ContactUs />} />
               <Route path="/refundandpolicy" element={<RefundAndPolicy />} />
-              <Route path="/licenceandagreement" element={<LicenceAndAgreement />} />
+              <Route path="/licenceandagreement" element={<LicenseAndAgreement />} />
 
               <Route path="/forgotpassword" element={<ForgotPassword/>} />
 
