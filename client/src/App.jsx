@@ -44,7 +44,6 @@ import Gallery from "./pages/Gallery";
 function App() {
   return (
     <>
-
       <BrowserRouter basename="/">
         <Scroll />
         <Routes>

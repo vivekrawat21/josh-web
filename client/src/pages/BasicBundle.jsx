@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Users, FileText, Award } from "lucide-react";
+import { ChevronDown, CheckCircle, Users, Award } from "lucide-react"
 
 import { BASE_URL } from "@/utils/utils";
 
 import axios from "axios";
 
 import { useParams } from "react-router-dom";
-const BasicBundle = () => {
+const BasicBundle = ({ page = "page1" }) => {
   const [bundle , setBundle] = React.useState([])
  
   const {id} = useParams()
@@ -30,276 +30,1024 @@ const BasicBundle = () => {
     }
     // console.log("Bundle",bundle[0])
   }, [id])
+
+    const [openIndex, setOpenIndex] = useState(0)
+    const [selected, setSelected] = useState("english")
+  
+    // Define color themes for each page
+    const themes = {
+      page1: {
+        primary: "#A88DA3",
+        primaryLight: "#D8C7DC",
+        primaryDark: "#81807f",
+        secondary: "#B8ACBA",
+        secondaryLight: "#E0D9E1", // Main theme color for page1
+        secondaryDark: "#4a4644",
+        accent: "#D7C9DA",
+        accentLight: "#f0e8f0",
+        accentDark: "#636362",
+        background: "#ffffff",
+        text: "#333333",
+        textLight: "#545352",
+        border: "#adacab",
+        buttonGradientFrom: "#908f8e",
+        buttonGradientTo: "#4a4644",
+        cardBorder: "#D6C2DC",
+        timelineDot: "#837883",
+        mentorHighlight: "#cebad3",
+        footerBackground: "#A88DA3",
+        footerBorder: "#D7C9DA",
+        footerText: "#D7C9DA",
+        gradientStart: "#C7BAC9",
+        gradientMiddle: "#DCCFE0",
+        gradientEnd: "#E0D9E1",
+        timelineGradientStart: "#EAE4EA",
+        timelineGradientEnd: "#D4CBD6",
+        moduleNumberGradientStart: "#D4CBD6",
+        moduleNumberGradientEnd: "#B2A8B2",
+        ctaGradientStart: "#e0d9e1",
+        ctaGradientEnd: "#b3adb4",
+        bgHeroSectionImage:"/Freelancing_Road_To_1_Lakhs heading image.png",
+        fifteenMImage: "/15M.png",
+        oneBImage: "/1B.png",
+        twentyLImage: "/20L.png",
+      },
+      page2: {
+        primary: "#6D77A3",
+        primaryLight: "#A5ADCF",
+        primaryDark: "#5d6590",
+        secondary: "#8d95b4", // Main theme color for page2
+        secondaryLight: "#b0b6d0",
+        secondaryDark: "#6a7090",
+        accent: "#c0c5db",
+        accentLight: "#e8eaf4",
+        accentDark: "#5d6590",
+        background: "#ffffff",
+        text: "#333333",
+        textLight: "#545352",
+        border: "#8d95b4",
+        buttonGradientFrom: "#7a82a0",
+        buttonGradientTo: "#5d6590",
+        cardBorder: "#a5adcf",
+        timelineDot: "#6d77a3",
+        mentorHighlight: "#a5adcf",
+        footerBackground: "#6D77A3",
+        footerBorder: "#A5ADCF",
+        footerText: "#c0c5db",
+        gradientStart: "#9da4c0",
+        gradientMiddle: "#b0b6d0",
+        gradientEnd: "#8d95b4",
+        timelineGradientStart: "#b0b6d0",
+        timelineGradientEnd: "#8d95b4",
+        moduleNumberGradientStart: "#a5adcf",
+        moduleNumberGradientEnd: "#8d95b4",
+        ctaGradientStart: "#8d95b4",
+        ctaGradientEnd: "#6d77a3",
+        bgHeroSectionImage:"/herolandingpage2.png",
+        fifteenMImage: "/15Mpage3.png",
+        oneBImage: "/1Bpage3.png",
+        twentyLImage: "/20Lpage3.png",
+      },
+      page3: {
+        primary: "#7e8385",
+        primaryLight: "#b5b9bb",
+        primaryDark: "#6a6e70",
+        secondary: "#999ea0", // Main theme color for page3
+        secondaryLight: "#b5b9bb",
+        secondaryDark: "#7e8385",
+        accent: "#b5b9bb",
+        accentLight: "#e6e8e9",
+        accentDark: "#7e8385",
+        background: "#ffffff",
+        text: "#333333",
+        textLight: "#545352",
+        border: "#999ea0",
+        buttonGradientFrom: "#8a8f91",
+        buttonGradientTo: "#6a6e70",
+        cardBorder: "#b5b9bb",
+        timelineDot: "#7e8385",
+        mentorHighlight: "#b5b9bb",
+        footerBackground: "#7e8385",
+        footerBorder: "#b5b9bb",
+        footerText: "#d1d3d4",
+        gradientStart: "#a6aaac",
+        gradientMiddle: "#b5b9bb",
+        gradientEnd: "#999ea0",
+        timelineGradientStart: "#b5b9bb",
+        timelineGradientEnd: "#999ea0",
+        moduleNumberGradientStart: "#b5b9bb",
+        moduleNumberGradientEnd: "#999ea0",
+        ctaGradientStart: "#999ea0",
+        ctaGradientEnd: "#7e8385",
+        bgHeroSectionImage:"/herolandingpage3.png",
+        fifteenMImage: "/15Mpage2.png",
+        oneBImage: "/1Bpage2.png",
+        twentyLImage: "/20Lpage2.png",
+      },
+    }
+  
+    // Get the current theme based on the page prop
+    const colors = themes[page] || themes.page1
+  
+    const toggleQuestion = (index) => {
+      setOpenIndex(openIndex === index ? null : index)
+    }
+  
+    const bonusSkills = [
+      {
+        id: 1,
+        name: "WordPress",
+        imageUrl: "/wordpress.svg",
+      },
+      {
+        id: 2,
+        name: "Photoshop",
+        imageUrl: "/ps.svg",
+      },
+      {
+        id: 3,
+        name: "JavaScript",
+        imageUrl: "/javascript.svg",
+      },
+      {
+        id: 4,
+        name: "Mobile Video Editing",
+        imageUrl: "/mobile_video_editing.svg",
+      },
+      {
+        id: 5,
+        name: "Launch E-Course",
+        imageUrl: "/launch_e_course.svg",
+      },
+      {
+        id: 6,
+        name: "Google Ads",
+        imageUrl: "/google_ads.svg",
+      },
+      {
+        id: 7,
+        name: "Taxation",
+        imageUrl: "/taxation.svg",
+      },
+      {
+        id: 8,
+        name: "Public Relations",
+        imageUrl: "/pr.svg",
+      },
+      {
+        id: 9,
+        name: "Content Writing",
+        imageUrl: "/content_writing.svg",
+      },
+      {
+        id: 10,
+        name: "Copy Writing",
+        imageUrl: "/copy_writing.svg",
+      },
+      {
+        id: 11,
+        name: "Printify",
+        imageUrl: "/printify.svg",
+      },
+      {
+        id: 12,
+        name: "Shipping",
+        imageUrl: "/shipping.svg",
+      },
+    ]
+  
+    const goldenAgeData = [
+      {
+        id: 1,
+        title: "Unstoppable Growth",
+        description:
+          "The freelance economy is expanding faster than ever, with businesses shifting to remote, flexible talent.",
+      },
+      {
+        id: 2,
+        title: "Endless Earnings",
+        description: "Say goodbye to fixed salaries—charge what you're worth and scale your income on your terms.",
+      },
+      {
+        id: 3,
+        title: "Freedom & Flexibility",
+        description: "Work from anywhere, choose your projects, and create a lifestyle that suits you.",
+      },
+    ]
+  
+    const ModulesData = [
+      {
+        id: 1,
+        title: "Foundation",
+        descriptionTitle: "Start Strong, Succeed",
+        description:
+          "Master the fundamentals of freelancing, including mindset, client acquisition, and essential skills.",
+      },
+      {
+        id: 2,
+        title: "Positioning",
+        descriptionTitle: "Stand Out, Get Noticed",
+        description: "Learn how to position yourself as a premium freelancer who charges top rates.",
+      },
+      {
+        id: 3,
+        title: "Showcasing",
+        descriptionTitle: "Showcase Your Talent",
+        description: "Create a portfolio that highlights your skills and attracts high-paying clients.",
+      },
+      {
+        id: 4,
+        title: "Networking",
+        descriptionTitle: "Connect, Collaborate, Thrive",
+        description: "Build a network of fellow freelancers, mentors, and potential clients to help you grow.",
+      },
+      {
+        id: 5,
+        title: "Outreach",
+        descriptionTitle: "Get Found, Get Hired",
+        description: "Learn how to effectively reach out to potential clients and pitch your services.",
+      },
+      {
+        id: 6,
+        title: "Managing",
+        descriptionTitle: "Stay Organized, Stay Productive",
+        description: "Master time management, project management, and client communication skills.",
+      },
+      {
+        id: 7,
+        title: "Scaling",
+        descriptionTitle: "Grow Your Business",
+        description: "Learn how to scale your freelancing business, including hiring a team and creating a brand.",
+      },
+    ]
+  
+    const questions = [
+      {
+        question: "How do I enroll in the course?",
+        answer:
+          "You can enroll directly from this page by clicking the button. Once you complete your purchase, you'll receive confirmation via WhatsApp and email.",
+      },
+      {
+        question: "What payment methods do you accept?",
+        answer:
+          "We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely through our payment gateway.",
+      },
+      {
+        question: "Is there a refund policy?",
+        answer:
+          "Yes, we offer a 30-day money-back guarantee. If you're not satisfied with the course, you can request a full refund within 30 days of purchase.",
+      },
+      {
+        question: "How long do I have access to the course materials?",
+        answer:
+          "Once enrolled, you have lifetime access to all course materials, including future updates and additional resources.",
+      },
+      {
+        question: "Are there any prerequisites for this course?",
+        answer:
+          "No specific prerequisites are required. The course is designed to accommodate beginners while also providing value to those with some experience.",
+      },
+      {
+        question: "Can I access the course on mobile devices?",
+        answer:
+          "Yes, our platform is fully responsive. You can access all course materials on desktop, tablet, and mobile devices.",
+      },
+      {
+        question: "Is there a community or support available?",
+        answer:
+          "You'll get access to our private community where you can connect with other students and instructors. We also provide dedicated support via email.",
+      },
+    ]
+  
+    const cards = [
+      {
+        title: "Apt High-Ticket Framework",
+        description:
+          "Learn how to position yourself as a premium freelancer who charges top rates. This framework helps you stand out from the crowd, attract high-paying clients, and deliver work that justifies premium pricing. Stop working more for less—start earning big for the value you bring.",
+        img: "/member2.jpg",
+      },
+      {
+        title: "Master High-Income Skills",
+        description:
+          "Freelancing success starts with skills that businesses are desperate for. Learn in-demand, high-paying skills like marketing, content, and AI tools—the ones that drive business results. Master what pays, so clients always need you. Stay ahead of the curve with future-proof skills that keep your income growing.",
+        img: "/member2.jpg",
+      },
+      {
+        title: "Automate Client Acquisition",
+        description:
+          "Forget begging for work—let clients come to you. Build a personal brand that positions you as the go-to expert, so clients see your value upfront. Learn to use AI tools, social proof, and content to attract high-paying leads consistently—without chasing anyone. Turn your profile into a client magnet that works 24/7.",
+        img: "/member4.jpg",
+      },
+    ]
+  
+    const heroSectionData = [
+      {
+        title: "Freelancing Road To 5 Lakhs Per Month",
+        subtitle: "Unlock High-Ticket Freelancing Success – Land Premium Clients, Scale Fast, and Work on Your Terms!",
+        numberOfCourses: "24 Skilled Courses",
+      },
+    ]
+
+
   return (
-    <div className="flex flex-col min-h-screen mb-6 mx-4">
-      {/* Header Section */}
-      <header className="bg-orange-800 text-white p-4 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold">JoshGuru</h1>
-        </div>
-        <Button
-          variant="outline"
-          className="bg-transparent text-white border-white hover:bg-white hover:text-[#8B4513]"
-        >
+    <div className="relative w-full overflow-x-hidden">
+      {/* page nav bar */}
+      <div className="relative w-full h-auto py-3 md:h-[71.78px] bg-white/10 backdrop-blur-[12.5px] flex justify-between items-center px-4 md:px-6 lg:px-20 xl:px-56 shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] mx-auto">
+        <img src="/logo1.png" alt="joshguru" className="w-[60px] md:w-[90px] h-[60px] object-cover" />
+        <button className="px-4 md:px-6 py-2 bg-transparent text-white font-semibold border-2 border-white shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] transition-all duration-200 hover:bg-white hover:text-blue-600 text-sm md:text-base">
           Enroll Now
-        </Button>
-      </header>
+        </button>
+      </div>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-[#8B4513] to-[#CD853F] text-white py-16 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <Badge className="bg-[#F5DEB3] text-[#8B4513] mb-4">{bundle.bundleName}</Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Freelancing Road To 1 Lakhs Per Months</h1>
-          <p className="text-xl mb-8">
-            {bundle.description}
-          </p>
-         
+      {/* Optional hero section */}
+      <div className="absolute top-0 left-0 w-full h-full -z-40">
+        <img
+          src={colors.bgHeroSectionImage}
+          alt="hero"
+          className="w-full h-[950px] object-cover md:object-fill"
+        />
+      </div>
 
-          <div className="flex flex-wrap gap-8 mt-8 bg-[#F5DEB3]/80 p-4 rounded-lg text-[#8B4513]">
-            <div className="flex items-center gap-2">
-              <Award className="h-6 w-6" />
-              <span>24 Skilled Courses</span>
+      {/* hero section */}
+      <div className="relative w-full max-w-[1140px] px-4 mx-auto pt-[110px] pb-[50px] md:pb-[100px] flex flex-col items-center">
+        {/* Heading 6 */}
+        <div className="w-[215.23px] h-[32.8px] bg-white/20 rounded-full flex items-center justify-center mb-4">
+          <p className="text-white text-[13.23px] font-medium">Digital Freelancing Bundle</p>
+        </div>
+
+        {/* Main Heading */}
+        <h1 className="w-full max-w-[893.39px] text-2xl md:text-3xl lg:text-[44.38px] font-black text-white text-center leading-tight md:leading-[55px] mb-2 md:mb-4">
+          {heroSectionData[0].title}
+        </h1>
+
+        {/* Subtitle */}
+        <p className="w-full max-w-[720.34px] text-sm md:text-[14.87px] text-white text-center mb-6 md:mb-10">
+          {heroSectionData[0].subtitle}
+        </p>
+
+        {/* Language Tabs */}
+        <div className="flex gap-3 mb-6 md:mb-10">
+          <button
+            className={`w-[84.16px] h-[34.5px] rounded-full flex items-center justify-center text-white text-[13.94px] ${
+              selected === "english"
+                ? `bg-gradient-to-r from-${colors.primaryLight} to-${colors.primary}`
+                : "bg-white/10"
+            }`}
+            style={{
+              background:
+                selected === "english" ? `linear-gradient(to right, ${colors.primaryLight}, ${colors.primary})` : "",
+            }}
+            onClick={() => setSelected("english")}
+          >
+            English
+          </button>
+          <button
+            className={`w-[84.16px] h-[34.5px] rounded-full flex items-center justify-center text-[#333333] text-[14.18px] ${
+              selected === "hindi" ? `bg-gradient-to-r from-${colors.primaryLight} to-${colors.primary}` : "bg-white/10"
+            }`}
+            style={{
+              background:
+                selected === "hindi" ? `linear-gradient(to right, ${colors.primaryLight}, ${colors.primary})` : "",
+            }}
+            onClick={() => setSelected("hindi")}
+          >
+            Hindi
+          </button>
+        </div>
+
+        {/* Info Strip */}
+        <div
+          className="w-full max-w-[800px] bg-[#d1d0cf] rounded-[12px] md:rounded-b-none md:rounded-t-[12px] flex flex-col md:flex-row items-center justify-around px-4 md:px-6 py-4 md:h-[68px] mb-4 md:mb-0"
+          style={{
+            border: `3px solid ${colors.primaryDark}`,
+            borderBottom: "md:0",
+          }}
+        >
+          <div className="flex items-center gap-2 py-2 md:py-0 w-full md:w-auto">
+            <img src="/all_course.svg" alt="courses" className="w-[34px] h-[34px]" />
+            <p className="text-[#333333] text-sm md:text-[15px] font-medium text-left md:text-center">
+              {heroSectionData[0].numberOfCourses}
+            </p>
+          </div>
+
+          <div className="hidden md:block w-[1.16px] h-[35px] bg-black opacity-30" />
+
+          <div className="flex items-center gap-2 py-2 md:py-0 w-full md:w-auto">
+            <img src="/lifetime_access.svg" alt="access" className="w-[34px] h-[34px]" />
+            <p className="text-[#333333] text-sm md:text-[14.63px] font-medium text-left md:text-center">
+              Lifetime Access
+            </p>
+          </div>
+
+          <div className="hidden md:block w-[1.16px] h-[35px] bg-black opacity-30" />
+
+          <div className="flex items-center gap-2 py-2 md:py-0 w-full md:w-auto">
+            <img src="/english_hindi.svg" alt="language" className="w-[34px] h-[34px]" />
+            <p className="text-[#333333] text-sm md:text-[15.12px] font-medium text-left md:text-center">
+              English/Hindi
+            </p>
+          </div>
+        </div>
+
+        {/* Video Section */}
+        <div className="w-full max-w-[950px] h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] bg-gradient-to-b from-[#bfbebe] to-[#929190] rounded-[12px] overflow-hidden">
+          <div className="w-full h-full p-[3px]">
+            <div className="w-full h-full bg-[#0F0F0F] rounded-[10px] overflow-hidden">
+              <video
+                src={
+                  selected === "english"
+                    ? "https://www.w3schools.com/html/mov_bbb.mp4"
+                    : "https://www.w3schools.com/html/mov_bbb.mp4"
+                }
+                controls
+                className="w-full h-full object-cover rounded-[10px]"
+              ></video>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-6 w-6" />
-              <span>Lifetime Access</span>
+          </div>
+        </div>
+        <div className="mt-8 md:mt-12">
+          <button
+            className="h-[51px] rounded px-6 md:px-10 text-white text-base md:text-[16.7344px] leading-[27px] font-medium w-[250px] md:w-[350px] flex items-center justify-center"
+            style={{
+              background: `linear-gradient(to right, ${colors.buttonGradientFrom}, ${colors.buttonGradientTo})`,
+            }}
+          >
+            Start Learning
+          </button>
+        </div>
+      </div>
+
+      {/*Bonus Skills */}
+      <div className="relative w-full py-2 md:py-2">
+        <p className="text-center text-xl md:text-2xl lg:text-[30px] font-bold mb-8 md:mb-16 px-4">
+          Level Up With These Exclusive{" "}
+          <span style={{ borderBottom: `4px solid ${colors.primaryDark}` }}>Bonus Skills</span>
+        </p>
+        <div className="relative flex overflow-hidden rounded-lg group">
+          {/* Left blurred gradient */}
+          <div
+            className="absolute inset-y-0 left-0 w-16 z-10 blur-5xl pointer-events-none"
+            style={{
+              background: `linear-gradient(to right, ${colors.background}, ${colors.background}, transparent)`,
+            }}
+          ></div>
+
+          {/* Scrolling content */}
+          <div className="flex space-x-8 md:space-x-16 animate-loop-scroll h-28 my-4">
+            {bonusSkills.map((bonusSkill) => (
+              <img
+                src={bonusSkill.imageUrl || "/placeholder.svg"}
+                alt={bonusSkill.name}
+                key={bonusSkill.id}
+                className="w-12 h-8 md:w-16 md:h-10 lg:w-24 lg:h-10 mx-4 md:mx-8 max-w-32 object-contain"
+              />
+            ))}
+          </div>
+
+          {/* Duplicate scrolling content */}
+          <div className="flex space-x-8 md:space-x-16 animate-loop-scroll my-6" aria-hidden="true">
+            {bonusSkills.map((bonusSkill) => (
+              <img
+                src={bonusSkill.imageUrl || "/placeholder.svg"}
+                alt={bonusSkill.name}
+                key={bonusSkill.id}
+                className="w-12 h-8 md:w-16 md:h-10 lg:w-24 lg:h-10 mx-4 md:mx-8 max-w-32 object-contain"
+              />
+            ))}
+          </div>
+
+          {/* Right blurred gradient */}
+          <div
+            className="absolute inset-y-0 right-0 w-16 z-10 blur-5xl pointer-events-none"
+            style={{
+              background: `linear-gradient(to left, ${colors.background}, ${colors.background}, transparent)`,
+            }}
+          ></div>
+        </div>
+      </div>
+
+      {/*Golden Age */}
+      <div style={{ backgroundColor: colors.accentLight }} className="w-full py-12 md:py-16 lg:py-20">
+        {/* Container */}
+        <div className="w-full max-w-[1140px] mx-auto px-4">
+          {/* Heading */}
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold">
+              <span>The</span>
+              <span className="relative mx-2">
+                <span
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "3px",
+                    backgroundColor: colors.border,
+                    borderRadius: "0.375rem",
+                  }}
+                ></span>
+              </span>
+              <span>Golden Age To Freelancing Is Here!</span>
+            </h2>
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Info Cards Container */}
+            <div className="flex flex-col gap-4 md:gap-5 lg:w-1/2">
+              {goldenAgeData.map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    backgroundColor: colors.background,
+                    border: `2px solid ${colors.accentDark}`,
+                  }}
+                  className="rounded-[12px] p-5 md:p-6"
+                >
+                  <div style={{ backgroundColor: colors.accentLight }} className="rounded-[4px] p-2 mb-4 relative">
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        width: "0.5rem",
+                        height: "100%",
+                        backgroundColor: colors.border,
+                        borderTopRightRadius: "0.375rem",
+                        borderBottomRightRadius: "0.375rem",
+                      }}
+                    ></div>
+                    <h5 className="pl-4 font-medium">{item.title}</h5>
+                  </div>
+                  <p className="text-sm md:text-base">{item.description}</p>
+                </div>
+              ))}
             </div>
-            <div className="flex items-center gap-2">
-              <FileText className="h-6 w-6" />
-              <span>English/Hindi</span>
+
+            {/* Image on right */}
+            <div className="lg:w-1/2 flex justify-center items-center mt-6 lg:mt-0">
+              <img src="/golden_age.png" alt="Golden Age" className="max-w-full h-auto max-h-[480px] object-contain" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/*India Rank*/}
+      <div className="w-full py-12 md:py-16 lg:py-20">
+        <div className="w-full max-w-[1140px] mx-auto px-4">
+          {/* Header Section */}
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold">
+              <span>And</span>
+              <span className="relative mx-2">
+                <span
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "3px",
+                    backgroundColor: colors.border,
+                    borderRadius: "0.375rem",
+                  }}
+                ></span>
+              </span>
+              <span>India Ranks #2 in the Freelance Market</span>
+            </h2>
+          </div>
+
+          {/* Cards Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            <div
+              style={{
+                backgroundColor: colors.background,
+                borderColor: colors.textLight,
+              }}
+              className="border rounded-[12px] shadow-[0px_4px_30px_rgba(0,0,0,0.15)] p-5"
+            >
+              <div
+                className="w-[80px] h-[80px] bg-cover mb-5"
+                style={{ backgroundImage: `url(${colors.fifteenMImage})` }}
+              ></div>
+              <h3 className="font-bold text-lg mb-3">Freelancers</h3>
+              <p className="text-sm md:text-base">
+                India is the second-largest freelance market, with over 15 million working independently.
+              </p>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: colors.background,
+                borderColor: colors.textLight,
+              }}
+              className="border rounded-[12px] shadow-[0px_4px_30px_rgba(0,0,0,0.15)] p-5"
+            >
+              <div
+                className="w-[80px] h-[80px] bg-cover mb-5"
+                style={{ backgroundImage: `url(${colors.oneBImage})` }}
+              ></div>
+              <h3 className="font-bold text-lg mb-3">Market</h3>
+              <p className="text-sm md:text-base">
+                Freelancers in India contribute over $1 billion to the global economy across multiple industries.
+              </p>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: colors.background,
+                borderColor: colors.textLight,
+              }}
+              className="border rounded-[12px] shadow-[0px_4px_30px_rgba(0,0,0,0.15)] p-5 md:col-span-2 lg:col-span-1 md:max-w-md md:mx-auto lg:mx-0 lg:max-w-none"
+            >
+              <div
+                className="w-[80px] h-[80px] bg-cover mb-5"
+                style={{ backgroundImage: `url(${colors.twentyLImage})` }}
+              ></div>
+              <h3 className="font-bold text-lg mb-3">Earners</h3>
+              <p className="text-sm md:text-base">
+                23% of Indian freelancers earn over ₹20 lakh a year, making freelancing a rewarding career.
+              </p>
+            </div>
+          </div>
+
+          {/* CTA Button */}
+          <div className="flex justify-center">
+            <button
+              style={{
+                background: `linear-gradient(to right, ${colors.buttonGradientFrom}, ${colors.buttonGradientTo})`,
+              }}
+              className="w-[280px] md:w-[360px] h-[51px] rounded-[4px] text-white text-base md:text-[17.0156px] leading-[27px] font-medium"
+            >
+              Claim your spot
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/*Add Up*/}
+      <div
+        style={{
+          background: `linear-gradient(125.79deg, ${colors.gradientStart} 0%, ${colors.gradientMiddle} 36.84%, ${colors.gradientEnd} 86.11%)`,
+        }}
+        className="relative w-full py-12 md:py-16 lg:py-20"
+      >
+        {/* Heading Container */}
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-white">
+            <span>You Can Also</span>
+            <span style={{ borderBottom: `4px solid ${colors.primaryLight}` }} className="pb-0 ml-2">
+              Add Up
+            </span>
+            <span className="ml-2">To This With</span>
+          </h2>
+        </div>
+
+        {/* Cards Container */}
+        <div className="relative w-full lg:w-[850px] h-[300px] md:h-[900px] overflow-y-auto mx-auto px-4 hide-scrollbar">
+          <div className="space-y-4 md:space-y-6 lg:space-y-8">
+            {cards.map((card, index) => (
+              <div
+                key={index}
+                className="sticky top-0 w-full max-w-[1100px] mx-auto border-[3px] rounded-[12px] p-4 md:p-8 shadow-xl transition-all duration-300"
+                style={{
+                  zIndex: cards.length + index,
+                  opacity: 1,
+                  backgroundColor: colors.background,
+                  borderColor: colors.cardBorder,
+                  borderWidth: "3px",
+                }}
+              >
+                <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+                  <img
+                    src={card.img || "/placeholder.svg"}
+                    alt="card-img"
+                    className="w-full md:w-[300px] h-[200px] object-cover rounded"
+                  />
+                  <div>
+                    <h2 className="text-lg md:text-xl font-bold mb-2">{card.title}</h2>
+                    <p className="text-xs md:text-sm ">{card.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Custom CSS for hiding scrollbar but allowing scroll */}
+        <style jsx global>{`
+          .hide-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+          }
+          .hide-scrollbar::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari and Opera */
+          }
+        `}</style>
+      </div>
+
+      {/* Success Is Here */}
+      <div className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
+        {/* Background elements */}
+        <div
+          style={{ backgroundImage: `url('/#${colors.secondaryLight}.png')` }}
+          className="absolute left-0 top-[700px] w-full max-w-[1034px] h-[100px] opacity-50"
+        ></div>
+        <div className="hidden lg:block absolute right-1/4 top-0 w-[1.8px] h-full bg-[url('/v-line.png')]"></div>
+        <div
+          style={{
+            background: `linear-gradient(to bottom right, ${colors.timelineGradientStart}, ${colors.timelineGradientEnd})`,
+            borderRadius: "9999px",
+            opacity: 0.6,
+            filter: "blur(120px)",
+          }}
+          className="absolute left-0 top-1/4 w-full max-w-[1034px] h-full max-h-[1231px]"
+        ></div>
+
+        <div className="container mx-auto max-w-[1140px] px-4 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+            {/* Left side with heading */}
+            <div className="lg:col-span-4 w-full lg:sticky lg:top-24 self-start">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-gray-900 mb-6">
+                Your Framework For Freelance Success Is Here!
+              </h2>
+              <p className="text-base md:text-lg text-gray-700 mb-8">
+                Follow this proven roadmap to build a thriving freelance business that gives you the freedom, income,
+                and impact you desire.
+              </p>
+              <div className="hidden lg:block">
+                <button
+                  style={{
+                    background: `linear-gradient(to right, ${colors.ctaGradientStart}, ${colors.ctaGradientEnd})`,
+                  }}
+                  className="px-6 py-3 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  Get Started Today
+                </button>
+              </div>
+            </div>
+
+            {/* Center timeline */}
+            <div className="hidden lg:flex lg:col-span-1 justify-center">
+              <div className="relative">
+                <div
+                  style={{
+                    background: `linear-gradient(to bottom, ${colors.timelineGradientStart}, ${colors.timelineGradientEnd})`,
+                  }}
+                  className="absolute left-1/2 top-0 bottom-0 w-0.5 transform -translate-x-1/2"
+                ></div>
+
+                {/* Timeline dots */}
+                {ModulesData.map((_, index) => (
+                  <div
+                    key={`dot-${index}`}
+                    style={{
+                      top: `${index * 180 + 75}px`,
+                      borderColor: colors.timelineDot,
+                    }}
+                    className="absolute left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full bg-white border-4 z-10"
+                  ></div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right side with modules */}
+            <div className="lg:col-span-7 space-y-10 md:space-y-16 relative">
+              {ModulesData.map((module, index) => (
+                <div
+                  key={module.id}
+                  style={{ backgroundColor: colors.background }}
+                  className="relative rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                >
+                  {/* Module Number Badge */}
+                  <div className="absolute left-4 lg:-left-6 top-0 transform -translate-y-1/2 flex items-center flex-wrap">
+                    <div
+                      style={{
+                        background: `linear-gradient(to bottom right, ${colors.moduleNumberGradientStart}, ${colors.moduleNumberGradientEnd})`,
+                      }}
+                      className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg"
+                    >
+                      <span className="text-white font-bold text-base md:text-lg">{module.id}</span>
+                    </div>
+                    <div
+                      style={{ backgroundColor: colors.background }}
+                      className="py-1 px-2 md:py-2 md:px-4 rounded-r-lg shadow-md ml-1"
+                    >
+                      <h3 className="text-sm md:text-base font-bold text-gray-800">{module.title}</h3>
+                    </div>
+                  </div>
+
+                  {/* Module Content */}
+                  <div className="p-4 md:p-6 pt-6 md:pt-8 mt-4">
+                    <h4 className="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3">
+                      {module.descriptionTitle}
+                    </h4>
+                    <p className="text-sm md:text-base text-gray-700 leading-relaxed">{module.description}</p>
+                  </div>
+
+                  {/* Connecting line to timeline (mobile only) */}
+                  <div
+                    style={{
+                      background: `linear-gradient(to bottom, ${colors.secondaryLight}, transparent)`,
+                    }}
+                    className="lg:hidden absolute left-4 top-full w-0.5 h-8 md:h-12"
+                  >
+                    {index !== ModulesData.length - 1 && (
+                      <div
+                        style={{ backgroundColor: colors.secondaryLight }}
+                        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full"
+                      ></div>
+                    )}
+                  </div>
+
+                  {/* Horizontal connecting line (desktop only) */}
+                  <div
+                    style={{ backgroundColor: colors.secondary }}
+                    className="hidden lg:block absolute right-full top-1/2 w-8 h-0.5"
+                  ></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile CTA button */}
+          <div className="mt-10 md:mt-16 text-center lg:hidden">
+            <button
+              style={{
+                background: `linear-gradient(to right, ${colors.ctaGradientStart}, ${colors.ctaGradientEnd})`,
+              }}
+              className="px-6 py-3 text-white font-medium rounded-lg shadow-lg"
+            >
+              Get Started Today
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mentor */}
+      <section style={{ backgroundColor: colors.secondary }} className="w-full py-10 md:py-16 lg:py-20">
+        <div className="container mx-auto max-w-[1140px] px-4">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10">
+            {/* Mentor Image */}
+            <img src="/member2.jpg" alt="Mentor" className="w-[200px] md:w-[250px] h-auto object-cover" />
+
+            {/* Text Content */}
+            <div className="text-white">
+              {/* Heading */}
+              <h3 className="font-bold text-2xl md:text-[28.48px] mb-4 md:mb-5">Meet Your Mentor</h3>
+
+              {/* Highlight background and name */}
+              <div className="relative">
+                {/* Background Block */}
+                <div
+                  style={{ backgroundColor: colors.mentorHighlight }}
+                  className="absolute left-0 top-0 w-[102.97px] h-[20px] z-0"
+                />
+                {/* Name */}
+                <span className="relative z-10 text-[#333333] font-normal text-sm md:text-[14.25px]">
+                  Lakshit Sethiya
+                </span>
+
+                {/* Inline text after name */}
+                <span className="ml-1 text-white text-sm md:text-[14.75px]">
+                  , the founder of Social Sellar Academy, is a seasoned freelancer and social media marketing expert who has helped thousands of freelancers transform their businesses. Starting from scratch, Lakshit built a thriving freelance career by mastering the art of driving revenue through strategic digital marketing. With his freelancing experience, Lakshit has developed a proven system that enables freelancers to leverage social media to build profitable personal brands, attract high paying clients, and generate sustainable income.
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-[#F0FFF0]">
-      <div className="container mx-auto max-w-6xl">
-        {/* Header */}
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">
-          Master {bundle.bundleName} & Elevate Your Career!
-          <span className="block w-32 sm:w-48 h-1 bg-orange-800 mx-auto mt-2"></span>
-        </h2>
+      {/* certificate */}
+      <section className="py-10 px-4 bg-white mt-10">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h2 className="text-3xl font-bold mb-6">
+            Before You Ask!
+            <span className="block w-32 h-1 bg- mt-2" style={{ backgroundColor: colors.primaryLight }}></span>
+          </h2>
+          <p className="text-lg mb-6 sm:mb-8">
+            Yes, you'll be certified for each course after passing the tests.
+          </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Left Section - Course Details */}
-          <div className="flex flex-col gap-6">
-            {/* SEO & Content Marketing */}
-            <Card className="border-orange-600 overflow-hidden">
-              <CardContent className="p-0">
-                <div className="flex">
-                  <div className="w-2 bg-orange-700"></div>
-                  <div className="p-4 sm:p-6">
-                    <h3 className="text-lg sm:text-xl font-semibold mb-2 bg-orange-700 p-2 rounded-md w-fit">
-                      Learn SEO & Content Marketing
-                    </h3>
-                    <p className="text-sm sm:text-base">
-                      Discover how to rank on search engines, optimize content, and drive organic traffic to websites.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Social Media Mastery */}
-            <Card className="border-orange-600 overflow-hidden">
-              <CardContent className="p-0">
-                <div className="flex">
-                  <div className="w-2 bg-orange-700"></div>
-                  <div className="p-4 sm:p-6">
-                    <h3 className="text-lg sm:text-xl font-semibold mb-2 bg-orange-700 p-2 rounded-md w-fit">
-                      Social Media Mastery
-                    </h3>
-                    <p className="text-sm sm:text-base">
-                      Build brand awareness, engage audiences, and create high-converting campaigns on platforms like Facebook, Instagram, and LinkedIn.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* PPC & Paid Ads */}
-            <Card className="border-orange-600 overflow-hidden">
-              <CardContent className="p-0">
-                <div className="flex">
-                  <div className="w-2 bg-orange-700"></div>
-                  <div className="p-4 sm:p-6">
-                    <h3 className="text-lg sm:text-xl font-semibold mb-2 bg-orange-700 p-2 rounded-md w-fit">
-                      PPC & Paid Ads
-                    </h3>
-                    <p className="text-sm sm:text-base">
-                      Master Google Ads, Facebook Ads, and LinkedIn campaigns to maximize ROI.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="space-y-6">
+            <div className="flex gap-4">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md flex items-center justify-center text-white flex-shrink-0"
+          style={{ backgroundColor: colors.secondary}}>
+            <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
+          <p className="font-medium text-sm sm:text-base">
+            Official certificate from us to verify your achievements and increase your job prospects.
+          </p>
+            </div>
 
-          {/* Right Section - Course Image & Features */}
-          <div className="flex flex-col items-center">
+            <div className="flex gap-4">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md flex items-center justify-center text-white flex-shrink-0"
+          style={{ backgroundColor: colors.secondary}}>
+            <Users className="h-5 w-5 sm:h-6 sm:w-6" />
+          </div>
+          <p className="font-medium text-sm sm:text-base">
+            Easily shareable certificate for your portfolio to post on all platforms available.
+          </p>
+            </div>
+
+            <div className="flex gap-4">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md flex items-center justify-center text-white flex-shrink-0"
+          style={{ backgroundColor: colors.secondary}}>
+            <Award className="h-5 w-5 sm:h-6 sm:w-6" />
+          </div>
+          <p className="font-medium text-sm sm:text-base">
+            Use your certificate to enhance your professional credibility and stand out among your peers.
+          </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <div
+            className="border-4 rounded-lg p-3 sm:p-4 bg-[#FFF8DC] max-w-xs sm:max-w-md"
+            style={{ borderColor: colors.primary }}
+          >
             <img
-              src="https://t4.ftcdn.net/jpg/02/52/76/09/360_F_252760983_ZTCURKreID1WJkC7uiX6olt7hH0Q7v8X.jpg"
-              alt="Digital Marketing Course"
-              className="rounded-lg w-full h-auto max-w-xs sm:max-w-md md:max-w-lg object-cover"
+          src="https://media.istockphoto.com/id/1427207629/vector/certificate-of-appreciation-template-gold-and-blue-color-clean-modern-certificate-with-gold.jpg?s=612x612&w=0&k=20&c=ZTN5SJx55fIbCEdynoE5tVb9qX9MIztBp8KYfn1DPq0="
+          alt="Certificate"
+          className="rounded"
             />
-
-            {/* Course Features */}
-            <ul className="mt-6 space-y-4 text-gray-700">
-              <li className="flex items-center gap-2">
-                <CheckCircle className="text-orange-800" size={20} /> Industry-Recognized Certificate
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="text-orange-800" size={20} /> Live Projects & Case Studies
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="text-orange-800" size={20} /> Lifetime Access to Course Materials
-              </li>
-            </ul>
-
-            {/* Enroll Button */}
-            <Button className="mt-6 bg-orange-700 text-white px-6 py-3 rounded-md hover:bg-[#CD853F]/90 transition">
-              Enroll Now
-            </Button>
           </div>
         </div>
-      </div>
-    </section>
-     
-      
-
-
-      <section className="py-16 px-4 bg-[#FFF8DC]">
-  <div className="container mx-auto max-w-6xl">
-    <h2 className="text-3xl font-bold text-center mb-12">
-      Get Access To 24 Bonus Skill Courses
-      <span className="block w-48 h-1 bg-[#CD853F] mx-auto mt-2"></span>
-    </h2>
-
-    <div className="bg-[#8B4513] rounded-lg p-6 sm:p-8 text-white relative overflow-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-        <div className="space-y-6 sm:space-y-8">
-          {bundle.whyBundle?.map((item, index) => (
-            <span className="flex items-center gap-2 text-sm sm:text-base" key={index}>
-              <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-              <span>{item}</span>
-            </span>
-          ))}
+          </div>
         </div>
+      </section>
 
-        <div className="relative w-full h-60 sm:h-80">
-          <img
-            src="https://www.shutterstock.com/image-photo/rear-view-man-raising-arm-600nw-2345710689.jpg"
-            alt="Student learning"
-            className="rounded-lg object-cover w-full h-full"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+        {/* Question */}
+      <div className="w-full py-12 md:py-16 lg:py-20 mb-16">
+        <div className="w-full max-w-4xl mx-auto px-4">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">Questions? We've got you covered</h2>
+            <div
+              style={{ backgroundColor: colors.primaryLight }}
+              className="w-[100px] md:w-[200px] h-[3px] rounded mx-auto"
+            />
+          </div>
 
-<section className="py-16 px-4 bg-[#FFF8DC]">
-  <div className="container mx-auto max-w-6xl">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold mb-4">Explore Our Premium Courses</h2>
-      <div className="w-32 h-1 bg-[#CD853F] mx-auto mt-2"></div>
-    </div>
-
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
-      {bundle.courses?.map((course) => (
-        <div
-          key={course._id}
-          className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 group"
-        >
-           <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={course.imageUrl || "data:image/jpeg;base64,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"}
-                    alt={course.title}
-                    fill
-                    className=" object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+          <div className="space-y-3 md:space-y-4">
+            {questions.map((item, index) => (
+              <div
+                key={index}
+                style={{ borderColor: colors.primary }}
+                className="border-2 rounded-xl overflow-hidden shadow-md"
+              >
+                <button
+                  onClick={() => toggleQuestion(index)}
+                  style={{ backgroundColor: colors.background }}
+                  className="w-full flex items-center justify-between p-3 md:p-5 text-left hover:bg-[#F6F3F7] transition-colors"
+                >
+                  <span className="font-medium text-gray-800 text-sm md:text-base">{item.question}</span>
+                  <ChevronDown
+                    style={{ color: colors.primary }}
+                    className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-200 ${
+                      openIndex === index ? "transform rotate-180" : ""
+                    }`}
                   />
+                </button>
+
+                <div
+                  style={{ backgroundColor: colors.background }}
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    openIndex === index ? "max-h-40 py-3 px-3 md:py-4 md:px-5" : "max-h-0"
+                  }`}
+                >
+                  <p className="text-gray-600 text-sm md:text-base">{item.answer}</p>
                 </div>
-          <div className="p-4 sm:p-6">
-            <h3 className="text-lg sm:text-xl font-semibold mb-3 group-hover:text-[#8B4513] transition-colors">
-              {course.title}
-            </h3>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
-
-<section className="py-16 px-4 bg-[#FFF8DC]">
-  <div className="container mx-auto max-w-6xl">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div>
-        <h2 className="text-3xl font-bold mb-6">
-          Before You Ask!
-          <span className="block w-32 h-1 bg-[#CD853F] mt-2"></span>
-        </h2>
-        <p className="text-lg mb-6 sm:mb-8">
-          Yes, you'll be certified for each course after passing the tests.
-        </p>
-
-        <div className="space-y-6">
-          <div className="flex gap-4">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md bg-[#8B4513] flex items-center justify-center text-white flex-shrink-0">
-              <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-            </div>
-            <p className="font-medium text-sm sm:text-base">
-              Official certificate from us to verify your achievements and increase your job prospects.
-            </p>
-          </div>
-
-          <div className="flex gap-4">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md bg-[#8B4513] flex items-center justify-center text-white flex-shrink-0">
-              <Users className="h-5 w-5 sm:h-6 sm:w-6" />
-            </div>
-            <p className="font-medium text-sm sm:text-base">
-              Easily shareable certificate for your portfolio to post on all platforms available.
-            </p>
-          </div>
-
-          <div className="flex gap-4">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md bg-[#8B4513] flex items-center justify-center text-white flex-shrink-0">
-              <Award className="h-5 w-5 sm:h-6 sm:w-6" />
-            </div>
-            <p className="font-medium text-sm sm:text-base">
-              Use your certificate to enhance your professional credibility and stand out among your peers.
-            </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-center">
-        <div className="border-4 border-[#CD853F] rounded-lg p-3 sm:p-4 bg-[#FFF8DC] max-w-xs sm:max-w-md">
-          <img
-            src="https://media.istockphoto.com/id/1427207629/vector/certificate-of-appreciation-template-gold-and-blue-color-clean-modern-certificate-with-gold.jpg?s=612x612&w=0&k=20&c=ZTN5SJx55fIbCEdynoE5tVb9qX9MIztBp8KYfn1DPq0="
-            alt="Certificate"
-            className="rounded"
-          />
+      {/* Footer */}
+      <div
+        style={{
+          backgroundColor: colors.footerBackground,
+          borderColor: colors.footerBorder,
+        }}
+        className="fixed w-full h-[120px] md:h-[90px] bottom-0 z-50 border-t-2 box-border lg:px-48 flex items-center"
+      >
+        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+          <div className="text-center md:text-left">
+            <div style={{ color: colors.footerText }} className="text-xs md:text-[15px] font-medium">
+              Hurry Up! Seats are filling in fast
+            </div>
+            <div className="flex items-center justify-center md:justify-start gap-2 mt-1 md:mt-2">
+              <span className="text-white text-base md:text-[18.5938px] font-bold line-through">₹74,999</span>
+              <span className="text-white text-base md:text-[18.5938px] font-bold">₹49,999</span>
+            </div>
+          </div>
+          <button className="w-full md:w-auto px-4 py-2 md:px-6 md:py-3 bg-white/10 border border-white rounded-[4px] mt-3 md:mt-0">
+            <span className="text-white text-sm md:text-[15.125px]">Enroll Now</span>
+          </button>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section className="bg-[#8B4513] text-white py-6 px-4">
-  <div className="container mx-auto max-w-6xl flex flex-wrap gap-4 sm:gap-0 justify-between items-center">
-    <div>
-      <p className="font-medium text-sm sm:text-base">Hurry Up! Seats are filling fast</p>
-      <div className="flex items-center gap-2">
-        <span className="text-lg sm:text-xl line-through">₹74,999</span>
-        <span className="text-xl sm:text-2xl font-bold">₹{bundle.price}</span>
-      </div>
-    </div>
-    <Button className="bg-[#CD853F] hover:bg-[#CD853F]/90 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md">
-      Enroll Now
-    </Button>
-  </div>
-</section>
-
     </div>
   );
 };
