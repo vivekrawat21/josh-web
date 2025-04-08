@@ -17,16 +17,13 @@ import {
   FaBlog,
   FaSignInAlt,
   FaGraduationCap,
-  FaLightbulb,
-  FaArrowRight,
+
   FaStar,
-  FaStackOverflow,
 } from "react-icons/fa"
 import { MdHome, MdExplore } from "react-icons/md"
 import { Link } from "react-router-dom"
-import { FaArrowTrendUp, FaBookBible } from "react-icons/fa6"
-import Bundle from "@/pages/Bundle"
-import SpecialBundles from "./SpecialBundles"
+import { FaArrowTrendUp } from "react-icons/fa6"
+
 import { id } from "date-fns/locale"
 
 // Animation variants
@@ -208,7 +205,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles,specialBundles, trending
         <>
           <Link to={"dashboard/profile/personalinformation"}><MenuItem icon={<FaUser />} label="Personal Info" path="/dashboard/profile" /></Link>
           <Link to={"/about"}><MenuItem icon={<FaInfoCircle />} label="About" path="/about" /></Link>
-          <Link to={"/dashboard/mywallet"}><MenuIisOpentem icon={<FaWallet />} label="My Wallet" path="/dashboard/wallet" /></Link>
+          <Link to={"/dashboard/mywallet"}><MenuItem icon={<FaWallet />} label="My Wallet" path="/dashboard/wallet" /></Link>
           <Link to={"/dashboard/mycourses"}><MenuItem icon={<FaBook />} label="My Courses" path="/dashboard/courses" /></Link>
           <Link to={"/"}><MenuItem icon={<FaGift />} label="Refer & Earn" path="/dashboard/refer&earn" /></Link>
           <Link to={"/dashboard/help&support"}><MenuItem icon={<FaHeadset />} label="Help & Support" path="/dashboard/support" /></Link>
@@ -229,26 +226,29 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles,specialBundles, trending
         <>
         <Link to={"/"}>  <MenuItem icon={<MdHome />} label="Home" path="/" /></Link>
           <Link to={"/about"}><MenuItem icon={<FaInfoCircle />} label="About" path="/about" /></Link>
+          
           <MenuItem icon={<FaGraduationCap />} label="Courses" path="/courses" onClick={navigateToCategories} />
-          {/* <Link to={"/"}><MenuItem icon={<MdExplore />} label="Explore" path="/explore" /></Link> */}
+          <Link to={"/courses"}><MenuItem icon={<MdExplore />} label="Explore" path="/course" /></Link>
           <Link to={"/community"}><MenuItem icon={<FaUsers />} label="Community" path="/community" /></Link>
           <Link to={"/webinars"}><MenuItem icon={<FaVideo />} label="Webinars" path="/webinars" /></Link>
           <Link to={"/blogs"}><MenuItem icon={<FaBlog />} label="Blogs" path="/blogs" /></Link>
 
           <motion.div variants={itemVariants} className="pt-4 px-3 space-y-3">
+            <Link to={"/login"}>
             <button
-              onClick={() => handleRouteChange("/login")}
+              
               className="w-full text-center border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-3 px-4 rounded-xl hover:bg-orange-500 hover:text-white transition-all duration-300 text-sm font-medium"
             >
               <FaSignInAlt className="w-4 h-4" /> Login
             </button>
-
+            </Link>
+            <Link to={"/signup"}>
             <button
-              onClick={() => handleRouteChange("/signup")}
               className="w-full text-center bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center gap-2 py-3 px-4 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg"
             >
               <FaSignInAlt className="w-4 h-4" /> Sign Up
             </button>
+            </Link>
           </motion.div>
         </>
       )}

@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Check, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const goalsData = [
   {
@@ -87,26 +98,33 @@ const goalsData = [
 ];
 
 const Goals = () => {
-  const { id } = useParams(); // Get the 'id' from the URL
-  const goalId = parseInt(id); // Convert the id to an integer
+  const { id } = useParams();
+  const goalId = parseInt(id);
+  const [userName, setuserName] = useState("");
+  const [subject, setSubject] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [open, setOpen] = useState(false);
 
-  // Find the goal object based on the id
-  // console.log(goalId)
   const goal = goalsData.find((g) => g.id === goalId);
 
-  // If the goal is not found, display a message
   if (!goal) {
     return <div>Goal not found</div>;
   }
 
+  const handleSubmit = () => {
+    setOpen(false);
+    setuserName("");
+    setSubject("");
+    setMobile("");
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto p-4">
-      <div className="bg-gray-50 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row gap-8 relative overflow-hidden">
-        {/* Left Content */}
-        <div className="flex flex-col gap-6 md:w-3/5">
+      <div className="bg-gray-50 rounded-3xl p-6 md:p-12 flex flex-col md:flex-row gap-8 relative overflow-hidden">
+        <div className="flex flex-col gap-6 md:w-3/5 w-full">
           <div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-              {goal.title} {/* Dynamically display the title */}
+              {goal.title}
             </h2>
             <p className="mt-4 text-gray-600 text-lg">
               Stay ahead in your career by mastering the skills that matter.
@@ -121,48 +139,69 @@ const Goals = () => {
                 <div className="mt-1 bg-red-100 rounded-full p-1">
                   <Check className="h-4 w-4 text-red-500" />
                 </div>
-                <span className="text-gray-700">{feature}</span> {/* Dynamically display the features */}
+                <span className="text-gray-700">{feature}</span>
               </li>
             ))}
           </ul>
 
           <div className="mt-4">
-            <Button className="bg-red-500 hover:bg-red-600 text-white px-8 py-6 rounded-md text-lg font-medium">
-              Talk to Career Expert
-            </Button>
             <div className="flex items-center gap-2 mt-6 text-gray-600">
               <Phone className="h-4 w-4" />
               <span>For enquiries call: 1800 210 2020</span>
             </div>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="bg-red-500 hover:bg-red-600 text-white px-8 py-6 mt-4 rounded-md text-lg font-medium">
+                  Talk to Career Expert
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Enter your details to connect with us.</DialogTitle>
+                  <DialogDescription>Our expert will reach out shortly.</DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right">Name</Label>
+                    <Input id="name" value={userName} onChange={(e) => setuserName(e.target.value)} className="col-span-3" placeholder="Enter your name" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="subject" className="text-right">Subject</Label>
+                    <Input id="subject" value={subject} onChange={(e) => setSubject(e.target.value)} className="col-span-3" placeholder="Enter your query" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="mobileNumber" className="text-right">Mobile</Label>
+                    <Input id="mobileNumber" value={mobile} onChange={(e) => setMobile(e.target.value)} className="col-span-3" placeholder="Enter your mobile number" />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button onClick={handleSubmit} className="bg-red-500 hover:bg-red-600 text-white">
+                    Send
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
-        {/* Right Content with img and Stats */}
-        <div className="md:w-2/5 relative">
-          <div className="h-full">
-            <img
-              src="/goal_person.jpg"
-              alt="Professional man in business attire"
-              width={500}
-              height={600}
-              className="object-cover object-center h-full"
-            />
-
-            {/* Stats Boxes */}
-            <div className="absolute top-10 right-4 bg-white rounded-lg p-3 shadow-md">
-              <p className="text-sm text-gray-600">No. of promotions</p>
-              <p className="text-2xl font-bold">7,174</p>
-            </div>
-
-            <div className="absolute top-1/2 right-8 bg-white rounded-lg p-3 shadow-md">
-              <p className="text-sm text-gray-600">Avg. salary hike</p>
-              <p className="text-2xl font-bold">39%</p>
-            </div>
-
-            <div className="absolute bottom-20 right-4 bg-white rounded-lg p-3 shadow-md">
-              <p className="text-sm text-gray-600">Career transitions</p>
-              <p className="text-2xl font-bold">27,132</p>
-            </div>
+        <div className="md:w-2/5 w-full relative">
+          <img
+            src="/goal_person.jpg"
+            alt="Professional"
+            className="object-cover object-center w-full h-full max-h-[500px] rounded-lg"
+          />
+          <div className="absolute top-4 right-4 bg-white rounded-lg p-3 shadow-md text-center">
+            <p className="text-sm text-gray-600">No. of promotions</p>
+            <p className="text-2xl font-bold">7,174</p>
+          </div>
+          <div className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white rounded-lg p-3 shadow-md text-center">
+            <p className="text-sm text-gray-600">Avg. salary hike</p>
+            <p className="text-2xl font-bold">39%</p>
+          </div>
+          <div className="absolute bottom-6 right-4 bg-white rounded-lg p-3 shadow-md text-center">
+            <p className="text-sm text-gray-600">Career transitions</p>
+            <p className="text-2xl font-bold">27,132</p>
           </div>
         </div>
       </div>
