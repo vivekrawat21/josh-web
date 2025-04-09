@@ -75,9 +75,9 @@ function App() {
       </Route>
 
       
-      <Route path="/basicBundle/:id" element={<BasicBundle/>} />
-      <Route path="/intermediateBundle/:id" element={<IntermediateBundle/>} />
-      <Route path="/advanceBundle/:id" element={<AdvanceBundle />} />
+      <Route path="/specialBundle/:id" element={<BasicBundle/>} />
+      <Route path="/specialBundle/:id" element={<IntermediateBundle/>} />
+      <Route path="/specialBundle/:id" element={<AdvanceBundle />} />
       
           <Route
             path="/"
@@ -111,7 +111,7 @@ function App() {
               <Route path="/webinars" element={<Webinars />} />
               
               <Route path="/goal/:id" element={<Goals />} />
-              <Route path="/specialBundle/:id" element={<BasicBundle />} />
+              {/* <Route path="/specialBundle/:id" element={<BasicBundle />} /> */}
               <Route path="/gallery/:type" element={<Gallery />} />
 
 

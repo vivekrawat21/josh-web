@@ -9,6 +9,7 @@ import SpecialBundles from '@/components/SpecialBundles'
 import DiscountPopup from '@/components/DiscountPopup'
 import DownloadApp from '@/components/DownloadApp'
 import SkillUpCourses from '@/components/SkillUpCourses'
+import EducationalInstituteTestimonial from '@/components/EducationalInstituteTestimonial'
 
 
 const Home = () => {
@@ -23,6 +24,7 @@ const Home = () => {
       <TopCourses />
       <DownloadApp />
       <TopMentors/>
+      <EducationalInstituteTestimonial/>
       <TestimonialBento />
 
       <FAQ />
