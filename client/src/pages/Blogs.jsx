@@ -88,12 +88,10 @@ const Blogs = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+    <div className="w-full mx-auto px-6 pb-6 ">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4">Our Blog</h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          The latest news, articles, and resources, curated by our team.
-        </p>
+      
       </div>
 
       {/* Featured post */}
@@ -124,7 +122,7 @@ const Blogs = () => {
             <span className="ml-4 text-sm text-gray-500">{blogPosts[0].readTime}</span>
           </div>
           <Link to={`/blogs/${blogPosts[0].id}`}>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded">
+            <button className="px-4 py-2 bg-orange-500 text-white  rounded">
               Read Article
             </button>
           </Link>
@@ -164,7 +162,7 @@ const Blogs = () => {
               </div>
               <Link to={`/blogs/${post.id}`}>
                 <button
-                  className="px-4 py-2 text-blue-600 border border-blue-600 rounded"
+                  className="bg-orange-500 text-white px-4 py-2 rounded-lg"
                 >
                   Read Article
                 </button>
@@ -177,7 +175,7 @@ const Blogs = () => {
       {/* View all button */}
       <div className="text-center mt-12">
         <button
-          className="px-6 py-3 bg-blue-600 text-white rounded"
+          className="px-6 py-3 bg-orange-500 text-white  rounded-lg"
           onClick={handleViewAll}
         >
           {showAll ? "Show Less" : "View All Articles"}
