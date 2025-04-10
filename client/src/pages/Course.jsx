@@ -14,90 +14,107 @@ import {
   FaAccessibleIcon,
   FaLock,
 } from "react-icons/fa";
-import { useState } from "react";
+import { useState , useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Youtube, Linkedin } from "lucide-react"
+import { useSelector } from "react-redux";
 
 
 const Course = () => {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const courseData = {
-    courseTitle: "Personality Development",
-    courseDescription:
-      "This course is designed to help you develop your personality and improve your interpersonal skills.",
-    courseIntroVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
-    sections: [
-      {
-        id: "01",
-        title: "Complete HTML Course",
-        lessons: "15 Lessons",
-        free: true,
-        items: [
-          "HTML and VSCode - getting started",
-          "Core structure of HTML and Meta tags",
-          "Heading, paragraph and reading docs",
-          "Formatting style and Global attributes",
-          "Value of colors and CSS format",
-          "Links and Images with Map",
-          "Tables in HTML in HINDI",
-          "List, inline and Block element",
-          "Class ID and iframe",
-          "Head Tag in HTML",
-          "HTML semantics",
-          "HTML forms and forms attributes",
-          "Types of input forms",
-          "HTML MEDIA and API",
-          "HTML series over, what next",
-        ],
-      },
-      {
-        id: "02",
-        title: "HTML Quizzes",
-        lessons: "1 Test",
-        badge: "HTML",
-        free: false,
-        items: [],
-      },
-    ],
-    authors: [
-      {
-        name: "Josh Guru",
-        description:
-          "Josh Guru is a passionate educator and web developer with a knack for making complex concepts simple and engaging. With years of experience in the industry, he is dedicated to helping learners unlock their potential in the world of web development.",
-        linkedInId: "https://www.linkedin.com/in/josh-guru",
-        image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-5So9WLEXMlzxzkllW3q0o1pn1GSNO3.png",
-        youtubeId: "https://www.youtube.com/@JoshGuru",
-      },
-    ],
-    courseIntroLine: "Welcome to the HTML course!",
-    courseBrifeDescription:
-      "This course is designed to help you develop your personality and improve your interpersonal skills.",
-    whatWillYouLearn: [
-      "Learn the basics of HTML and how to create a website",
-      "Understand the structure of HTML documents",
-      "Learn how to use HTML tags and attributes",
-      "Create forms and tables in HTML",
-      "Learn how to add images and links to your website",
-      ],
-    courseHighlights: [
-      "Learn HTML from scratch",
-      "Hands-on projects and exercises",
-      "Interactive quizzes and assessments",
-      "Access to a supportive community",
-      "Lifetime access to course materials",
-      ],
-    whoShouldEnroll:"This course is perfect for beginners who want to start their journey into web development by mastering HTML.No prior programming experience is required – just bring your curiosity and enthusiasm to learn!",
-    why: "Just like enjoying a cup of chai while contemplating life, HTML is the starting point of your web development journey. By the end of this course, you'll have a solid understanding of HTML fundamentals and be ready to explore more advanced web technologies.",
-    couresThumbnail:"https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-5So9WLEXMlzxzkllW3q0o1pn1GSNO3.png",
-    coursePrice: "₹499",
-    courseDuration: "Valid for 365 days",
-    benifit: [
-      "Lifetime access to course materials",
-      "Hands-on projects and exercises",
-      "Interactive quizzes and assessments",
-    ]
-  };
-
+  const [courseData, setCourseData] = useState(null);
+  const {courseId} = useParams();
+  // const courses = useSelector((state) => state.course);
+//  console.log(courses)
+  const { courses } = useSelector((state) => state.course);
+  //  const trendingCourses = courses[0]?.filter((course) => course.isTrending) || [];
+  // const courseData = {
+  //   courseTitle: "Personality Development",
+  //   courseDescription:
+  //     "This course is designed to help you develop your personality and improve your interpersonal skills.",
+  //   courseIntroVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+  //   sections: [
+  //     {
+  //       id: "01",
+  //       title: "Complete HTML Course",
+  //       lessons: "15 Lessons",
+  //       free: true,
+  //       items: [
+  //         "HTML and VSCode - getting started",
+  //         "Core structure of HTML and Meta tags",
+  //         "Heading, paragraph and reading docs",
+  //         "Formatting style and Global attributes",
+  //         "Value of colors and CSS format",
+  //         "Links and Images with Map",
+  //         "Tables in HTML in HINDI",
+  //         "List, inline and Block element",
+  //         "Class ID and iframe",
+  //         "Head Tag in HTML",
+  //         "HTML semantics",
+  //         "HTML forms and forms attributes",
+  //         "Types of input forms",
+  //         "HTML MEDIA and API",
+  //         "HTML series over, what next",
+  //       ],
+  //     },
+  //     {
+  //       id: "02",
+  //       title: "HTML Quizzes",
+  //       lessons: "1 Test",
+  //       badge: "HTML",
+  //       free: false,
+  //       items: [],
+  //     },
+  //   ],
+  //   authors: [
+  //     {
+  //       name: "Josh Guru",
+  //       description:
+  //         "Josh Guru is a passionate educator and web developer with a knack for making complex concepts simple and engaging. With years of experience in the industry, he is dedicated to helping learners unlock their potential in the world of web development.",
+  //       linkedInId: "https://www.linkedin.com/in/josh-guru",
+  //       image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-5So9WLEXMlzxzkllW3q0o1pn1GSNO3.png",
+  //       youtubeId: "https://www.youtube.com/@JoshGuru",
+  //     },
+  //   ],
+  //   courseIntroLine: "Welcome to the HTML course!",
+  //   courseBrifeDescription:
+  //     "This course is designed to help you develop your personality and improve your interpersonal skills.",
+  //   whatWillYouLearn: [
+  //     "Learn the basics of HTML and how to create a website",
+  //     "Understand the structure of HTML documents",
+  //     "Learn how to use HTML tags and attributes",
+  //     "Create forms and tables in HTML",
+  //     "Learn how to add images and links to your website",
+  //     ],
+  //   courseHighlights: [
+  //     "Learn HTML from scratch",
+  //     "Hands-on projects and exercises",
+  //     "Interactive quizzes and assessments",
+  //     "Access to a supportive community",
+  //     "Lifetime access to course materials",
+  //     ],
+  //   whoShouldEnroll:"This course is perfect for beginners who want to start their journey into web development by mastering HTML.No prior programming experience is required – just bring your curiosity and enthusiasm to learn!",
+  //   why: "Just like enjoying a cup of chai while contemplating life, HTML is the starting point of your web development journey. By the end of this course, you'll have a solid understanding of HTML fundamentals and be ready to explore more advanced web technologies.",
+  //   couresThumbnail:"https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-5So9WLEXMlzxzkllW3q0o1pn1GSNO3.png",
+  //   coursePrice: "₹499",
+  //   courseDuration: "Valid for 365 days",
+  //   benifit: [
+  //     "Lifetime access to course materials",
+  //     "Hands-on projects and exercises",
+  //     "Interactive quizzes and assessments",
+  //   ]
+  // };
+  
+    useEffect(() => {
+      if (!courses || courses.length === 0) return;
+      if (courses?.[0]?.length==0) return;
+      const course = courses[0].find((course) => course._id === courseId);
+      console.log(course);
+      setCourseData(course);
+      // console.log(course);
+    }, [courses, courseId]);
+    
   const [expandedSections, setExpandedSections] = useState({
     "01": true, // First section is open by default
   });
@@ -115,18 +132,23 @@ const Course = () => {
 
   return (
     <div className="min-h-screen bg-white text-black">
+      
       <div className="container mx-auto px-4">
+      {courseData && Object.keys(courseData).length > 0 ? (
+
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Section */}
           <div className="lg:w-2/3">
             <div className="mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">{courseData.courseTitle}</h1>
-              <p className="text-gray-600 text-lg">{courseData.courseDescription}</p>
+            
+              <h1 className="text-3xl md:text-4xl font-bold mb-4">
+                {courseData?.title}</h1>
+              <p className="text-gray-600 text-lg">{courseData?.description}</p>
               <div className="md:block sm:block lg:hidden mt-6">
                 <div className="bg-white rounded-lg shadow-md overflow-hidden sticky top-4">
                   <div className="relative">
                     <img
-                      src={courseData.couresThumbnail}
+                      src={courseData?.image}
                       alt="Course Thumbnail"
                       className="w-full h-48 object-cover"
                     />
@@ -315,7 +337,7 @@ const Course = () => {
             </div>
           </div>
 
-          {/* Right Section */}
+  
           <div className="lg:w-1/3 hidden sm:hidden lg:block md:hidden">
             <div className="bg-white rounded-lg shadow-md overflow-hidden sticky top-4">
               <div className="relative">
@@ -348,7 +370,7 @@ const Course = () => {
                     ))}
                   </div>
                 </div>
-
+               
                 <div className="mt-6 space-y-3">
                   <button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-3 rounded font-medium transition-colors">
                     BUY THIS COURSE
@@ -361,10 +383,16 @@ const Course = () => {
               </div>
             </div>
           </div>
-        </div>
+
+        </div>)
+ :(
+  <div >loading</div>
+    
+)}
       </div>  
+      
     </div>
-  );
+    )
 };
 
 export default Course;

@@ -43,6 +43,7 @@ import Goals from "./pages/Goals";
 import Gallery from "./pages/Gallery";
 import Disclaimer from "./pages/Disclaimer";
 import Terms from "./pages/Terms";
+import CoursePlayer from "./pages/CoursePlayer";
 function App() {
   return (
     <>
@@ -94,8 +95,11 @@ function App() {
                 path="/bundle/:bundleId"
                 element={<Bundle />}
               ></Route>
-              <Route path="/course/:id" element={<Course />} />
+              <Route path="/course/:courseId" element={<Course />} />
               <Route path="/courses" element={<Courses />} />
+                <Route path="/coursePlayer" element={<CoursePlayer />} />
+
+              {/* <Route path="/course/:videoIndex" element={<CoursePlayer />} /> */}
 
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
