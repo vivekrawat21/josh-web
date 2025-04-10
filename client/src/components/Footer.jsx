@@ -28,7 +28,7 @@ const Footer = () => {
 
     {/* Join as Instructor Button */}
     <button className="border-2 py-2 px-5 bg-white text-orange-500 font-bold rounded-lg hover:bg-orange-100 transition duration-300">
-     <Link to="/login" >Join Us</Link>
+     <Link to="/signup" >Join Us</Link>
     </button>
   </div>
 

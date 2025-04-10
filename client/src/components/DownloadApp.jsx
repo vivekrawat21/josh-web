@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const DownloadApp = () => {
   return (
@@ -9,7 +10,7 @@ const DownloadApp = () => {
         <p className="text-xl sm:text-2xl text-orange-500 font-semibold">
           Join 10,000+ users
         </p>
-        <p className="text-sm sm:text-base md:text-lg text-gray-900 mt-3 leading-relaxed">
+        <p className="text-lg sm:text-base md:text-xl text-gray-900 mt-3 leading-relaxed">
           Unlock seamless learning on the go. Get access to premium features, latest updates, and personalized content—available now on the App Store and Google Play.
           <br />
           <span className="font-medium">Your journey begins now.</span>
@@ -30,14 +31,20 @@ const DownloadApp = () => {
         </div>
       </div>
 
-      {/* Phone Image */}
-      <div className="w-full lg:w-7/12 flex justify-center lg:justify-end">
-        <img
-          src="/MobileFrame6.png"
-          alt="Mobile App Preview"
-          className="w-[220px] sm:w-[280px] md:w-[360px] lg:w-[450px] xl:w-[500px] h-auto object-contain rounded-lg drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)]"
-        />
-      </div>
+      {/* Phone Image with Animation */}
+      <motion.div
+  className="w-full lg:w-7/12 flex justify-center lg:justify-end"
+  initial={{ x: 150, opacity: 0 }}
+  whileInView={{ x: 0, opacity: 1 }}
+  transition={{ duration: 0.8, ease: "easeOut" }}
+>
+  <img
+    src="/MobileFrame6.png"
+    alt="Mobile App Preview"
+    className="w-[220px] sm:w-[280px] md:w-[400px] lg:w-[450px] xl:w-[650px] h-[500px] object-contain rounded-lg drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)]"
+  />
+</motion.div>
+
     </div>
   );
 };
