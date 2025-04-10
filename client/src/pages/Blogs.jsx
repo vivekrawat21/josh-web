@@ -100,7 +100,8 @@ const Blogs = () => {
       <div className="mb-16 grid md:grid-cols-2 gap-6">
         <div>
           <img
-            src={blogPosts[0].image}
+            // src={blogPosts[0].image}
+            src="https://img.freepik.com/free-photo/online-message-blog-chat-communication-envelop-graphic-icon-concept_53876-127416.jpg?ga=GA1.1.158131261.1743601196&semt=ais_hybrid&w=740"
             alt={blogPosts[0].title}
             className="w-full h-auto object-cover"
           />
@@ -114,7 +115,8 @@ const Blogs = () => {
           <p className="mb-4">{blogPosts[0].excerpt}</p>
           <div className="flex items-center gap-4 mb-6">
             <img
-              src={blogPosts[0].author.avatar}
+              // src={blogPosts[0].author.avatar}
+              
               alt={blogPosts[0].author.name}
               className="w-8 h-8 rounded-full"
             />
@@ -139,7 +141,8 @@ const Blogs = () => {
             transition={{ type: "spring", stiffness: 300 }} // Smooth transition
           >
             <img
-              src={post.image}
+              // src={post.image}
+                src="https://img.freepik.com/free-photo/online-message-blog-chat-communication-envelop-graphic-icon-concept_53876-127416.jpg?ga=GA1.1.158131261.1743601196&semt=ais_hybrid&w=740"
               alt={post.title}
               className="w-full h-auto object-cover"
             />
