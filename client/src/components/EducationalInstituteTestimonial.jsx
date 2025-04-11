@@ -77,7 +77,7 @@ const EducationalInstituteTestimonial = () => {
   };
 
   return (
-    <div className="w-full  px-4 py-16 bg-gradient-to-br from-orange-200 to-orange-50 mx-4 mb-10">
+    <div className="w-full  px-4 py-16 bg-gradient-to-br from-orange-200 to-orange-50  mb-10">
       <div className="text-center mb-12">
         <h2 className="text-4xl lg:text-6xl font-semibold text-black bg-clip-text">
           Trusted by Leading <span className="text-orange-500">Educational Institutions</span>
@@ -124,7 +124,7 @@ const EducationalInstituteTestimonial = () => {
 
         {/* Text Content */}
         <div className="w-full lg:w-1/3 space-y-4">
-          <span className="inline-block text-xs font-semibold text-orange-600 uppercase bg-orange-100 px-4 py-1 rounded-full">
+          <span className="inline-block text-xs font-semibold text-orange-600 uppercase bg-orange-100  py-1 rounded-full">
             Success Story
           </span>
           <blockquote className="text-gray-700 text-lg">{current.quote}</blockquote>

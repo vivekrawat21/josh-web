@@ -561,7 +561,7 @@ const HeroLanding = () => {
                   whileHover={{ scale: 1.05 }}
                   className="bg-orange-500 text-white px-6 md:px-8 py-2 md:py-3 rounded-lg text-base md:text-lg font-semibold hover:bg-orange-700 transition-colors w-full"
                 >
-                  <Link to="/login" className="block w-full">
+                  <Link to="/signup" className="block w-full">
                     Start Learning Today →
                   </Link>
                 </motion.button>

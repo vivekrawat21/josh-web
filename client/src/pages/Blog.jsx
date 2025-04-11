@@ -174,7 +174,7 @@ const Blog = () => {
         <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50">
           <button 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
+            className="bg-orange-600 text-white p-3 rounded-full shadow-lg hover:bg-orange-700 transition-colors"
             aria-label="Back to top"
           >
             ↑
