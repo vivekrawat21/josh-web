@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const DownloadApp = () => {
   return (
-    <div className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-16 py-10 rounded-xl gap-10 mb-16">
+    <div className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-16  rounded-xl gap-10 mb-16 ">
       {/* Text and Download Buttons */}
       <div className="w-full lg:w-5/12 text-center lg:text-left">
         <p className="text-xl sm:text-2xl text-orange-500 font-semibold">
@@ -32,18 +32,20 @@ const DownloadApp = () => {
       </div>
 
       {/* Phone Image with Animation */}
-      <motion.div
-  className="w-full lg:w-7/12 flex justify-center lg:justify-end"
-  initial={{ x: 150, opacity: 0 }}
-  whileInView={{ x: 0, opacity: 1 }}
-  transition={{ duration: 0.8, ease: "easeOut" }}
->
-  <img
-    src="/MobileFrame6.png"
-    alt="Mobile App Preview"
-    className="w-[220px] sm:w-[280px] md:w-[400px] lg:w-[450px] xl:w-[650px] h-[500px] object-contain rounded-lg drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)]"
-  />
-</motion.div>
+      <div className="w-full lg:w-7/12 flex justify-center lg:justify-end overflow-hidden">
+  <motion.div
+    initial={{ x: 150, opacity: 0 }}
+    whileInView={{ x: 0, opacity: 1 }}
+    transition={{ duration: 0.8, ease: "easeOut" }}
+  >
+    <img
+      src="/MobileFrame6.png"
+      alt="Mobile App Preview"
+      className="w-[400px] sm:w-[320px] md:w-[400px] lg:w-[450px] xl:w-[650px] h-full object-contain rounded-lg drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)]"
+    />
+  </motion.div>
+</div>
+
 
     </div>
   );

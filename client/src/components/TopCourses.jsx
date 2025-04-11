@@ -19,7 +19,7 @@ const TopCourses = () => {
   const trendingCourses = courses[0]?.filter((course) => course.isTrending) || [];
 
   return (
-    <section className="mt-8 pb-6 px-4 md:px-10 w-full mx-auto text-center relative overflow-hidden my-14">
+    <section className="mt-8 pb-6 px-4 md:px-10 w-full mx-auto text-center relative overflow-hidden mb-4 ">
       <h2 className="text-[1.80rem] lg:text-7xl font-semibold text-center  my-10 text-gray-900">
         Trending <span className="text-orange-500">Courses</span>
       </h2>
