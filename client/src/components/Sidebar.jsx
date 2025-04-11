@@ -207,7 +207,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles,specialBundles, trending
           <Link to={"/about"}><MenuItem icon={<FaInfoCircle />} label="About" path="/about" /></Link>
           <Link to={"/dashboard/mywallet"}><MenuItem icon={<FaWallet />} label="My Wallet" path="/dashboard/wallet" /></Link>
           <Link to={"/dashboard/mycourses"}><MenuItem icon={<FaBook />} label="My Courses" path="/dashboard/courses" /></Link>
-          <Link to={"/"}><MenuItem icon={<FaGift />} label="Refer & Earn" path="/dashboard/refer&earn" /></Link>
+          <Link to={"/dashboard/refer&earn"}><MenuItem icon={<FaGift />} label="Refer & Earn" path="/dashboard/refer&earn" /></Link>
           <Link to={"/dashboard/help&support"}><MenuItem icon={<FaHeadset />} label="Help & Support" path="/dashboard/support" /></Link>
           {/* <Link to={"/community"}><MenuItem icon={<FaUsers />} label="Community" path="/community" /></Link> */}
           {/* <Link to={"/webinars"}><MenuItem icon={<FaVideo />} label="Webinars" path="/webinars" /></Link> */}
