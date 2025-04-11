@@ -47,7 +47,9 @@ import CoursePlayer from "./pages/CoursePlayer";
 function App() {
   return (
     <>
-      <BrowserRouter basename="/">
+
+      <BasicBundle/>
+      {/* <BrowserRouter basename="/">
         <Scroll />
         <Routes>
           <Route path="/admin" element={<AdminLayout />} >
@@ -101,7 +103,7 @@ function App() {
 
               {/* <Route path="/course/:videoIndex" element={<CoursePlayer />} /> */}
 
-              <Route path="/login" element={<Login />} />
+              {/*<Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/joinus" element={<JoinUs />} />
               <Route path="/disclaimer" element={<Disclaimer />} />
@@ -116,7 +118,7 @@ function App() {
               
               <Route path="/goal/:id" element={<Goals />} />
               {/* <Route path="/specialBundle/:id" element={<BasicBundle />} /> */}
-              <Route path="/gallery/:type" element={<Gallery />} />
+              {/*<Route path="/gallery/:type" element={<Gallery />} />
 
 
               <Route path="/blogs/:id" element={<Blog />} />
@@ -136,7 +138,7 @@ function App() {
             </Route>
           </Route>
         </Routes>
-      </BrowserRouter> 
+      </BrowserRouter>  */}
     </>
   );
 }
