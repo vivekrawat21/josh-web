@@ -44,6 +44,7 @@ import Gallery from "./pages/Gallery";
 import Disclaimer from "./pages/Disclaimer";
 import Terms from "./pages/Terms";
 import CoursePlayer from "./pages/CoursePlayer";
+import BundleRouter from "./pages/bundleRouter";
 function App() {
   return (
     <>
@@ -76,9 +77,7 @@ function App() {
       </Route>
 
       
-      <Route path="/specialBundle/:id" element={<BasicBundle/>} />
-      <Route path="/specialBundle/:id" element={<IntermediateBundle/>} />
-      <Route path="/specialBundle/:id" element={<AdvanceBundle />} />
+      <Route path="/specialBundle/:id" element={<BundleRouter />} />
       
           <Route
             path="/"

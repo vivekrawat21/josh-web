@@ -273,40 +273,39 @@ const HeroLanding = () => {
             </motion.div>
           </motion.div> */}
 
-<div className="relative lg:top-12 w-full sm:mx-auto lg:w-[49.5%] flex flex-col items-start gap-0 mt-2 mb-0 md:hidden lg:block sm:block px-2 sm:px-2">
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={isVisible ? { opacity: 1, y: 0 } : {}}
-    transition={{ duration: 0.5 }}
-    className="text-center w-full"
-  >
-    <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-orange-700">
-      Why JoshGuru?
-    </h2>
-  </motion.div>
+          <div className="relative lg:top-12 w-full sm:mx-auto lg:w-[49.5%] flex flex-col items-start gap-0 mt-2 mb-0 md:hidden lg:block sm:hidden px-2 sm:px-2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+              className="text-center w-full"
+            >
+              <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-orange-700">
+                Why JoshGuru?
+              </h2>
+            </motion.div>
 
-  <div className="relative mt-0 pt-0 min-h-[300px] md:min-h-[350px] w-full">
-    {/* Rocket */}
-    <motion.div
-      className="absolute left-1/2 md:left-48 top-11 -translate-x-1/2 z-20"
-      style={{
-        bottom: `${20 + rocketYPosition}%`,
-      }}
-      initial={{ y: 100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{
-        duration: 1.5,
-        delay: 0.2,
-        y: {
-          duration: 2,
-          repeat: Number.POSITIVE_INFINITY,
-          repeatType: "reverse",
-          ease: "easeInOut",
-        },
-      }}
-    >
-      {/* Rocket Body */}
-      <div className="relative hidden lg:block">
+            <div className="relative mt-0 pt-0 min-h-[300px] md:min-h-[350px] w-full">
+              {/* Rocket */}
+              <motion.div
+                className="absolute left-1/2 md:left-48 top-11 -translate-x-1/2 z-20"
+                style={{
+                  bottom: `${20 + rocketYPosition}%`,
+                }}
+                initial={{ y: 100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{
+                  duration: 1.5,
+                  delay: 0.2,
+                  y: {
+                    duration: 2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                  },
+                }}
+              >
+                <div className="relative hidden lg:block">
                   {/* Rocket body */}
                   <div className="w-12 h-44 bg-gradient-to-b from-gray-200 to-gray-300 rounded-full relative">
                     {/* Cockpit */}
@@ -358,61 +357,60 @@ const HeroLanding = () => {
                     <div className="w-full h-full bg-gradient-to-t from-transparent via-orange-100/30 to-transparent rounded-full blur-xl"></div>
                   </motion.div>
                 </div>
-    </motion.div>
+              </motion.div>
 
-    {/* Features */}
-    {features.map((feature, index) => {
-      let positionClasses = ""
-      let lineStyles = {}
+              {/* Features */}
+              {features.map((feature, index) => {
+                let positionClasses = ""
+                let lineStyles = {}
 
-      if (feature.position === "left") {
-        positionClasses = "left-2 sm:left-0 md:left-4"
-        lineStyles = {
-          top: `${25 + 2 * 15}%`,
-          right: "-20px",
-          width: "30px",
-          height: "2px",
-        }
-      } else if (feature.position === "right") {
-        positionClasses = "right-2 sm:right-0 md:right-4"
-        lineStyles = {
-          top: `${20 + 2 * 15}%`,
-          left: "-20px",
-          width: "30px",
-          height: "2px",
-        }
-      }
+                if (feature.position === "left") {
+                  positionClasses = "left-2 sm:left-0 md:left-4"
+                  lineStyles = {
+                    top: `${25 + 2 * 15}%`,
+                    right: "-20px",
+                    width: "30px",
+                    height: "2px",
+                  }
+                } else if (feature.position === "right") {
+                  positionClasses = "right-2 sm:right-0 md:right-4"
+                  lineStyles = {
+                    top: `${20 + 2 * 15}%`,
+                    left: "-20px",
+                    width: "30px",
+                    height: "2px",
+                  }
+                }
 
-      return (
-        <motion.div
-          key={index}
-          className={`absolute ${positionClasses} max-w-[130px]`}
-          style={{ top: `${feature.position === "bottom" ? "auto" : 20 + index * 15}%` }}
-          initial={{
-            opacity: 0,
-            x: feature.position === "left" ? -50 : feature.position === "right" ? 50 : 0,
-          }}
-          animate={isVisible ? { opacity: 1, x: 0, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: feature.delay }}
-        >
-          <div className="bg-white p-3 rounded-xl border border-orange-200 shadow-lg shadow-orange-100 relative">
-            <div className="absolute bg-gradient-to-r from-orange-400 to-orange-500" style={lineStyles}></div>
+                return (
+                  <motion.div
+                    key={index}
+                    className={`absolute ${positionClasses} max-w-[130px]`}
+                    style={{ top: `${feature.position === "bottom" ? "auto" : 20 + index * 15}%` }}
+                    initial={{
+                      opacity: 0,
+                      x: feature.position === "left" ? -50 : feature.position === "right" ? 50 : 0,
+                    }}
+                    animate={isVisible ? { opacity: 1, x: 0, y: 0 } : {}}
+                    transition={{ duration: 0.7, delay: feature.delay }}
+                  >
+                    <div className="bg-white p-3 rounded-xl border border-orange-200 shadow-lg shadow-orange-100 relative">
+                      <div className="absolute bg-gradient-to-r from-orange-400 to-orange-500" style={lineStyles}></div>
 
-            <div className="flex items-center gap-2">
-              <div className="rounded-full p-1.5 bg-orange-100 shrink-0">{feature.icon}</div>
-              <h3 className="text-sm font-bold text-gray-800">{feature.title}</h3>
+                      <div className="flex items-center gap-2">
+                        <div className="rounded-full p-1.5 bg-orange-100 shrink-0">{feature.icon}</div>
+                        <h3 className="text-sm font-bold text-gray-800">{feature.title}</h3>
+                      </div>
+                    </div>
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
-        </motion.div>
-      )
-    })}
-  </div>
-</div>
-
 
           {/*left container for md device*/}
           <motion.div
-            className="flex flex-col md:items-center md:justify-center py-10 md:w-full lg:hidden hidden md:block"
+            className="flex flex-col md:items-center md:justify-center py-10 md:w-full lg:hidden hidden sm:block md:block"
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 100, opacity: 0 }}

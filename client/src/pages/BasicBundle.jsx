@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown, CheckCircle, Users, Award } from "lucide-react"
+import { Link } from "react-router-dom";
 
 import { BASE_URL } from "@/utils/utils";
 
 import axios from "axios";
 
 import { useParams } from "react-router-dom";
-const BasicBundle = ({ page = "page1" }) => {
+const BasicBundle = ({ page = "page2" }) => {
   const [bundle , setBundle] = React.useState([])
  
   const {id} = useParams()
@@ -36,113 +37,113 @@ const BasicBundle = ({ page = "page1" }) => {
   
     // Define color themes for each page
     const themes = {
-      page1: {
-        primary: "#A88DA3",
-        primaryLight: "#D8C7DC",
-        primaryDark: "#81807f",
-        secondary: "#B8ACBA",
-        secondaryLight: "#E0D9E1", // Main theme color for page1
-        secondaryDark: "#4a4644",
-        accent: "#D7C9DA",
-        accentLight: "#f0e8f0",
-        accentDark: "#636362",
-        background: "#ffffff",
+      page1: { // Orange theme
+        primary: "#FFA500",
+        primaryLight: "#FFE0B2",
+        primaryDark: "#E65100",
+        secondary: "#FFB74D",
+        secondaryLight: "#FFE9CA",
+        secondaryDark: "#CC5500",
+        accent: "#FFCC80",
+        accentLight: "#FFF3E0",
+        accentDark: "#EF6C00",
+        background: "#FFF8F2",
         text: "#333333",
-        textLight: "#545352",
-        border: "#adacab",
-        buttonGradientFrom: "#908f8e",
-        buttonGradientTo: "#4a4644",
-        cardBorder: "#D6C2DC",
-        timelineDot: "#837883",
-        mentorHighlight: "#cebad3",
-        footerBackground: "#A88DA3",
-        footerBorder: "#D7C9DA",
-        footerText: "#D7C9DA",
-        gradientStart: "#C7BAC9",
-        gradientMiddle: "#DCCFE0",
-        gradientEnd: "#E0D9E1",
-        timelineGradientStart: "#EAE4EA",
-        timelineGradientEnd: "#D4CBD6",
-        moduleNumberGradientStart: "#D4CBD6",
-        moduleNumberGradientEnd: "#B2A8B2",
-        ctaGradientStart: "#e0d9e1",
-        ctaGradientEnd: "#b3adb4",
+        textLight: "#666666",
+        border: "#FFB74D",
+        buttonGradientFrom: "#FFA500",
+        buttonGradientTo: "#E65100",
+        cardBorder: "#FFCC80",
+        timelineDot: "#FFA500",
+        mentorHighlight: "#FFE0B2",
+        footerBackground: "#CC5500",
+        footerBorder: "#FFCC80",
+        footerText: "#FFF3E0",
+        gradientStart: "#FFE0B2",
+        gradientMiddle: "#FFCC80",
+        gradientEnd: "#FFB74D",
+        timelineGradientStart: "#FFE9CA",
+        timelineGradientEnd: "#FFCC80",
+        moduleNumberGradientStart: "#FFCC80",
+        moduleNumberGradientEnd: "#FFB74D",
+        ctaGradientStart: "#FFE0B2",
+        ctaGradientEnd: "#FFA500",
         bgHeroSectionImage:"/Freelancing_Road_To_1_Lakhs heading image.png",
         fifteenMImage: "/15M.png",
         oneBImage: "/1B.png",
         twentyLImage: "/20L.png",
       },
-      page2: {
-        primary: "#6D77A3",
-        primaryLight: "#A5ADCF",
-        primaryDark: "#5d6590",
-        secondary: "#8d95b4", // Main theme color for page2
-        secondaryLight: "#b0b6d0",
-        secondaryDark: "#6a7090",
-        accent: "#c0c5db",
-        accentLight: "#e8eaf4",
-        accentDark: "#5d6590",
-        background: "#ffffff",
+      page2: { // Green theme
+        primary: "#4CAF50",
+        primaryLight: "#C8E6C9",
+        primaryDark: "#388E3C",
+        secondary: "#81C784",
+        secondaryLight: "#E8F5E9",
+        secondaryDark: "#66BB6A",
+        accent: "#A5D6A7",
+        accentLight: "#F1F8E9",
+        accentDark: "#43A047",
+        background: "#F1F8E9",
         text: "#333333",
-        textLight: "#545352",
-        border: "#8d95b4",
-        buttonGradientFrom: "#7a82a0",
-        buttonGradientTo: "#5d6590",
-        cardBorder: "#a5adcf",
-        timelineDot: "#6d77a3",
-        mentorHighlight: "#a5adcf",
-        footerBackground: "#6D77A3",
-        footerBorder: "#A5ADCF",
-        footerText: "#c0c5db",
-        gradientStart: "#9da4c0",
-        gradientMiddle: "#b0b6d0",
-        gradientEnd: "#8d95b4",
-        timelineGradientStart: "#b0b6d0",
-        timelineGradientEnd: "#8d95b4",
-        moduleNumberGradientStart: "#a5adcf",
-        moduleNumberGradientEnd: "#8d95b4",
-        ctaGradientStart: "#8d95b4",
-        ctaGradientEnd: "#6d77a3",
+        textLight: "#666666",
+        border: "#81C784",
+        buttonGradientFrom: "#66BB6A",
+        buttonGradientTo: "#388E3C",
+        cardBorder: "#A5D6A7",
+        timelineDot: "#4CAF50",
+        mentorHighlight: "#C8E6C9",
+        footerBackground: "#4CAF50",
+        footerBorder: "#A5D6A7",
+        footerText: "#E8F5E9",
+        gradientStart: "#C8E6C9",
+        gradientMiddle: "#A5D6A7",
+        gradientEnd: "#81C784",
+        timelineGradientStart: "#E8F5E9",
+        timelineGradientEnd: "#A5D6A7",
+        moduleNumberGradientStart: "#A5D6A7",
+        moduleNumberGradientEnd: "#81C784",
+        ctaGradientStart: "#81C784",
+        ctaGradientEnd: "#4CAF50",
         bgHeroSectionImage:"/herolandingpage2.png",
-        fifteenMImage: "/15Mpage3.png",
-        oneBImage: "/1Bpage3.png",
-        twentyLImage: "/20Lpage3.png",
-      },
-      page3: {
-        primary: "#7e8385",
-        primaryLight: "#b5b9bb",
-        primaryDark: "#6a6e70",
-        secondary: "#999ea0", // Main theme color for page3
-        secondaryLight: "#b5b9bb",
-        secondaryDark: "#7e8385",
-        accent: "#b5b9bb",
-        accentLight: "#e6e8e9",
-        accentDark: "#7e8385",
-        background: "#ffffff",
-        text: "#333333",
-        textLight: "#545352",
-        border: "#999ea0",
-        buttonGradientFrom: "#8a8f91",
-        buttonGradientTo: "#6a6e70",
-        cardBorder: "#b5b9bb",
-        timelineDot: "#7e8385",
-        mentorHighlight: "#b5b9bb",
-        footerBackground: "#7e8385",
-        footerBorder: "#b5b9bb",
-        footerText: "#d1d3d4",
-        gradientStart: "#a6aaac",
-        gradientMiddle: "#b5b9bb",
-        gradientEnd: "#999ea0",
-        timelineGradientStart: "#b5b9bb",
-        timelineGradientEnd: "#999ea0",
-        moduleNumberGradientStart: "#b5b9bb",
-        moduleNumberGradientEnd: "#999ea0",
-        ctaGradientStart: "#999ea0",
-        ctaGradientEnd: "#7e8385",
-        bgHeroSectionImage:"/herolandingpage3.png",
         fifteenMImage: "/15Mpage2.png",
         oneBImage: "/1Bpage2.png",
         twentyLImage: "/20Lpage2.png",
+      },
+      page3: { // Purple theme
+        primary: "#9C27B0",
+        primaryLight: "#E1BEE7",
+        primaryDark: "#6A1B9A",
+        secondary: "#AB47BC",
+        secondaryLight: "#F3E5F5",
+        secondaryDark: "#8E24AA",
+        accent: "#CE93D8",
+        accentLight: "#F8F0FB",
+        accentDark: "#7B1FA2",
+        background: "#F3E5F5",
+        text: "#333333",
+        textLight: "#666666",
+        border: "#AB47BC",
+        buttonGradientFrom: "#8E24AA",
+        buttonGradientTo: "#6A1B9A",
+        cardBorder: "#CE93D8",
+        timelineDot: "#9C27B0",
+        mentorHighlight: "#E1BEE7",
+        footerBackground: "#9C27B0",
+        footerBorder: "#CE93D8",
+        footerText: "#F3E5F5",
+        gradientStart: "#E1BEE7",
+        gradientMiddle: "#CE93D8",
+        gradientEnd: "#AB47BC",
+        timelineGradientStart: "#F3E5F5",
+        timelineGradientEnd: "#CE93D8",
+        moduleNumberGradientStart: "#CE93D8",
+        moduleNumberGradientEnd: "#AB47BC",
+        ctaGradientStart: "#AB47BC",
+        ctaGradientEnd: "#9C27B0",
+        bgHeroSectionImage:"/herolandingpage3.png",
+        fifteenMImage: "/15Mpage3.png",
+        oneBImage: "/1Bpage3.png",
+        twentyLImage: "/20Lpage3.png",
       },
     }
   
@@ -353,7 +354,9 @@ const BasicBundle = ({ page = "page1" }) => {
     <div className="relative w-full overflow-x-hidden">
       {/* page nav bar */}
       <div className="relative w-full h-auto py-3 md:h-[71.78px] bg-white/10 backdrop-blur-[12.5px] flex justify-between items-center px-4 md:px-6 lg:px-20 xl:px-56 shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] mx-auto">
-        <img src="/logo1.png" alt="joshguru" className="w-[60px] md:w-[90px] h-[60px] object-cover" />
+        <Link to="/">
+        <img src="/logo1.png" alt="joshguru" className="w-[60px] md:w-[90px] h-[60px] object-cover" />  
+        </Link>
         <button className="px-4 md:px-6 py-2 bg-transparent text-white font-semibold border-2 border-white shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] transition-all duration-200 hover:bg-white hover:text-blue-600 text-sm md:text-base">
           Enroll Now
         </button>
@@ -417,7 +420,7 @@ const BasicBundle = ({ page = "page1" }) => {
 
         {/* Info Strip */}
         <div
-          className="w-full max-w-[800px] bg-[#d1d0cf] rounded-[12px] md:rounded-b-none md:rounded-t-[12px] flex flex-col md:flex-row items-center justify-around px-4 md:px-6 py-4 md:h-[68px] mb-4 md:mb-0"
+          className="w-full max-w-[800px] bg-transparent rounded-[12px] md:rounded-b-none md:rounded-t-[12px] flex flex-col md:flex-row items-center justify-around px-4 md:px-6 py-4 md:h-[68px] mb-4 md:mb-0"
           style={{
             border: `3px solid ${colors.primaryDark}`,
             borderBottom: "md:0",
@@ -687,7 +690,7 @@ const BasicBundle = ({ page = "page1" }) => {
       {/*Add Up*/}
       <div
         style={{
-          background: `linear-gradient(125.79deg, ${colors.gradientStart} 0%, ${colors.gradientMiddle} 36.84%, ${colors.gradientEnd} 86.11%)`,
+          background: `linear-gradient(125.79deg, ${colors.gradientEnd} 0%, ${colors.gradientMiddle} 36.84%, ${colors.gradientStart} 86.11%)`,
         }}
         className="relative w-full py-12 md:py-16 lg:py-20"
       >
@@ -884,7 +887,7 @@ const BasicBundle = ({ page = "page1" }) => {
       </div>
 
       {/* Mentor */}
-      <section style={{ backgroundColor: colors.secondary }} className="w-full py-10 md:py-16 lg:py-20">
+      <section style={{ backgroundColor: colors.secondaryDark }} className="w-full py-10 md:py-16 lg:py-20">
         <div className="container mx-auto max-w-[1140px] px-4">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10">
             {/* Mentor Image */}
