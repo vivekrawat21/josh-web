@@ -39,7 +39,7 @@ export default function DiscountPopup() {
             transition={{ duration: 0.4, ease: "easeOut" }}
             className="w-full max-w-[90%] sm:max-w-md mx-auto"
           >
-            <DialogContent className="p-5 sm:p-6 rounded-xl shadow-xl bg-gradient-to-r from-orange-500 to-red-600 text-white text-center border-4 border-orange-300">
+            <DialogContent className="p-5 sm:p-6 rounded-xl shadow-xl bg-gradient-to-r from-orange-500 to-orange-400 text-white text-center border-4 border-orange-300">
               
               {/* Accessible Dialog Title */}
               <DialogTitle className="text-2xl sm:text-3xl font-bold mb-4">🔥 Exclusive Offers! 🔥</DialogTitle>

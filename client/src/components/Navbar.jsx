@@ -163,7 +163,7 @@ const Navbar = () => {
               {isOpenCourse && (
   <div
     ref={coursesDropdownRef}
-    className="absolute lg:left-[400%] left-1/2 top-full transform -translate-x-1/2 mt-2 bg-white shadow-2xl rounded-2xl p-8 w-[60vw] h-[60vh] grid grid-cols-3 gap-8 opacity-100 transition-opacity duration-300 pointer-events-auto overflow-y-auto border border-gray-200"
+    className="absolute lg:left-[400%] left-1/2 top-full transform -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-8 w-[60vw] h-[50vh] grid grid-cols-3 gap-8 opacity-100 transition-opacity duration-300 pointer-events-auto overflow-y-auto border border-gray-200 bg-white"
   >
     {/* Special Bundles */}
     <div className="pr-6">
@@ -206,26 +206,31 @@ const Navbar = () => {
     </div>
 
     {/* All Bundles */}
-    <div className="pr-6">
-      <h3 className="text-orange-500 text-md md:text-xl font-bold mb-7">ALL BUNDLES</h3>
-      <ul className="space-y-2 text-md">
-        {bundles.map((bundle) => (
-          <li key={bundle._id} className="hover:text-orange-500 transition cursor-pointer">
-            <Link
-              to={`/bundle/${bundle._id}`}
-              className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
-                    after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
-                    after:duration-300 hover:after:w-full"
-            >
-              {bundle.bundleName}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <Link to="/courses" className="mt-4 block text-orange-500 font-semibold hover:underline">
-        See All
-      </Link>
-    </div>
+    <div className="pr-6 max-h-[400px] overflow-hidden">
+  <h3 className="text-orange-500 text-md md:text-xl font-bold mb-7">ALL BUNDLES</h3>
+  
+  <ul className="space-y-2 text-md">
+    {bundles.slice(0, 6).map((bundle) => (
+      <li key={bundle._id} className="hover:text-orange-500 transition cursor-pointer">
+        <Link
+          to={`/bundle/${bundle._id}`}
+          className="relative after:content-[''] after:absolute after:left-0 after:bottom-0 
+                  after:w-0 after:h-[0.5px] after:bg-orange-500 after:transition-all 
+                  after:duration-300 hover:after:w-full"
+        >
+          {bundle.bundleName}
+        </Link>
+      </li>
+    ))}
+  </ul>
+
+  {bundles.length > 6 && (
+    <Link to="/courses" className="mt-4 block text-orange-500 font-semibold hover:underline">
+      See All
+    </Link>
+  )}
+</div>
+
   </div>
 )}
 
