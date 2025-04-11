@@ -8,6 +8,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "@/utils/utils";
 import axios from "axios";
 
+const SkeletonCard = () => (
+  <div className="animate-pulse rounded-lg border shadow-sm p-4 space-y-4">
+    <div className="h-48 bg-gray-200 rounded-md w-full"></div>
+    <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+    <div className="h-4 bg-gray-200 rounded w-full"></div>
+    <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+    <div className="flex justify-between mt-4">
+      <div className="h-6 w-1/4 bg-gray-200 rounded"></div>
+      <div className="h-6 w-1/6 bg-gray-200 rounded"></div>
+    </div>
+  </div>
+);
+
 const Courses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
@@ -15,27 +28,29 @@ const Courses = () => {
   const [selectedCategory, setSelectedCategory] = useState(category || "all");
   const [bundleData, setBundleData] = useState([]);
   const [allCourses, setAllCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBundles = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(`${BASE_URL}/course/getAllBundles`, { withCredentials: true });
         setBundleData(res.data.data.bundles);
 
-        // Extract courses from bundles
         const extractedCourses = res.data.data.bundles.flatMap(bundle =>
           bundle.courses.map(course => ({ ...course, bundleName: bundle.bundleName }))
         );
         setAllCourses(extractedCourses);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchBundles();
   }, [category, id]);
 
-  // Filter courses based on search term and selected category
   const filteredCourses = allCourses.filter(course => {
     const matchesCategory = selectedCategory === "all" || course.bundleName === selectedCategory;
     const matchesSearch = searchTerm === "" ||
@@ -87,7 +102,9 @@ const Courses = () => {
 
       {/* Courses grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCourses.length > 0 ? (
+        {loading ? (
+          Array.from({ length: 6 }).map((_, index) => <SkeletonCard key={index} />)
+        ) : filteredCourses.length > 0 ? (
           filteredCourses.map((course) => (
             <Card
               key={course._id}
