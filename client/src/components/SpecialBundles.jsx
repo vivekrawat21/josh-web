@@ -100,7 +100,7 @@ const SpecialBundles = () => {
       </h2>
 
       
-      <div className="grid grid-cols-1 items-center sm:grid-cols-2 md:grid-cols-3 gap-20 max-w-[95%] mx-auto">
+      <div className="grid grid-cols-1 items-center sm:grid-cols-2 md:grid-cols-3 md:gap-20 gap-6 max-w-[95%] mx-auto">
         {mergedBundles.map((book, index) => (
          <Link to={`/specialBundle/${book._id}`} key={index}>
          <div key={index} className="text-center relative">

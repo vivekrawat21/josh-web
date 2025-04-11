@@ -120,7 +120,7 @@ const Navbar = () => {
                 className="w-[60px] h-[60px] object-cover"
               />
             </Link>
-            <p className="absolute text-center font-bold text-[6px] md:text-[8px] top-[63.5%] text-gray-900 md:w-[130px] md:top-[75%]">
+            <p className="absolute text-center font-bold text-[6px] md:text-[8px] top-[63.5%] text-gray-900 md:w-[130px] md:top-[63%]">
               Powered by <span className="text-gray-900">NIITF</span>
             </p>
           </div>
