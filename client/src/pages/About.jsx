@@ -2,7 +2,25 @@
 
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+
 const About = () => {
+  const galleryData = [
+    {
+      title: "Events",
+      image: "/event1.webp",
+      path: "/gallery/events",
+    },
+    {
+      title: "Trips",
+      image: "/event2.webp",
+      path: "/gallery/Trips",
+    },
+    {
+      title: "Occasions",
+      image: "/event3.webp",
+      path: "/gallery/occassions",
+    },
+  ];
   const teamMembers = [
     {
       id: 1,
@@ -15,7 +33,7 @@ const About = () => {
     {
       id: 2,
       name: "Jane Smith",
-      role: "Lead Developer",
+            role: "Lead Developer",
       imageUrl: "/member2.jpg",
       description:
         "Jane is an expert in full-stack development and ensures that our technical solutions are cutting-edge and efficient.",
@@ -54,7 +72,7 @@ const About = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <p className="leading-relaxed text-gray-600">
+          <p className="leading-relaxed text-gray-600 text-sm md:text-base">
             Joshguru is an Ed-Tech Platform that Provides Skills development
             program to all youth in India. Joshguru has various types of courses
             available for Skills enhancement like Public Speaking, Personality
@@ -184,31 +202,29 @@ const About = () => {
             ))}
           </div>
         </motion.div>
-        <section class=" h-auto w-full p-6">
-    <div class=" w-full h-auto mx-auto ">
-        <h2 class="text-3xl font-bold mb-6">Gallery</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <Link to ="/gallery/events" class="block  rounded-lg shadow-md p-4 hover:shadow-lg transition">
-                <h3 class="text-xl font-semibold mb-2">Events</h3>
-                <div class="h-auto  flex items-center justify-center">
-                  <img src="/event1.webp" alt="" />
-                </div>
+        <section className="w-full px-6 py-10">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8 text-gray-900">Gallery</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {galleryData.map((item, index) => (
+            <Link
+              key={index}
+              to={item.path}
+              className="relative group overflow-hidden rounded-xl shadow-lg transition hover:shadow-2xl"
+            >
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <h3 className="text-white text-xl font-semibold">{item.title}</h3>
+              </div>
             </Link>
-            <Link to ="/gallery/Trips" class="block  rounded-lg shadow-md p-4 hover:shadow-lg transition">
-                <h3 class="text-xl font-semibold mb-2">Trips</h3>
-                <div class="h-auto  flex items-center justify-center">
-                  <img src="/event2.webp" alt="" />
-                </div>
-            </Link>
-            <Link to ="/gallery/occassions" class="block  rounded-lg shadow-md p-4 hover:shadow-lg transition">
-                <h3 class="text-xl font-semibold mb-2">Occassions</h3>
-                <div class="h-auto flex items-center justify-center">
-                  <img src="/event3.webp" alt="" />
-                </div>
-            </Link>
+          ))}
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
       </div>
     </section>

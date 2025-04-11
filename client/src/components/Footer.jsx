@@ -3,7 +3,7 @@ import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaTwitter } from "react
 
 const Footer = () => {
   return (
-    <section className="w-full bg-gradient-to-b from-gray-900 to-gray-800 text-white  flex flex-col items-center rounded-lg mb-2">
+    <section className="w-full bg-gradient-to-b from-gray-900 to-gray-800 text-white  flex flex-col items-center  ">
 <div className="w-full flex flex-col space-y-2 justify-between  px-6">
   {/* Logo and Join Button Container */}
   <div className="w-full flex justify-between items-center  mt-0 mb-6 ">
