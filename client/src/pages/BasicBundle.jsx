@@ -11,7 +11,7 @@ import { BASE_URL } from "@/utils/utils";
 import axios from "axios";
 
 import { useParams } from "react-router-dom";
-const BasicBundle = ({ page = "page3" }) => {
+const BasicBundle = ({ page = "page2" }) => {
   const [bundle , setBundle] = React.useState([])
  
   const {id} = useParams()
@@ -354,7 +354,9 @@ const BasicBundle = ({ page = "page3" }) => {
     <div className="relative w-full overflow-x-hidden">
       {/* page nav bar */}
       <div className="relative w-full h-auto py-3 md:h-[71.78px] bg-white/10 backdrop-blur-[12.5px] flex justify-between items-center px-4 md:px-6 lg:px-20 xl:px-56 shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] mx-auto">
+        <Link to="/">
         <img src="/logo1.png" alt="joshguru" className="w-[60px] md:w-[90px] h-[60px] object-cover" />  
+        </Link>
         <button className="px-4 md:px-6 py-2 bg-transparent text-white font-semibold border-2 border-white shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] transition-all duration-200 hover:bg-white hover:text-blue-600 text-sm md:text-base">
           Enroll Now
         </button>

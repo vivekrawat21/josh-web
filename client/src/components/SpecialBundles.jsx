@@ -62,6 +62,7 @@ const SpecialBundles = () => {
 
   const bookDetails = [
     {
+      _id: "1",
       title: "Freelancing Road To 1 lakhs",
       image: '/specialBundle1.jpg',
       titleColor: "#DAD5DD",
@@ -69,6 +70,7 @@ const SpecialBundles = () => {
     },
     
     {
+      _id: "2",
       title: "Freelancing Road To 3 Lakhs",
       image: '/specialBundle2.jpg',
       titleColor: "#AAB2D1",
@@ -76,6 +78,7 @@ const SpecialBundles = () => {
     },
 
     {
+      _id: "3",
       title: "Freelancing Road To 5 Lakhs",
       image: '/specialBundle3.jpg',
       titleColor: "#c7ccce",
@@ -88,7 +91,7 @@ const SpecialBundles = () => {
   // console.log("Trending Courses:", specialBundles);
   const mergedBundles = bookDetails.map((book, index) => ({
     ...book,
-    _id: specialBundles[index]?._id || `fallback-${index}`, // Assign `_id` or fallback value
+    _id: index+1 || `fallback-${index}`, // Assign `_id` or fallback value
   }));
   return (
     <section className="py-12 px-4">
@@ -99,7 +102,7 @@ const SpecialBundles = () => {
       
       <div className="grid grid-cols-1 items-center sm:grid-cols-2 md:grid-cols-3 gap-20 max-w-[95%] mx-auto">
         {mergedBundles.map((book, index) => (
-         <Link to={`${book.link}/${book._id}`} key={index}>
+         <Link to={`/specialBundle/${book._id}`} key={index}>
          <div key={index} className="text-center relative">
            <div
              className="flex justify-center items-center rounded-t-md mb-1"

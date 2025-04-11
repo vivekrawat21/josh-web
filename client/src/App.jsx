@@ -44,12 +44,11 @@ import Gallery from "./pages/Gallery";
 import Disclaimer from "./pages/Disclaimer";
 import Terms from "./pages/Terms";
 import CoursePlayer from "./pages/CoursePlayer";
+import BundleRouter from "./pages/bundleRouter";
 function App() {
   return (
     <>
-
-      <BasicBundle/>
-      {/* <BrowserRouter basename="/">
+      <BrowserRouter basename="/">
         <Scroll />
         <Routes>
           <Route path="/admin" element={<AdminLayout />} >
@@ -78,9 +77,7 @@ function App() {
       </Route>
 
       
-      <Route path="/specialBundle/:id" element={<BasicBundle/>} />
-      <Route path="/specialBundle/:id" element={<IntermediateBundle/>} />
-      <Route path="/specialBundle/:id" element={<AdvanceBundle />} />
+      <Route path="/specialBundle/:id" element={<BundleRouter />} />
       
           <Route
             path="/"
@@ -103,7 +100,7 @@ function App() {
 
               {/* <Route path="/course/:videoIndex" element={<CoursePlayer />} /> */}
 
-              {/*<Route path="/login" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/joinus" element={<JoinUs />} />
               <Route path="/disclaimer" element={<Disclaimer />} />
@@ -118,7 +115,7 @@ function App() {
               
               <Route path="/goal/:id" element={<Goals />} />
               {/* <Route path="/specialBundle/:id" element={<BasicBundle />} /> */}
-              {/*<Route path="/gallery/:type" element={<Gallery />} />
+              <Route path="/gallery/:type" element={<Gallery />} />
 
 
               <Route path="/blogs/:id" element={<Blog />} />
@@ -138,7 +135,7 @@ function App() {
             </Route>
           </Route>
         </Routes>
-      </BrowserRouter>  */}
+      </BrowserRouter> 
     </>
   );
 }
