@@ -57,8 +57,8 @@ const mentors = [
 
 const TopMentor = () => {
   return (
-    <section className="mt-8 pb-6 px-4 md:px-8 lg:px-10 w-full mx-auto text-center relative overflow-hidden my-14">
-      <h2 className="text-3xl sm:text-4xl mtext-[1.80rem] lg:text-7xl font-semibold text-center  my-10 text-gray-900">
+    <section className="  px-4 md:px-8 lg:px-10 w-full mx-auto text-center relative overflow-hidden mb-10">
+      <h2 className="text-3xl sm:text-4xl mtext-[1.80rem] lg:text-7xl font-semibold text-center  mb-10 text-gray-900">
         Meet <span className="text-orange-500">Top Mentors</span>
       </h2>
 
