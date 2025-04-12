@@ -94,8 +94,8 @@ const SpecialBundles = () => {
     _id: index+1 || `fallback-${index}`, // Assign `_id` or fallback value
   }));
   return (
-    <section className="py-12 px-4">
-      <h2 className="text-[1.80rem] lg:text-7xl font-semibold text-center  my-10 text-gray-900">
+    <section className="py-8 px-4">
+      <h2 className="text-2xl lg:text-7xl font-semibold text-center  my-8 text-gray-900">
         Digital <span className="text-orange-500">Learning Bundles</span>
       </h2>
 

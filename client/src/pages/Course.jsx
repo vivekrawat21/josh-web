@@ -252,6 +252,7 @@ const Course = () => {
                           className="w-full h-full object-cover"
                         />
                       </div>
+                      
                       <div>
                         <h2 className="text-xl font-semibold">{author?.name}</h2>
                         <div className="flex gap-2 mt-2">

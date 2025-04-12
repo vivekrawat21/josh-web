@@ -64,9 +64,13 @@ const MyCourses = () => {
           </p>
         </div>
         <div className='p-6'>
+          {/* <Link to={`/course/${course._id}/learn`}>
+           */}
+           <Link to={`/signup}`}>
           <button className='w-full py-2 bg-gradient-to-r from-orange-500 to-orange-700 text-white rounded-lg font-medium hover:opacity-90 transition'>
             Continue Learning
           </button>
+          </Link>
         </div>
       </div>
     ))}
@@ -110,9 +114,11 @@ const MyCourses = () => {
                     </p>
                   </div>
                   <div className='p-4'>
+                    <Link to={`/course/${course._id}/learn`}>
                     <button className='w-full py-2 bg-gradient-to-r from-orange-400 to-orange-600 text-white rounded-md hover:opacity-90'>
                       Continue Learning
                     </button>
+                    </Link>
                   </div>
                 </div>
               ))}

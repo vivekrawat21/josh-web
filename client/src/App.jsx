@@ -95,6 +95,8 @@ function App() {
                 element={<Bundle />}
               ></Route>
               <Route path="/course/:courseId" element={<Course />} />
+              <Route path="/course/:courseId/learn" element={<CoursePlayer />} />
+
               <Route path="/courses" element={<Courses />} />
                 <Route path="/coursePlayer" element={<CoursePlayer />} />
 
