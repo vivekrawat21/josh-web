@@ -449,7 +449,7 @@ const AdvanceBundle = ({ page = "page3" }) => {
         </div>
 
         {/* Video Section */}
-        <div className="w-full max-w-[950px] h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] bg-gradient-to-b from-[#bfbebe] to-[#929190] rounded-[12px] overflow-hidden">
+        <div className="w-full max-w-[950px] h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] bg-gradient-to-b from-[#7e8385] to-[#999ea0] rounded-[12px] overflow-hidden">
           <div className="w-full h-full p-[3px]">
             <div className="w-full h-full bg-[#0F0F0F] rounded-[10px] overflow-hidden">
               <video
@@ -492,7 +492,7 @@ const AdvanceBundle = ({ page = "page3" }) => {
           ></div>
 
           {/* Scrolling content */}
-          <div className="flex space-x-8 md:space-x-16 animate-loop-scroll h-28 my-4">
+          <div className="flex space-x-8 md:space-x-16 animate-loop-scroll h-16 md:h-28 my-4">
             {bonusSkills.map((bonusSkill) => (
               <img
                 src={bonusSkill.imageUrl || "/placeholder.svg"}

@@ -376,7 +376,7 @@ const SearchComponent = () => {
   return (
     <div className="flex flex-col items-center justify-center px-4 space-y-6">
       {/* Search Input */}
-      <h2 className="text-xl sm:text-2xl text-red-700 brightness-200 font-bold">
+      <h2 className="text-lg sm:text-2xl text-red-700 brightness-200 font-bold">
         Discover Your Next Learning Journey
       </h2>
       <div className="relative w-full max-w-xl">

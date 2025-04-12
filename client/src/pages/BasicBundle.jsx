@@ -453,31 +453,37 @@ const BasicBundle = ({ page = "page2" }) => {
         </div>
 
         {/* Video Section */}
-        <div className="w-full max-w-[950px] h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] bg-gradient-to-b from-[#bfbebe] to-[#929190] rounded-[12px] overflow-hidden">
-          <div className="w-full h-full p-[3px]">
-            <div className="w-full h-full bg-[#0F0F0F] rounded-[10px] overflow-hidden">
-              <video
-                src={
-                  selected === "english"
-                    ? "https://www.w3schools.com/html/mov_bbb.mp4"
-                    : "https://www.w3schools.com/html/mov_bbb.mp4"
-                }
-                controls
-                className="w-full h-full object-cover rounded-[10px]"
-              ></video>
-            </div>
-          </div>
-        </div>
-        <div className="mt-8 md:mt-12">
-          <button
-            className="h-[51px] rounded px-6 md:px-10 text-white text-base md:text-[16.7344px] leading-[27px] font-medium w-[250px] md:w-[350px] flex items-center justify-center"
+          <div
+            className="w-full max-w-[950px] h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] bg-gradient-to-b rounded-[12px] overflow-hidden"
             style={{
-              background: `linear-gradient(to right, ${colors.buttonGradientFrom}, ${colors.buttonGradientTo})`,
+              background: `linear-gradient(to bottom, ${colors.primary}, ${colors.secondary})`,
             }}
           >
-            Start Learning
-          </button>
-        </div>
+            <div className="w-full h-full p-[3px]">
+              <div className="w-full h-full bg-[#0F0F0F] rounded-[10px] overflow-hidden">
+                <video
+            src={
+              selected === "english"
+                ? bundle?.videoUrlEnglish || "https://www.w3schools.com/html/mov_bbb.mp4"
+                : bundle?.videoUrlHindi || "https://www.w3schools.com/html/mov_bbb.mp4"
+            }
+            controls
+            className="w-full h-full object-cover rounded-[10px]"
+                ></video>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 md:mt-12">
+            <button
+              className="h-[51px] rounded px-6 md:px-10 text-white text-base md:text-[16.7344px] leading-[27px] font-medium w-[250px] md:w-[350px] flex items-center justify-center"
+              style={{
+                background: `linear-gradient(to right, ${colors.buttonGradientFrom}, ${colors.buttonGradientTo})`,
+              }}
+              onClick={() => window.open(bundle?.startLearningUrl || "#", "_blank")}
+            >
+              Start Learning
+            </button>
+          </div>
       </div>
 
       {/*Bonus Skills */}
@@ -496,7 +502,7 @@ const BasicBundle = ({ page = "page2" }) => {
           ></div>
 
           {/* Scrolling content */}
-          <div className="flex space-x-8 md:space-x-16 animate-loop-scroll h-28 my-4">
+          <div className="flex space-x-8 md:space-x-16 animate-loop-scroll h-16 md:h-28 my-4">
             {bonusSkills.map((bonusSkill) => (
               <img
                 src={bonusSkill.imageUrl || "/placeholder.svg"}
@@ -521,7 +527,7 @@ const BasicBundle = ({ page = "page2" }) => {
 
           {/* Right blurred gradient */}
           <div
-            className="absolute inset-y-0 right-0 w-16 z-10 blur-5xl pointer-events-none"
+            className="absolute inset-y-0 right-0 w-16  z-10 blur-5xl pointer-events-none"
             style={{
               background: `linear-gradient(to left, ${colors.background}, ${colors.background}, transparent)`,
             }}

@@ -17,6 +17,7 @@ const testimonials = [
     id: 1,
     name: "Westfield High School",
     representative: "Dr. James Anderson",
+    representativeImage: "/freelancing_2lakh.png",
     title: "Principal",
     location: "Chicago, Illinois",
     videoUrl: "https://www.youtube.com/embed/tgbNymZ7vqY",
@@ -32,6 +33,7 @@ const testimonials = [
     id: 2,
     name: "Oakridge Academy",
     representative: "Prof. Lisa Chen",
+    representativeImage: "/freelancing_2lakh.png",
     title: "Head of Digital Learning",
     location: "Boston, Massachusetts",
     videoUrl: "https://www.youtube.com/embed/tgbNymZ7vqY",
@@ -47,6 +49,7 @@ const testimonials = [
     id: 3,
     name: "Riverside School District",
     representative: "Maria Gonzalez",
+    representativeImage: "/freelancing_2lakh.png",
     title: "Curriculum Director",
     location: "Austin, Texas",
     videoUrl: "https://www.youtube.com/embed/tgbNymZ7vqY",
@@ -81,10 +84,10 @@ const EducationalInstituteTestimonial = () => {
     p-6 md:p-12   shadow-lg mx-4
     ">
       <div className="text-center mb-12">
-        <h2 className="text-4xl lg:text-6xl font-semibold text-black bg-clip-text">
+        <h2 className="text-2xl lg:text-6xl font-semibold text-black bg-clip-text">
           Trusted by Leading <span className="text-orange-500">Educational Institutions</span>
         </h2>
-        <p className="text-gray-600 mx-auto mt-2">
+        <p className="text-gray-600 mx-auto mt-2 hidden lg:block">
           See how schools and educational institutions are using our content to transform their classrooms
         </p>
       </div>
@@ -132,12 +135,15 @@ const EducationalInstituteTestimonial = () => {
           <blockquote className="text-gray-700 text-lg">{current.quote}</blockquote>
 
           <div>
-            <h3 className="text-lg font-bold">{current.representative}</h3>
+            <div className="flex gap-2 items-center">
+              <img src={current.representativeImage} alt="representativeImage" width={20} height={20} />
+              <h3 className="text-lg font-bold">{current.representative}</h3>
+            </div>
             <p className="text-sm text-gray-500">{current.title}</p>
             <p className="text-sm text-gray-500">{current.name}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="gap-4 mt-4 hidden lg:grid lg:grid-cols-2">
             <div className="flex gap-2 items-start">
               <Users size={20} className="text-orange-600" />
               <div>
@@ -155,7 +161,7 @@ const EducationalInstituteTestimonial = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 mt-4 p-4 bg-orange-50 rounded-lg shadow-sm">
+          <div className="items-center gap-3 mt-4 p-4 bg-orange-50 rounded-lg shadow-sm hidden lg:flex">
             <TrendingUp size={24} className="text-orange-600" />
             <div>
               <p className="text-sm text-gray-500">Measured Improvement</p>

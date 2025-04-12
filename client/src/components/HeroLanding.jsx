@@ -127,7 +127,7 @@ const HeroLanding = () => {
 
   return (
     <div className="relative flex flex-col items-center justify-between min-h-screen w-full px-4 md:flex-row md:space-x-12 md:px-12">
-      <div className="relative w-full h-auto py-10 md:h-screen md:-top-14">
+      <div className="relative w-full h-auto pt-10 pb-5 md:h-screen md:-top-14">
         {/* Background Images - Responsive positioning */}
         <motion.img
           src="/arrow_pattern1.svg"
@@ -285,7 +285,7 @@ const HeroLanding = () => {
               </h2>
             </motion.div>
 
-            <div className="relative mt-0 pt-0 min-h-[300px] md:min-h-[350px] w-full">
+            <div className="relative mt-0 pt-0 min-h-[250px] md:min-h-[350px] w-full">
               {/* Rocket */}
               <motion.div
                 className="absolute left-1/2 md:left-48 top-11 -translate-x-1/2 z-20"

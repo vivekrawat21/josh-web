@@ -135,7 +135,6 @@ const Course = () => {
       
       <div className="container mx-auto px-4">
       {courseData && Object.keys(courseData).length > 0 ? (
-
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Section */}
           <div className="lg:w-2/3">
