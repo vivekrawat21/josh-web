@@ -77,7 +77,9 @@ const EducationalInstituteTestimonial = () => {
   };
 
   return (
-    <div className="w-full  px-4 py-16 bg-gradient-to-br from-orange-200 to-orange-50  mb-10">
+    <div className=" bg-gradient-to-br from-orange-200 to-orange-50  mb-10
+    p-6 md:p-12   shadow-lg mx-4
+    ">
       <div className="text-center mb-12">
         <h2 className="text-4xl lg:text-6xl font-semibold text-black bg-clip-text">
           Trusted by Leading <span className="text-orange-500">Educational Institutions</span>
