@@ -4,20 +4,20 @@ import { motion } from "framer-motion";
 
 const DownloadApp = () => {
   return (
-    <div className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-16 py-10  gap-10 mb-16 bg-orange-100 mx-4">
+    <div className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-16 pb-4  gap-10 mb-16 bg-orange-100 mx-4">
       {/* Text Section */}
       <div className="w-full lg:w-5/12 text-center lg:text-left">
         <p className="text-xl sm:text-4xl text-orange-500 font-semibold">
           Join 10,000+ users
         </p>
-        <p className="text-base sm:text-lg md:text-xl text-gray-900 mt-3 leading-relaxed">
+        <p className="text-base sm:text-lg md:text-xl text-gray-900 mt-3 leading-relaxed text-center">
           Unlock seamless learning on the go. Get access to premium features,
           latest updates, and personalized content—available now on the App
           Store and Google Play.
           <br />
           <span className="font-medium">Your journey begins now.</span>
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-6">
+        <div className="flex  sm:flex-row items-center justify-center lg:justify-start gap-4 mt-6">
           <Link
             to="#"
             className="w-40 h-12 flex items-center justify-center bg-black text-white rounded-lg shadow-md hover:opacity-80 transition"
@@ -34,7 +34,7 @@ const DownloadApp = () => {
       </div>
 
       {/* Image Section */}
-      <div className="w-full lg:w-7/12 flex justify-center lg:justify-end overflow-hidden">
+      <div className="w-full lg:w-7/12 flex justify-center lg:justify-end overflow-hidden my-0">
         <motion.div
           initial={{ x: 150, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}

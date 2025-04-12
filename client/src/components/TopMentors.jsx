@@ -23,7 +23,7 @@ const mentors = [
     name: "Jane Smith",
     role: "Expert Digital Marketer",
     image:
-      "https://plus.unsplash.com/premium_photo-1690407617542-2f210cf20d7e?w=500&auto=format&fit=crop&q=60",
+    "https://media.istockphoto.com/id/2148494746/photo/portrait-of-young-businesswoman-with-curly-hairstyle-wear-trendy-smart-casual-outfit-isolated.webp?a=1&b=1&s=612x612&w=0&k=20&c=lnZqq-hMGNQan6PWh5PodvY_2kHodR_0pISRS6Ji_G8=",
   },
   {
     id: 3,
@@ -57,31 +57,68 @@ const mentors = [
 
 const TopMentor = () => {
   return (
-    <section className="  px-4 md:px-8 lg:px-10 w-full mx-auto text-center relative overflow-hidden mb-10">
+    <section className="  px-4 md:px-8 lg:px-10 w-full mx-auto text-center relative overflow-hidden mb-10 ">
       <h2 className="text-3xl sm:text-4xl mtext-[1.80rem] lg:text-7xl font-semibold text-center  mb-10 text-gray-900">
         Meet <span className="text-orange-500">Top Mentors</span>
       </h2>
-
       <div className="relative w-full">
-        <Carousel className="relative flex items-center justify-center w-full">
-          <CarouselContent>
-            {mentors.map((mentor) => (
-              <CarouselItem
-                key={mentor.id}
-                className="basis-11/12 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 flex justify-center"
-              >
-                <Card className="w-[90%] sm:w-[250px] h-[350px]">
-                  <MentorCard mentor={mentor} />
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
+  {/* ✅ Left Arrow */}
+  
 
-          {/* ✅ Responsive and styled carousel buttons */}
-          <CarouselPrevious className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition duration-200" />
-          <CarouselNext className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition duration-200" />
-        </Carousel>
-      </div>
+  {/* <Carousel className="flex items-center justify-center w-full">
+    <CarouselContent>
+      {mentors.map((mentor) => (
+        <CarouselItem
+          key={mentor.id}
+          className="basis-11/12 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 flex justify-center"
+        >
+          <Card className="w-[90%] sm:w-[250px] h-[350px]">
+            <MentorCard mentor={mentor} />
+          </Card>
+        </CarouselItem>
+      ))}
+    </CarouselContent>
+    <CarouselPrevious className="absolute -left-4 sm:-left-6 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition duration-200" />
+  <CarouselNext className="absolute -right-4 sm:-right-6 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition duration-200" />
+  </Carousel> */}
+            <Carousel className="relative flex items-center justify-center w-full"
+            // slidesToScroll={1}  // Moves one card at a time
+            // swipeToSlide={true}  
+            >
+  
+            <CarouselPrevious
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-gray-100 rounded-full shadow-lg hover:bg-gray-300 focus:outline-none p-2 md:left-[-1rem]"
+            >
+              &#8592;
+            </CarouselPrevious>
+          
+            <CarouselContent>
+            {mentors.map((mentor) => (
+                <CarouselItem
+                  className="md:basis-1/4 lg:basis-1/4 flex justify-center "
+                  key={mentor.id}
+                >
+                  <Card className="w-[95%] md:w-[85%] lg:w-[90%] flex flex-col ">
+            
+            <MentorCard mentor={mentor} />
+                    
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          
+            <CarouselNext
+              className="absolute right-2 top-1/2 transform -translate-y-1/4 z-10 bg-gray-100 rounded-full shadow-lg hover:bg-gray-300 focus:outline-none p-2 md:right-[-1rem]"
+            >
+              &#8594;
+            </CarouselNext>
+          
+          </Carousel>
+
+  {/* ✅ Right Arrow */}
+  
+</div>
+
     </section>
   );
 };
@@ -95,9 +132,9 @@ function MentorCard({ mentor }) {
       initial={{ opacity: 0, y: 50, scale: 0.9 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="relative flex-shrink-0 group w-full"
+      className="relative flex-shrink-0 group w-full "
     >
-      <div className="relative overflow-hidden rounded-lg shadow-lg w-full h-[350px]">
+      <div className="relative overflow-hidden rounded-lg shadow-lg w-[330px] h-[350px] ">
         <img
           src={mentor.image}
           alt={mentor.name}
