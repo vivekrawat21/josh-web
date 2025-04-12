@@ -259,6 +259,7 @@ const Navbar = () => {
         bundles={bundles}
         specialBundles={specialBundles}
         trendingCourses={trendingCourses}
+        allCourses={allCourses}
       />
     </nav>
   );

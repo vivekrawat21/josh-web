@@ -14,6 +14,7 @@ import {
   FaInfoCircle,
   FaUsers,
   FaVideo,
+  FaBookOpen,
   FaBlog,
   FaSignInAlt,
   FaGraduationCap,
@@ -69,7 +70,7 @@ const itemVariants = {
 // Mock data - replace with your actual data source
 
 
-const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles,specialBundles, trendingCourses,logout  }) => {
+const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles,specialBundles, trendingCourses,allCourses,logout  }) => {
   const [view, setView] = useState("main") // main, courses, subcourses
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [selectedCourse, setSelectedCourse] = useState(null)
@@ -116,9 +117,23 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles,specialBundles, trending
         title: bundle?.bundleName,
         link: `/bundle/${bundle?._id}`
         
-      }
-      })
-    }
+      }})
+    },
+    {
+    category:"ALL COURSES",
+    id: "allCourses",
+    icon: <FaBookOpen />,
+    courses: allCourses?.map((course)=>{
+      return {
+        key: course?._id,
+        id: course?._id,
+        title: course?.title,
+        link: `/course/${course?._id}`,
+       }
+       }
+      
+    )
+  }
   ]
 
   // Reset to main view when sidebar closes
