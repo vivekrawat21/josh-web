@@ -16,6 +16,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { setBundle } from "@/features/bundles/BundleSlice";
 import { addCourse } from "@/features/courses/courseSlice";
+const special = [
+  {
+    _id: "1",
+    bundleName: "Freelancing Road To 1 lakhs",
+    link: "/basicBundle",
+  },
+  
+  {
+    _id: "2",
+    bundleName: "Freelancing Road To 3 Lakhs",
+    link: "/intermediateBundle",
+  },
+
+  {
+    _id: "3",
+    bundleName: "Freelancing Road To 5 Lakhs",
+    link: "/advanceBundle",
+  }
+];
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -33,6 +52,7 @@ const Navbar = () => {
 
   const coursesDropdownRef = useRef(null);
   const coursesButtonRef = useRef(null);
+
 
   // Toggle Sidebar
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -69,6 +89,7 @@ const Navbar = () => {
       try {
         const res = await axios.get(`${BASE_URL}/user`, { withCredentials: true });
         dispatch(setUser(res.data.data.user));
+        
         setIsLoggedIn(true);
       } catch {
         dispatch(logoutUser());
@@ -105,7 +126,8 @@ const Navbar = () => {
 
   useEffect(() => {
     const filteredSpecialBundles = bundles.filter((bundle) => bundle.isSpecial);
-    setSpecialBundles(filteredSpecialBundles);
+    // setSpecialBundles(filteredSpecialBundles);
+    setSpecialBundles(special);
   }, [bundles]);
 
   return (
@@ -159,7 +181,7 @@ const Navbar = () => {
                       {specialBundles.slice(0, 6).map((bundle) => (
                         <li key={bundle._id} className="hover:text-orange-500 transition">
                           <Link to={`/specialBundle/${bundle._id}`} className="relative hover:after:w-full after:transition-all after:duration-300">
-                            {bundle.bundleName}
+                            {bundle?.bundleName}
                           </Link>
                         </li>
                       ))}
