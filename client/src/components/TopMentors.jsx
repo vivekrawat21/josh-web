@@ -87,7 +87,7 @@ const TopMentor = () => {
             >
   
             <CarouselPrevious
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-gray-100 rounded-full shadow-lg hover:bg-gray-300 focus:outline-none p-2 md:left-[-1rem]"
+              className="absolute left-2 top-1/2 transform -translate-y-1/4 z-10 bg-gray-100 rounded-full shadow-lg hover:bg-gray-300 focus:outline-none p-2 md:left-[-1rem] "
             >
               &#8592;
             </CarouselPrevious>
