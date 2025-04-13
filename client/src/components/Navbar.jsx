@@ -110,7 +110,7 @@ const Navbar = () => {
     const fetchCourses = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/course/getCourses`, { withCredentials: true });
-        const all = res.data.data.courses;
+        const all = res?.data?.data.courses;
         setAllCourses(all);
         setTrendingCourses(all.filter((course) => course.isTrending));
         dispatch(addCourse(all));
@@ -212,7 +212,7 @@ const Navbar = () => {
                     <ul className="space-y-2 text-md">
                       {bundles.slice(0, 6).map((bundle) => (
                         <li key={bundle._id} className="hover:text-orange-500 transition">
-                          <Link to={`/bundle/${bundle._id}`}>{bundle.bundleName}</Link>
+                          <Link to={`/bundle/${bundle._id}`}>{bundle?.bundleName}</Link>
                         </li>
                       ))}
                     </ul>
@@ -227,7 +227,7 @@ const Navbar = () => {
                     <ul className="space-y-2 text-md">
                       {allCourses.slice(0, 6).map((course) => (
                         <li key={course._id} className="hover:text-orange-500 transition">
-                          <Link to={`/course/${course._id}`}>{course.title}</Link>
+                          <Link to={`/course/${course?._id}`}>{course?.title}</Link>
                         </li>
                       ))}
                     </ul>
