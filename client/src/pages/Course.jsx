@@ -42,6 +42,7 @@ const Course = () => {
   const { courses } = useSelector((state) => state.course);
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const [visibleCount, setVisibleCount] = useState(5);
   useEffect(() => {
     if (!courses || courses.length === 0) return;
     if (courses?.[0]?.length === 0) return;
@@ -55,10 +56,17 @@ const Course = () => {
   });
   const addToCart = () => {
     if(courseData){
-      dispatch(courseData)
+      dispatch(addItems(courseData))
 
     }
   }
+  const loadMore = () => {
+    setVisibleCount((prev) => prev + 5);
+  }
+  const loadLess = () => {  
+    setVisibleCount((prev)=> prev - 5);
+  }
+  console.log(courseData);
   const mentors = [
     {
       name: "Josh Guru",
@@ -171,7 +179,7 @@ const Course = () => {
                   </div>
                 )}
                 <div className="space-y-4">
-                  {courseData?.videos.map((video) => (
+                  {courseData?.videos.slice(0,visibleCount).map((video) => (
                     <div
                       key={video._id}
                       className="bg-white rounded-md shadow-md overflow-hidden"
@@ -198,6 +206,25 @@ const Course = () => {
                       </div>
                     </div>
                   ))}
+                  <div className="flex justify-center gap-2">
+                  {visibleCount < courseData?.videos.length && (
+                    <button
+                    className="mt-4 px-4 py-2 border border-orange-500 text-orange-500 font-medium rounded-lg hover:bg-orange-500 hover:text-white transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-300"
+                    onClick={loadMore}
+                  >
+                    Load More
+                  </button>
+                  )}
+                  {visibleCount > 5 && (
+                   <button
+                   className="mt-4 px-4 py-2 border border-orange-500 text-orange-500 font-medium rounded-lg hover:bg-orange-500 hover:text-white transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-300"
+                   onClick={loadLess}
+                 >
+                   Load Less
+                 </button>
+                 
+                  )}
+                  </div>
                 </div>
 
                 {/* Enrollment Pop-up */}
@@ -232,7 +259,7 @@ const Course = () => {
 
               <div className="bg-white text-black min-h-screen p-6 md:p-8">
                 <h1 className="text-2xl md:text-3xl font-bold  text-gray-900">
-                  <p className="mb-4 text-gray-700 text-sm md:text-base lg:text-lg text-justify">
+                  <p className=" text-gray-700 text-sm md:text-base lg:text-lg text-justify">
                     {courseData?.courseIntroLine}
                   </p>
                   About This Course
@@ -240,7 +267,7 @@ const Course = () => {
                 {/* About This Course Section */}
                 <section className=" md:px-6 lg:px-8 py-6">
                   {/* Course Description */}
-                  <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
+                  <h3 className="text-lg md:text-xl font-semibold mt-2 mb-2 text-black">
                     Course Description:
                   </h3>
                   <p className="mb-4 text-gray-800 text-sm md:text-base lg:text-lg text-justify">
@@ -251,7 +278,7 @@ const Course = () => {
                   <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
                     What You'll Learn:
                   </h3>
-                  <ul className="pl-4 md:pl-6 space-y-4 mb-6">
+                  <ul className=" md:pl-6 space-y-4 mb-6">
                     {courseData.whatYouWillLearn.map((item, index) => (
                       <li key={index} className="flex items-start">
                         <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg lg:text-xl" />
@@ -266,7 +293,7 @@ const Course = () => {
                   <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
                     Course Highlights:
                   </h3>
-                  <ul className="pl-4 md:pl-6 space-y-4 mb-6">
+                  <ul className=" md:pl-6 space-y-4 mb-6">
                     {courseData.courseHighlights.map((highlight, index) => (
                       <li key={index} className="flex items-start">
                         <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg lg:text-xl" />

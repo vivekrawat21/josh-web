@@ -22,11 +22,11 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gray-100 flex">
+    <div className="w-full bg-gray-100 flex">
       {/* Sidebar */}
       <DashboardSidebar/>
       {/* Main Content */}
-      <div className="w-full md:w-4/5 p-6">
+      <div className="w-full md:w-4/5 border-l border-gray-400 ">
         <Outlet />
       </div>
     </div>
