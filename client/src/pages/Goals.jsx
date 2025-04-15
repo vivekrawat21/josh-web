@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import emailjs from "@emailjs/browser"
 const goalsData = [
   {
     id: 1,
@@ -104,7 +104,11 @@ const Goals = () => {
   const [subject, setSubject] = useState("");
   const [mobile, setMobile] = useState("");
   const [open, setOpen] = useState(false);
-
+  const formData = {
+    userName: userName,
+    subject: subject,
+    mobile: mobile,
+  }
   const goal = goalsData.find((g) => g.id === goalId);
 
   if (!goal) {
@@ -112,10 +116,27 @@ const Goals = () => {
   }
 
   const handleSubmit = () => {
+    // e.preventDefault();
+
+ const serviceID = 'service_qtx181t';
+    const templateID = 'template_t3xhl2x';
+    const publicKey = 'TnKE0lnl_xvNEe4ds';
+
+    emailjs.send(serviceID, templateID, formData, publicKey)
+      .then((response) => {
+        console.log('SUCCESS!', response.status, response.text);
+        alert('Message sent to your mail!');
+      }, (err) => {
+        console.error('FAILED...', err);
+        alert('Failed to send message.');
+      });
+
+
     setOpen(false);
     setuserName("");
     setSubject("");
     setMobile("");
+
   };
 
   return (

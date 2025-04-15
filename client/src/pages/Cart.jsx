@@ -1,53 +1,59 @@
-import React from "react";
+import React, { use } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 const Cart = () => {
-  const cartItems = [
-    {
-      id: 1,
-      title: "Full-Stack Development",
-      price: 900,
-      type: "video",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      title: "Digital Marketing",
-      price: 550,
-      type: "video + notes",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      title: "Data Science",
-      price: 650,
-      type: "video + projects",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 4,
-      title: "DevOps",
-      price: 800,
-      type: "video + projects",
-      image: "https://via.placeholder.com/150",
-    },
-  ];
-
+  // const cartItems = [
+  //   {
+  //     id: 1,
+  //     title: "Full-Stack Development",
+  //     price: 900,
+  //     type: "video",
+  //     image: "https://via.placeholder.com/150",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Digital Marketing",
+  //     price: 550,
+  //     type: "video + notes",
+  //     image: "https://via.placeholder.com/150",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Data Science",
+  //     price: 650,
+  //     type: "video + projects",
+  //     image: "https://via.placeholder.com/150",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "DevOps",
+  //     price: 800,
+  //     type: "video + projects",
+  //     image: "https://via.placeholder.com/150",
+  //   },
+  // ];
+  const cartItems = useSelector((state) => state.cart.cart);
+  const subtotal= cartItems.reduce((acc, item) => acc + item.price, 0);
+  const discount = 0;
+  const total = subtotal - discount;
+  console.log(total);
+  console.log(cartItems);
   return (
     <section className="w-full min-h-screen px-4 md:px-8 lg:px-12 py-8 bg-gray-100">
       <div className="flex flex-col lg:flex-row lg:justify-center w-full lg:space-x-10 space-y-6 lg:space-y-0">
         {/* Cart Items Section */}
         <motion.div
-          className="w-full lg:w-7/12 shadow-xl rounded-lg p-6 bg-white"
+          className="w-full h-full lg:w-7/12 shadow-xl rounded-lg p-6 bg-white"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-xl md:text-2xl font-bold mb-4">Cart Items</h2>
-          {cartItems.map((item) => (
+          {cartItems?.map((item) => (
             <motion.div
-              key={item.id}
+              key={item._id}
               className="flex items-center justify-between py-4 border-b"
               whileHover={{ scale: 1.02 }}
             >
@@ -82,15 +88,15 @@ const Cart = () => {
           <div className="space-y-4">
             <div className="flex justify-between text-md md:text-lg">
               <span>Subtotal:</span>
-              <span className="font-semibold">₹3000</span>
+              <span className="font-semibold">₹{subtotal}</span>
             </div>
             <div className="flex justify-between text-md md:text-lg text-green-500 font-semibold">
               <span>Discount:</span>
-              <span>-₹1500</span>
+              <span>-₹{discount}</span>
             </div>
             <div className="flex justify-between text-lg md:text-xl font-bold">
               <span>Total:</span>
-              <span>₹1500</span>
+              <span>₹{total}</span>
             </div>
           </div>
           <div className="mt-6 space-y-4">
