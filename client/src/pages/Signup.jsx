@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { FiEye, FiEyeOff, FiXCircle } from 'react-icons/fi';
 import { Loader } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../utils/utils';
 import { motion } from 'framer-motion';
 import { setUser } from "../features/user/userSlice";
 import { useDispatch, useSelector } from 'react-redux';
+import Payment from '@/components/Payment';
+import CourseBundleSelection from "../components/CourseBundleSelection"  // Import the new component
 
 const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
-  const bundles = useSelector((state) => state?.bundle?.bundles[0] || []);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const courseId = queryParams.get('courseId');
+  const typeParam = queryParams.get('type') || 'bundle';
+
+  const bundles = useSelector((state) => state.bundle?.bundles[0] || []);
+  const courses = useSelector((state) => state.course?.courses[0] || []);
 
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
@@ -25,23 +32,29 @@ const Signup = () => {
   const [referralCode, setReferralCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState({});
 
   const steps = ['Info', 'Course', 'PayU'];
 
-  // Skip to Step 2 if user exists in store
   useEffect(() => {
-    if (user) {
-      setStep(2);
+    if ((typeParam === 'course' && courses.length > 0) || (typeParam === 'bundle' && bundles.length > 0)) {
+      if (courseId) {
+        const found = (typeParam === 'course'
+          ? courses.find((c) => c._id === courseId)
+          : bundles.find((b) => b._id === courseId)
+        );
+        if (found) {
+          setSelectedCourse(found);
+          // setStep(2)
+        }
+      }
     }
-  }, [user]);
+  }, [courseId, typeParam, bundles, courses]);
 
   const checkUserExist = async (errors) => {
     try {
       const res = await axios.post(`${BASE_URL}/auth/checkuserexist`, { mobilenumber, email });
-      if (res?.data?.statusCode === 200 && res?.data?.data == null) {
-        return;
-      }
+      if (res?.data?.statusCode === 200 && res?.data?.data == null) return;
     } catch (error) {
       errors.push(error.response?.data?.message || 'Something went wrong. Please try again.');
     }
@@ -82,7 +95,6 @@ const Signup = () => {
       email,
       password,
       referralCode,
-      course: selectedCourse,
     };
 
     try {
@@ -99,18 +111,18 @@ const Signup = () => {
     }
   };
 
+  const itemsToShow = courseId
+    ? [(typeParam === 'course' ? courses : bundles).find((item) => item._id === courseId)].filter(Boolean)
+    : (typeParam === 'course' ? courses : bundles);
+
   return (
-    <div className="bg-gradient-to-br from-orange-50 to-blue-50 flex flex-col lg:flex-row items-center justify-center px-6">
+    <div className="bg-gradient-to-br from-orange-50 to-blue-50 flex flex-col lg:flex-row items-center justify-center px-6 py-4">
       <div className="hidden lg:flex w-1/2 justify-start pr-8">
-        <img
-          src="/signup.jpg"
-          alt="Signup"
-          className="w-[90%] h-auto object-contain rounded-2xl"
-        />
+        <img src="/signup.jpg" alt="Signup" className="w-[90%] h-auto object-contain rounded-2xl" />
       </div>
 
-      <div className="w-full lg:w-[720px] bg-white shadow-xl rounded-2xl p-6 sm:p-10">
-        <h2 className="text-xl sm:text-xl font-extrabold text-center mb-8 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text">
+      <div className=" lg:w-[720px] bg-white shadow-xl rounded-2xl p-5 ">
+        <h2 className="text-xl lg:text-2xl font-extrabold text-center mb-10 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text">
           Signup to Joshguru
         </h2>
 
@@ -186,57 +198,24 @@ const Signup = () => {
         )}
 
         {step === 2 && (
-          <div>
-            <h3 className="text-xl font-semibold mb-4 text-center">Select a Bundle</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {bundles.map((bundle) => (
-                <label key={bundle._id} className={`border p-2 rounded-xl flex flex-col items-center cursor-pointer transition ${selectedCourse === bundle?._id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
-                  <img src={bundle?.bundleImage} alt={bundle?.bundleName} className="w-full h-24 object-cover rounded mb-2" />
-                  <span className="font-semibold text-center text-sm">{bundle?.bundleName}</span>
-                  <input
-                    type="radio"
-                    name="course"
-                    value={bundle._id}
-                    checked={selectedCourse === bundle?._id}
-                    onChange={() => setSelectedCourse(bundle._id)}
-                    className="mt-1"
-                  />
-                </label>
-              ))}
-            </div>
-            <button
-              className="mt-6 w-full bg-orange-500 text-white py-3 px-6 rounded-md hover:bg-orange-600 transition"
-              onClick={() => selectedCourse && setStep(3)}
-              disabled={!selectedCourse}
-            >
-              Next
-            </button>
-            <button
-              onClick={() => setStep(1)}
-              className="mt-3 w-full text-sm text-gray-600 hover:text-gray-800 underline"
-            >
-              ← Back to Personal Info
-            </button>
-          </div>
+          <CourseBundleSelection
+            itemsToShow={itemsToShow}
+            selectedCourse={selectedCourse}
+            setSelectedCourse={setSelectedCourse}
+            typeParam={typeParam}
+            setStep={setStep}
+          />
         )}
 
         {step === 3 && (
           <div className="text-center">
-            <h3 className="text-2xl font-semibold mb-4">PayU</h3>
-            <p className="text-gray-600 mb-6">Payment gateway integration coming soon.</p>
-            <button
-              onClick={handleFinalSubmit}
-              className="bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700 transition"
-              disabled={loading}
-            >
-              {loading ? <Loader size={20} className="animate-spin mx-auto" /> : 'Continue to Dashboard'}
-            </button>
-            <button
-              onClick={() => setStep(2)}
-              className="mt-3 text-sm text-gray-600 hover:text-gray-800 underline"
-            >
-              ← Back to Course Selection
-            </button>
+            <Payment
+              data={selectedCourse}
+              type={typeParam || 'bundle'}
+              setStep={setStep}
+              handleFinalSubmit={handleFinalSubmit}
+            />
+
           </div>
         )}
       </div>

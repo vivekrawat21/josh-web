@@ -5,11 +5,13 @@ import { motion } from "framer-motion";
 import { FaBook, FaClock, FaUsers, FaCertificate } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+
 const Bundle = () => {
   const { bundleId } = useParams();
   const navigate = useNavigate();
   const [bundle, setBundle] = useState({});
   const bundles = useSelector((state) => state.bundle.bundles[0]);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const selected = bundles?.filter((bundle) => bundle._id === bundleId);
@@ -115,7 +117,7 @@ const Bundle = () => {
           className="px-6 py-2 sm:px-8 sm:py-2 text-xs sm:text-sm md:text-base border-2 border-black font-semibold rounded-xl text-black hover:bg-orange-500 hover:text-white transition-all duration-300 mb-8"
           whileHover={{ scale: 1.05 }}
         >
-          <Link to="/signup">Buy Bundle</Link>
+          <Link to={!user?`/signup?courseId=${bundle._id}&type=bundle`:'/payment'}  >Buy Bundle</Link>
         </motion.button>
       </div>
     </motion.div>

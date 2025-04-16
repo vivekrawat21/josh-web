@@ -45,7 +45,7 @@ const Login = () => {
   };
 
   return (
-    <div className=" bg-gradient-to-br from-orange-50 to-blue-50 flex flex-col lg:flex-row items-center justify-center py-4 lg:py-8 px-6">
+    <div className="bg-gradient-to-br from-orange-50 to-blue-50 flex flex-col lg:flex-row items-center justify-center px-6 py-4">
       {/* Image Section */}
       <div className="hidden lg:flex w-1/2 justify-start pr-8">
         <img
@@ -57,7 +57,7 @@ const Login = () => {
 
       {/* Form Section */}
       <div className="w-full lg:w-[540px] bg-white shadow-xl rounded-2xl p-6 sm:p-10">
-        <h2 className="text-xl sm:text-xl font-extrabold text-center mb-8 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-8 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text">
           Login to Joshguru
         </h2>
 

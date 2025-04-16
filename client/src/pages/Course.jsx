@@ -43,6 +43,8 @@ const Course = () => {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [visibleCount, setVisibleCount] = useState(5);
+  const user = useSelector((state) => state.user);
+
   useEffect(() => {
     if (!courses || courses.length === 0) return;
     if (courses?.[0]?.length === 0) return;
@@ -150,10 +152,19 @@ const Course = () => {
                         </ul>
                       </div>
                       <div className="mt-3 space-y-3">
+                        <Link to={!user?`/signup?courseId=${courseId}&type=course`:'/payment'}>
                         <button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-3 rounded font-medium transition-colors">
                           <FaRupeeSign className="inline-block mr-2" />
                           {courseData?.price} /-
                         </button>
+                        </Link>
+                      {!cartContainsCourse && (
+                         <button className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-medium transition-colors"
+                        onClick={addToCart}>
+                           <FaShoppingCart className="inline-block mr-2" />
+                             Add to Cart
+                      </button>
+                    )}
                       </div>
                     </div>
                   </div>
@@ -419,10 +430,12 @@ const Course = () => {
                     </ul>
                   </div>
                   <div className="space-y-3">
+                  <Link to={!user?`/signup?courseId=${courseId}&type=course`:'/payment'}>
                     <button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-3 rounded font-medium transition-colors">
                       <FaRupeeSign className="inline-block mr-2" />
                       {courseData?.price} /-
                     </button>
+                  </Link>
                     {!cartContainsCourse && (
                     <button className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-medium transition-colors"
                      onClick={addToCart}>

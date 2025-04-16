@@ -5,7 +5,7 @@ const Wrapper = ({children}) => {
    <div className="w-full flex justify-center relative">
 
 
-    <div className=" w-full mt-24 ">
+    <div className=" w-full mt-20 ">
      {children}
     </div>
    </div>
