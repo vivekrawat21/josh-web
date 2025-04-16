@@ -2,7 +2,8 @@ import React, { use } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
-
+import { useDispatch } from "react-redux";
+import { removeFromCart } from "../features/cart/cartSlice";
 const Cart = () => {
   // const cartItems = [
   //   {
@@ -37,9 +38,14 @@ const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cart);
   const subtotal= cartItems.reduce((acc, item) => acc + item.price, 0);
   const discount = 0;
+  const dispatch = useDispatch();
   const total = subtotal - discount;
   console.log(total);
   console.log(cartItems);
+  const removeItem = (id) => {
+    dispatch(removeFromCart(id));
+    console.log("Item removed from cart");
+  }
   return (
     <section className="w-full min-h-screen px-4 md:px-8 lg:px-12 py-8 bg-gray-100">
       <div className="flex flex-col lg:flex-row lg:justify-center w-full lg:space-x-10 space-y-6 lg:space-y-0">
@@ -51,6 +57,11 @@ const Cart = () => {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-xl md:text-2xl font-bold mb-4">Cart Items</h2>
+          {cartItems?.length === 0 && (
+           < div className="flex items-center justify-center h-full" >
+              <p className="text-lg font-semibold text-gray-500">Your cart is empty</p>
+            </div>
+            )}
           {cartItems?.map((item) => (
             <motion.div
               key={item._id}
@@ -67,6 +78,9 @@ const Cart = () => {
               <div className="flex items-center space-x-4">
                 <p className="text-md md:text-lg font-semibold">₹{item.price}</p>
                 <motion.button
+                onClick={ () =>{
+                  removeItem(item._id);
+                }}
                   whileTap={{ scale: 0.9 }}
                   className="text-red-orange hover:text-white hover:bg-orange-500 p-2 rounded-full transition"
                 >
