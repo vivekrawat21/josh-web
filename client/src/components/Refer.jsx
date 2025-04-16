@@ -16,9 +16,12 @@ import {
 import { Input } from "../components/ui/input"
 import { Copy } from 'lucide-react';
 import { Label } from "../components/ui/label"
-
+import { useSelector } from 'react-redux';
 const ReferAndEarn = () => {
-  const referralCode = 'ABC123XYZ';
+  const user = useSelector((state) => state.user);
+  // const userId = user._id;
+  console.log(user)
+  // const referralCode = 'ABC123XYZ';
   const referralLink = "https://joshguru.com/refer/referallcode"; // Add your referral link
 
   const rewards = [
@@ -28,7 +31,7 @@ const ReferAndEarn = () => {
   ];
 
   const handleCopyReferralLink = () => {
-    navigator.clipboard.writeText(referralLink);
+    navigator.clipboard.writeText(user?.sharableReferralCode);
   };
 
   return (
@@ -44,17 +47,17 @@ const ReferAndEarn = () => {
 
         <h2 className="text-lg font-semibold text-gray-700 mb-3">Your Referral Code</h2>
         <div className="flex items-center justify-between bg-gray-200 p-4 rounded-lg shadow-sm">
-          <span className="text-lg font-semibold">{referralCode}</span>
+          <span className="text-lg font-semibold">{user?.sharableReferralCode}</span>
           <Dialog>
             <DialogTrigger asChild>
               <button
                 className="bg-orange-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-600"
-                onClick={() => navigator.clipboard.writeText(referralCode)}
+                onClick={() => navigator.clipboard.writeText(user?.sharableReferralCode)}
               >
                 <FaShareSquare /> <span>Share</span>
               </button>
             </DialogTrigger>
-            <DialogContent className="max-w-full sm:max-w-md p-2 sm:p-4"> {/* Add mobile responsiveness */}
+            <DialogContent className="w-[90%]  mx-auto sm:max-w-md sm:p-4"> {/* Add mobile responsiveness */}
               <DialogHeader>
                 <DialogTitle>Share link</DialogTitle>
                 <DialogDescription>
@@ -62,30 +65,31 @@ const ReferAndEarn = () => {
                 </DialogDescription>
               </DialogHeader>
               <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-x-2 sm:space-y-0"> {/* Ensure responsive flex */}
-                <div className="flex-1">
+                <div className="flex-1 flex items-center space-x-2">
                   <Label htmlFor="link" className="sr-only">
                     Link
                   </Label>
                   <Input
                     id="link"
-                    defaultValue={referralLink}
+                    defaultValue={user?.sharableReferralCode}
                     readOnly
                     className="w-full"
                   />
-                </div>
-                <Button
+                   <Button
                   type="button"
                   size="sm"
-                  className="px-3 w-full sm:w-auto" /* Full width button on mobile */
+                  className="px-3  sm:w-auto" /* Full width button on mobile */
                   onClick={handleCopyReferralLink}
                 >
                   <span className="sr-only">Copy</span>
                   <Copy />
                 </Button>
+                </div>
+               
               </div>
               <DialogFooter className="justify-start sm:justify-end">
                 <DialogClose asChild>
-                  <Button type="button" variant="secondary">
+                  <Button type="button" variant="secondary" className="bg-gray-300 text-gray-700 hover:bg-gray-400">
                     Close
                   </Button>
                 </DialogClose>

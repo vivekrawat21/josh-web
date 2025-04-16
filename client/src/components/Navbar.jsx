@@ -1,5 +1,11 @@
 import { useEffect, useState, useRef } from "react";
-import { FaChevronDown, FaBars, FaTimes, FaShoppingCart, FaUser } from "react-icons/fa";
+import {
+  FaChevronDown,
+  FaBars,
+  FaTimes,
+  FaShoppingCart,
+  FaUser,
+} from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import "@fontsource/fugaz-one";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,6 +14,7 @@ import axios from "axios";
 import Sidebar from "./Sidebar";
 import { motion } from "framer-motion";
 import { BASE_URL } from "@/utils/utils";
+// import { useSelector } from "react-redux";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +29,7 @@ const special = [
     bundleName: "Freelancing Road To 1 lakhs",
     link: "/basicBundle",
   },
-  
+
   {
     _id: "2",
     bundleName: "Freelancing Road To 3 Lakhs",
@@ -33,7 +40,7 @@ const special = [
     _id: "3",
     bundleName: "Freelancing Road To 5 Lakhs",
     link: "/advanceBundle",
-  }
+  },
 ];
 
 const Navbar = () => {
@@ -52,7 +59,11 @@ const Navbar = () => {
 
   const coursesDropdownRef = useRef(null);
   const coursesButtonRef = useRef(null);
-
+  const cart = useSelector((state) => state.cart.cart);
+  const cartItems = useSelector((state) => state.cart.cart);
+  // if (cartItems) {
+  //   console.log(cartItems.length);
+  // }
 
   // Toggle Sidebar
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -76,7 +87,11 @@ const Navbar = () => {
 
   const logout = async () => {
     try {
-      await axios.post(`${BASE_URL}/auth/logout`, {}, { withCredentials: true });
+      await axios.post(
+        `${BASE_URL}/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
       dispatch(logoutUser());
       navigate("/login");
     } catch (error) {
@@ -87,9 +102,11 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/user`, { withCredentials: true });
+        const res = await axios.get(`${BASE_URL}/user`, {
+          withCredentials: true,
+        });
         dispatch(setUser(res.data.data.user));
-        
+
         setIsLoggedIn(true);
       } catch {
         dispatch(logoutUser());
@@ -98,7 +115,9 @@ const Navbar = () => {
 
     const fetchBundles = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/course/getBundles`, { withCredentials: true });
+        const res = await axios.get(`${BASE_URL}/course/getBundles`, {
+          withCredentials: true,
+        });
         const allBundles = res.data.data.bundles;
         setBundles(allBundles);
         dispatch(setBundle(allBundles));
@@ -109,7 +128,9 @@ const Navbar = () => {
 
     const fetchCourses = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/course/getCourses`, { withCredentials: true });
+        const res = await axios.get(`${BASE_URL}/course/getCourses`, {
+          withCredentials: true,
+        });
         const all = res?.data?.data.courses;
         setAllCourses(all);
         setTrendingCourses(all.filter((course) => course.isTrending));
@@ -149,10 +170,14 @@ const Navbar = () => {
 
           <ul className="hidden md:flex items-center space-x-10 text-[16px] pt-4">
             <li>
-              <Link to="/" className="hover:text-orange-400 transition">Home</Link>
+              <Link to="/" className="hover:text-orange-400 transition">
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/about" className="hover:text-orange-400 transition">About</Link>
+              <Link to="/about" className="hover:text-orange-400 transition">
+                About
+              </Link>
             </li>
             <li className="relative group">
               <button
@@ -176,63 +201,112 @@ const Navbar = () => {
                 >
                   {/* Special Bundles */}
                   <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-7">SPECIAL BUNDLES</h3>
+                    <h3 className="text-orange-500 text-xl font-bold mb-7">
+                      SPECIAL BUNDLES
+                    </h3>
                     <ul className="space-y-2 text-md">
                       {specialBundles.slice(0, 6).map((bundle) => (
-                        <li key={bundle._id} className="hover:text-orange-500 transition">
-                          <Link to={`/specialBundle/${bundle._id}`} className="relative hover:after:w-full after:transition-all after:duration-300">
+                        <li
+                          key={bundle._id}
+                          className="hover:text-orange-500 transition"
+                        >
+                          <Link
+                            to={`/specialBundle/${bundle._id}`}
+                            className="relative hover:after:w-full after:transition-all after:duration-300"
+                          >
                             {bundle?.bundleName}
                           </Link>
                         </li>
                       ))}
                     </ul>
                     {specialBundles.length > 6 && (
-                      <Link to="/specialBundles" className="text-sm text-orange-500 mt-2 inline-block">See All →</Link>
+                      <Link
+                        to="/specialBundles"
+                        className="text-sm text-orange-500 mt-2 inline-block"
+                      >
+                        See All →
+                      </Link>
                     )}
                   </div>
 
                   {/* Trending Courses */}
                   <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-7">TRENDING COURSES</h3>
+                    <h3 className="text-orange-500 text-xl font-bold mb-7">
+                      TRENDING COURSES
+                    </h3>
                     <ul className="space-y-2 text-md">
                       {trendingCourses.slice(0, 6).map((course) => (
-                        <li key={course._id} className="hover:text-orange-500 transition">
-                          <Link to={`/course/${course._id}`}>{course.title}</Link>
+                        <li
+                          key={course._id}
+                          className="hover:text-orange-500 transition"
+                        >
+                          <Link to={`/course/${course._id}`}>
+                            {course.title}
+                          </Link>
                         </li>
                       ))}
                     </ul>
                     {trendingCourses.length > 6 && (
-                      <Link to="/courses/trending" className="text-sm text-orange-500 mt-2 inline-block">See All →</Link>
+                      <Link
+                        to="/courses/trending"
+                        className="text-sm text-orange-500 mt-2 inline-block"
+                      >
+                        See All →
+                      </Link>
                     )}
                   </div>
 
                   {/* All Bundles */}
                   <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-7">ALL BUNDLES</h3>
+                    <h3 className="text-orange-500 text-xl font-bold mb-7">
+                      ALL BUNDLES
+                    </h3>
                     <ul className="space-y-2 text-md">
                       {bundles.slice(0, 6).map((bundle) => (
-                        <li key={bundle._id} className="hover:text-orange-500 transition">
-                          <Link to={`/bundle/${bundle._id}`}>{bundle?.bundleName}</Link>
+                        <li
+                          key={bundle._id}
+                          className="hover:text-orange-500 transition"
+                        >
+                          <Link to={`/bundle/${bundle._id}`}>
+                            {bundle?.bundleName}
+                          </Link>
                         </li>
                       ))}
                     </ul>
                     {bundles.length > 6 && (
-                      <Link to="/bundles" className="text-sm text-orange-500 mt-2 inline-block">See All →</Link>
+                      <Link
+                        to="/bundles"
+                        className="text-sm text-orange-500 mt-2 inline-block"
+                      >
+                        See All →
+                      </Link>
                     )}
                   </div>
 
                   {/* All Courses */}
                   <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-7">ALL COURSES</h3>
+                    <h3 className="text-orange-500 text-xl font-bold mb-7">
+                      ALL COURSES
+                    </h3>
                     <ul className="space-y-2 text-md">
                       {allCourses.slice(0, 6).map((course) => (
-                        <li key={course._id} className="hover:text-orange-500 transition">
-                          <Link to={`/course/${course?._id}`}>{course?.title}</Link>
+                        <li
+                          key={course._id}
+                          className="hover:text-orange-500 transition"
+                        >
+                          <Link to={`/course/${course?._id}`}>
+                            {course?.title}
+                          </Link>
                         </li>
                       ))}
                     </ul>
                     {allCourses.length > 6 && (
-                      <Link to="/courses" className="text-sm text-orange-500 mt-2 inline-block">See All →</Link>
+                      <Link
+                        to="/courses"
+                        className="text-sm text-orange-500 mt-2 inline-block"
+                      >
+                        See All →
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -243,31 +317,68 @@ const Navbar = () => {
 
         {/* Right-side icons and auth */}
         <div className="flex items-center space-x-4">
-          <Link to="/cart">
-            <FaShoppingCart className="text-4xl text-gray-900 shadow-md rounded-lg p-2 bg-transparent" />
+          <Link
+            to="/cart"
+            className="relative flex items-center gap-2 p-2 rounded-lg bg-white shadow hover:shadow-lg transition-all"
+          >
+            <FaShoppingCart className="text-3xl text-gray-800" />
+            {cartItems?.length > 0 && (
+              <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                {cartItems.length}
+              </span>
+            )}
           </Link>
 
           {!loggedIn ? (
             <div className="hidden md:flex space-x-4">
-              <Link to="/login" className="bg-orange-500 text-white px-4 py-2 rounded-lg">Login</Link>
-              <Link to="/signup" className="border border-orange-500 text-orange-500 px-4 py-2 rounded-lg">Register</Link>
+              <Link
+                to="/login"
+                className="bg-orange-500 text-white px-4 py-2 rounded-lg"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="border border-orange-500 text-orange-500 px-4 py-2 rounded-lg"
+              >
+                Register
+              </Link>
             </div>
           ) : (
             <DropdownMenu className="hidden md:inline">
               <DropdownMenuTrigger asChild>
                 <FaUser className="text-2xl cursor-pointer" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="" sideOffset={3} className="bg-white p-4 rounded-lg shadow-lg">
-                <DropdownMenuItem><Link to="/dashboard/profile/personalinformation">My Profile</Link></DropdownMenuItem>
-                <DropdownMenuItem><Link to="/dashboard/mywallet">My Wallet</Link></DropdownMenuItem>
-                <DropdownMenuItem><Link to="/dashboard/mycourses">My Courses</Link></DropdownMenuItem>
-                <DropdownMenuItem><Link to="/dashboard/help&support">Help and Support</Link></DropdownMenuItem>
-                <DropdownMenuItem><button onClick={logout}>Logout</button></DropdownMenuItem>
+              <DropdownMenuContent
+                align=""
+                sideOffset={3}
+                className="bg-white p-4 rounded-lg shadow-lg"
+              >
+                <DropdownMenuItem>
+                  <Link to="/dashboard/profile/personalinformation">
+                    My Profile
+                  </Link>
+                </DropdownMenuItem>
+                {/* <DropdownMenuItem>
+                  <Link to="/dashboard/mywallet">My Wallet</Link>
+                </DropdownMenuItem> */}
+                <DropdownMenuItem>
+                  <Link to="/dashboard/mycourses">My Courses</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/dashboard/help&support">Help and Support</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <button onClick={logout}>Logout</button>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
 
-          <button onClick={toggleSidebar} className="md:hidden text-2xl ml-auto text-gray-900 mr-4">
+          <button
+            onClick={toggleSidebar}
+            className="md:hidden text-2xl ml-auto text-gray-900 mr-4"
+          >
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>

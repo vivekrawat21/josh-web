@@ -45,6 +45,7 @@ import Disclaimer from "./pages/Disclaimer";
 import Terms from "./pages/Terms";
 import CoursePlayer from "./pages/CoursePlayer";
 import BundleRouter from "./pages/bundleRouter";
+import Upgrade from "./components/Upgrade";
 function App() {
   return (
     <>
@@ -69,7 +70,9 @@ function App() {
         <Route path="profile/personalinformation" element={<PersonalInformation />} />
         <Route path="profile/invoices" element={<Invoices />} />
         <Route path="profile/privacyandsecurity" element={<PrivacyAndSecurity />} />
+        <Route path="mycourse/upgrade" element={<Upgrade />} />
         <Route path="mycourses" element={<MyCourses />} />
+       
         <Route path="mywallet" element={<Mywallet />} />
 
         <Route path="refer&earn" element={<Refer />} />

@@ -39,7 +39,9 @@ const MyCourses = () => {
   const enrolledCourses = user?.courses || [];
   const enrolledCourseIds = enrolledCourses.map((course) => course._id);
   const suggestedBundleId = enrolledCourses[0]?.bundle;
-  const suggestedBundle = bundles?.find((b) => b._id === suggestedBundleId);
+  console.log(bundles)
+  const suggestedBundle = bundles?.find((b) => b._id === suggestedBundleId) || bundles?.[0];
+
   const suggestedCourses =
     suggestedBundle?.courses?.filter(
       (course) => !enrolledCourseIds.includes(course._id)
@@ -124,9 +126,9 @@ const MyCourses = () => {
                               style={{ width: `${bundle?.progress}%` }}
                             ></div>
                           </div>
-                          <p className="text-sm text-right text-gray-600 mt-1">
+                          {/* <p className="text-sm text-right text-gray-600 mt-1">
                             {bundle?.progress}% Complete
-                          </p>
+                          </p> */}
                         </div>
 
                         <div className="p-6">
@@ -185,7 +187,7 @@ const MyCourses = () => {
               </div> */}
 
                           <Link to={`/course/${course._id}/learn`}>
-                            <button className="w-full bg-indigo-600 text-white py-3 px-4 rounded-xl hover:bg-indigo-700 transition-colors font-medium">
+                            <button className="w-full bg-orange-500 text-white py-3 px-4 rounded-xl hover:bg-indigo-700 transition-colors font-medium">
                               Resume Course
                             </button>
                           </Link>
@@ -223,9 +225,9 @@ const MyCourses = () => {
                 alt={suggestedBundle?.bundleName}
                 className="w-full h-full object-cover rounded-xl"
               />
-              <div className="absolute bottom-4 left-4 text-white bg-black/60 p-2 rounded-xl">
+              {/* <div className="absolute bottom-4 left-4 text-white bg-black/60 p-2 rounded-xl">
                 <span>{suggestedBundle?.progress}% Complete</span>
-              </div>
+              </div> */}
             </div>
 
             <ul className="space-y-2">
@@ -250,9 +252,11 @@ const MyCourses = () => {
               </li>
             </ul>
           </div>
-          <button className="bg-white text-indigo-600 px-8 py-4 rounded-xl font-bold hover:bg-indigo-50 transition-colors whitespace-nowrap">
+          <Link to="/dashboard/mycourse/upgrade">
+          <button className="bg-white text-orange-600 px-8 py-4 rounded-xl font-bold hover:bg-indigo-50 transition-colors whitespace-nowrap">
             Upgrade to Pro
           </button>
+          </Link>
         </div>
         )}
       </div>

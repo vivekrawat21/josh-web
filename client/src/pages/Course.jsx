@@ -66,6 +66,9 @@ const Course = () => {
   const loadLess = () => {  
     setVisibleCount((prev)=> prev - 5);
   }
+  console.log("cart items")
+  console.log(JSON.stringify(cart));
+  const cartContainsCourse = cart.cart.some((item) => item._id === courseId);
   console.log(courseData);
   const mentors = [
     {
@@ -420,11 +423,13 @@ const Course = () => {
                       <FaRupeeSign className="inline-block mr-2" />
                       {courseData?.price} /-
                     </button>
+                    {!cartContainsCourse && (
                     <button className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-medium transition-colors"
                      onClick={addToCart}>
                       <FaShoppingCart className="inline-block mr-2" />
                       Add to Cart
                     </button>
+                    )}
                   </div>
                 </div>
               </div>
