@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiEye, FiEyeOff, FiXCircle } from 'react-icons/fi';
 import { Loader } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+  const bundles = useSelector((state) => state?.bundle?.bundles[0] || []);
 
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
@@ -24,15 +26,38 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState('');
-  const bundles = useSelector((state) => state?.bundle?.bundles[0] || []);
 
   const steps = ['Info', 'Course', 'PayU'];
 
-  const handleInitialSubmit = () => {
+  // Skip to Step 2 if user exists in store
+  useEffect(() => {
+    if (user) {
+      setStep(2);
+    }
+  }, [user]);
+
+  const checkUserExist = async (errors) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/auth/checkuserexist`, { mobilenumber, email });
+      if (res?.data?.statusCode === 200 && res?.data?.data == null) {
+        return;
+      }
+    } catch (error) {
+      errors.push(error.response?.data?.message || 'Something went wrong. Please try again.');
+    }
+  };
+
+  const handleInitialSubmit = async () => {
     const errors = [];
+    setLoading(true);
 
     if (!name.trim()) errors.push('Name is required.');
-    if (!/^[0-9]{10}$/.test(mobilenumber)) errors.push('Enter a valid 10-digit mobile number.');
+    if (!/^[0-9]{10}$/.test(mobilenumber)) {
+      errors.push('Enter a valid 10-digit mobile number.');
+    } else {
+      await checkUserExist(errors);
+    }
+
     if (!/.+@.+\..+/.test(email)) errors.push('Enter a valid email address.');
     if (password.length < 6) errors.push('Password must be at least 6 characters.');
     if (password !== confirmPassword) errors.push('Passwords do not match.');
@@ -43,10 +68,13 @@ const Signup = () => {
       setErrorMsgs([]);
       setStep(2);
     }
+
+    setLoading(false);
   };
 
   const handleFinalSubmit = async () => {
     setErrorMsgs([]);
+    setLoading(true);
 
     const userInfo = {
       name,
@@ -58,7 +86,6 @@ const Signup = () => {
     };
 
     try {
-      setLoading(true);
       const res = await axios.post(`${BASE_URL}/auth/register`, userInfo);
       if (res?.data?.data?.user) {
         dispatch(setUser(res.data.data.user));
@@ -66,18 +93,14 @@ const Signup = () => {
       }
     } catch (error) {
       const backendError = error.response?.data?.message;
-      if (backendError) {
-        setErrorMsgs(Array.isArray(backendError) ? backendError : [backendError]);
-      } else {
-        setErrorMsgs(['Something went wrong. Please try again.']);
-      }
+      setErrorMsgs(Array.isArray(backendError) ? backendError : [backendError || 'Something went wrong. Please try again.']);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className=" bg-gradient-to-br from-orange-50 to-blue-50 flex flex-col lg:flex-row items-center justify-center py-4 lg:py-8 px-6">
+    <div className="bg-gradient-to-br from-orange-50 to-blue-50 flex flex-col lg:flex-row items-center justify-center px-6">
       <div className="hidden lg:flex w-1/2 justify-start pr-8">
         <img
           src="/signup.jpg"
@@ -86,7 +109,7 @@ const Signup = () => {
         />
       </div>
 
-      <div className="w-full lg:w-[540px] bg-white shadow-xl rounded-2xl p-6 sm:p-10">
+      <div className="w-full lg:w-[720px] bg-white shadow-xl rounded-2xl p-6 sm:p-10">
         <h2 className="text-xl sm:text-xl font-extrabold text-center mb-8 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text">
           Signup to Joshguru
         </h2>
@@ -136,7 +159,11 @@ const Signup = () => {
               </button>
             </div>
             <input type="text" value={referralCode} onChange={(e) => setReferralCode(e.target.value)} placeholder="Referral code (optional)" className="border p-3 rounded w-full" />
-            <button type="submit" className="w-full bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600 transition">
+            <button
+              type="submit"
+              className="w-full bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600 transition"
+              disabled={loading}
+            >
               {loading ? <Loader size={20} className="animate-spin mx-auto" /> : 'Continue'}
             </button>
 
@@ -161,7 +188,7 @@ const Signup = () => {
         {step === 2 && (
           <div>
             <h3 className="text-xl font-semibold mb-4 text-center">Select a Bundle</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {bundles.map((bundle) => (
                 <label key={bundle._id} className={`border p-2 rounded-xl flex flex-col items-center cursor-pointer transition ${selectedCourse === bundle?._id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
                   <img src={bundle?.bundleImage} alt={bundle?.bundleName} className="w-full h-24 object-cover rounded mb-2" />
@@ -200,6 +227,7 @@ const Signup = () => {
             <button
               onClick={handleFinalSubmit}
               className="bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700 transition"
+              disabled={loading}
             >
               {loading ? <Loader size={20} className="animate-spin mx-auto" /> : 'Continue to Dashboard'}
             </button>
