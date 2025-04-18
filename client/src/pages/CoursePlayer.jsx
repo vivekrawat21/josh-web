@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 
 function CoursePlayer() {
-  const [activeTab, setActiveTab] = useState("DISCUSSIONS")
+  const [activeTab, setActiveTab] = useState("ABOUT")
   const [showTitle, setShowTitle] = useState(false)
   const [openModule, setOpenModule] = useState(1)
   const [currentVideo, setCurrentVideo] = useState(null)
@@ -158,12 +158,12 @@ function CoursePlayer() {
                   </div>
                 </>
               ) : (
-                <div className="mt-2 sm:mt-4">
+                <div className="mt-2 sm:mt-2">
                   <h3 className="text-lg sm:text-xl font-bold mb-3">About This Course</h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">{course.description}</p>
+                  <p className="text-gray-700 text-sm md:text-base leading-relaxed">{course.description}</p>
                   <div className="mt-4">
-                    <h4 className="font-semibold text-base sm:text-lg">What you'll learn:</h4>
-                    <ul className="list-disc pl-5 mt-2 text-sm text-gray-700 space-y-1">
+                    <h3 className="text-lg sm:text-xl font-bold">What you'll learn:</h3>
+                    <ul className="list-disc pl-5 mt-2 text-sm text-gray-700 space-y-1 md:text-base">
                       {course.whatYouWillLearn.map((point, index) => (
                         <li key={index}>{point}</li>
                       ))}
@@ -188,8 +188,8 @@ function CoursePlayer() {
               `}
             >
               {/* Sidebar Header */}
-              <div className="sticky top-0 bg-white px-3 py-3 border-b border-gray-200 z-10 flex justify-between items-center">
-                <h3 className="font-semibold text-base">Course Content</h3>
+              <div className="sticky top-0 bg-white px-3  pt-2 pb-3 border-b border-gray-200 z-10 flex justify-between items-center">
+                <h3 className="font-semibold text-base md:text-lg">Course Content</h3>
                 <button 
                   className="md:hidden p-1 rounded-full hover:bg-gray-100"
                   onClick={() => setShowSidebar(false)}
@@ -217,7 +217,7 @@ function CoursePlayer() {
                     </div>
                   ))
                 ) : (
-                  <p className="text-center text-gray-500 py-4">No videos available for this course.</p>
+                  <p className="text-center text-gray-500 py-4">Currently, No videos available for this course.</p>
                 )}
               </div>
               
@@ -226,7 +226,7 @@ function CoursePlayer() {
                 <div className="flex justify-center gap-2 flex-wrap px-3 pb-4">
                   {visibleCount < course?.videos.length && (
                     <button
-                      className="px-3 py-1.5 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                      className="px-3 py-1.5 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300 md:text-lg"
                       onClick={loadMore}
                     >
                       Load More
@@ -234,7 +234,7 @@ function CoursePlayer() {
                   )}
                   {visibleCount > 5 && (
                     <button
-                      className="px-3 py-1.5 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                      className="px-3 py-1.5 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300 md:text-lg"
                       onClick={loadLess}
                     >
                       Load Less
