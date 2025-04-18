@@ -56,22 +56,26 @@ const Course = () => {
   const [expandedSections, setExpandedSections] = useState({
     "01": true,
   });
+  
   const addToCart = () => {
     if(courseData){
       dispatch(addItems(courseData))
-
     }
   }
+  
   const loadMore = () => {
     setVisibleCount((prev) => prev + 5);
   }
+  
   const loadLess = () => {  
-    setVisibleCount((prev)=> prev - 5);
+    setVisibleCount((prev) => prev - 5);
   }
+  
   console.log("cart items")
   console.log(JSON.stringify(cart));
   const cartContainsCourse = cart.cart.some((item) => item._id === courseId);
   console.log(courseData);
+  
   const mentors = [
     {
       name: "Josh Guru",
@@ -96,7 +100,7 @@ const Course = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="min-h-screen bg-white text-black ">
       <div className="container mx-auto px-4">
         {courseData && Object.keys(courseData).length > 0 ? (
           <div className="flex flex-col lg:flex-row gap-6">
@@ -106,24 +110,24 @@ const Course = () => {
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">
                   {courseData?.title}
                 </h1>
-                {/* <div className="w-16 h-1 bg-orange-500 mt-2"></div> */}
-                <div className="md:block sm:block lg:hidden mt-6">
-                  <div className="bg-white rounded-lg shadow-md overflow-hidden sticky top-4">
+                
+                {/* Mobile/tablet course info card - shown only on smaller screens */}
+                <div className="lg:hidden mt-6">
+                  <div className="bg-white rounded-lg shadow-md overflow-hidden">
                     <div className="relative">
                       <img
                         src={courseData?.image}
                         alt="Course Thumbnail"
                         className="w-full h-48 object-cover"
                       />
-                      <div className="md:block hidden">
-                        <h2 className="text-3xl font-bold text-black">
+                      <div className="md:block p-4">
+                        <h2 className="text-xl font-bold text-black">
                           {courseData?.title}
                         </h2>
-                        <div className="w-16 h-1 bg-orange-500 mt-2"></div>
                       </div>
                     </div>
                     <div className="p-4">
-                      <div className="flex items-center text-sm text-gray-600 mb-3">
+                      <div className="mb-3">
                         <ul className="space-y-4 mb-3 text-gray-700">
                           <li className="flex items-center gap-4">
                             <FaLanguage className="text-2xl text-gray-500" />
@@ -152,23 +156,26 @@ const Course = () => {
                         </ul>
                       </div>
                       <div className="mt-3 space-y-3">
-                        <Link to={!user?`/signup?courseId=${courseId}&type=course`:'/payment'}>
-                        <button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-3 rounded font-medium transition-colors">
-                          <FaRupeeSign className="inline-block mr-2" />
-                          {courseData?.price} /-
-                        </button>
+                        <Link to={!user ? `/signup?courseId=${courseId}&type=course` : '/payment'}>
+                          <button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-3 rounded font-medium transition-colors">
+                            <FaRupeeSign className="inline-block mr-2" />
+                            {courseData?.price} /-
+                          </button>
                         </Link>
-                      {!cartContainsCourse && (
-                         <button className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-medium transition-colors"
-                        onClick={addToCart}>
-                           <FaShoppingCart className="inline-block mr-2" />
-                             Add to Cart
-                      </button>
-                    )}
+                        {!cartContainsCourse && (
+                          <button 
+                            className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-medium transition-colors"
+                            onClick={addToCart}
+                          >
+                            <FaShoppingCart className="inline-block mr-2" />
+                            Add to Cart
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
+                
                 {/* Video Section */}
                 <div className="relative pb-[56.25%] w-full h-0">
                   <iframe
@@ -185,101 +192,61 @@ const Course = () => {
 
               <div className="bg-white text-black px-6 pt-6">
                 <h2 className="text-2xl font-bold mb-6">Syllabus</h2>
-                {courseData?.videos.length <= 0 && (
+                {courseData?.whatYouWillLearn.length <= 0 ? (
                   <div className="text-center text-gray-500">
                     <p className="text-black">
                       Currently No videos available for this course.
                     </p>
                   </div>
-                )}
-                <div className="space-y-4">
-                  {courseData?.videos.slice(0,visibleCount).map((video) => (
-                    <div
-                      key={video._id}
-                      className="bg-white rounded-md shadow-md overflow-hidden"
-                      onClick={() => toggleSection(video)}
-                    >
-                      <div className="flex justify-between items-center p-4 border-b border-gray-200">
-                        <div className="flex items-center gap-4">
-                          <div>
-                            <h3 className="font-medium">{video.title}</h3>
-                          </div>
-                          {!video.isPreview && (
-                            <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded flex items-center gap-1">
-                              <FaLock /> Locked
-                            </span>
-                          )}
-                        </div>
-                        <div>
-                          {expandedSections[video._id] ? (
-                            <FaChevronUp className="text-gray-600" />
-                          ) : (
-                            <FaChevronDown className="text-gray-600" />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="flex justify-center gap-2">
-                  {visibleCount < courseData?.videos.length && (
-                    <button
-                    className="mt-4 px-4 py-2 border border-orange-500 text-orange-500 font-medium rounded-lg hover:bg-orange-500 hover:text-white transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-300"
-                    onClick={loadMore}
-                  >
-                    Load More
-                  </button>
-                  )}
-                  {visibleCount > 5 && (
-                   <button
-                   className="mt-4 px-4 py-2 border border-orange-500 text-orange-500 font-medium rounded-lg hover:bg-orange-500 hover:text-white transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-300"
-                   onClick={loadLess}
-                 >
-                   Load Less
-                 </button>
-                 
-                  )}
-                  </div>
-                </div>
-
-                {/* Enrollment Pop-up */}
-                {showModal && (
-                  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm">
-                      <h2 className="text-xl font-semibold mb-4">
-                        Enroll to Unlock
-                      </h2>
-                      <p className="text-gray-600 mb-4">
-                        You need to enroll in the course to access this module.
-                      </p>
-                      <button
-                        onClick={() => {
-                          setIsEnrolled(true);
-                          setShowModal(false);
-                        }}
-                        className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg mr-2"
-                      >
-                        BUY COURSE
-                      </button>
-                      <button
-                        onClick={() => setShowModal(false)}
-                        className="bg-gray-300 py-2 px-4 rounded-lg"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
+                ) : (
+                  <ul className="space-y-4 pl-6 list-disc text-gray-800 text-lg font-medium leading-relaxed">
+                    {courseData?.whatYouWillLearn?.map((item, index) => (
+                      <li key={index} className="relative">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </div>
 
+              {/* Enrollment Pop-up */}
+              {showModal && (
+                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm">
+                    <h2 className="text-xl font-semibold mb-4">
+                      Enroll to Unlock
+                    </h2>
+                    <p className="text-gray-600 mb-4">
+                      You need to enroll in the course to access this module.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setIsEnrolled(true);
+                        setShowModal(false);
+                      }}
+                      className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg mr-2"
+                    >
+                      BUY COURSE
+                    </button>
+                    <button
+                      onClick={() => setShowModal(false)}
+                      className="bg-gray-300 py-2 px-4 rounded-lg"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className="bg-white text-black min-h-screen p-6 md:p-8">
-                <h1 className="text-2xl md:text-3xl font-bold  text-gray-900">
-                  <p className=" text-gray-700 text-sm md:text-base lg:text-lg text-justify">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                  <p className="text-gray-700 text-sm md:text-base lg:text-lg text-justify">
                     {courseData?.courseIntroLine}
                   </p>
                   About This Course
                 </h1>
                 {/* About This Course Section */}
-                <section className=" md:px-6 lg:px-8 py-6">
+                <section className="py-6">
                   {/* Course Description */}
                   <h3 className="text-lg md:text-xl font-semibold mt-2 mb-2 text-black">
                     Course Description:
@@ -287,13 +254,19 @@ const Course = () => {
                   <p className="mb-4 text-gray-800 text-sm md:text-base lg:text-lg text-justify">
                     {courseData?.description}
                   </p>
-
-                  {/* What You'll Learn */}
                   <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
-                    What You'll Learn:
+                    Why This Course?
                   </h3>
-                  <ul className=" md:pl-6 space-y-4 mb-6">
-                    {courseData.whatYouWillLearn.map((item, index) => (
+                  <p className="mb-6 text-gray-800 text-sm md:text-base lg:text-lg leading-relaxed text-justify tracking-normal">
+                    {courseData?.whyCourse}
+                  </p>
+
+                  {/* Who Should Enroll */}
+                  <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
+                    Who Should Enroll:
+                  </h3>
+                  <ul className="md:pl-6 space-y-4 mb-6">
+                    {courseData.whoShouldEnroll.map((item, index) => (
                       <li key={index} className="flex items-start">
                         <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg lg:text-xl" />
                         <span className="ml-2 text-gray-800 text-sm md:text-base lg:text-lg text-justify leading-relaxed">
@@ -302,42 +275,37 @@ const Course = () => {
                       </li>
                     ))}
                   </ul>
-
-                  {/* Course Highlights */}
                   <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
-                    Course Highlights:
+                    Still Confused?
                   </h3>
-                  <ul className=" md:pl-6 space-y-4 mb-6">
-                    {courseData.courseHighlights.map((highlight, index) => (
+                  <ul className="md:pl-6 space-y-4 mb-6">
+                    {courseData.stillConfused.map((item, index) => (
                       <li key={index} className="flex items-start">
                         <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg lg:text-xl" />
                         <span className="ml-2 text-gray-800 text-sm md:text-base lg:text-lg text-justify leading-relaxed">
-                          {highlight}
+                          {item}
                         </span>
                       </li>
                     ))}
                   </ul>
-
-                  {/* Who Should Enroll */}
                   <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
-                    Who Should Enroll:
+                    Reason Why Joshguru
                   </h3>
-                  <p className="mb-6 text-gray-800 text-sm md:text-base lg:text-lg leading-relaxed text-justify tracking-normal">
-                    {courseData?.whoShouldEnroll}
-                  </p>
-
-                  {/* Why This Course */}
-                  <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
-                    Why This Course?
-                  </h3>
-                  <p className="mb-6 text-gray-800 text-sm md:text-base lg:text-lg leading-relaxed text-justify tracking-normal">
-                    {courseData?.whyCourse}
-                  </p>
+                  <ul className="md:pl-6 space-y-4 mb-2">
+                    {courseData.reasonWhyJoshGuru.map((item, index) => (
+                      <li key={index} className="flex items-start">
+                        <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg lg:text-xl" />
+                        <span className="ml-2 text-gray-800 text-sm md:text-base lg:text-lg text-justify leading-relaxed">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </section>
 
                 {/* mentor Section */}
-                <section className="mb-12">
-                  <h1 className="text-3xl font-bold mb-6">Mentor</h1>
+                <section className="mb-4">
+                  <h1 className="text-3xl font-bold mb-2">Mentor</h1>
                   {courseData.mentor.map((mentor, index) => (
                     <div key={index} className="flex items-center gap-4">
                       <div className="w-16 h-16 rounded-full overflow-hidden">
@@ -381,67 +349,69 @@ const Course = () => {
               </div>
             </div>
 
-            <div className="lg:w-1/3 hidden sm:hidden lg:block md:hidden">
-              <div className="bg-white rounded-lg shadow-md overflow-hidden sticky top-4">
+            {/* Right Section - Desktop Sidebar */}
+            <div className="lg:w-1/3 hidden lg:block">
+              <div className="bg-white rounded-lg shadow-md overflow-hidden sticky top-20">
                 <div className="relative">
                   <img
                     src={courseData?.image}
                     alt="Course Thumbnail"
                     className="w-full h-48 object-cover"
                   />
-                  <div className="m-4">
-                    <h2 className="text-3xl font-bold text-black">
+                  <div className="mx-4 my-2">
+                    <h2 className="text-2xl font-bold text-black">
                       {courseData?.title}
                     </h2>
-                    <div className="w-16 h-1 bg-orange-500 mt-2"></div>
                   </div>
                 </div>
-                <div className="p-4">
-                  <div className="flex items-center text-sm text-gray-600 mb-4">
-                    <ul className="space-y-4 mb-3 text-gray-700">
+                <div className="px-4 py-2">
+                  <div className="mb-4">
+                    <ul className="space-y-2 mb-3 text-gray-700">
                       <li className="flex items-center gap-4">
-                        <FaLanguage className="text-3xl text-gray-500" />
+                        <FaLanguage className="text-2xl text-gray-500" />
                         <span className="text-lg">Language - English</span>
                       </li>
                       <li className="flex items-center gap-4">
-                        <FaDesktop className="text-3xl text-gray-500" />
+                        <FaDesktop className="text-2xl text-gray-500" />
                         <span className="text-lg">
                           Use On Desktop, Tablet & Mobile
                         </span>
                       </li>
                       <li className="flex items-center gap-4">
-                        <FaInfinity className="text-3xl text-gray-500" />
+                        <FaInfinity className="text-2xl text-gray-500" />
                         <span className="text-lg">Full Lifetime Access</span>
                       </li>
                       <li className="flex items-center gap-4">
-                        <FaRegClock className="text-3xl text-gray-500" />
+                        <FaRegClock className="text-2xl text-gray-500" />
                         <span className="text-lg">{courseData?.duration}</span>
                       </li>
                       <li className="flex items-center gap-4">
-                        <FaCertificate className="text-3xl text-gray-500" />
+                        <FaCertificate className="text-2xl text-gray-500" />
                         <span className="text-lg">
                           Certificate Of Completion
                         </span>
                       </li>
                       <li className="flex items-center gap-4">
-                        <FaClock className="text-3xl text-gray-500" />
+                        <FaClock className="text-2xl text-gray-500" />
                         <span className="text-lg">Learn at Your Own Pace</span>
                       </li>
                     </ul>
                   </div>
-                  <div className="space-y-3">
-                  <Link to={!user?`/signup?courseId=${courseId}&type=course`:'/payment'}>
-                    <button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-3 rounded font-medium transition-colors">
-                      <FaRupeeSign className="inline-block mr-2" />
-                      {courseData?.price} /-
-                    </button>
-                  </Link>
+                  <div className="space-y-2 pb-4">
+                    <Link to={!user ? `/signup?courseId=${courseId}&type=course` : '/payment'}>
+                      <button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-3 rounded font-medium transition-colors">
+                        <FaRupeeSign className="inline-block mr-2" />
+                        {courseData?.price} /-
+                      </button>
+                    </Link>
                     {!cartContainsCourse && (
-                    <button className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-medium transition-colors"
-                     onClick={addToCart}>
-                      <FaShoppingCart className="inline-block mr-2" />
-                      Add to Cart
-                    </button>
+                      <button 
+                        className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-medium transition-colors"
+                        onClick={addToCart}
+                      >
+                        <FaShoppingCart className="inline-block mr-2" />
+                        Add to Cart
+                      </button>
                     )}
                   </div>
                 </div>
@@ -449,7 +419,9 @@ const Course = () => {
             </div>
           </div>
         ) : (
-          <div>loading</div>
+          <div className="flex justify-center items-center h-64">
+            <div className="text-xl">Loading course information...</div>
+          </div>
         )}
       </div>
     </div>

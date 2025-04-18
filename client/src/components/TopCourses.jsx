@@ -114,7 +114,7 @@ function CourseCard({ course, handleClick }) {
           </h3>
 
           <p className="mt-2 text-sm md:text-base text-gray-600 italic line-clamp-3">
-            {course?.description || "No description available"}
+            {course?.description  || "No description available"}
           </p>
 
           {/* Duration and Button (moved here) */}
@@ -122,7 +122,10 @@ function CourseCard({ course, handleClick }) {
             <div className="flex items-center justify-center space-x-2 text-gray-700 font-medium">
               <Clock size={18} className="text-orange-500" />
               <span className="text-sm md:text-base">
-                {course.duration || "6 Months"}
+              {course?.duration
+  ? `${course.duration.charAt(0)} Months`
+  : "No description available"}
+
               </span>
             </div>
 
