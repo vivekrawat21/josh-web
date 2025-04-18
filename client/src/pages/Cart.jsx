@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { removeFromCart } from "../features/cart/cartSlice";
+import { Link } from "react-router-dom";
 const Cart = () => {
   // const cartItems = [
   //   {
@@ -39,6 +40,7 @@ const Cart = () => {
   const subtotal= cartItems.reduce((acc, item) => acc + item.price, 0);
   const discount = 0;
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const total = subtotal - discount;
   console.log(total);
   console.log(cartItems);
@@ -92,6 +94,7 @@ const Cart = () => {
         </motion.div>
 
         {/* Order Summary Section */}
+        { cartItems?.length > 0 &&
         <motion.div
           className="w-full lg:w-4/12 shadow-xl rounded-lg p-6 bg-white"
           initial={{ opacity: 0, x: 30 }}
@@ -126,18 +129,24 @@ const Cart = () => {
               Apply Coupon
             </motion.button>
           </div>
+          
           <div className="mt-4">
+            <Link to={!user?"/signup?type=cart":"/payment"} >
             <motion.button
               whileTap={{ scale: 0.95 }}
               className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-4 py-3 rounded-lg w-full"
             >
               Proceed to Checkout
             </motion.button>
-          </div>
+            </Link>
+          </div>  
+        
+
           <p className="mt-4 text-xs md:text-sm text-gray-500 text-center">
             Need help? Contact our support team at support@joshguru.com
           </p>
         </motion.div>
+}
       </div>
     </section>
   );

@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { setUser } from "../features/user/userSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import Payment from '@/components/Payment';
-import CourseBundleSelection from "../components/CourseBundleSelection"  // Import the new component
+import CourseBundleSelection from "../components/CourseBundleSelection";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ const Signup = () => {
 
   const bundles = useSelector((state) => state.bundle?.bundles[0] || []);
   const courses = useSelector((state) => state.course?.courses[0] || []);
+  const cartItems = useSelector((state) => state.cart.cart);
 
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
@@ -32,21 +33,24 @@ const Signup = () => {
   const [referralCode, setReferralCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState({});
+  const [selectedCourse, setSelectedCourse] = useState(typeParam === 'cart' ? cartItems : {});
 
   const steps = ['Info', 'Course', 'PayU'];
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [step]);
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to top on load
     if ((typeParam === 'course' && courses.length > 0) || (typeParam === 'bundle' && bundles.length > 0)) {
       if (courseId) {
         const found = (typeParam === 'course'
           ? courses.find((c) => c._id === courseId)
           : bundles.find((b) => b._id === courseId)
         );
-        if (found) {
-          setSelectedCourse(found);
-          // setStep(2)
-        }
+        if (found) setSelectedCourse(found);
       }
     }
   }, [courseId, typeParam, bundles, courses]);
@@ -111,22 +115,35 @@ const Signup = () => {
     }
   };
 
-  const itemsToShow = courseId
-    ? [(typeParam === 'course' ? courses : bundles).find((item) => item._id === courseId)].filter(Boolean)
-    : (typeParam === 'course' ? courses : bundles);
+  const itemsToShow = typeParam === 'cart'
+    ? cartItems
+    : courseId
+      ? [(typeParam === 'course' ? courses : bundles).find((item) => item._id === courseId)].filter(Boolean)
+      : (typeParam === 'course' ? courses : bundles);
+
+  // If it's cart mode and the cart is empty, show a message instead of the signup form
+  if (typeParam === 'cart' && cartItems.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <h2 className="text-2xl font-bold">Your cart is empty</h2>
+        <p className="text-gray-600">Please go back to the homepage and add some courses to your cart before continuing.</p>
+        <Link to="/" className="text-blue-500 hover:underline mt-4">Go to Homepage</Link>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-gradient-to-br from-orange-50 to-blue-50 flex flex-col lg:flex-row items-center justify-center px-6 py-4">
+    <div className="bg-white lg:bg-gradient-to-br lg:from-orange-50 lg:to-blue-50 flex flex-col lg:flex-row items-center md:justify-center sm:px-6 md:py-6 min-h-screen">
       <div className="hidden lg:flex w-1/2 justify-start pr-8">
         <img src="/signup.jpg" alt="Signup" className="w-[90%] h-auto object-contain rounded-2xl" />
       </div>
 
-      <div className=" lg:w-[720px] bg-white shadow-xl rounded-2xl p-5 ">
-        <h2 className="text-xl lg:text-2xl font-extrabold text-center mb-10 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text">
+      <div className="w-full lg:max-w-xl bg-white lg:shadow-xl lg:rounded-2xl p-2 sm:p-6 lg:p-8 sm:mx-auto">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-8 md:mb-10 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text ">
           Signup to Joshguru
         </h2>
 
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-10 px-2 lg:px-0">
           {steps.map((s, idx) => (
             <div key={s} className="flex-1 relative px-1">
               <motion.div
@@ -140,7 +157,7 @@ const Signup = () => {
                     : undefined,
                 }}
               />
-              <div className="absolute left-1/2 -translate-x-1/2 top-[-20px] text-sm font-medium text-gray-600">
+              <div className="absolute left-1/2 -translate-x-1/2 top-[-20px] text-xs sm:text-sm font-medium text-gray-600">
                 {s}
               </div>
             </div>
@@ -148,34 +165,24 @@ const Signup = () => {
         </div>
 
         {step === 1 && (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleInitialSubmit();
-            }}
-            className="space-y-4 text-base"
-          >
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" className="border p-3 rounded w-full" required />
-            <input type="tel" value={mobilenumber} pattern="[0-9]{10}" onChange={(e) => setMobileNumber(e.target.value)} placeholder="Mobile number" className="border p-3 rounded w-full" required />
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="border p-3 rounded w-full" required />
+          <form onSubmit={(e) => { e.preventDefault(); handleInitialSubmit(); }} className="space-y-4 text-sm sm:text-base">
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" className="border p-2 sm:p-3 rounded w-full" required />
+            <input type="tel" value={mobilenumber} pattern="[0-9]{10}" onChange={(e) => setMobileNumber(e.target.value)} placeholder="Mobile number" className="border p-2 sm:p-3 rounded w-full" required />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="border p-2 sm:p-3 rounded w-full" required />
             <div className="relative">
-              <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 6 chars)" className="border p-3 rounded w-full" minLength={6} required />
+              <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 6 chars)" className="border p-2 sm:p-3 rounded w-full" minLength={6} required />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-gray-500">
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
             <div className="relative">
-              <input type={showConfirmPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm password" className="border p-3 rounded w-full" minLength={6} required />
+              <input type={showConfirmPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm password" className="border p-2 sm:p-3 rounded w-full" minLength={6} required />
               <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-3 text-gray-500">
                 {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
-            <input type="text" value={referralCode} onChange={(e) => setReferralCode(e.target.value)} placeholder="Referral code (optional)" className="border p-3 rounded w-full" />
-            <button
-              type="submit"
-              className="w-full bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600 transition"
-              disabled={loading}
-            >
+            <input type="text" value={referralCode} onChange={(e) => setReferralCode(e.target.value)} placeholder="Referral code (optional)" className="border p-2 sm:p-3 rounded w-full" />
+            <button type="submit" className="w-full bg-orange-500 text-white py-2 sm:py-3 rounded-md hover:bg-orange-600 transition" disabled={loading}>
               {loading ? <Loader size={20} className="animate-spin mx-auto" /> : 'Continue'}
             </button>
 
@@ -215,7 +222,6 @@ const Signup = () => {
               setStep={setStep}
               handleFinalSubmit={handleFinalSubmit}
             />
-
           </div>
         )}
       </div>

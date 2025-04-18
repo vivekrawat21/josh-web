@@ -279,7 +279,7 @@ const Course = () => {
                     Still Confused?
                   </h3>
                   <ul className="md:pl-6 space-y-4 mb-6">
-                    {courseData.stillConfused.map((item, index) => (
+                    {courseData?.stillConfused?.map((item, index) => (
                       <li key={index} className="flex items-start">
                         <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg lg:text-xl" />
                         <span className="ml-2 text-gray-800 text-sm md:text-base lg:text-lg text-justify leading-relaxed">
@@ -292,7 +292,7 @@ const Course = () => {
                     Reason Why Joshguru
                   </h3>
                   <ul className="md:pl-6 space-y-4 mb-2">
-                    {courseData.reasonWhyJoshGuru.map((item, index) => (
+                    {courseData?.reasonWhyJoshGuru?.map((item, index) => (
                       <li key={index} className="flex items-start">
                         <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg lg:text-xl" />
                         <span className="ml-2 text-gray-800 text-sm md:text-base lg:text-lg text-justify leading-relaxed">
@@ -306,7 +306,7 @@ const Course = () => {
                 {/* mentor Section */}
                 <section className="mb-4">
                   <h1 className="text-3xl font-bold mb-2">Mentor</h1>
-                  {courseData.mentor.map((mentor, index) => (
+                  {courseData?.mentor.map((mentor, index) => (
                     <div key={index} className="flex items-center gap-4">
                       <div className="w-16 h-16 rounded-full overflow-hidden">
                         <img
