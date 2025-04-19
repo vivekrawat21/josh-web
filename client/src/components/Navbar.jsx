@@ -189,10 +189,10 @@ const Navbar = () => {
                     transition={{ duration: 0.2 }}
                   >
                     {[
-                      { title: "SPECIAL BUNDLES", items: specialBundles, type: "specialBundle" },
-                      { title: "TRENDING COURSES", items: trendingCourses, type: "course" },
-                      { title: "ALL BUNDLES", items: bundles, type: "bundle" },
-                      { title: "ALL COURSES", items: allCourses, type: "course" },
+                      { title: "SPECIAL BUNDLES", items: bundles, type: "bundle" },
+                      { title: "TRENDING COURSES", items: trendingCourses, type: "course" }, 
+                      { title: "DIGITAL LEARNING BUNDLES", items: specialBundles, type: "specialBundle" },
+                      { title: "CHOOSE YOUR SKILL", items: allCourses, type: "course" },
                     ].map((section, idx) => (
                       <div className="pr-6" key={idx}>
                         <h3 className="text-orange-500 text-xl font-bold mb-7">{section.title}</h3>
