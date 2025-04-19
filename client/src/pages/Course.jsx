@@ -66,7 +66,8 @@ const Course = () => {
       }));
     }
   };
-
+  // console.log("course data is ")
+  // console.log(courseData)
   return (
     <div className="min-h-screen bg-white text-black">
       <div className="container mx-auto px-4 py-6">
@@ -103,7 +104,15 @@ const Course = () => {
                           </li>
                           <li className="flex items-center gap-3">
                             <FaDesktop className="text-xl text-gray-500" />
-                            <span>Use On Desktop, Tablet & Mobile</span>
+                            {(courseData?.title?.toLowerCase().startsWith("odoo") || courseData?.title?.toLowerCase().startsWith("microsoft")) ? (
+  <span className="text-base md:text-lg">
+  Offiline
+</span>
+) : (
+  <span className="text-base md:text-lg">
+  Use On Desktop, Tablet & Mobile
+</span>
+)}
                           </li>
                           {/* <li className="flex items-center gap-3">
                             <FaInfinity className="text-xl text-gray-500" />
@@ -123,29 +132,38 @@ const Course = () => {
                           </li> */}
                         </ul>
                       </div>
-                      <div className="mt-4 space-y-3">
-                        <Link
-                          to={
-                            !user
-                              ? `/signup?courseId=${courseId}&type=course`
-                              : "/payment"
-                          }
-                        >
-                          <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:bg-orange-600 text-white text-center py-3 rounded font-medium transition-colors">
-                            <FaRupeeSign className="inline-block mr-2" />
-                            {courseData?.price} /-
-                          </button>
-                        </Link>
-                        {!cartContainsCourse && (
-                          <button
-                            className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-medium transition-colors"
-                            onClick={addToCart}
-                          >
-                            <FaShoppingCart className="inline-block mr-2" />
-                            Add to Cart
-                          </button>
-                        )}
-                      </div>
+                      <div className="mt-4 space-y-4">
+  {/* Buy Now Button */}
+  <Link
+    to={
+      !user
+        ? `/signup?courseId=${courseId}&type=course`
+        : "/payment"
+    }
+  >
+    <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white text-center py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
+      <FaRupeeSign />
+      {courseData?.price} /- 
+    </button>
+  </Link>
+
+  {/* GST Notice */}
+  <p className="text-sm text-gray-600 italic text-center">
+  * 18% GST will be added at checkout.
+  </p>
+
+  {/* Add to Cart Button (if not in cart) */}
+  {!cartContainsCourse && (
+    <button
+      className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
+      onClick={addToCart}
+    >
+      <FaShoppingCart />
+      Add to Cart
+    </button>
+  )}
+</div>
+
                     </div>
                   </div>
                 </div>
@@ -155,7 +173,7 @@ const Course = () => {
                   <iframe
                     className="absolute top-0 left-0 w-full h-full rounded-lg shadow-md"
                     src={
-                      courseData?.couseIntrovideo ||
+                      courseData?.courseIntrovideo ||
                       "https://www.youtube.com/embed/Dhpb0rz8fjU?si=WYbWv-wXCXmpzhJq"
                     }
                     title={
@@ -408,9 +426,40 @@ const Course = () => {
                       </p>
                     </div>
                   ) : (
-                    <p className="text-gray-500">
-                      Mentor information not available
+                    <div>
+                    <div className="flex items-center gap-4">
+                      <div>
+                        <h2 className="text-xl font-semibold">
+                          Priya Sharma
+                        </h2>
+                        <div className="flex gap-3 mt-2">
+                          <a
+                            href="https://www.youtube.com/@priyasharma"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="YouTube"
+                            className="text-black hover:text-red-600"
+                          >
+                            <FaYoutube size={20} />
+                          </a>
+                          <a
+                            href="https://www.linkedin.com/in/priyasharma"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="LinkedIn"
+                            className="text-black hover:text-blue-700"
+                          >
+                            <FaLinkedin size={20} />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-gray-800 text-sm md:text-base lg:text-lg leading-relaxed text-justify mt-4">
+                      Priya Sharma is a {courseData?.title}  with over 8 years of experience. She loves teaching modern JavaScript frameworks and has a strong presence on YouTube, where she shares tips on career growth and tech tutorials.
                     </p>
+                  </div>
+                  
+
                   )}
                 </section>
               </div>
@@ -442,16 +491,24 @@ const Course = () => {
                       </li>
                       <li className="flex items-center gap-3">
                         <FaDesktop className="text-xl text-gray-500" />
-                        <span className="text-base md:text-lg">
-                          Use On Desktop, Tablet & Mobile
-                        </span>
+                        {(courseData?.title?.toLowerCase().startsWith("odoo") || courseData?.title?.toLowerCase().startsWith("microsoft")) ? (
+  <span className="text-base md:text-lg">
+  Offiline
+</span>
+) : (
+  <span className="text-base md:text-lg">
+  Use On Desktop, Tablet & Mobile
+</span>
+)}
+
+                       
                       </li>
                       {/* <li className="flex items-center gap-3">
                         <FaInfinity className="text-xl text-gray-500" />
                         <span className="text-base md:text-lg">Full Lifetime Access</span>
                       </li> */}
                       <li className="flex items-center gap-3">
-                        <FaRegClock className="text-xl text-gray-500" />
+                        <FaRegClock className="text-2xl text-gray-500 mb-2" />
                         <span className="text-base md:text-lg">
                           {courseData?.duration}
                         </span>
@@ -468,29 +525,38 @@ const Course = () => {
                       </li> */}
                     </ul>
                   </div>
-                  <div className="space-y-3 pb-2">
-                    <Link
-                      to={
-                        !user
-                          ? `/signup?courseId=${courseId}&type=course`
-                          : "/payment"
-                      }
-                    >
-                      <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:bg-orange-600 text-white text-center py-3 rounded font-medium transition-colors">
-                        <FaRupeeSign className="inline-block mr-2" />
-                        {courseData?.price} /-
-                      </button>
-                    </Link>
-                    {!cartContainsCourse && (
-                      <button
-                        className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-medium transition-colors"
-                        onClick={addToCart}
-                      >
-                        <FaShoppingCart className="inline-block mr-2" />
-                        Add to Cart
-                      </button>
-                    )}
-                  </div>
+                  <div className="space-y-4 pb-2">
+  {/* Buy Now Button */}
+  <Link
+    to={
+      !user
+        ? `/signup?courseId=${courseId}&type=course`
+        : "/payment"
+    }
+  >
+    <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
+      <FaRupeeSign />
+      {courseData?.price} /-
+    </button>
+  </Link>
+
+  {/* GST Note */}
+  <p className="text-sm text-gray-600 italic text-center">
+    * 18% GST will be added at checkout
+  </p>
+
+  {/* Add to Cart Button */}
+  {!cartContainsCourse && (
+    <button
+      className="w-full bg-gray-200 hover:bg-gray-300 text-black py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
+      onClick={addToCart}
+    >
+      <FaShoppingCart />
+      Add to Cart
+    </button>
+  )}
+</div>
+
                 </div>
               </div>
             </div>
