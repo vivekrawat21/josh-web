@@ -433,7 +433,7 @@ const Course = () => {
                           </h2>
                           <div className="flex gap-3 mt-2">
                             <a
-                              href="https://www.youtube.com/@priyasharma"
+                              href="#"
                               target="_blank"
                               rel="noopener noreferrer"
                               aria-label="YouTube"
@@ -442,7 +442,7 @@ const Course = () => {
                               <FaYoutube size={20} />
                             </a>
                             <a
-                              href="https://www.linkedin.com/in/priyasharma"
+                              href="#"
                               target="_blank"
                               rel="noopener noreferrer"
                               aria-label="LinkedIn"
