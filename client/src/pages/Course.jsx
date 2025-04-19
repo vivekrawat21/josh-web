@@ -105,14 +105,14 @@ const Course = () => {
                           <li className="flex items-center gap-3">
                             <FaDesktop className="text-xl text-gray-500" />
                             {(courseData?.title?.toLowerCase().startsWith("odoo") || courseData?.title?.toLowerCase().startsWith("microsoft")) ? (
-  <span className="text-base md:text-lg">
-  Offiline
-</span>
-) : (
-  <span className="text-base md:text-lg">
-  Use On Desktop, Tablet & Mobile
-</span>
-)}
+                              <span className="text-base md:text-lg">
+                                Offiline
+                              </span>
+                            ) : (
+                              <span className="text-base md:text-lg">
+                                Use On Desktop, Tablet & Mobile
+                              </span>
+                            )}
                           </li>
                           {/* <li className="flex items-center gap-3">
                             <FaInfinity className="text-xl text-gray-500" />
@@ -133,36 +133,36 @@ const Course = () => {
                         </ul>
                       </div>
                       <div className="mt-4 space-y-4">
-  {/* Buy Now Button */}
-  <Link
-    to={
-      !user
-        ? `/signup?courseId=${courseId}&type=course`
-        : "/payment"
-    }
-  >
-    <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white text-center py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
-      <FaRupeeSign />
-      {courseData?.price} /- 
-    </button>
-  </Link>
+                        {/* Buy Now Button */}
+                        <Link
+                          to={
+                            !user
+                              ? `/signup?courseId=${courseId}&type=course`
+                              : "/payment"
+                          }
+                        >
+                          <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white text-center py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
+                            <FaRupeeSign />
+                            {courseData?.price} /-
+                          </button>
+                        </Link>
 
-  {/* GST Notice */}
-  <p className="text-sm text-gray-600 italic text-center">
-  * 18% GST will be added at checkout.
-  </p>
+                        {/* GST Notice */}
+                        <p className="text-sm text-gray-600 italic text-center">
+                          * 18% GST will be added at checkout.
+                        </p>
 
-  {/* Add to Cart Button (if not in cart) */}
-  {!cartContainsCourse && (
-    <button
-      className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
-      onClick={addToCart}
-    >
-      <FaShoppingCart />
-      Add to Cart
-    </button>
-  )}
-</div>
+                        {/* Add to Cart Button (if not in cart) */}
+                        {!cartContainsCourse && (
+                          <button
+                            className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
+                            onClick={addToCart}
+                          >
+                            <FaShoppingCart />
+                            Add to Cart
+                          </button>
+                        )}
+                      </div>
 
                     </div>
                   </div>
@@ -189,7 +189,7 @@ const Course = () => {
               <div className="bg-white text-black px-4 md:px-6 pt-6">
                 <h2 className="text-2xl font-bold mb-2">Syllabus</h2>
                 {!courseData?.whatYouWillLearn ||
-                courseData.whatYouWillLearn.length === 0 ? (
+                  courseData.whatYouWillLearn.length === 0 ? (
                   <div className="text-center text-gray-500 py-4">
                     <p className="text-black">
                       Currently No videos available for this course.
@@ -197,48 +197,47 @@ const Course = () => {
                   </div>
                 ) : (
                   <ul className="space-y-4">
-                  {courseData.whatYouWillLearn.map((item, index) => (
-                    <li
-                      key={index}
-                      className={`
+                    {courseData.whatYouWillLearn.map((item, index) => (
+                      <li
+                        key={index}
+                        className={`
                         relative flex items-start gap-3 p-4 
                         rounded-lg transition-all duration-300
-                        ${
-                          hoveredIndex === index
+                        ${hoveredIndex === index
                             ? "bg-gradient-to-r from-orange-50 to-red-50 shadow-md transform -translate-y-1"
                             : "bg-gray-50 shadow-sm"
-                        }
+                          }
                       `}
-                      onMouseEnter={() => setHoveredIndex(index)}
-                      onMouseLeave={() => setHoveredIndex(null)}
-                    >
-                      <div
-                        className={`
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                      >
+                        <div
+                          className={`
                         flex-shrink-0 mt-0.5 
                         ${hoveredIndex === index ? "text-orange-600" : "text-orange-500"}
                       `}
-                      >
-                        <CheckCircle className="h-5 w-5" />
-                      </div>
-                      <div className="flex-1">
-                        <p
-                          className={`
+                        >
+                          <CheckCircle className="h-5 w-5" />
+                        </div>
+                        <div className="flex-1">
+                          <p
+                            className={`
                           font-medium leading-relaxed
                           ${hoveredIndex === index ? "text-gray-900" : "text-gray-800"}
                         `}
-                        >
-                          {item}
-                        </p>
-                      </div>
-                      <div
-                        className={`
+                          >
+                            {item}
+                          </p>
+                        </div>
+                        <div
+                          className={`
                         absolute left-0 top-0 bottom-0 w-1 rounded-l-lg
                         ${hoveredIndex === index ? "bg-orange-600" : "bg-orange-400"}
                       `}
-                      />
-                    </li>
-                  ))}
-                </ul>
+                        />
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </div>
 
@@ -306,7 +305,7 @@ const Course = () => {
                     Who Should Enroll:
                   </h3>
                   {courseData?.whoShouldEnroll &&
-                  courseData.whoShouldEnroll.length > 0 ? (
+                    courseData.whoShouldEnroll.length > 0 ? (
                     <ul className="space-y-4 mb-6">
                       {courseData.whoShouldEnroll.map((item, index) => (
                         <li key={index} className="flex items-start">
@@ -328,7 +327,7 @@ const Course = () => {
                   </h3>
                   {/* <span className="mb-4 ">These Points might help you makeup your Mind:</span> */}
                   {courseData?.stillConfused &&
-                  courseData.stillConfused.length > 0 ? (
+                    courseData.stillConfused.length > 0 ? (
                     <ul className="space-y-4 mb-6">
                       {courseData.stillConfused.map((item, index) => (
                         <li key={index} className="flex items-start">
@@ -349,7 +348,7 @@ const Course = () => {
                     Reason Why Joshguru
                   </h3>
                   {courseData?.reasonWhyJoshGuru &&
-                  courseData.reasonWhyJoshGuru.length > 0 ? (
+                    courseData.reasonWhyJoshGuru.length > 0 ? (
                     <ul className="space-y-4 mb-6">
                       {courseData.reasonWhyJoshGuru.map((item, index) => (
                         <li key={index} className="flex items-start">
@@ -427,38 +426,38 @@ const Course = () => {
                     </div>
                   ) : (
                     <div>
-                    <div className="flex items-center gap-4">
-                      <div>
-                        <h2 className="text-xl font-semibold">
-                          Priya Sharma
-                        </h2>
-                        <div className="flex gap-3 mt-2">
-                          <a
-                            href="https://www.youtube.com/@priyasharma"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="YouTube"
-                            className="text-black hover:text-red-600"
-                          >
-                            <FaYoutube size={20} />
-                          </a>
-                          <a
-                            href="https://www.linkedin.com/in/priyasharma"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="LinkedIn"
-                            className="text-black hover:text-blue-700"
-                          >
-                            <FaLinkedin size={20} />
-                          </a>
+                      <div className="flex items-center gap-4">
+                        <div>
+                          <h2 className="text-xl font-semibold">
+                            Priya Sharma
+                          </h2>
+                          <div className="flex gap-3 mt-2">
+                            <a
+                              href="https://www.youtube.com/@priyasharma"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="YouTube"
+                              className="text-black hover:text-red-600"
+                            >
+                              <FaYoutube size={20} />
+                            </a>
+                            <a
+                              href="https://www.linkedin.com/in/priyasharma"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="LinkedIn"
+                              className="text-black hover:text-blue-700"
+                            >
+                              <FaLinkedin size={20} />
+                            </a>
+                          </div>
                         </div>
                       </div>
+                      <p className="text-gray-800 text-sm md:text-base lg:text-lg leading-relaxed text-justify mt-4">
+                        Priya Sharma is a {courseData?.title}  with over 8 years of experience. She loves teaching modern JavaScript frameworks and has a strong presence on YouTube, where she shares tips on career growth and tech tutorials.
+                      </p>
                     </div>
-                    <p className="text-gray-800 text-sm md:text-base lg:text-lg leading-relaxed text-justify mt-4">
-                      Priya Sharma is a {courseData?.title}  with over 8 years of experience. She loves teaching modern JavaScript frameworks and has a strong presence on YouTube, where she shares tips on career growth and tech tutorials.
-                    </p>
-                  </div>
-                  
+
 
                   )}
                 </section>
@@ -492,16 +491,16 @@ const Course = () => {
                       <li className="flex items-center gap-3">
                         <FaDesktop className="text-xl text-gray-500" />
                         {(courseData?.title?.toLowerCase().startsWith("odoo") || courseData?.title?.toLowerCase().startsWith("microsoft")) ? (
-  <span className="text-base md:text-lg">
-  Offiline
-</span>
-) : (
-  <span className="text-base md:text-lg">
-  Use On Desktop, Tablet & Mobile
-</span>
-)}
+                          <span className="text-base md:text-lg">
+                            Offilne
+                          </span>
+                        ) : (
+                          <span className="text-base md:text-lg">
+                            Use On Desktop, Tablet & Mobile
+                          </span>
+                        )}
 
-                       
+
                       </li>
                       {/* <li className="flex items-center gap-3">
                         <FaInfinity className="text-xl text-gray-500" />
@@ -526,36 +525,36 @@ const Course = () => {
                     </ul>
                   </div>
                   <div className="space-y-4 pb-2">
-  {/* Buy Now Button */}
-  <Link
-    to={
-      !user
-        ? `/signup?courseId=${courseId}&type=course`
-        : "/payment"
-    }
-  >
-    <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
-      <FaRupeeSign />
-      {courseData?.price} /-
-    </button>
-  </Link>
+                    {/* Buy Now Button */}
+                    <Link
+                      to={
+                        !user
+                          ? `/signup?courseId=${courseId}&type=course`
+                          : "/payment"
+                      }
+                    >
+                      <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
+                        <FaRupeeSign />
+                        {courseData?.price} /-
+                      </button>
+                    </Link>
 
-  {/* GST Note */}
-  <p className="text-sm text-gray-600 italic text-center">
-    * 18% GST will be added at checkout
-  </p>
+                    {/* GST Note */}
+                    <p className="text-sm text-gray-600 italic text-center">
+                      * 18% GST will be added at checkout
+                    </p>
 
-  {/* Add to Cart Button */}
-  {!cartContainsCourse && (
-    <button
-      className="w-full bg-gray-200 hover:bg-gray-300 text-black py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
-      onClick={addToCart}
-    >
-      <FaShoppingCart />
-      Add to Cart
-    </button>
-  )}
-</div>
+                    {/* Add to Cart Button */}
+                    {!cartContainsCourse && (
+                      <button
+                        className="w-full bg-gray-200 hover:bg-gray-300 text-black py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
+                        onClick={addToCart}
+                      >
+                        <FaShoppingCart />
+                        Add to Cart
+                      </button>
+                    )}
+                  </div>
 
                 </div>
               </div>
