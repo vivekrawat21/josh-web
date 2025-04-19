@@ -42,6 +42,9 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
       <Link to="/admin/courses" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
         <FaBook /> Courses
       </Link>
+      <Link to="/admin/bundles" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
+        <FaBook /> Bundles
+      </Link>
       <Link to="/admin/students" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
         <FaGift /> Students
       </Link>

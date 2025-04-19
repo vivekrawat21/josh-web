@@ -11,11 +11,11 @@ const AdminLayout = () => {
   const dispatch = useDispatch();
   const fetchUser = async () => {
     try{
-      console.log("use effect")
+      // console.log("use effect")
       const res  = await axios.get(`${BASE_URL}/user`,{withCredentials:true})
-      console.log("use effect")
+      // console.log("use effect")
       
-        console.log(res.data.data)
+        // console.log(res.data.data)
         dispatch(setUser(res.data.data.user));
     }
     catch(e){

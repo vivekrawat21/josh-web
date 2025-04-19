@@ -27,7 +27,8 @@ import RefundAndPolicy from "./pages/RefundAndPolicy";
 import LicenseAndAgreement from "./pages/LicenseAndAgreement";
 import Scroll from "./Scroll";
 // import Admin from "./pages/Admin";
-import AllCourses from "./components/AllCourses"
+import AdminCourses from "./components/AdminCourses"
+import AdminBundles from "./components/AdminBundles";
 import AdminLogin from "./components/AdminLogin";
 import AdminSettings from "./components/AdminSettings";
 import Students from "./components/Students";
@@ -46,6 +47,8 @@ import Terms from "./pages/Terms";
 import CoursePlayer from "./pages/CoursePlayer";
 import BundleRouter from "./pages/bundleRouter";
 import Upgrade from "./components/Upgrade";
+import EditCourse from "./components/EditCourse";
+import EditBundle from "./components/EditBundle";
 function App() {
   return (
     <>
@@ -54,7 +57,10 @@ function App() {
         <Routes>
           <Route path="/admin" element={<AdminLayout />} >
           <Route index element={<AdminLogin  />} />
-          <Route path="/admin/courses" element={<AllCourses />} />
+          <Route path="/admin/courses" element={<AdminCourses />} />
+          <Route path="/admin/bundles" element={<AdminBundles />} />
+          <Route path="/admin/editBundle/:id" element={<EditBundle />} />
+          <Route path="/admin/editCourse/:id" element={<EditCourse />} />
           <Route path="/admin/login" element={<AdminLogin />} />
 
           <Route path="/admin/settings" element={<AdminSettings />} />
