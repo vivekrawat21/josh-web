@@ -41,9 +41,8 @@ const Signup = () => {
     window.scrollTo(0, 0);
   }, [step]);
 
-
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to top on load
+    window.scrollTo(0, 0);
     if ((typeParam === 'course' && courses.length > 0) || (typeParam === 'bundle' && bundles.length > 0)) {
       if (courseId) {
         const found = (typeParam === 'course'
@@ -121,24 +120,23 @@ const Signup = () => {
       ? [(typeParam === 'course' ? courses : bundles).find((item) => item._id === courseId)].filter(Boolean)
       : (typeParam === 'course' ? courses : bundles);
 
-  // If it's cart mode and the cart is empty, show a message instead of the signup form
   if (typeParam === 'cart' && cartItems.length === 0) {
     return (
-      <div className="text-center py-20">
+      <div className="text-center py-20 px-6">
         <h2 className="text-2xl font-bold">Your cart is empty</h2>
         <p className="text-gray-600">Please go back to the homepage and add some courses to your cart before continuing.</p>
-        <Link to="/" className="text-blue-500 hover:underline mt-4">Go to Homepage</Link>
+        <Link to="/" className="text-blue-500 hover:underline mt-4 inline-block">Go to Homepage</Link>
       </div>
     );
   }
 
   return (
-    <div className="bg-white lg:bg-gradient-to-br lg:from-orange-50 lg:to-blue-50 flex flex-col lg:flex-row items-center md:justify-center sm:px-6 md:py-6 min-h-screen">
+    <div className="bg-white lg:bg-gradient-to-br lg:from-orange-50 lg:to-blue-50 flex flex-col lg:flex-row items-center md:justify-center min-h-screen px-4 sm:px-6">
       <div className="hidden lg:flex w-1/2 justify-start pr-8">
         <img src="/signup.jpg" alt="Signup" className="w-[90%] h-auto object-contain rounded-2xl" />
       </div>
 
-      <div className="w-full lg:max-w-xl bg-white lg:shadow-xl lg:rounded-2xl p-2 sm:p-6 lg:p-8 sm:mx-auto">
+      <div className="w-full max-w-screen-sm mx-auto bg-white lg:max-w-xl lg:shadow-xl lg:rounded-2xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 sm:mx-auto">
         <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-8 md:mb-10 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text ">
           Signup to Joshguru
         </h2>
