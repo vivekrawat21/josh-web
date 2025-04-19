@@ -106,7 +106,7 @@ const Course = () => {
                             <FaDesktop className="text-xl text-gray-500" />
                             {(courseData?.title?.toLowerCase().startsWith("odoo") || courseData?.title?.toLowerCase().startsWith("microsoft")) ? (
                               <span className="text-base md:text-lg">
-                                Offiline
+                                Offline
                               </span>
                             ) : (
                               <span className="text-base md:text-lg">
@@ -492,7 +492,7 @@ const Course = () => {
                         <FaDesktop className="text-xl text-gray-500" />
                         {(courseData?.title?.toLowerCase().startsWith("odoo") || courseData?.title?.toLowerCase().startsWith("microsoft")) ? (
                           <span className="text-base md:text-lg">
-                            Offilne
+                            offline
                           </span>
                         ) : (
                           <span className="text-base md:text-lg">
