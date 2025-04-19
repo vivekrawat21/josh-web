@@ -4,6 +4,7 @@ import { Edit, MoreHorizontal, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+// import { useSelector } from 'react-redux';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,56 +13,57 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import axios from 'axios';
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import AddNewCourse from './AddNewCourse';
 import { BASE_URL } from '@/utils/utils';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setBundle } from '@/features/bundles/BundleSlice';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
-
-// useEffect({
-//    fetchCourses()
-// },[])
-const AllCourse = () => {
+const AdminBundles = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addCourse,setAddCourse]=useState(false);
-  const [courses,setCourses]= useState([])
+  const [bundles,setBundles]= useState([])
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   // const [closeAddCourse,setCloseAddCourse]=useState(false)
   const handleCourseAddButton= ()=>{
     // console.log("")
     setAddCourse(!addCourse)
   }
-  const fetchCourses = async()=>{
+  const fetchBundles = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/course/getCourses`,{withCredentials:true})
-    console.log(res)
-    setCourses(res.data.data.courses)
+      const res = await axios.get(`${BASE_URL}/bundle/getBundles`, {
+        withCredentials: true,
+      });
+      const allBundles = res.data.data.bundles;
+      setBundles(allBundles);
+      dispatch(setBundle(allBundles));
     } catch (error) {
-        console.log(error)
+      console.error("Error fetching bundles:", error);
     }
-    
-  
-  }
+  };
 
- 
-  useEffect(()=>{
-    // fetchCourseAndBundle()
-    fetchCourses()
-  },[])
+useEffect(()=>{
+    fetchBundles()
+},[])
+    console.log(bundles)
 
-  const filteredCourses = courses.filter(
-    (course) =>
-      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+    const editBundle = (id) => {
+        navigate(`/admin/editBundle/${id}`);  // Passing data via navigate's state
+      };
   return (
     <div>
       <div className='flex justify-between my-2'>
-        <div>Courses Dashboard</div>
+        <div>Bundles Dashboard</div>
         <div>
-          <Button onClick={handleCourseAddButton}>Add new Course</Button>
+          <Button onClick={handleCourseAddButton}>Add new Bundle</Button>
         </div>
       </div>
       {addCourse && (
@@ -74,12 +76,12 @@ const AllCourse = () => {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Course Management</CardTitle>
-            <CardDescription>Manage your courses, edit details, or remove courses.</CardDescription>
+            <CardTitle>Bundle Management</CardTitle>
+            <CardDescription>Manage your bundles, edit details, or remove bundles.</CardDescription>
           </div>
           <div className="flex items-center gap-2">
             <Input
-              placeholder="Search courses..."
+              placeholder="Search bundles..."
               className="w-[250px]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -101,24 +103,24 @@ const AllCourse = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {courses.map((course) => (
-              <TableRow key={course._id}>
-                <TableCell className="font-medium">{course.title}</TableCell>
-                <TableCell>{course.category}</TableCell>
-                <TableCell>₹{course.price}</TableCell>
-                <TableCell>{course.bundleName}</TableCell>
-                <TableCell>{course.date}</TableCell>
+            {bundles.map((bundle) => (
+              <TableRow key={bundle?._id}>
+                <TableCell className="font-medium">{bundle?.bundleName}</TableCell>
+                <TableCell>{bundle?.category || bundle?.bundleName}</TableCell>
+                <TableCell>₹{bundle?.price}</TableCell>
+                <TableCell>{bundle?.bundleName}</TableCell>
+                <TableCell>{bundle?.date}</TableCell>
                 
                 <TableCell>
                   <span
                     className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                      course.status === "Published" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
+                      bundle?.status === "Published" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
-                    {course.status}
+                    {bundle?.status}
                   </span>
                 </TableCell>
-                <TableCell>{course.lastUpdated}</TableCell>
+                <TableCell>{bundle?.lastUpdated}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -129,11 +131,45 @@ const AllCourse = () => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => {
+                        editBundle(bundle?._id,"bundle")
+                      }}>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem>View Analytics</DropdownMenuItem>
+                      
+                      {/* <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Edit </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Edit profile</DialogTitle>
+          <DialogDescription>
+            Make changes to your profile here. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="name" className="text-right">
+              Name
+            </Label>
+            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="username" className="text-right">
+              Username
+            </Label>
+            <Input id="username" value="@peduarte" className="col-span-3" />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button type="submit">Save changes</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog> */}
+                    
+                      
                       <DropdownMenuSeparator />
                       <DropdownMenuItem className="text-red-600">
                         <Trash className="mr-2 h-4 w-4" />
@@ -154,4 +190,4 @@ const AllCourse = () => {
   )
 }
 
-export default AllCourse
+export default AdminBundles
