@@ -116,7 +116,7 @@ const Navbar = () => {
         setBundles(allBundles);
         dispatch(setBundle(allBundles));
       } catch (error) {
-        // console.error("Error fetching bundles:", error);
+        console.error("Error fetching bundles:", error);
       }
     };
 
