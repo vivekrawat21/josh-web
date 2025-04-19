@@ -187,7 +187,7 @@ const Course = () => {
               </div>
 
               <div className="bg-white text-black px-4 md:px-6 pt-6">
-                <h2 className="text-2xl font-bold mb-2">Syllabus</h2>
+                <h2 className="text-2xl font-bold mb-2">What you will learn</h2>
                 {!courseData?.whatYouWillLearn ||
                   courseData.whatYouWillLearn.length === 0 ? (
                   <div className="text-center text-gray-500 py-4">
