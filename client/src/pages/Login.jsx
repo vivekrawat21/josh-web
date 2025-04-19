@@ -45,7 +45,7 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-orange-50 to-blue-50 flex flex-col lg:flex-row items-center justify-center px-6 py-4">
+    <div className="bg-white lg:bg-gradient-to-br lg:from-orange-50 lg:to-blue-50 flex flex-col lg:flex-row items-center min-h-screen px-4 sm:px-6 mt-8">
       {/* Image Section */}
       <div className="hidden lg:flex w-1/2 justify-start pr-8">
         <img
@@ -56,18 +56,18 @@ const Login = () => {
       </div>
 
       {/* Form Section */}
-      <div className="w-full lg:w-[540px] bg-white shadow-xl rounded-2xl p-6 sm:p-10">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-8 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text">
+      <div className="w-full max-w-screen-sm mx-auto bg-white lg:max-w-xl lg:shadow-xl lg:rounded-2xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 sm:mx-auto">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-8 md:mb-10 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text">
           Login to Joshguru
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-base">
+        <form onSubmit={handleSubmit} className="space-y-4 text-sm sm:text-base">
           <input
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email or Phone number"
-            className="border p-3 rounded w-full"
+            className="border p-2 sm:p-3 rounded w-full"
             required
           />
           <div className="relative">
@@ -76,7 +76,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
-              className="border p-3 rounded w-full"
+              className="border p-2 sm:p-3 rounded w-full"
               required
             />
             <button
@@ -99,7 +99,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600 transition"
+            className="w-full bg-orange-500 text-white py-2 sm:py-3 rounded-md hover:bg-orange-600 transition"
             disabled={loading}
           >
             {loading ? <Loader size={20} className="animate-spin mx-auto" /> : "Login"}

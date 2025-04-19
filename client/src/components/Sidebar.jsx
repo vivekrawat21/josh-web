@@ -123,7 +123,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
         setSelectedCategory(null)
         setSelectedCourse(null)
         setBreadcrumbs([])
-      }, 300)
+      }, 200)
     }
   }, [isOpen])
 
@@ -131,7 +131,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
     setActiveItem(path)
     setTimeout(() => {
       onClose(false)
-    }, 300)
+    }, 20)
   }
 
   useEffect(() => {
@@ -211,14 +211,14 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
           <MenuItem icon={<FaGraduationCap />} label="Courses" path="/courses" onClick={navigateToCategories} />
           <Link to={"/courses"}><MenuItem icon={<MdExplore />} label="Explore" path="/course" /></Link>
           <Link to={"/blogs"}><MenuItem icon={<FaBlog />} label="Blogs" path="/blogs" /></Link>
-          <motion.div variants={itemVariants} className="pt-4 px-3 ">
+          <motion.div variants={itemVariants} className="pt-4 px-3">
             <Link to={"/login"}>
-              <button className="w-full text-center border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-3 px-4 rounded-xl hover:bg-orange-500 hover:text-white transition-all duration-300 text-sm font-medium mb-3">
+              <button className="w-full text-center border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-3 px-4 rounded-xl hover:bg-orange-500 hover:text-white transition-all duration-300 text-sm font-medium mb-3 mt-5" onClick={()=>onClose(false)}>
                 <FaSignInAlt className="w-4 h-4 " /> Login
               </button>
             </Link>
             <Link to={"/signup"}>
-              <button className="w-full text-center bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center gap-2 py-3 px-4 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg">
+              <button className="w-full text-center bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center gap-2 py-3 px-4 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg" onClick={()=>onClose(false)}>
                 <FaSignInAlt className="w-4 h-4" /> Sign Up
               </button>
             </Link>
