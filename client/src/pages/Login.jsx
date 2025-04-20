@@ -9,8 +9,8 @@ import { Loader } from "lucide-react";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("vijay123@gmail.com");
-  const [password, setPassword] = useState("Vijay@123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errorMsgs, setErrorMsgs] = useState([]);
   const [loading, setLoading] = useState(false);
 
