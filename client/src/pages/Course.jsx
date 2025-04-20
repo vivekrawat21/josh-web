@@ -306,11 +306,11 @@ const Course = () => {
                   </h3>
                   {courseData?.whoShouldEnroll &&
                     courseData.whoShouldEnroll.length > 0 ? (
-                    <ul className="space-y-4 mb-6">
+                    <ul className=" ">
                       {courseData.whoShouldEnroll.map((item, index) => (
-                        <li key={index} className="flex items-start">
+                        <li key={index} className="flex items-start mb-3 last:mb-0">
                           <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
-                          <span className="ml-2 text-gray-800 text-sm md:text-base lg:text-lg text-justify leading-relaxed">
+                          <span className="ml-2 text-sm md:text-base lg:text-lg text-gray-800 leading-relaxed text-justify ">
                             {item}
                           </span>
                         </li>
@@ -328,11 +328,11 @@ const Course = () => {
                   {/* <span className="mb-4 ">These Points might help you makeup your Mind:</span> */}
                   {courseData?.stillConfused &&
                     courseData.stillConfused.length > 0 ? (
-                    <ul className="space-y-4 mb-6">
+                    <ul className="">
                       {courseData.stillConfused.map((item, index) => (
-                        <li key={index} className="flex items-start">
+                        <li key={index} className="flex items-start mb-3 last:mb-0">
                           <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
-                          <span className="ml-2 text-gray-800 text-sm md:text-base lg:text-lg text-justify leading-relaxed">
+                          <span className="ml-2 text-sm md:text-base lg:text-lg text-gray-800 leading-relaxed text-justify">
                             {item}
                           </span>
                         </li>
@@ -349,16 +349,18 @@ const Course = () => {
                   </h3>
                   {courseData?.reasonWhyJoshGuru &&
                     courseData.reasonWhyJoshGuru.length > 0 ? (
-                    <ul className="space-y-4 mb-6">
+                      <ul className="space-y-1">
                       {courseData.reasonWhyJoshGuru.map((item, index) => (
-                        <li key={index} className="flex items-start">
+                        <li key={index} className="flex items-center gap-1.5">
                           <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
-                          <span className="ml-2 text-gray-800 text-sm md:text-base lg:text-lg text-justify leading-relaxed">
+                          <span className="ml-2 text-sm md:text-base lg:text-lg text-gray-800 leading-relaxed text-justify">
                             {item}
                           </span>
                         </li>
                       ))}
                     </ul>
+                    
+                    
                   ) : (
                     <p className="mb-6 text-gray-500">
                       Information not available
@@ -490,7 +492,7 @@ const Course = () => {
                       </li>
                       <li className="flex items-center gap-3">
                         <FaDesktop className="text-xl text-gray-500" />
-                        {(courseData?.title?.toLowerCase().startsWith("odoo") || courseData?.title?.toLowerCase().startsWith("microsoft")) ? (
+                        {courseData?.isOffline ? (
                           <span className="text-base md:text-lg">
                             offline
                           </span>
