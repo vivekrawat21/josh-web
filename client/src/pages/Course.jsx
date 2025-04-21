@@ -17,7 +17,12 @@ import { Link } from "react-router-dom";
 import { addItems } from "../features/cart/cartSlice";
 import { useDispatch } from "react-redux";
 import { FaYoutube, FaLinkedin } from "react-icons/fa6";
+import { useRef } from "react";
 import { MdDownload } from "react-icons/md";
+import { FiMaximize } from "react-icons/fi";
+
+
+// import {certificate} from "../../public/certificate.png"
 const Course = () => {
   const [showModal, setShowModal] = useState(false);
   const [courseData, setCourseData] = useState(null);
@@ -28,6 +33,8 @@ const Course = () => {
   const dispatch = useDispatch();
   const [visibleCount, setVisibleCount] = useState(5);
   const user = useSelector((state) => state.user);
+  const certificateRef = useRef(null);
+  const [certificatePath, setCertificatePath] = useState("/certificate.png")
 
   useEffect(() => {
     if (!courses || courses.length === 0) return;
@@ -66,6 +73,24 @@ const Course = () => {
       }));
     }
   };
+  useEffect(() => {
+    if (courseData?.certificatePath?.trim()) {
+      console.log("Certificate path is set to:", courseData.certificatePath);
+      setCertificatePath(courseData?.certificatePath);
+    }
+  }, [courseData]);
+
+  const toggleFullScreen = () => {
+    if (certificateRef.current) {
+      if (!document.fullscreenElement) {
+        certificateRef.current.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  };
+
+
   // console.log("course data is ")
   // console.log(courseData)
   return (
@@ -75,8 +100,8 @@ const Course = () => {
           <div className="flex flex-col lg:flex-row gap-6">
             {/* Left Section */}
             <div className="lg:w-2/3">
-              <div className="mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold mb-4">
+              <div className="mb-6">
+                <h1 className="text-3xl md:text-4xl font-bold mb-5">
                   {courseData?.title}
                 </h1>
 
@@ -107,9 +132,9 @@ const Course = () => {
                             {courseData?.title
                               ?.toLowerCase()
                               .startsWith("odoo") ||
-                            courseData?.title
-                              ?.toLowerCase()
-                              .startsWith("microsoft") ? (
+                              courseData?.title
+                                ?.toLowerCase()
+                                .startsWith("microsoft") ? (
                               <span className="text-base md:text-lg">
                                 Offline
                               </span>
@@ -128,19 +153,16 @@ const Course = () => {
                             <span>{courseData?.duration}</span>
                           </li>
                           <li className="flex items-center gap-3">
+                            <MdDownload className="text-2xl text-gray-500" />
+                            <a
+                              href={courseData?.pdfPath}
+                            >
+                              <span> Download Syllabus</span>
+                            </a>
+                          </li>
+                          <li className="flex items-center gap-3">
                             <FaCertificate className="text-xl text-gray-500" />
                             <span>Certificate Of Completion</span>
-                            {courseData?.certificatePath && (
-                          <span>
-                            <a
-                              href={courseData.certificatePath}
-                              target="_blank"
-                              className="hover:text-blue-700 underline text-sm"
-                            >
-                              Certificate
-                            </a>
-                          </span>
-                        )}
                           </li>
                           {/* <li className="flex items-center gap-3">
                             <FaClock className="text-xl text-gray-500" />
@@ -148,7 +170,7 @@ const Course = () => {
                           </li> */}
                         </ul>
                       </div>
-                      <div className="mt-4 space-y-4">
+                      <div className="flex flex-row items-center justify-center gap-4 pb-2 w-full mt-2">
                         {/* Buy Now Button */}
                         <Link
                           to={
@@ -156,22 +178,19 @@ const Course = () => {
                               ? `/signup?courseId=${courseId}&type=course`
                               : "/payment"
                           }
+                          className={`${cartContainsCourse ? 'w-full' : 'w-full sm:w-1/2'
+                            }`}
                         >
-                          <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white text-center py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
+                          <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
                             <FaRupeeSign />
                             {courseData?.price} /-
                           </button>
                         </Link>
 
-                        {/* GST Notice */}
-                        <p className="text-sm text-gray-600 italic text-center">
-                          * 18% GST will be added at checkout.
-                        </p>
-
-                        {/* Add to Cart Button (if not in cart) */}
+                        {/* Add to Cart Button */}
                         {!cartContainsCourse && (
                           <button
-                            className="w-full bg-gray-200 hover:bg-gray-300 text-black text-center py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
+                            className="w-1/2 bg-gray-200 hover:bg-gray-300 text-black py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
                             onClick={addToCart}
                           >
                             <FaShoppingCart />
@@ -179,6 +198,11 @@ const Course = () => {
                           </button>
                         )}
                       </div>
+
+                      {/* GST Notice */}
+                      <p className="text-sm text-gray-600 italic text-center">
+                        * 18% GST will be added at checkout.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -204,7 +228,7 @@ const Course = () => {
               <div className="bg-white text-black px-4 md:px-6 pt-6">
                 <h2 className="text-2xl font-bold mb-2">What you will learn</h2>
                 {!courseData?.whatYouWillLearn ||
-                courseData.whatYouWillLearn.length === 0 ? (
+                  courseData.whatYouWillLearn.length === 0 ? (
                   <div className="text-center text-gray-500 py-4">
                     <p className="text-black">
                       Currently No videos available for this course.
@@ -218,11 +242,10 @@ const Course = () => {
                         className={`
                         relative flex items-start gap-3 p-4 
                         rounded-lg transition-all duration-300
-                        ${
-                          hoveredIndex === index
+                        ${hoveredIndex === index
                             ? "bg-gradient-to-r from-orange-50 to-red-50 shadow-md transform -translate-y-1"
                             : "bg-gray-50 shadow-sm"
-                        }
+                          }
                       `}
                         onMouseEnter={() => setHoveredIndex(index)}
                         onMouseLeave={() => setHoveredIndex(null)}
@@ -230,11 +253,10 @@ const Course = () => {
                         <div
                           className={`
                         flex-shrink-0 mt-0.5 
-                        ${
-                          hoveredIndex === index
-                            ? "text-orange-600"
-                            : "text-orange-500"
-                        }
+                        ${hoveredIndex === index
+                              ? "text-orange-600"
+                              : "text-orange-500"
+                            }
                       `}
                         >
                           <CheckCircle className="h-5 w-5" />
@@ -243,11 +265,10 @@ const Course = () => {
                           <p
                             className={`
                           font-medium leading-relaxed
-                          ${
-                            hoveredIndex === index
-                              ? "text-gray-900"
-                              : "text-gray-800"
-                          }
+                          ${hoveredIndex === index
+                                ? "text-gray-900"
+                                : "text-gray-800"
+                              }
                         `}
                           >
                             {item}
@@ -256,11 +277,10 @@ const Course = () => {
                         <div
                           className={`
                         absolute left-0 top-0 bottom-0 w-1 rounded-l-lg
-                        ${
-                          hoveredIndex === index
-                            ? "bg-orange-600"
-                            : "bg-orange-400"
-                        }
+                        ${hoveredIndex === index
+                              ? "bg-orange-600"
+                              : "bg-orange-400"
+                            }
                       `}
                         />
                       </li>
@@ -313,7 +333,7 @@ const Course = () => {
                 </div>
 
                 {/* About This Course Section */}
-                <section className="py-4">
+                <section className="py-4 mb-6">
                   {/* Course Description */}
                   <h3 className="text-lg md:text-xl font-semibold mt-2 mb-2 text-black">
                     Course Description:
@@ -333,7 +353,7 @@ const Course = () => {
                     Who Should Enroll:
                   </h3>
                   {courseData?.whoShouldEnroll &&
-                  courseData.whoShouldEnroll.length > 0 ? (
+                    courseData.whoShouldEnroll.length > 0 ? (
                     <ul className=" ">
                       {courseData.whoShouldEnroll.map((item, index) => (
                         <li
@@ -358,7 +378,7 @@ const Course = () => {
                   </h3>
                   {/* <span className="mb-4 ">These Points might help you makeup your Mind:</span> */}
                   {courseData?.stillConfused &&
-                  courseData.stillConfused.length > 0 ? (
+                    courseData.stillConfused.length > 0 ? (
                     <ul className="">
                       {courseData.stillConfused.map((item, index) => (
                         <li
@@ -382,7 +402,7 @@ const Course = () => {
                     Reason Why Joshguru
                   </h3>
                   {courseData?.reasonWhyJoshGuru &&
-                  courseData.reasonWhyJoshGuru.length > 0 ? (
+                    courseData.reasonWhyJoshGuru.length > 0 ? (
                     <ul className="space-y-1">
                       {courseData.reasonWhyJoshGuru.map((item, index) => (
                         <li key={index} className="flex items-center gap-1.5">
@@ -398,21 +418,33 @@ const Course = () => {
                       Information not available
                     </p>
                   )}
-             {courseData?.pdfPath && (
-  <a
-    href={courseData.pdfPath}
-    download
-    className="inline-flex items-center text-white bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 font-semibold py-2 px-4 rounded-lg 
-               sm:py-3 sm:px-6 md:py-2 md:px-8 lg:py-2 lg:px-8"
-  >
-    Syllabus
-    <span className="ml-2">
-      <MdDownload className="animate-bounce" />
-    </span>
-  </a>
-)}
 
                 </section>
+
+                {/* Certificate Section */}
+                <section className="mb-6">
+                  <h1 className="text-2xl md:text-3xl font-bold mb-1">Certificate</h1>
+                  <p className="text-sm italic mt-6 text-gray-600 mb-4 ml-2">
+                   Unlock better opportunity by sharing your certificate on <span className="text-blue-600 font-medium">LinkedIn</span>
+                  </p>
+                  <div className="relative w-full max-w-[500px] border rounded-xl shadow-md overflow-hidden">
+                    <img
+                      src={certificatePath}
+                      alt="Certificate"
+                      ref={certificateRef}
+                      className="w-full h-auto object-contain"
+                    />
+                    <button
+                      onClick={toggleFullScreen}
+                      className="absolute top-2 right-2 bg-black bg-opacity-60 text-white p-2 rounded-full hover:bg-opacity-80 transition"
+                      aria-label="Full screen"
+                    >
+                      <FiMaximize size={18} />
+                    </button>
+                  </div>
+                </section>
+
+
 
                 {/* Mentor Section */}
                 <section className="mb-6">
@@ -558,21 +590,19 @@ const Course = () => {
                         </span>
                       </li>
                       <li className="flex items-center gap-3">
+                        <MdDownload className="text-2xl text-gray-500" />
+                        <a
+                          href={courseData?.pdfPath}
+                          download
+                        >
+                          <span> Download Syllabus</span>
+                        </a>
+                      </li>
+                      <li className="flex items-center gap-3">
                         <FaCertificate className="text-xl text-gray-500" />
                         <span className="text-base md:text-lg">
                           Certificate Of Completion
                         </span>
-                        {courseData?.certificatePath && (
-                          <span>
-                            <a
-                              href={courseData.certificatePath}
-                              target="_blank"
-                              className="hover:text-blue-700 underline"
-                            >
-                              View Certificate
-                            </a>
-                          </span>
-                        )}
                       </li>
                       {/* <li className="flex items-center gap-3">
                         <FaClock className="text-xl text-gray-500" />
@@ -580,7 +610,7 @@ const Course = () => {
                       </li> */}
                     </ul>
                   </div>
-                  <div className="space-y-4 pb-2">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pb-2 w-full mt-8">
                     {/* Buy Now Button */}
                     <Link
                       to={
@@ -588,6 +618,8 @@ const Course = () => {
                           ? `/signup?courseId=${courseId}&type=course`
                           : "/payment"
                       }
+                      className={`${cartContainsCourse ? 'w-full' : 'w-full sm:w-1/2'
+                        }`}
                     >
                       <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
                         <FaRupeeSign />
@@ -595,15 +627,10 @@ const Course = () => {
                       </button>
                     </Link>
 
-                    {/* GST Note */}
-                    <p className="text-sm text-gray-600 italic text-center">
-                      * 18% GST will be added at checkout
-                    </p>
-
                     {/* Add to Cart Button */}
                     {!cartContainsCourse && (
                       <button
-                        className="w-full bg-gray-200 hover:bg-gray-300 text-black py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
+                        className="w-full sm:w-1/2 bg-gray-200 hover:bg-gray-300 text-black py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
                         onClick={addToCart}
                       >
                         <FaShoppingCart />
@@ -611,6 +638,11 @@ const Course = () => {
                       </button>
                     )}
                   </div>
+
+                  {/* GST Note */}
+                  <p className="text-sm text-gray-600 italic text-center">
+                    * 18% GST will be added at checkout
+                  </p>
                 </div>
               </div>
             </div>

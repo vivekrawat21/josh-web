@@ -109,12 +109,13 @@ const Navbar = () => {
 
     const fetchBundles = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/course/getBundles`, {
+        const res = await axios.get(`${BASE_URL}/bundle/getBundles`, {
           withCredentials: true,
         });
-        const allBundles = res.data.data.bundles;
+        const allBundles = res?.data?.data.bundles;
         setBundles(allBundles);
         dispatch(setBundle(allBundles));
+
       } catch (error) {
         console.error("Error fetching bundles:", error);
       }

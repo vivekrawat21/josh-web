@@ -6,6 +6,7 @@ import { Badge } from "../components/ui/badge";
 import { Search } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "@/utils/utils";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
 const SkeletonCard = () => (
@@ -29,18 +30,32 @@ const Courses = () => {
   const [bundleData, setBundleData] = useState([]);
   const [allCourses, setAllCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const bundles = useSelector((state) => state.bundle.bundles[0])
   useEffect(() => {
+   
     const fetchBundles = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${BASE_URL}/course/getAllBundles`, { withCredentials: true });
+        // Fetch all bundles
+        if(!bundles) {
+        const res = await axios.get(`${BASE_URL}/bundle/getAllBundles`, { withCredentials: true });
         setBundleData(res.data.data.bundles);
-
-        const extractedCourses = res.data.data.bundles.flatMap(bundle =>
+        const extractedCourses = res?.data.data.bundles.flatMap(bundle =>
           bundle.courses.map(course => ({ ...course, bundleName: bundle.bundleName }))
         );
         setAllCourses(extractedCourses);
+        }
+        else {
+          // If bundles are already in the store, use them
+          const extractedCourses = bundles.flatMap(bundle =>  
+            bundle.courses.map(course => ({ ...course, bundleName: bundle.bundleName }))
+          );
+          setAllCourses(extractedCourses);
+          setBundleData(bundles);
+        }
+        
+
+        
       } catch (error) {
         console.log(error);
       } finally {
@@ -49,7 +64,7 @@ const Courses = () => {
     };
 
     fetchBundles();
-  }, [category, id]);
+  }, [category, id, bundles]);
 
   const filteredCourses = allCourses.filter(course => {
     const matchesCategory = selectedCategory === "all" || course.bundleName === selectedCategory;
