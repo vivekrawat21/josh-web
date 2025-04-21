@@ -422,7 +422,62 @@ const EditCourse = () => {
             Add Item
           </button>
         </div>
-
+      {/* still confused*/}
+      <div>
+          <label className="block text-xl font-semibold mb-2">Still Confused?</label>
+          {course.stillConfused.map((item, index) => (
+            <div key={index} className="flex items-center gap-2 mb-2">
+              <input
+                type="text"
+                value={item}
+                onChange={(e) => handleArrayChange('stillConfused', index, e.target.value)}
+                className="w-full border px-3 py-2 rounded"
+              />
+              <button
+                type="button"
+                onClick={() => removeArrayItem('stillConfused', index)}
+                className="bg-red-500 text-white px-3 py-1 rounded"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addArrayItem('stillConfused')}
+            className="bg-blue-500 text-white px-3 py-2 rounded mt-2"
+          >
+            Add Item
+          </button>
+        </div>
+        {/* reason why */}
+        <div>
+          <label className="block text-xl font-semibold mb-2">Reason Why</label>
+          {course.reasonWhyJoshGuru?.map((item, index) => (
+            <div key={index} className="flex items-center gap-2 mb-2">
+              <input
+                type="text"
+                value={item}
+                onChange={(e) => handleArrayChange('reasonWhyJoshGuru', index, e.target.value)}
+                className="w-full border px-3 py-2 rounded"
+              />
+              <button
+                type="button"
+                onClick={() => removeArrayItem('reasonWhyJoshGuru', index)}
+                className="bg-red-500 text-white px-3 py-1 rounded"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addArrayItem('reasonWhyJoshGuru')}
+            className="bg-blue-500 text-white px-3 py-2 rounded mt-2"
+          >
+            Add Item
+          </button>
+        </div>
         {/* Submit */}
         <div className="text-right">
           <button

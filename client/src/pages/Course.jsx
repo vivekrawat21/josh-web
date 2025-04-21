@@ -149,15 +149,17 @@ const Course = () => {
                             <span>Full Lifetime Access</span>
                           </li> */}
                           <li className="flex items-center gap-3">
-                            <FaRegClock className="text-xl text-gray-500" />
+                            <FaRegClock className="text-2xl text-gray-500" />
                             <span>{courseData?.duration}</span>
                           </li>
-                          <li className="flex items-center gap-3">
-                            <MdDownload className="text-2xl text-gray-500"  />
+                          <li className="flex items-center gap-3 ">
+                            <MdDownload className="text-2xl text-gray-500 animate-bounce  mt-[0.32rem] 
+                            " />
                             <a
                               href={courseData?.pdfPath}
+                              download
                             >
-                              <span> Download Syllabus</span>
+                              <span className="hover:border-b-2 hover:border-orange-200"> Download Brochure</span>
                             </a>
                           </li>
                           <li className="flex items-center gap-3">
@@ -333,99 +335,89 @@ const Course = () => {
                 </div>
 
                 {/* About This Course Section */}
-                <section className="py-4 mb-6">
-                  {/* Course Description */}
-                  <h3 className="text-lg md:text-xl font-semibold mt-2 mb-2 text-black">
-                    Course Description:
-                  </h3>
-                  <p className="mb-4 text-gray-800 text-sm md:text-base lg:text-lg text-justify">
-                    {courseData?.description}
-                  </p>
-                  <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
-                    Why This Course?
-                  </h3>
-                  <p className="mb-6 text-gray-800 text-sm md:text-base lg:text-lg leading-relaxed text-justify tracking-normal">
-                    {courseData?.whyCourse}
-                  </p>
-
-                  {/* Who Should Enroll */}
-                  <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
-                    Who Should Enroll:
-                  </h3>
-                  {courseData?.whoShouldEnroll &&
-                    courseData.whoShouldEnroll.length > 0 ? (
-                    <ul className=" ">
-                      {courseData.whoShouldEnroll.map((item, index) => (
-                        <li
-                          key={index}
-                          className="flex items-start mb-3 last:mb-0"
-                        >
-                          <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
-                          <span className="ml-2 text-sm md:text-base lg:text-lg text-gray-800 leading-relaxed text-justify ">
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="mb-6 text-gray-500">
-                      Information not available
+                <div className="px-4  max-w-5xl mx-auto">
+                  <section className="py-4 mb-6">
+                    {/* Course Description */}
+                    <h3 className="text-lg md:text-xl font-semibold mt-2 mb-2 text-black">
+                      Course Description:
+                    </h3>
+                    <p className="mb-4 text-gray-800 text-[11pt] md:text-base lg:text-lg text-left md:text-justify">
+                      {courseData?.description}
                     </p>
-                  )}
 
-                  <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
-                    Still Confused?
-                  </h3>
-                  {/* <span className="mb-4 ">These Points might help you makeup your Mind:</span> */}
-                  {courseData?.stillConfused &&
-                    courseData.stillConfused.length > 0 ? (
-                    <ul className="">
-                      {courseData.stillConfused.map((item, index) => (
-                        <li
-                          key={index}
-                          className="flex items-start mb-3 last:mb-0"
-                        >
-                          <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
-                          <span className="ml-2 text-sm md:text-base lg:text-lg text-gray-800 leading-relaxed text-justify">
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="mb-6 text-gray-500">
-                      Information not available
+                    {/* Why This Course */}
+                    <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
+                      Why This Course?
+                    </h3>
+                    <p className="mb-6 text-gray-800 text-[11pt] md:text-base lg:text-lg leading-relaxed text-left md:text-justify tracking-normal">
+                      {courseData?.whyCourse}
                     </p>
-                  )}
 
-                  <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
-                    Reason Why Joshguru
-                  </h3>
-                  {courseData?.reasonWhyJoshGuru &&
-                    courseData.reasonWhyJoshGuru.length > 0 ? (
-                    <ul className="space-y-1">
-                      {courseData.reasonWhyJoshGuru.map((item, index) => (
-                        <li key={index} className="flex items-center gap-1.5">
-                          <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
-                          <span className="ml-2 text-sm md:text-base lg:text-lg text-gray-800 leading-relaxed text-justify">
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="mb-6 text-gray-500">
-                      Information not available
-                    </p>
-                  )}
+                    {/* Who Should Enroll */}
+                    <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
+                      Who Should Enroll:
+                    </h3>
+                    {courseData?.whoShouldEnroll && courseData.whoShouldEnroll.length > 0 ? (
+                      <ul>
+                        {courseData.whoShouldEnroll.map((item, index) => (
+                          <li key={index} className="flex items-start mb-3 last:mb-0">
+                            <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
+                            <span className="ml-2 text-[11pt] md:text-base lg:text-lg text-gray-800 leading-relaxed text-left md:text-justify">
+                              {item}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="mb-6 text-gray-500">Information not available</p>
+                    )}
 
-                </section>
+                    {/* Still Confused */}
+                    <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
+                      Still Confused?
+                    </h3>
+                    {courseData?.stillConfused && courseData.stillConfused.length > 0 ? (
+                      <ul>
+                        {courseData.stillConfused.map((item, index) => (
+                          <li key={index} className="flex items-start mb-3 last:mb-0">
+                            <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
+                            <span className="ml-2 text-[11pt] md:text-base lg:text-lg text-gray-800 leading-relaxed text-left md:text-justify">
+                              {item}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="mb-6 text-gray-500">Information not available</p>
+                    )}
+
+                    {/* Reason Why Joshguru */}
+                    <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
+                      Reason Why Joshguru
+                    </h3>
+                    {courseData?.reasonWhyJoshGuru && courseData.reasonWhyJoshGuru.length > 0 ? (
+                      <ul className="space-y-1">
+                        {courseData.reasonWhyJoshGuru.map((item, index) => (
+                          <li key={index} className="flex items-start gap-1.5">
+                            <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
+                            <span className="ml-2 text-[11pt] md:text-base lg:text-lg text-gray-800 leading-relaxed text-left md:text-justify">
+                              {item}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="mb-6 text-gray-500">Information not available</p>
+                    )}
+                  </section>
+                </div>
+
 
                 {/* Certificate Section */}
                 <section className="mb-6">
                   <h1 className="text-2xl md:text-3xl font-bold mb-1">Certificate</h1>
                   <p className="text-sm italic mt-3 mb-2 lg:mt-6 text-gray-600 lg:mb-4 lg:ml-2">
-                   Unlock better opportunity by sharing your certificate on <span className="text-blue-600 font-medium">LinkedIn</span>
+                    Unlock better opportunity by sharing your certificate on <span className="text-blue-600 font-medium">LinkedIn</span>
                   </p>
                   <div className="relative w-full max-w-[500px] border rounded-xl shadow-md overflow-hidden">
                     <img
@@ -462,7 +454,7 @@ const Course = () => {
                             <img
                               src={
                                 mentor?.
-                                profileImage ||
+                                  profileImage ||
                                 "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDZ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
                               }
                               alt={mentor?.name || "Mentor"}
@@ -590,13 +582,14 @@ const Course = () => {
                           {courseData?.duration}
                         </span>
                       </li>
-                      <li className="flex items-center gap-3">
-                        <MdDownload className="text-2xl text-gray-500" />
+                      <li className="flex items-center gap-3 ">
+                        <MdDownload className="text-2xl text-gray-500 animate-bounce  mt-[0.32rem] 
+                            " />
                         <a
                           href={courseData?.pdfPath}
                           download
                         >
-                          <span> Download Syllabus</span>
+                          <span className="hover:border-b-2 hover:border-orange-200"> Download Brochure</span>
                         </a>
                       </li>
                       <li className="flex items-center gap-3">
