@@ -8,7 +8,7 @@ import {
   FaLanguage,
   FaDesktop,
 } from "react-icons/fa";
-import { CheckCircle } from "lucide-react"
+import { CheckCircle } from "lucide-react";
 import { FaRupeeSign } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -17,11 +17,11 @@ import { Link } from "react-router-dom";
 import { addItems } from "../features/cart/cartSlice";
 import { useDispatch } from "react-redux";
 import { FaYoutube, FaLinkedin } from "react-icons/fa6";
-
+import { MdDownload } from "react-icons/md";
 const Course = () => {
   const [showModal, setShowModal] = useState(false);
   const [courseData, setCourseData] = useState(null);
-  const [hoveredIndex, setHoveredIndex] = useState(null)
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const { courseId } = useParams();
   const { courses } = useSelector((state) => state.course);
   const cart = useSelector((state) => state.cart);
@@ -104,7 +104,12 @@ const Course = () => {
                           </li>
                           <li className="flex items-center gap-3">
                             <FaDesktop className="text-xl text-gray-500" />
-                            {(courseData?.title?.toLowerCase().startsWith("odoo") || courseData?.title?.toLowerCase().startsWith("microsoft")) ? (
+                            {courseData?.title
+                              ?.toLowerCase()
+                              .startsWith("odoo") ||
+                            courseData?.title
+                              ?.toLowerCase()
+                              .startsWith("microsoft") ? (
                               <span className="text-base md:text-lg">
                                 Offline
                               </span>
@@ -125,6 +130,17 @@ const Course = () => {
                           <li className="flex items-center gap-3">
                             <FaCertificate className="text-xl text-gray-500" />
                             <span>Certificate Of Completion</span>
+                            {courseData?.certificatePath && (
+                          <span>
+                            <a
+                              href={courseData.certificatePath}
+                              target="_blank"
+                              className="hover:text-blue-700 underline text-sm"
+                            >
+                              Certificate
+                            </a>
+                          </span>
+                        )}
                           </li>
                           {/* <li className="flex items-center gap-3">
                             <FaClock className="text-xl text-gray-500" />
@@ -163,7 +179,6 @@ const Course = () => {
                           </button>
                         )}
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -189,7 +204,7 @@ const Course = () => {
               <div className="bg-white text-black px-4 md:px-6 pt-6">
                 <h2 className="text-2xl font-bold mb-2">What you will learn</h2>
                 {!courseData?.whatYouWillLearn ||
-                  courseData.whatYouWillLearn.length === 0 ? (
+                courseData.whatYouWillLearn.length === 0 ? (
                   <div className="text-center text-gray-500 py-4">
                     <p className="text-black">
                       Currently No videos available for this course.
@@ -203,10 +218,11 @@ const Course = () => {
                         className={`
                         relative flex items-start gap-3 p-4 
                         rounded-lg transition-all duration-300
-                        ${hoveredIndex === index
+                        ${
+                          hoveredIndex === index
                             ? "bg-gradient-to-r from-orange-50 to-red-50 shadow-md transform -translate-y-1"
                             : "bg-gray-50 shadow-sm"
-                          }
+                        }
                       `}
                         onMouseEnter={() => setHoveredIndex(index)}
                         onMouseLeave={() => setHoveredIndex(null)}
@@ -214,7 +230,11 @@ const Course = () => {
                         <div
                           className={`
                         flex-shrink-0 mt-0.5 
-                        ${hoveredIndex === index ? "text-orange-600" : "text-orange-500"}
+                        ${
+                          hoveredIndex === index
+                            ? "text-orange-600"
+                            : "text-orange-500"
+                        }
                       `}
                         >
                           <CheckCircle className="h-5 w-5" />
@@ -223,7 +243,11 @@ const Course = () => {
                           <p
                             className={`
                           font-medium leading-relaxed
-                          ${hoveredIndex === index ? "text-gray-900" : "text-gray-800"}
+                          ${
+                            hoveredIndex === index
+                              ? "text-gray-900"
+                              : "text-gray-800"
+                          }
                         `}
                           >
                             {item}
@@ -232,7 +256,11 @@ const Course = () => {
                         <div
                           className={`
                         absolute left-0 top-0 bottom-0 w-1 rounded-l-lg
-                        ${hoveredIndex === index ? "bg-orange-600" : "bg-orange-400"}
+                        ${
+                          hoveredIndex === index
+                            ? "bg-orange-600"
+                            : "bg-orange-400"
+                        }
                       `}
                         />
                       </li>
@@ -305,10 +333,13 @@ const Course = () => {
                     Who Should Enroll:
                   </h3>
                   {courseData?.whoShouldEnroll &&
-                    courseData.whoShouldEnroll.length > 0 ? (
+                  courseData.whoShouldEnroll.length > 0 ? (
                     <ul className=" ">
                       {courseData.whoShouldEnroll.map((item, index) => (
-                        <li key={index} className="flex items-start mb-3 last:mb-0">
+                        <li
+                          key={index}
+                          className="flex items-start mb-3 last:mb-0"
+                        >
                           <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
                           <span className="ml-2 text-sm md:text-base lg:text-lg text-gray-800 leading-relaxed text-justify ">
                             {item}
@@ -327,10 +358,13 @@ const Course = () => {
                   </h3>
                   {/* <span className="mb-4 ">These Points might help you makeup your Mind:</span> */}
                   {courseData?.stillConfused &&
-                    courseData.stillConfused.length > 0 ? (
+                  courseData.stillConfused.length > 0 ? (
                     <ul className="">
                       {courseData.stillConfused.map((item, index) => (
-                        <li key={index} className="flex items-start mb-3 last:mb-0">
+                        <li
+                          key={index}
+                          className="flex items-start mb-3 last:mb-0"
+                        >
                           <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
                           <span className="ml-2 text-sm md:text-base lg:text-lg text-gray-800 leading-relaxed text-justify">
                             {item}
@@ -348,8 +382,8 @@ const Course = () => {
                     Reason Why Joshguru
                   </h3>
                   {courseData?.reasonWhyJoshGuru &&
-                    courseData.reasonWhyJoshGuru.length > 0 ? (
-                      <ul className="space-y-1">
+                  courseData.reasonWhyJoshGuru.length > 0 ? (
+                    <ul className="space-y-1">
                       {courseData.reasonWhyJoshGuru.map((item, index) => (
                         <li key={index} className="flex items-center gap-1.5">
                           <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
@@ -359,13 +393,25 @@ const Course = () => {
                         </li>
                       ))}
                     </ul>
-                    
-                    
                   ) : (
                     <p className="mb-6 text-gray-500">
                       Information not available
                     </p>
                   )}
+             {courseData?.pdfPath && (
+  <a
+    href={courseData.pdfPath}
+    download
+    className="inline-flex items-center text-white bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 font-semibold py-2 px-4 rounded-lg 
+               sm:py-3 sm:px-6 md:py-2 md:px-8 lg:py-2 lg:px-8"
+  >
+    Syllabus
+    <span className="ml-2">
+      <MdDownload className="animate-bounce" />
+    </span>
+  </a>
+)}
+
                 </section>
 
                 {/* Mentor Section */}
@@ -456,11 +502,12 @@ const Course = () => {
                         </div>
                       </div>
                       <p className="text-gray-800 text-sm md:text-base lg:text-lg leading-relaxed text-justify mt-4">
-                        Priya Sharma is a {courseData?.title}  with over 8 years of experience. She loves teaching modern JavaScript frameworks and has a strong presence on YouTube, where she shares tips on career growth and tech tutorials.
+                        Priya Sharma is a {courseData?.title} with over 8 years
+                        of experience. She loves teaching modern JavaScript
+                        frameworks and has a strong presence on YouTube, where
+                        she shares tips on career growth and tech tutorials.
                       </p>
                     </div>
-
-
                   )}
                 </section>
               </div>
@@ -493,16 +540,12 @@ const Course = () => {
                       <li className="flex items-center gap-3">
                         <FaDesktop className="text-xl text-gray-500" />
                         {courseData?.isOffline ? (
-                          <span className="text-base md:text-lg">
-                            offline
-                          </span>
+                          <span className="text-base md:text-lg">offline</span>
                         ) : (
                           <span className="text-base md:text-lg">
                             Use On Desktop, Tablet & Mobile
                           </span>
                         )}
-
-
                       </li>
                       {/* <li className="flex items-center gap-3">
                         <FaInfinity className="text-xl text-gray-500" />
@@ -519,6 +562,17 @@ const Course = () => {
                         <span className="text-base md:text-lg">
                           Certificate Of Completion
                         </span>
+                        {courseData?.certificatePath && (
+                          <span>
+                            <a
+                              href={courseData.certificatePath}
+                              target="_blank"
+                              className="hover:text-blue-700 underline"
+                            >
+                              View Certificate
+                            </a>
+                          </span>
+                        )}
                       </li>
                       {/* <li className="flex items-center gap-3">
                         <FaClock className="text-xl text-gray-500" />
@@ -557,7 +611,6 @@ const Course = () => {
                       </button>
                     )}
                   </div>
-
                 </div>
               </div>
             </div>
