@@ -106,7 +106,7 @@ const Course = () => {
                 </h1>
 
                 {/* Mobile/tablet course info card - shown only on smaller screens */}
-                <div className="lg:hidden mt-6 mb-8">
+                <div className="lg:hidden mt-6 mb-8 ">
                   <div className="bg-white rounded-lg shadow-md overflow-hidden">
                     <div className="relative">
                       <img
@@ -153,7 +153,7 @@ const Course = () => {
                             <span>{courseData?.duration}</span>
                           </li>
                           <li className="flex items-center gap-3">
-                            <MdDownload className="text-2xl text-gray-500" />
+                            <MdDownload className="text-2xl text-gray-500"  />
                             <a
                               href={courseData?.pdfPath}
                             >
@@ -170,7 +170,7 @@ const Course = () => {
                           </li> */}
                         </ul>
                       </div>
-                      <div className="flex flex-row items-center justify-center gap-4 pb-2 w-full mt-2">
+                      <div className="flex flex-row items-center justify-center gap-4 pb-2 w-full mt-2 ">
                         {/* Buy Now Button */}
                         <Link
                           to={
@@ -190,7 +190,7 @@ const Course = () => {
                         {/* Add to Cart Button */}
                         {!cartContainsCourse && (
                           <button
-                            className="w-1/2 bg-gray-200 hover:bg-gray-300 text-black py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
+                            className="w-11/12 bg-gray-200 hover:bg-gray-300 text-black py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
                             onClick={addToCart}
                           >
                             <FaShoppingCart />
@@ -424,7 +424,7 @@ const Course = () => {
                 {/* Certificate Section */}
                 <section className="mb-6">
                   <h1 className="text-2xl md:text-3xl font-bold mb-1">Certificate</h1>
-                  <p className="text-sm italic mt-6 text-gray-600 mb-4 ml-2">
+                  <p className="text-sm italic mt-3 mb-2 lg:mt-6 text-gray-600 lg:mb-4 lg:ml-2">
                    Unlock better opportunity by sharing your certificate on <span className="text-blue-600 font-medium">LinkedIn</span>
                   </p>
                   <div className="relative w-full max-w-[500px] border rounded-xl shadow-md overflow-hidden">
@@ -447,7 +447,7 @@ const Course = () => {
 
 
                 {/* Mentor Section */}
-                <section className="mb-6">
+                <section className="mt-8 mb-6">
                   <h1 className="text-2xl md:text-3xl font-bold mb-4">
                     Mentor
                   </h1>
@@ -456,7 +456,7 @@ const Course = () => {
                       {courseData.mentor.map((mentor, index) => (
                         <div
                           key={index}
-                          className="flex flex-col md:flex-row md:items-center gap-4 mb-4"
+                          className="flex  flex-row items-center gap-4 mb-2 lg:mb-4 "
                         >
                           <div className="w-20 h-20 md:w-16 md:h-16 rounded-full overflow-hidden mb-2 md:mb-0">
                             <img
@@ -471,7 +471,7 @@ const Course = () => {
                           </div>
 
                           <div>
-                            <h2 className="text-xl font-semibold">
+                            <h2 className="lg:text-xl text-lg font-semibold">
                               {mentor?.name || "Mentor"}
                             </h2>
                             <div className="flex gap-3 mt-2">
