@@ -1,422 +1,311 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '@/utils/utils';
-import { useNavigate } from 'react-router-dom';
+
 const EditCourse = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState({ message: '', type: '' });
   const [showToast, setShowToast] = useState(false);
   const { id } = useParams();
-  const navigator = useNavigate();
-  const fetchCourse = async(id) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (id) fetchCourse(id);
+  }, [id]);
+
+  const fetchCourse = async (id) => {
     try {
       setLoading(true);
-      const res = await axios.get(`${BASE_URL}/course/${id}`, { withCredentials: true });
-      console.log(res.data.data.course);
-      setCourse(res.data.data.course);
-      setLoading(false);
+      const res = await axios.get(`${BASE_URL}/course/${id}`, {
+        withCredentials: true,
+      });
+      const courseData = res.data.data.course;
+      setCourse({
+        ...courseData,
+        whatYouWillLearn: courseData.whatYouWillLearn || [],
+        whoShouldEnroll: courseData.whoShouldEnroll || [],
+      });
     } catch (error) {
-      console.error("Error fetching course:", error);
+      console.error('Error fetching course:', error);
+    } finally {
       setLoading(false);
     }
   };
-  
-  useEffect(() => {
-    if(id) {
-      fetchCourse(id);
-    }
-  }, [id]);
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setCourse(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setCourse((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
-    setCourse(prev => ({
-      ...prev,
-      [name]: checked
-    }));
+    setCourse((prev) => ({ ...prev, [name]: checked }));
   };
 
   const handleArrayChange = (name, index, value) => {
-    const newArray = [...course[name]];
-    newArray[index] = value;
-    setCourse(prev => ({
-      ...prev,
-      [name]: newArray
-    }));
+    const updatedArray = [...course[name]];
+    updatedArray[index] = value;
+    setCourse((prev) => ({ ...prev, [name]: updatedArray }));
   };
 
   const addArrayItem = (name) => {
-    setCourse(prev => ({
-      ...prev,
-      [name]: [...prev[name], '']
-    }));
+    setCourse((prev) => ({ ...prev, [name]: [...prev[name], ''] }));
   };
 
   const removeArrayItem = (name, index) => {
-    const newArray = [...course[name]];
-    newArray.splice(index, 1);
-    setCourse(prev => ({
+    const updatedArray = [...course[name]];
+    updatedArray.splice(index, 1);
+    setCourse((prev) => ({ ...prev, [name]: updatedArray }));
+  };
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    setCourse((prev) => ({
       ...prev,
-      [name]: newArray
+      [name]: files[0],
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    const formData = new FormData();
+   
+    
+    for (const key in course) {
+      if (Array.isArray(course[key])) {
+        course[key].forEach((item, index) => {
+          formData.append(`${key}[${index}]`, item || '');
+        });
+      } else if (course[key] instanceof File) {
+        formData.append(key, course[key]); // file input
+      } else {
+        formData.append(key, course[key] ?? '');
+      }
+    }
+  
+    // Debug properly
+    // for (let pair of formData.entries()) {
+    //   console.log(pair[0] + ':', pair[1]);
+    // }
+   if (formData.get("bundle") === "") {
+      formData.delete("bundle");
+    }
+    console.log(formData)
     try {
-      const res = await axios.patch(`${BASE_URL}/course/${id}`, course, { 
-        withCredentials: true 
+      await axios.patch(`${BASE_URL}/course/${id}`, formData, {
+        withCredentials: true,
+        // let axios auto set Content-Type
       });
-      console.log("Course updated successfully:", res.data);
+      
       setToast({ message: 'Course updated successfully!', type: 'success' });
       setShowToast(true);
-      navigator(`/admin/courses`);
-      // You might want to add a success message or redirect here
+      setTimeout(() => navigate('/admin/courses'), 2000);
     } catch (error) {
-      console.error("Error updating course:", error);
-      // Add error handling here
+      console.error('Error updating course:', error);
+      setToast({ message: 'Error updating course!', type: 'error' });
+      setShowToast(true);
     }
   };
   
-  console.log("Current course state:", course);
+
+  if (loading) {
+    return (
+      <div className="text-center py-8">
+        <p>Loading course data...</p>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="text-center py-8">
+        <p>No course found with the provided ID.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {loading ? (
-        <div className="text-center py-8">
-          <div className="spinner"></div>
-          <p className="mt-4">Loading course data...</p>
-        </div>
-      ) : !course ? (
-        <div className="text-center py-8">
-          <p>No course found with the provided ID.</p>
-        </div>
-      ) : (
-        <div className="bg-white rounded-lg shadow-lg">
-          <h1 className="text-2xl font-bold p-6 border-b">Edit Course</h1>
-          
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            {/* Basic Information */}
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
-              
-              <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={course.title || ''}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              
-              <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Description</label>
-                <textarea
-                  name="description"
-                  value={course.description || ''}
-                  onChange={handleInputChange}
-                  rows="4"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                ></textarea>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-gray-700 font-medium mb-2">Price (₹)</label>
-                  <input
-                    type="number"
-                    name="price"
-                    value={course.price || 0}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-gray-700 font-medium mb-2">Duration</label>
-                  <input
-                    type="text"
-                    name="duration"
-                    value={course.duration || ''}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-              </div>
-              
-              <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Image URL</label>
-                <input
-                  type="text"
-                  name="image"
-                  value={course.image || ''}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Course Introduction URL</label>
-                <input
-                  type="text"
-                  name="image"
-                  value={course.courseIntrovideo || ''}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div className='flex items-center mb-4 px-4 gap-4'>
-              <div className="flex items-center mb-4">
-                <input
-                  type="checkbox"
-                  name="isOffline"
-                  checked={course.isOffline || false}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                <label className="text-gray-700">Is Offline</label>
-              </div>
-              <div className="flex items-center mb-4">
-                <input
-                  type="checkbox"
-                  name="isTrending"
-                  checked={course.isTrending || false}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                <label className="text-gray-700">Is Trending</label>
-              </div>
-              </div>
-            </div>
-            
-            {/* What You Will Learn */}
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h2 className="text-xl font-semibold mb-4">What You Will Learn</h2>
-              
-              {course.whatYouWillLearn && course.whatYouWillLearn.map((item, index) => (
-                <div key={`learn-${index}`} className="flex mb-2">
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => handleArrayChange('whatYouWillLearn', index, e.target.value)}
-                    className="flex-grow px-3 py-2 border border-gray-300 rounded-md mr-2"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeArrayItem('whatYouWillLearn', index)}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              
-              <button
-                type="button"
-                onClick={() => addArrayItem('whatYouWillLearn')}
-                className="mt-2 px-3 py-2 bg-blue-500 text-white rounded-md"
-              >
-                Add Item
-              </button>
-            </div>
-            
-            {/* Course Highlights */}
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h2 className="text-xl font-semibold mb-4">Course Highlights</h2>
-              
-              {course.courseHighlights && course.courseHighlights.map((item, index) => (
-                <div key={`highlight-${index}`} className="flex mb-2">
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => handleArrayChange('courseHighlights', index, e.target.value)}
-                    className="flex-grow px-3 py-2 border border-gray-300 rounded-md mr-2"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeArrayItem('courseHighlights', index)}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              
-              <button
-                type="button"
-                onClick={() => addArrayItem('courseHighlights')}
-                className="mt-2 px-3 py-2 bg-blue-500 text-white rounded-md"
-              >
-                Add Item
-              </button>
-            </div>
-            
-            {/* Who Should Enroll */}
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h2 className="text-xl font-semibold mb-4">Who Should Enroll</h2>
-              
-              {course.whoShouldEnroll && course.whoShouldEnroll.map((item, index) => (
-                <div key={`enroll-${index}`} className="flex mb-2">
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => handleArrayChange('whoShouldEnroll', index, e.target.value)}
-                    className="flex-grow px-3 py-2 border border-gray-300 rounded-md mr-2"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeArrayItem('whoShouldEnroll', index)}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              
-              <button
-                type="button"
-                onClick={() => addArrayItem('whoShouldEnroll')}
-                className="mt-2 px-3 py-2 bg-blue-500 text-white rounded-md"
-              >
-                Add Item
-              </button>
-            </div>
-            
-            {/* Why Choose JoshGuru */}
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h2 className="text-xl font-semibold mb-4">Why Choose JoshGuru</h2>
-              
-              {course.reasonWhyJoshGuru && course.reasonWhyJoshGuru.map((item, index) => (
-                <div key={`reason-${index}`} className="flex mb-2">
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => handleArrayChange('reasonWhyJoshGuru', index, e.target.value)}
-                    className="flex-grow px-3 py-2 border border-gray-300 rounded-md mr-2"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeArrayItem('reasonWhyJoshGuru', index)}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              
-              <button
-                type="button"
-                onClick={() => addArrayItem('reasonWhyJoshGuru')}
-                className="mt-2 px-3 py-2 bg-blue-500 text-white rounded-md"
-              >
-                Add Item
-              </button>
-            </div>
-            
-            {/* Still Confused */}
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h2 className="text-xl font-semibold mb-4">Still Confused?</h2>
-              
-              {course.stillConfused && course.stillConfused.map((item, index) => (
-                <div key={`confused-${index}`} className="flex mb-2">
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => handleArrayChange('stillConfused', index, e.target.value)}
-                    className="flex-grow px-3 py-2 border border-gray-300 rounded-md mr-2"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeArrayItem('stillConfused', index)}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              
-              <button
-                type="button"
-                onClick={() => addArrayItem('stillConfused')}
-                className="mt-2 px-3 py-2 bg-blue-500 text-white rounded-md"
-              >
-                Add Item
-              </button>
-            </div>
-            
-            {/* Why This Course */}
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h2 className="text-xl font-semibold mb-4">Why This Course</h2>
-              
-              {course.whyCourse && course.whyCourse.map((item, index) => (
-                <div key={`why-${index}`} className="flex mb-2">
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => handleArrayChange('whyCourse', index, e.target.value)}
-                    className="flex-grow px-3 py-2 border border-gray-300 rounded-md mr-2"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeArrayItem('whyCourse', index)}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              
-              <button
-                type="button"
-                onClick={() => addArrayItem('whyCourse')}
-                className="mt-2 px-3 py-2 bg-blue-500 text-white rounded-md"
-              >
-                Add Item
-              </button>
-            </div>
-            
-            {/* How Will This Help You */}
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h2 className="text-xl font-semibold mb-4">How Will This Help You</h2>
-              
-              <div className="mb-4">
-                <textarea
-                  name="HowWillHelpYou"
-                  value={course.HowWillHelpYou || ''}
-                  onChange={handleInputChange}
-                  rows="6"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                ></textarea>
-              </div>
-            </div>
-            {/* {showToast && (
-              <div className={`toast toast-${toast.type}`}>
-                <div className="toast-message">{toast.message}</div>
-                <button onClick={() => setShowToast(false)} className="toast-close">X</button>
-              </div>
-            )} */}
-            {/* Submit Button */}
-            <div className="text-center">
-              <button
-                type="submit"
-                className="px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700"
-              >
-                Update Course
-              </button>
-            </div>
-          </form>
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow rounded-lg">
+      <h1 className="text-2xl font-bold mb-6">Edit Course</h1>
+
+      {showToast && (
+        <div
+          className={`mb-4 p-3 rounded text-white ${
+            toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+          }`}
+        >
+          {toast.message}
         </div>
       )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Title */}
+        <div>
+          <label className="block mb-2 font-medium">Title</label>
+          <input
+            type="text"
+            name="title"
+            value={course.title || ''}
+            onChange={handleInputChange}
+            className="w-full border px-3 py-2 rounded"
+          />
+        </div>
+
+        {/* Description */}
+        <div>
+          <label className="block mb-2 font-medium">Description</label>
+          <textarea
+            name="description"
+            value={course.description || ''}
+            onChange={handleInputChange}
+            className="w-full border px-3 py-2 rounded"
+            rows="4"
+          />
+        </div>
+
+        {/* Price & Duration */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-2 font-medium">Price (₹)</label>
+            <input
+              type="number"
+              name="price"
+              value={course.price || 0}
+              onChange={handleInputChange}
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 font-medium">Duration</label>
+            <input
+              type="text"
+              name="duration"
+              value={course.duration || ''}
+              onChange={handleInputChange}
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+        </div>
+
+        {/* Files */}
+        <div>
+          <label className="block mb-2 font-medium">Thumbnail Image</label>
+          <input type="file" name="imageFile" accept="image/*" onChange={handleFileChange} />
+        </div>
+        <div>
+          <label className="block mb-2 font-medium">Syllabus PDF</label>
+          <input type="file" name="pdfFile" accept="application/pdf" onChange={handleFileChange} />
+        </div>
+        <div>
+          <label className="block mb-2 font-medium">Certificate Image</label>
+          <input type="file" name="certificateFile" accept="image/*" onChange={handleFileChange} />
+        </div>
+
+        {/* Video Link */}
+        <div>
+          <label className="block mb-2 font-medium">Course Introduction URL</label>
+          <input
+            type="text"
+            name="courseIntrovideo"
+            value={course.courseIntrovideo || ''}
+            onChange={handleInputChange}
+            className="w-full border px-3 py-2 rounded"
+          />
+        </div>
+
+        {/* Checkboxes */}
+        <div className="flex gap-6">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="isOffline"
+              checked={course.isOffline || false}
+              onChange={handleCheckboxChange}
+            />
+            Is Offline
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="isTrending"
+              checked={course.isTrending || false}
+              onChange={handleCheckboxChange}
+            />
+            Is Trending
+          </label>
+        </div>
+
+        {/* What You Will Learn */}
+        <div>
+          <label className="block text-xl font-semibold mb-2">What You Will Learn</label>
+          {course.whatYouWillLearn.map((item, index) => (
+            <div key={index} className="flex items-center gap-2 mb-2">
+              <input
+                type="text"
+                value={item}
+                onChange={(e) => handleArrayChange('whatYouWillLearn', index, e.target.value)}
+                className="w-full border px-3 py-2 rounded"
+              />
+              <button
+                type="button"
+                onClick={() => removeArrayItem('whatYouWillLearn', index)}
+                className="bg-red-500 text-white px-3 py-1 rounded"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addArrayItem('whatYouWillLearn')}
+            className="bg-blue-500 text-white px-3 py-2 rounded mt-2"
+          >
+            Add Item
+          </button>
+        </div>
+
+        {/* Who Should Enroll */}
+        <div>
+          <label className="block text-xl font-semibold mb-2">Who Should Enroll</label>
+          {course.whoShouldEnroll.map((item, index) => (
+            <div key={index} className="flex items-center gap-2 mb-2">
+              <input
+                type="text"
+                value={item}
+                onChange={(e) => handleArrayChange('whoShouldEnroll', index, e.target.value)}
+                className="w-full border px-3 py-2 rounded"
+              />
+              <button
+                type="button"
+                onClick={() => removeArrayItem('whoShouldEnroll', index)}
+                className="bg-red-500 text-white px-3 py-1 rounded"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addArrayItem('whoShouldEnroll')}
+            className="bg-blue-500 text-white px-3 py-2 rounded mt-2"
+          >
+            Add Item
+          </button>
+        </div>
+
+        {/* Submit */}
+        <div className="text-right">
+          <button
+            type="submit"
+            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

@@ -49,7 +49,7 @@ import BundleRouter from "./pages/bundleRouter";
 import Upgrade from "./components/Upgrade";
 import EditCourse from "./components/EditCourse";
 import EditBundle from "./components/EditBundle";
-import Test from "./pages/Test";
+
 function App() {
   return (
     <>
@@ -123,7 +123,7 @@ function App() {
 
 
               <Route path="/blogs" element={<Blogs />} />
-              <Route path='/test' element={<Test />} />
+          
               <Route path="/webinars" element={<Webinars />} />
               
               <Route path="/goal/:id" element={<Goals />} />
