@@ -461,7 +461,8 @@ const Course = () => {
                           <div className="w-20 h-20 md:w-16 md:h-16 rounded-full overflow-hidden mb-2 md:mb-0">
                             <img
                               src={
-                                mentor?.image ||
+                                mentor?.
+                                profileImage ||
                                 "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDZ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
                               }
                               alt={mentor?.name || "Mentor"}
