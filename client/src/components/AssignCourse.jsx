@@ -44,7 +44,7 @@ const AssignCourse = ({ assignType, studentId }) => {
         });
         setList(res.data.data.courses); // Save all fetched courses in state
       } else {
-        const res = await axios.get(`${BASE_URL}/course/getAllBundles`, {
+        const res = await axios.get(`${BASE_URL}/bundle/getAllBundles`, {
           withCredentials: true,
         });
         setList(res.data.data.bundles); // Save all fetched bundles in state
@@ -85,7 +85,7 @@ const AssignCourse = ({ assignType, studentId }) => {
       const endpoint =
         assignType === "course"
           ? `${BASE_URL}/course/assignCourse`
-          : `${BASE_URL}/course/assignBundle`;
+          : `${BASE_URL}/bundle/assignBundle`;
 
       const response = await axios.patch(
         endpoint,

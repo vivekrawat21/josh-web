@@ -154,8 +154,8 @@ const AdminCourses = () => {
                               <Edit className="mr-2 h-4 w-4" />
                               Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem>View Analytics</DropdownMenuItem>
-                            <DropdownMenuSeparator />
+                            {/* <DropdownMenuItem>View Analytics</DropdownMenuItem>
+                            <DropdownMenuSeparator /> */}
                             <DropdownMenuItem 
                               className="text-red-600" 
                               onClick={() => deleteCourse(course._id)}
