@@ -26,7 +26,7 @@ const PersonalInformation = () => {
     let income7Days = 0;
     let income30Days = 0;
   
-    user.incomeHistory.forEach((entry) => {
+    user?.incomeHistory.forEach((entry) => {
       const entryDate = new Date(entry.date);
       if (entryDate >= startOfToday) {
         todayIncome += entry.amount;
@@ -48,7 +48,7 @@ const PersonalInformation = () => {
   };
   const { todayIncome, income7Days, income30Days } = getIncomeBreakdown(user);
   const totalIncome = user?.total_income || 0;
-  const totalTeam = user?.total_team || 0;
+  // const totalTeam = user?.total_team || 0;
   const incentive = user?.incentive || 0;
   
   return (
@@ -81,7 +81,7 @@ const PersonalInformation = () => {
         <div className="space-y-3">
           <InfoCard
             title="My Total Team"
-            value={user?.total_team || 0}
+            value={user?.totalTeam || 0}
             icon={<FaUsers />}
             gradient="from-[#FFA500] to-[#FF8C00]"
           />
