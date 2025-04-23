@@ -101,6 +101,8 @@ const Signup = () => {
     };
 
     try {
+      // console.log("user info to check referral code")
+      // console.log(userInfo)
       const res = await axios.post(`${BASE_URL}/auth/register`, userInfo);
       if (res?.data?.data?.user) {
         dispatch(setUser(res.data.data.user));
