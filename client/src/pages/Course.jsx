@@ -7,7 +7,10 @@ import {
   FaCheckCircle,
   FaLanguage,
   FaDesktop,
+  FaLock,
 } from "react-icons/fa";
+import { Lock } from "lucide-react";
+
 import { CheckCircle } from "lucide-react";
 import { FaRupeeSign } from "react-icons/fa";
 import { useState, useEffect } from "react";
@@ -21,78 +24,117 @@ import { useRef } from "react";
 import { MdDownload } from "react-icons/md";
 import { FiMaximize } from "react-icons/fi";
 
-
 // import {certificate} from "../../public/certificate.png"
 const Course = () => {
   const [showModal, setShowModal] = useState(false);
-  const [courseData, setCourseData] = useState(null);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const { courseId } = useParams();
-  const { courses } = useSelector((state) => state.course);
-  const cart = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
-  const [visibleCount, setVisibleCount] = useState(5);
-  const user = useSelector((state) => state.user);
-  const certificateRef = useRef(null);
-  const [certificatePath, setCertificatePath] = useState("/certificate.png")
+const [courseData, setCourseData] = useState(null);
+const [hoveredIndex, setHoveredIndex] = useState(null);
+const { courseId } = useParams();
+const { courses } = useSelector((state) => state.course);
+const cart = useSelector((state) => state.cart);
+const dispatch = useDispatch();
+const [visibleCount, setVisibleCount] = useState(5);
+const user = useSelector((state) => state.user);
+const certificateRef = useRef(null);
+const [certificatePath, setCertificatePath] = useState("/certificate.png");
+const [selectedVideo, setSelectedVideo] = useState(null);
+const [currentLessonTitle, setCurrentLessonTitle] = useState("");
+const [showTitle, setShowTitle] = useState(false);
+const [showSidebar, setShowSidebar] = useState(false);
 
-  useEffect(() => {
-    if (!courses || courses.length === 0) return;
-    if (courses?.[0]?.length === 0) return;
-    const course = courses[0].find((course) => course._id === courseId);
-    setCourseData(course);
-  }, [courses, courseId]);
+useEffect(() => {
+  if (!courses || courses.length === 0) return;
+  if (courses?.[0]?.length === 0) return;
+  const course = courses[0].find((course) => course._id === courseId);
+  setCourseData(course);
+}, [courses, courseId]);
 
-  const [expandedSections, setExpandedSections] = useState({
-    "01": true,
-  });
+// FIXED: Add dependency array to prevent running on every render
+useEffect(() => {
+  // Only set the initial video when courseData first loads or changes
+  if (courseData?.courseIntrovideo?.videoPath && !selectedVideo) {
+    setSelectedVideo(courseData.courseIntrovideo.videoPath);
+  }
+}, [courseData, selectedVideo]);
 
-  const addToCart = () => {
-    if (courseData) {
-      dispatch(addItems(courseData));
-    }
-  };
+const [expandedSections, setExpandedSections] = useState({
+  "01": true,
+});
 
-  const loadMore = () => {
-    setVisibleCount((prev) => prev + 5);
-  };
+const addToCart = () => {
+  if (courseData) {
+    dispatch(addItems(courseData));
+  }
+};
 
-  const loadLess = () => {
-    setVisibleCount((prev) => prev - 5);
-  };
+const loadMore = () => {
+  setVisibleCount((prev) => prev + 5);
+};
 
-  const cartContainsCourse = cart.cart.some((item) => item._id === courseId);
+const loadLess = () => {
+  setVisibleCount((prev) => prev - 5);
+};
 
-  const toggleSection = (video) => {
-    if (!video.isPreview) {
-      setShowModal(true);
+const cartContainsCourse = cart.cart.some((item) => item._id === courseId);
+
+const toggleSection = (sectionId) => {
+  setExpandedSections((prev) => ({
+    ...prev,
+    [sectionId]: !prev[sectionId],
+  }));
+};
+const toggleModule = (videoId) => {
+  setOpenModule(openModule === videoId ? -1 : videoId);
+};
+const playLesson = (videoLink, title) => {
+  setSelectedVideo(videoLink);
+  setCurrentLessonTitle(title);
+  setShowTitle(true);
+  setTimeout(() => {
+    setShowTitle(false);
+  }, 3000);
+};
+
+useEffect(() => {
+  if (courseData?.certificatePath?.trim()) {
+    console.log("Certificate path is set to:", courseData.certificatePath);
+    setCertificatePath(courseData?.certificatePath);
+  }
+}, [courseData]);
+
+const toggleFullScreen = () => {
+  if (certificateRef.current) {
+    if (!document.fullscreenElement) {
+      certificateRef.current.requestFullscreen();
     } else {
-      setExpandedSections((prev) => ({
-        ...prev,
-        [video._id]: !prev[video._id],
-      }));
+      document.exitFullscreen();
     }
+  }
+};
+
+// Unified video handling function
+const handleVideoSelection = (video) => {
+  console.log("Video selected:", video);
+  
+  // Convert isPreview to a strict boolean value regardless of its original type
+  const videoWithFixedTypes = {
+    ...video,
+    isPreview: Boolean(video.isPreview)
   };
-  useEffect(() => {
-    if (courseData?.certificatePath?.trim()) {
-      console.log("Certificate path is set to:", courseData.certificatePath);
-      setCertificatePath(courseData?.certificatePath);
+  
+  if (videoWithFixedTypes.isPreview) {
+    setSelectedVideo(videoWithFixedTypes);
+    setCurrentLessonTitle(video.title);
+    setShowTitle(true);
+    // setTimeout(() => setShowTitle(false), 3000);
+    if (window.innerWidth < 768) {
+      setShowSidebar(false);
     }
-  }, [courseData]);
-
-  const toggleFullScreen = () => {
-    if (certificateRef.current) {
-      if (!document.fullscreenElement) {
-        certificateRef.current.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
-    }
-  };
-
-
-  // console.log("course data is ")
-  // console.log(courseData)
+  } else {
+    setSelectedVideo(videoWithFixedTypes);
+    setShowModal(true);
+  }
+};
   return (
     <div className="min-h-screen bg-white text-black">
       <div className="container mx-auto px-4 py-6">
@@ -132,9 +174,9 @@ const Course = () => {
                             {courseData?.title
                               ?.toLowerCase()
                               .startsWith("odoo") ||
-                              courseData?.title
-                                ?.toLowerCase()
-                                .startsWith("microsoft") ? (
+                            courseData?.title
+                              ?.toLowerCase()
+                              .startsWith("microsoft") ? (
                               <span className="text-base md:text-lg">
                                 Offline
                               </span>
@@ -142,7 +184,7 @@ const Course = () => {
                               <span className="text-base md:text-lg">
                                 Use On Desktop, Tablet & Mobile
                               </span>
-                            )}
+                           ) }
                           </li>
                           {/* <li className="flex items-center gap-3">
                             <FaInfinity className="text-xl text-gray-500" />
@@ -153,13 +195,15 @@ const Course = () => {
                             <span>{courseData?.duration}</span>
                           </li>
                           <li className="flex items-center gap-3 ">
-                            <MdDownload className="text-2xl text-gray-500 animate-bounce  mt-[0.32rem] 
-                            " />
-                            <a
-                              href={courseData?.pdfPath}
-                              download
-                            >
-                              <span className="hover:border-b-2 hover:border-orange-200"> Download Brochure</span>
+                            <MdDownload
+                              className="text-2xl text-gray-500 animate-bounce  mt-[0.32rem] 
+                            "
+                            />
+                            <a href={courseData?.pdfPath} download>
+                              <span className="hover:border-b-2 hover:border-orange-200">
+                                {" "}
+                                Download Brochure
+                              </span>
                             </a>
                           </li>
                           <li className="flex items-center gap-3">
@@ -180,8 +224,9 @@ const Course = () => {
                               ? `/signup?courseId=${courseId}&type=course`
                               : "/payment"
                           }
-                          className={`${cartContainsCourse ? 'w-full' : 'w-full sm:w-1/2'
-                            }`}
+                          className={`${
+                            cartContainsCourse ? "w-full" : "w-full sm:w-1/2"
+                          }`}
                         >
                           <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
                             <FaRupeeSign />
@@ -211,118 +256,153 @@ const Course = () => {
 
                 {/* Video Section */}
                 <div className="relative pb-[56.25%] w-full h-0">
-                  <iframe
-                    className="absolute top-0 left-0 w-full h-full rounded-lg shadow-md"
-                    src={
-                      courseData?.courseIntrovideo ||
-                      "https://www.youtube.com/embed/Dhpb0rz8fjU?si=WYbWv-wXCXmpzhJq"
-                    }
-                    title={
-                      courseData?.videos && courseData.videos[0]
-                        ? courseData.videos[0].title
-                        : "Course Introduction"
-                    }
-                    allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
-                  ></iframe>
-                </div>
-              </div>
+  <iframe
+    className="absolute top-0 left-0 w-full h-full rounded-lg shadow-md"
+    src={
+      selectedVideo && Boolean(selectedVideo.isPreview)
+        ? selectedVideo.url
+        : courseData?.courseIntrovideo
+    }
+    title={
+      selectedVideo?.isPreview
+        ? selectedVideo.title
+        : "Course Introduction"
+    }
+    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
+    frameBorder="0"
+  ></iframe>
+</div>
 
-              <div className="bg-white text-black px-4 md:px-6 pt-6">
-                <h2 className="text-2xl font-bold mb-2">What you will learn</h2>
-                {!courseData?.whatYouWillLearn ||
-                  courseData.whatYouWillLearn.length === 0 ? (
-                  <div className="text-center text-gray-500 py-4">
-                    <p className="text-black">
-                      Currently No videos available for this course.
-                    </p>
-                  </div>
-                ) : (
-                  <ul className="space-y-4">
-                    {courseData.whatYouWillLearn.map((item, index) => (
-                      <li
-                        key={index}
-                        className={`
-                        relative flex items-start gap-3 p-4 
-                        rounded-lg transition-all duration-300
-                        ${hoveredIndex === index
-                            ? "bg-gradient-to-r from-orange-50 to-red-50 shadow-md transform -translate-y-1"
-                            : "bg-gray-50 shadow-sm"
-                          }
-                      `}
-                        onMouseEnter={() => setHoveredIndex(index)}
-                        onMouseLeave={() => setHoveredIndex(null)}
-                      >
-                        <div
-                          className={`
-                        flex-shrink-0 mt-0.5 
-                        ${hoveredIndex === index
-                              ? "text-orange-600"
-                              : "text-orange-500"
-                            }
-                      `}
-                        >
-                          <CheckCircle className="h-5 w-5" />
-                        </div>
-                        <div className="flex-1">
-                          <p
-                            className={`
-                          font-medium leading-relaxed
-                          ${hoveredIndex === index
-                                ? "text-gray-900"
-                                : "text-gray-800"
-                              }
-                        `}
-                          >
-                            {item}
-                          </p>
-                        </div>
-                        <div
-                          className={`
-                        absolute left-0 top-0 bottom-0 w-1 rounded-l-lg
-                        ${hoveredIndex === index
-                              ? "bg-orange-600"
-                              : "bg-orange-400"
-                            }
-                      `}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+<div className="bg-white text-black px-4 md:px-6 pt-6">
+  <h2 className="text-2xl font-bold mb-2 text-center md:text-left">What you will learn</h2>
+  {courseData?.videos?.length > 0 ? (
+    courseData.videos.slice(0, visibleCount).map((video) => (
+      <div key={video._id} className="mb-3">
+        <div
+          className={`flex justify-between items-center p-3 rounded cursor-pointer transition-colors ${
+            video.isPreview
+              ? "bg-gray-50 hover:bg-gray-200"
+              : "bg-gray-100 cursor-not-allowed"
+          }`}
+          onClick={() => {
+            console.log("on handle video selection", video);
+            handleVideoSelection(video);
+          }}
+        >
+          <span className="text-sm md:text-base font-medium text-black truncate w-full pr-2">
+            {video.title}
+          </span>
+          {video.isPreview ? (
+            <span className="text-green-600 text-xs font-semibold whitespace-nowrap">
+              Preview
+            </span>
+          ) : (
+            <FaLock className="w-4 h-4 flex-shrink-0 text-gray-600" />
+          )}
+        </div>
+      </div>
+    ))
+  ) : (
+    <ul className="space-y-4">
+      {courseData?.whatYouWillLearn?.map((item, index) => (
+        <li
+          key={index}
+          className={`
+            relative flex items-start gap-3 p-4 
+            rounded-lg transition-all duration-300
+            ${
+              hoveredIndex === index
+                ? "bg-gradient-to-r from-orange-50 to-red-50 shadow-md transform -translate-y-1"
+                : "bg-gray-50 shadow-sm"
+            }
+          `}
+          onMouseEnter={() => setHoveredIndex(index)}
+          onMouseLeave={() => setHoveredIndex(null)}
+        >
+          <div
+            className={`
+              flex-shrink-0 mt-0.5 
+              ${hoveredIndex === index ? "text-orange-600" : "text-orange-500"}
+            `}
+          >
+            <CheckCircle className="h-5 w-5" />
+          </div>
+          <div className="flex-1">
+            <p
+              className={`
+                font-medium leading-relaxed
+                ${hoveredIndex === index ? "text-gray-900" : "text-gray-800"}
+              `}
+            >
+              {item}
+            </p>
+          </div>
+          <div
+            className={`
+              absolute left-0 top-0 bottom-0 w-1 rounded-l-lg
+              ${hoveredIndex === index ? "bg-orange-600" : "bg-orange-400"}
+            `}
+          />
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
 
-              {/* Enrollment Pop-up */}
-              {showModal && (
-                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 px-4">
-                  <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full">
-                    <h2 className="text-xl font-semibold mb-4">
-                      Enroll to Unlock
-                    </h2>
-                    <p className="text-gray-600 mb-4">
-                      You need to enroll in the course to access this module.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                      <Link
-                        to={
-                          !user
-                            ? `/signup?courseId=${courseId}&type=course`
-                            : "/payment"
-                        }
-                      >
-                        <button className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg w-full">
-                          BUY COURSE
-                        </button>
-                      </Link>
-                      <button
-                        onClick={() => setShowModal(false)}
-                        className="bg-gray-300 hover:bg-gray-400 py-2 px-4 rounded-lg w-full"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
+{courseData?.videos?.length > 0 && (
+  <div className="flex justify-center gap-2 flex-wrap px-3 pb-4 mt-4">
+    {visibleCount < courseData.videos.length && (
+      <button
+        className="px-3 py-1.5 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300 md:text-base"
+        onClick={loadMore}
+      >
+        Load More
+      </button>
+    )}
+    {visibleCount > 5 && (
+      <button
+        className="px-3 py-1.5 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300 md:text-base"
+        onClick={loadLess}
+      >
+        Load Less
+      </button>
+    )}
+  </div>
+)}
+
+{/* Enrollment Pop-up */}
+{showModal && (
+  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 px-4">
+    <div className="bg-white p-4 md:p-6 rounded-lg shadow-lg text-center max-w-sm w-full animate-fadeIn">
+      <h2 className="text-xl font-semibold mb-4">
+        Enroll to Unlock
+      </h2>
+      <p className="text-gray-600 mb-4">
+        You need to enroll in the course to access this module.
+      </p>
+      <div className="flex flex-col sm:flex-row gap-2 justify-center">
+        <Link
+          to={
+            !user
+              ? `/signup?courseId=${courseId}&type=course`
+              : "/payment"
+          }
+          className="w-full"
+        >
+          <button className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg w-full">
+            BUY COURSE
+          </button>
+        </Link>
+        <button
+          onClick={() => setShowModal(false)}
+          className="bg-gray-300 hover:bg-gray-400 py-2 px-4 rounded-lg w-full"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
               <div className="bg-white text-black p-4 md:p-6 lg:px-8 lg:py-4">
                 <div className="mb-2">
@@ -357,10 +437,14 @@ const Course = () => {
                     <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
                       Who Should Enroll:
                     </h3>
-                    {courseData?.whoShouldEnroll && courseData.whoShouldEnroll.length > 0 ? (
+                    {courseData?.whoShouldEnroll &&
+                    courseData.whoShouldEnroll.length > 0 ? (
                       <ul>
                         {courseData.whoShouldEnroll.map((item, index) => (
-                          <li key={index} className="flex items-start mb-3 last:mb-0">
+                          <li
+                            key={index}
+                            className="flex items-start mb-3 last:mb-0"
+                          >
                             <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
                             <span className="ml-2 text-[11pt] md:text-base lg:text-lg text-gray-800 leading-relaxed text-left md:text-justify">
                               {item}
@@ -369,17 +453,23 @@ const Course = () => {
                         ))}
                       </ul>
                     ) : (
-                      <p className="mb-6 text-gray-500">Information not available</p>
+                      <p className="mb-6 text-gray-500">
+                        Information not available
+                      </p>
                     )}
 
                     {/* Still Confused */}
                     <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
                       Still Confused?
                     </h3>
-                    {courseData?.stillConfused && courseData.stillConfused.length > 0 ? (
+                    {courseData?.stillConfused &&
+                    courseData.stillConfused.length > 0 ? (
                       <ul>
                         {courseData.stillConfused.map((item, index) => (
-                          <li key={index} className="flex items-start mb-3 last:mb-0">
+                          <li
+                            key={index}
+                            className="flex items-start mb-3 last:mb-0"
+                          >
                             <FaCheckCircle className="text-green-500 min-w-[20px] mt-1 text-base md:text-lg" />
                             <span className="ml-2 text-[11pt] md:text-base lg:text-lg text-gray-800 leading-relaxed text-left md:text-justify">
                               {item}
@@ -388,14 +478,17 @@ const Course = () => {
                         ))}
                       </ul>
                     ) : (
-                      <p className="mb-6 text-gray-500">Information not available</p>
+                      <p className="mb-6 text-gray-500">
+                        Information not available
+                      </p>
                     )}
 
                     {/* Reason Why Joshguru */}
                     <h3 className="text-lg md:text-xl font-semibold mt-6 mb-2 text-black">
                       Reason Why Joshguru
                     </h3>
-                    {courseData?.reasonWhyJoshGuru && courseData.reasonWhyJoshGuru.length > 0 ? (
+                    {courseData?.reasonWhyJoshGuru &&
+                    courseData.reasonWhyJoshGuru.length > 0 ? (
                       <ul className="space-y-1">
                         {courseData.reasonWhyJoshGuru.map((item, index) => (
                           <li key={index} className="flex items-start gap-1.5">
@@ -407,17 +500,21 @@ const Course = () => {
                         ))}
                       </ul>
                     ) : (
-                      <p className="mb-6 text-gray-500">Information not available</p>
+                      <p className="mb-6 text-gray-500">
+                        Information not available
+                      </p>
                     )}
                   </section>
                 </div>
 
-
                 {/* Certificate Section */}
                 <section className="mb-6">
-                  <h1 className="text-2xl md:text-3xl font-bold mb-1">Certificate</h1>
+                  <h1 className="text-2xl md:text-3xl font-bold mb-1">
+                    Certificate
+                  </h1>
                   <p className="text-sm italic mt-3 mb-2 lg:mt-6 text-gray-600 lg:mb-4 lg:ml-2">
-                    Unlock better opportunity by sharing your certificate on <span className="text-blue-600 font-medium">LinkedIn</span>
+                    Unlock better opportunity by sharing your certificate on{" "}
+                    <span className="text-blue-600 font-medium">LinkedIn</span>
                   </p>
                   <div className="relative w-full max-w-[500px] border rounded-xl shadow-md overflow-hidden">
                     <img
@@ -436,8 +533,6 @@ const Course = () => {
                   </div>
                 </section>
 
-
-
                 {/* Mentor Section */}
                 <section className="mt-8 mb-6">
                   <h1 className="text-2xl md:text-3xl font-bold mb-4">
@@ -453,8 +548,7 @@ const Course = () => {
                           <div className="w-20 h-20 md:w-16 md:h-16 rounded-full overflow-hidden mb-2 md:mb-0">
                             <img
                               src={
-                                mentor?.
-                                  profileImage ||
+                                mentor?.profileImage ||
                                 "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDZ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
                               }
                               alt={mentor?.name || "Mentor"}
@@ -583,13 +677,15 @@ const Course = () => {
                         </span>
                       </li>
                       <li className="flex items-center gap-3 ">
-                        <MdDownload className="text-2xl text-gray-500 animate-bounce  mt-[0.32rem] 
-                            " />
-                        <a
-                          href={courseData?.pdfPath}
-                          download
-                        >
-                          <span className="hover:border-b-2 hover:border-orange-200"> Download Brochure</span>
+                        <MdDownload
+                          className="text-2xl text-gray-500 animate-bounce  mt-[0.32rem] 
+                            "
+                        />
+                        <a href={courseData?.pdfPath} download>
+                          <span className="hover:border-b-2 hover:border-orange-200">
+                            {" "}
+                            Download Brochure
+                          </span>
                         </a>
                       </li>
                       <li className="flex items-center gap-3">
@@ -612,8 +708,9 @@ const Course = () => {
                           ? `/signup?courseId=${courseId}&type=course`
                           : "/payment"
                       }
-                      className={`${cartContainsCourse ? 'w-full' : 'w-full sm:w-1/2'
-                        }`}
+                      className={`${
+                        cartContainsCourse ? "w-full" : "w-full sm:w-1/2"
+                      }`}
                     >
                       <button className="w-full bg-gradient-to-r from-orange-600 to-orange-400 hover:from-orange-700 hover:to-orange-500 text-white py-3 rounded font-semibold flex items-center justify-center gap-2 transition-colors">
                         <FaRupeeSign />
@@ -641,12 +738,19 @@ const Course = () => {
               </div>
             </div>
           </div>
-        ) : (
-          <div className="flex justify-center items-center h-64">
-            <div className="text-xl">Loading course information...</div>
-          </div>
-        )}
+        
+        
+        
       </div>
+  ):(
+    
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-xl">Loading course information...</div>
+
+      </div>
+  )}
+  
+    </div>
     </div>
   );
 };
