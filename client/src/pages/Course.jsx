@@ -633,7 +633,10 @@ const handleVideoSelection = (video) => {
             </div>
 
             {/* Right Section - Desktop Sidebar */}
-            <div className="lg:w-1/3 hidden lg:block">
+           
+          </div>
+           {/* right side */}
+           <div className="lg:w-1/3 hidden lg:block">
               <div className="bg-white rounded-lg shadow-md overflow-hidden sticky top-20">
                 <div className="relative">
                   <img
@@ -737,8 +740,6 @@ const handleVideoSelection = (video) => {
                 </div>
               </div>
             </div>
-          </div>
-        
         
         
       </div>
