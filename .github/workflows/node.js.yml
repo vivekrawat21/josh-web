@@ -1,4 +1,4 @@
-name: First CI-CD
+name: CI-CD
 
 on:
   push:
@@ -41,7 +41,6 @@ jobs:
           fi
           npm install
           npm run build
-          sudo cp -r dist/* /var/www/html
+          sudo scp -r dist/* /var/www/html
           sudo systemctl restart nginx
-          
           EOF
