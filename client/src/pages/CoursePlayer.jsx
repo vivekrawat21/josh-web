@@ -13,11 +13,16 @@ function CoursePlayer() {
   const [showSidebar, setShowSidebar] = useState(false)
   const { courseId } = useParams()
   const { courses, loading, error } = useSelector((state) => state.course)
+  console.log(courseId)
   const user = useSelector((state) => state.user)
-
+  // const courseId = useParams().courseId
   const course = courses[0]?.find((course) => course._id === courseId)
-  const courseExists = user?.courses?.some(course => course._id.toString() === courseId.toString())
+  console.log("course 0 " ,course[0])
+  // const course = courses?.find((course) => course._id === courseId)
 
+  const courseExists = user?.courses?.some(course => course._id.toString() === courseId.toString())
+  console.log(user)
+  console.log("courses exists", courseExists)
   useEffect(() => {
     if (!loading && course && courseExists && course.videos.length > 0) {
       setCurrentVideo(course.videos[0].url)
