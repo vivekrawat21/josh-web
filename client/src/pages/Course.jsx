@@ -1,16 +1,12 @@
 import {
   FaCertificate,
-  FaInfinity,
   FaShoppingCart,
   FaRegClock,
-  FaClock,
   FaCheckCircle,
   FaLanguage,
   FaDesktop,
   FaLock,
 } from "react-icons/fa";
-import { Lock } from "lucide-react";
-
 import { CheckCircle } from "lucide-react";
 import { FaRupeeSign } from "react-icons/fa";
 import { useState, useEffect } from "react";
@@ -24,7 +20,6 @@ import { useRef } from "react";
 import { MdDownload } from "react-icons/md";
 import { FiMaximize } from "react-icons/fi";
 
-// import {certificate} from "../../public/certificate.png"
 const Course = () => {
   const [showModal, setShowModal] = useState(false);
 const [courseData, setCourseData] = useState(null);
