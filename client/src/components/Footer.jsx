@@ -75,6 +75,7 @@ const Footer = () => {
   </div>
 
   {/* Quick Links */}
+  <div className="flex flex-row w-full md:w-1/2 justify-between gap-8">
   <div className="w-full md:w-1/3  md:text-left">
     <h2 className="text-lg font-semibold mb-4 text-gray-300">Quick Links</h2>
     <ul className="text-sm space-y-2 text-gray-400">
@@ -96,6 +97,7 @@ const Footer = () => {
       <li><Link to="/licenseAndAgreement" className="hover:text-cyan-400 transition">License & Agreements</Link></li>
       
     </ul>
+  </div>
   </div>
 </div>
 

@@ -1,219 +1,336 @@
-"use client"
+import { useState, useEffect } from "react";
+import { ChevronDown, ChevronUp, Menu, X } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { Circle, CircleDot } from "lucide-react";
+import { PlayCircle } from "lucide-react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { BASE_URL } from "../utils/utils";
 
-import { useState, useRef, useEffect } from "react"
-import { ChevronDown, ChevronUp, Lock, Paperclip } from "lucide-react"
+const CoursePlayer = () => {
+  const [activeTab, setActiveTab] = useState("ABOUT");
+  const [showTitle, setShowTitle] = useState(false);
+  const [openModule, setOpenModule] = useState(1);
+  const [currentVideo, setCurrentVideo] = useState(null);
+  const [currentLessonTitle, setCurrentLessonTitle] = useState("");
+  const [visibleCount, setVisibleCount] = useState(5);
+  const [showSidebar, setShowSidebar] = useState(false);
 
-function CoursePlayer() {
-  const [activeTab, setActiveTab] = useState("DISCUSSIONS")
-  const videoRef = useRef(null)
-  const [isEnrolled, setIsEnrolled] = useState(false) // Simulate enrollment status
-  const [showTitle, setShowTitle] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [openModule, setOpenModule] = useState(1)
-  const [currentVideo, setCurrentVideo] = useState("https://www.w3schools.com/html/mov_bbb.mp4")
-  const [currentLessonTitle, setCurrentLessonTitle] = useState("HTML and VSCode - Getting Started")
+  const { courseId } = useParams();
+  const user = useSelector((state) => state.user);
 
-  const courseData = {
-    title: "Chai aur HTML in Hindi",
-    about: "This course covers everything you need to know about HTML, from basics to advanced concepts like forms, tables, and accessibility.",
-    modules: [
-      {
-        id: 1,
-        title: "Complete HTML Course",
-        lessons: [
-          { title: "HTML and VSCode - Getting Started", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "HTML Tags and Elements", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "HTML Forms and Input Fields", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "HTML Tables and Lists", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "HTML Semantic Elements", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "HTML Multimedia Elements", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "HTML Attributes and Global Attributes", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-        ],
-      },
-      {
-        id: 2,
-        title: "Advanced HTML and Forms",
-        locked: !isEnrolled,
-        lessons: [
-          { title: "Advanced HTML Introduction", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "Complex Form Structures", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "Form Validation Techniques", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "Advanced Table Layouts", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "HTML5 APIs and Features", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "Responsive HTML Design", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-          { title: "Accessibility Best Practices", type: "video", videoLink: "https://www.w3schools.com/html/mov_bbb.mp4" },
-        ],
-      },
-    ],
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        console.log("Making API call...");
+        const res = await axios.get(`${BASE_URL}/course/${courseId}`, {
+          withCredentials: true,
+        });
+
+        setCourse(res.data.data.course || null);
+      } catch (err) {
+        console.error(err);
+        setError(err.response?.data?.message || "Failed to fetch course.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourse();
+  }, [courseId]);
+
+  useEffect(() => {
+    if (course && course.videos && course.videos.length > 0) {
+      setCurrentVideo(course.videos[0].url);
+      setCurrentLessonTitle(course.videos[0].title);
+    }
+  }, [course]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setShowSidebar(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const playLesson = (videoLink, title) => {
+    setCurrentVideo(videoLink);
+    setCurrentLessonTitle(title);
+    setShowTitle(true);
+
+    setTimeout(() => setShowTitle(false), 3000);
+
+    if (window.innerWidth < 768) {
+      setShowSidebar(false);
+    }
   };
 
-  // Toggle title visibility when clicking on video
-  const handleVideoClick = () => {
-    if (videoRef.current) {
-      if (videoRef.current.paused) {
-        videoRef.current.play()
-      } else {
-        videoRef.current.pause()
-      }
-    }
-    setShowTitle(true)
-    setTimeout(() => setShowTitle(false), 3000)
-  }
+  const toggleModule = (videoId) => {
+    setOpenModule(openModule === videoId ? -1 : videoId);
+  };
 
-  // Play selected lesson
-  const playLesson = (videoLink, title) => {
-    setCurrentVideo(videoLink)
-    setCurrentLessonTitle(title)
-    if (videoRef.current) {
-      videoRef.current.load()
-      videoRef.current.play()
-    }
-  }
+  const loadMore = () => setVisibleCount((prev) => prev + 5);
+  const loadLess = () => setVisibleCount((prev) => Math.max(5, prev - 5));
 
-  // Toggle module expansion
-  const toggleModule = (moduleId, isLocked) => {
-    if (!isLocked) {
-      setOpenModule(openModule === moduleId ? -1 : moduleId)
-    }
-  }
-
-  // Simulate progress update
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => (prev < 100 ? prev + 5 : 100))
-    }, 1000)
-    return () => clearInterval(interval)
-  }, [])
-
-  return (
-    <div className="flex flex-col md:flex-row bg-white min-h-screen">
-      <div className="w-full md:w-2/3 bg-white text-black shadow-lg">
-        <div className="flex items-center justify-between p-4 border-b border-gray-300">
-          <div className="flex items-center">
-            <button className="mr-4 text-gray-600">⬅</button>
-            <h1 className="text-lg font-medium">
-              {courseData.title} - {currentLessonTitle}
-            </h1>
-          </div>
-        </div>
-
-        <div className="relative p-4">
-          <div
-            className="aspect-video bg-gray-200 cursor-pointer rounded-lg overflow-hidden shadow-md"
-            onClick={handleVideoClick}
-          >
-            <video ref={videoRef} controls className="w-full h-full rounded-lg">
-              <source src={currentVideo} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-            {showTitle && (
-              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-3 transition-opacity">
-                <h3 className="text-lg font-medium">{currentLessonTitle}</h3>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="border-b border-gray-300 flex">
-          {["ABOUT", "DISCUSSIONS"].map((tab) => (
-            <button
-              key={tab}
-              className={`px-4 py-3 text-sm font-medium transition-colors duration-300 ${
-                activeTab === tab
-                  ? "border-b-2 border-orange-500 text-orange-600"
-                  : "text-gray-500 hover:text-orange-600"
-              }`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        <div className="p-4">
-          {activeTab === "DISCUSSIONS" ? (
-            <>
-              <h3 className="text-2xl font-bold">Lesson Discussion</h3>
-              <textarea
-                placeholder="Start a Discussion"
-                className="w-full bg-gray-100 outline-none resize-none h-20 border border-gray-300 rounded-lg p-2 mt-4"
-              ></textarea>
-              <div className="flex gap-4 mt-2">
-                <button className="px-4 py-2 bg-orange-500 text-white rounded text-sm">POST DISCUSSION</button>
-                <button className="px-4 py-2 bg-transparent border border-gray-300 rounded text-sm flex items-center gap-2">
-                  <Paperclip size={16} /> ATTACH FILE
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="mt-4">
-              <h3 className="text-2xl font-bold mb-4">About This Course</h3>
-              <p className="text-gray-700">{courseData.about}</p>
-              <div className="mt-4">
-                <h4 className="font-semibold text-lg">What you'll learn:</h4>
-                <ul className="list-disc pl-5 mt-2">
-                  {courseData.modules.flatMap((module) =>
-                    module.lessons.map((lesson, index) => (
-                      <li key={`${module.id}-${index}`}>{lesson.title}</li>
-                    ))
-                  )}
-                </ul>
-              </div>
-            </div>
-          )}
+  if (loading) {
+    return (
+      <div className="p-4 sm:p-6 lg:p-10 w-full">
+        <div className="animate-pulse space-y-4">
+          <div className="h-6 bg-gray-300 rounded w-1/3"></div>
+          <div className="aspect-video bg-gray-200 rounded-lg"></div>
+          <div className="h-4 bg-gray-300 rounded w-1/2 mt-4"></div>
+          <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+          <div className="h-4 bg-gray-300 rounded w-3/4"></div>
         </div>
       </div>
+    );
+  }
 
-      {/* Right panel - always visible */}
-      <div className="w-full md:w-1/3 bg-white text-black border-l border-gray-300 md:relative fixed bottom-0 h-auto md:h-full overflow-y-auto">
-        <div className="sticky top-0 bg-white p-3 border-b border-gray-200">
-          <h3 className="font-semibold">Course Content</h3>
-        </div>
-        <div className="p-4">
-          {courseData.modules.map((module) => (
-            <div key={module.id} className="mb-4">
-              <div
-                className={`flex justify-between items-center p-3 rounded cursor-pointer hover:bg-gray-200 
-                           ${module.locked ? "bg-gray-50 text-gray-500" : "bg-gray-100"}`}
-                onClick={() => toggleModule(module.id, module.locked)}
+  if (error) {
+    return (
+      <div className="p-4 flex justify-center items-center min-h-[50vh]">
+        <p className="text-red-500 text-center p-4 max-w-md">
+          Error loading course: {error}
+        </p>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="p-4 flex justify-center items-center min-h-[50vh]">
+        <p className="text-center p-4 max-w-md">Course not found.</p>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="flex flex-col bg-white min-h-screen">
+      {course ? (
+        <div className="flex flex-col md:flex-row w-full relative">
+          {/* Main Content Area */}
+          <div className="w-full md:w-2/3 bg-white text-black shadow-md flex flex-col">
+            {/* Course Title Bar with Mobile Sidebar Toggle */}
+            <div className="flex items-center justify-between px-3 border-b border-gray-300 sticky top-0 bg-white z-20 border-r ">
+              <h1 className="text-base sm:text-lg font-semibold truncate pr-2 pt-2 pb-3">
+                {course.title}
+              </h1>
+              <button
+                className="md:hidden flex items-center justify-center p-2 rounded-md hover:bg-gray-100"
+                onClick={() => setShowSidebar(!showSidebar)}
+                aria-label="Toggle course content"
               >
-                <div>
-                  <span className="text-lg font-semibold text-orange-500">
-                    {module.id.toString().padStart(2, "0")}{" "}
-                  </span>
-                  {module.title}
-                  <p className="text-sm text-gray-600">{module.lessons.length} Lessons</p>
-                </div>
-                {module.locked ? (
-                  <Lock size={20} className="text-gray-400" />
-                ) : openModule === module.id ? (
-                  <ChevronUp size={20} />
+                {showSidebar ? <X size={20} /> : <Menu size={20} />}
+                <span className="ml-2 text-sm">Content</span>
+              </button>
+            </div>
+
+            {/* Video Player */}
+            <div className="p-2 sm:p-4">
+              <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-md relative">
+                {currentVideo ? (
+                  <iframe
+                    src={currentVideo}
+                    className="w-full h-full rounded-lg"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title="Course Video"
+                  ></iframe>
                 ) : (
-                  <ChevronDown size={20} />
+                  <div className="animate-pulse w-full h-full bg-gray-300 rounded-lg" />
+                )}
+                {showTitle && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2 md:p-3 transition-opacity">
+                    <h3 className="text-sm md:text-lg font-medium line-clamp-2">
+                      {currentLessonTitle}
+                    </h3>
+                  </div>
                 )}
               </div>
+            </div>
 
-              {openModule === module.id && !module.locked && (
-                <div className="mt-2 bg-gray-50 rounded p-2">
-                  {module.lessons.map((lesson, index) => (
-                    <div
-                      key={index}
-                      className="p-2 flex items-center space-x-2 hover:bg-gray-200 rounded cursor-pointer"
-                      onClick={() => playLesson(lesson.videoLink, lesson.title)}
-                    >
-                      <span className="text-orange-400">📹</span>
-                      <p className="truncate">{lesson.title}</p>
-                    </div>
-                  ))}
+            {/* Tabs */}
+            <div className="border-b border-gray-300">
+              <div className="flex overflow-x-auto">
+                {["ABOUT", "DISCUSSIONS"].map((tab) => (
+                  <button
+                    key={tab}
+                    className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-300 ${
+                      activeTab === tab
+                        ? "border-b-2 border-orange-500 text-orange-600"
+                        : "text-gray-500 hover:text-orange-600"
+                    }`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Tab Content */}
+            <div className="p-3 sm:p-4 flex-grow">
+              {activeTab === "DISCUSSIONS" ? (
+                <>
+                  <h3 className="text-lg sm:text-xl font-bold">
+                    Lesson Feedback
+                  </h3>
+                  <textarea
+                    placeholder="Give a feedback"
+                    className="w-full bg-gray-100 outline-none resize-none h-24 border border-gray-300 rounded-lg p-3 mt-4"
+                  ></textarea>
+                  <div className="flex gap-4 mt-3">
+                    <button className="px-4 py-2 bg-orange-500 text-white rounded-md text-sm hover:bg-orange-600 transition">
+                      Post Feedback
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="mt-2 sm:mt-2">
+                  <h3 className="text-lg sm:text-xl font-bold mb-3">
+                    About This Course
+                  </h3>
+                  <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                    {course.description}
+                  </p>
+                  <div className="mt-4">
+                    <h3 className="text-lg sm:text-xl font-bold">
+                      What you'll learn:
+                    </h3>
+                    <ul className="list-disc pl-5 mt-2 text-sm text-gray-700 space-y-1 md:text-base">
+                      {course.whatYouWillLearn.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Mobile Sidebar Overlay */}
+          {showSidebar && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setShowSidebar(false)}></div>
+          )}
+
+          {/* Course Content Sidebar - Mobile Slide-in / Desktop Side Panel */}
+          <div 
+            className={`
+              fixed md:static 
+              top-0 right-0 bottom-0
+              w-3/4 md:w-1/3
+              ${showSidebar ? 'translate-x-0' : 'translate-x-full md:translate-x-0'} 
+              transition-transform duration-300 ease-in-out
+              bg-white 
+              overflow-y-auto
+              shadow-lg
+              z-50
+            `}
+          >
+            <div className="h-full flex flex-col md:h-[calc(100vh-80px)]">
+  {/* Sidebar Header with Close Button */}
+  <div className="flex items-center justify-between border-b border-gray-300 px-4 pb-3 pt-2 ">
+    <h2 className="text-lg font-bold">Course Content</h2>
+    <button 
+      className="md:hidden p-2 rounded-full hover:bg-gray-100"
+      onClick={() => setShowSidebar(false)}
+    >
+      <X size={20} />
+    </button>
+  </div>
+
+  {/* Sidebar Content and Buttons Wrapper */}
+  <div className="flex-1 flex flex-col overflow-hidden ">
+    {/* Scrollable Video List */}
+    <div className="flex-1 overflow-y-auto p-4">
+      {course.videos.length > 0 ? (
+        <div className="flex flex-col gap-3">
+          {course.videos.slice(0, visibleCount).map((video) => (
+            <div key={video._id}>
+              <div
+                className={`
+                  flex justify-between items-center p-3 rounded cursor-pointer transition-all duration-300 border-2 
+                  ${
+                    openModule === video._id
+                      ? "border-orange-400 bg-orange-50 shadow-sm"
+                      
+                      : "bg-gray-100 border hover:border-gray-300"
+                  }
+                `}
+                onClick={() => {
+                  toggleModule(video._id);
+                  playLesson(video.url, video.title);
+                }}
+              >
+                <span className="text-sm font-medium text-black truncate w-full pr-2">
+                  {video.title}
+                </span>
+                {openModule === video._id ? (
+                  <CircleDot size={18} className="animate-pulse text-orange-400" />
+                ) : (
+                  <Circle size={18} className="text-orange-500" />
+                )}
+              </div>
+            </div>
           ))}
         </div>
-      </div>
+      ) : (
+        <div className="text-center text-gray-500 py-4">
+          Currently, no videos available for this course.
+        </div>
+      )}
     </div>
-  )
-}
 
-export default CoursePlayer
+    {/* Sticky Load More/Less Buttons */}
+    {course.videos.length > 0 && (
+      <div className="p-4 border-t border-gray-300 bg-white flex justify-center gap-2 flex-wrap">
+        {visibleCount < course.videos.length && (
+          <button
+            className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
+            onClick={loadMore}
+          >
+            Load More
+          </button>
+        )}
+        {visibleCount > 5 && (
+          <button
+            className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
+            onClick={loadLess}
+          >
+            Load Less
+          </button>
+        )}
+      </div>
+    )}
+  </div>
+</div>
 
+          </div>
+        </div>
+      ) : (
+        <div className="w-full flex items-center justify-center bg-white text-center p-6 min-h-[50vh]">
+          <div className="max-w-md p-6 bg-gray-50 rounded-lg shadow-sm">
+            <p className="text-xl text-gray-700 font-semibold">
+              🚫 You have not purchased this course.
+            </p>
+            <p className="mt-2 text-gray-600">
+              Please enroll in this course to access the content.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CoursePlayer;

@@ -49,7 +49,7 @@ const About = () => {
   ];
 
   return (
-    <section className="py-16 px-8 bg-gradient-to-b from-gray-50 to-white">
+    <section className=" px-8 bg-gradient-to-b from-gray-50 to-white">
       <div className="flex flex-col items-center justify-center gap-16">
         {/* About Section */}
         <motion.div

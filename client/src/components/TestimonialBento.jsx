@@ -28,7 +28,7 @@ const TestimonialBento = () => {
 
   return (
     <div className="p-6 md:p-12 bg-orange-100  shadow-lg mx-4">
-      <h2 className="text-[1.80rem] lg:text[2.20rem] fontext-[1.80rem] lg:text-7xl font-semibold text-center  my-10 text-gray-900">
+      <h2 className="text-2xl lg:text[2.20rem] fontext-[1.80rem] lg:text-7xl font-semibold text-center  my-10 text-gray-900">
         Students <span className=" text-orange-500  ">Testimonials</span>
       </h2>
 

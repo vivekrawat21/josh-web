@@ -15,7 +15,42 @@ import DefaultProfile from "../assets/DefaultProfile.png";
 
 const PersonalInformation = () => {
   const user = useSelector((state) => state?.user);
-
+  // console.log(user)
+  const getIncomeBreakdown = (user) => {
+    const today = new Date();
+    const startOfToday = new Date(today.setHours(0, 0, 0, 0));
+    const last7Days = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const last30Days = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  
+    let todayIncome = 0;
+    let income7Days = 0;
+    let income30Days = 0;
+  
+    user?.incomeHistory.forEach((entry) => {
+      const entryDate = new Date(entry.date);
+      if (entryDate >= startOfToday) {
+        todayIncome += entry.amount;
+      }
+      if (entryDate >= last7Days) {
+        income7Days += entry.amount;
+      }
+      if (entryDate >= last30Days) {
+        income30Days += entry.amount;
+      }
+    });
+  
+    return {
+      todayIncome,
+      income7Days,
+      income30Days,
+      totalIncome: user?.total_income,
+    };
+  };
+  const { todayIncome, income7Days, income30Days } = getIncomeBreakdown(user);
+  const totalIncome = user?.total_income || 0;
+  // const totalTeam = user?.total_team || 0;
+  const incentive = user?.incentive || 0;
+  
   return (
     <div className="flex  justify-center bg-gray-100 p-4 ">
       <motion.div
@@ -46,41 +81,41 @@ const PersonalInformation = () => {
         <div className="space-y-3">
           <InfoCard
             title="My Total Team"
-            value={user?.total_team || 0}
+            value={user?.totalTeam || 0}
             icon={<FaUsers />}
             gradient="from-[#FFA500] to-[#FF8C00]"
           />
           <InfoCard
             title="My Total Income"
-            value={user?.total_income}
+            value={totalIncome}
             currency
             icon={<FaMoneyBillWave />}
             gradient="from-[#00BFFF] to-[#1E90FF]"
           />
           <InfoCard
             title="Today Income"
-            value={user?.today_income}
+            value={todayIncome}
             currency
             icon={<FaBolt />}
             gradient="from-[#FFA500] to-[#FF8C00]"
           />
           <InfoCard
             title="Last 7 Days Income"
-            value={user?.last_7_days_income}
+            value={income7Days}
             currency
             icon={<FaCalendarWeek />}
             gradient="from-[#00BFFF] to-[#1E90FF]"
           />
           <InfoCard
             title="Last 30 Days Income"
-            value={user?.last_30_days_income}
+            value={income30Days}
             currency
             icon={<FaCalendarAlt />}
             gradient="from-[#FFA500] to-[#FF8C00]"
           />
           <InfoCard
             title="Incentive"
-            value={user?.incentive}
+            value={incentive}
             currency
             icon={<FaGift />}
             gradient="from-[#00BFFF] to-[#1E90FF]"
