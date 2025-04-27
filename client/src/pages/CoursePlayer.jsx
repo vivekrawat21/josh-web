@@ -6,6 +6,7 @@ import { PlayCircle } from "lucide-react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../utils/utils";
+
 const CoursePlayer = () => {
   const [activeTab, setActiveTab] = useState("ABOUT");
   const [showTitle, setShowTitle] = useState(false);
@@ -112,17 +113,15 @@ const CoursePlayer = () => {
       </div>
     );
   }
+  
   return (
     <div className="flex flex-col bg-white min-h-screen">
       {course ? (
-        <div className={`flex flex-col md:flex-row w-full relative `}>
+        <div className="flex flex-col md:flex-row w-full relative">
           {/* Main Content Area */}
-          <div  className={`w-full md:w-2/3 bg-white text-black shadow-md flex flex-col `}
->
+          <div className="w-full md:w-2/3 bg-white text-black shadow-md flex flex-col">
             {/* Course Title Bar with Mobile Sidebar Toggle */}
-            <div className={`flex items-center justify-between px-3 border-b border-gray-300 sticky top-0 bg-white z-20 
-               
-              `}>
+            <div className="flex items-center justify-between px-3 border-b border-gray-300 sticky top-0 bg-white z-20 border-r ">
               <h1 className="text-base sm:text-lg font-semibold truncate pr-2 pt-2 pb-3">
                 {course.title}
               </h1>
@@ -219,109 +218,103 @@ const CoursePlayer = () => {
             </div>
           </div>
 
-          {/* Course Content Sidebar - Mobile Overlay / Desktop Side Panel */}
-          <div
+          {/* Mobile Sidebar Overlay */}
+          {showSidebar && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setShowSidebar(false)}></div>
+          )}
+
+          {/* Course Content Sidebar - Mobile Slide-in / Desktop Side Panel */}
+          <div 
             className={`
-    ${showSidebar ? "fixed  inset-0 z-30 bg-gray-900 bg-opacity-50" : "hidden"} 
-    md:relative md:block md:w-1/3 md:bg-white md:text-black md:border-l md:border-gray-300 md:z-10
-  `}
+              fixed md:static 
+              top-0 right-0 bottom-0
+              w-3/4 md:w-1/3
+              ${showSidebar ? 'translate-x-0' : 'translate-x-full md:translate-x-0'} 
+              transition-transform duration-300 ease-in-out
+              bg-white 
+              overflow-y-auto
+              shadow-lg
+              z-50
+            `}
           >
-            <div
-              className={`
-      ${
-        showSidebar
-          ? "fixed right-0 top-0 w-full max-w-xs h-full bg-white transform transition-transform duration-300 ease-in-out translate-x-0"
-          : "translate-x-full"
-      }
-      md:static md:transform-none md:max-w-none md:w-full md:h-auto md:max-h-screen md:overflow-y-auto
-    `}
-            >
-              {/* Sidebar Header */}
-              <div className="overflow-y-auto sticky top-0 bg-white px-4 pt-4 pb-3 border-b border-gray-200 z-20 flex justify-between items-center">
-                <h3 className="font-semibold text-lg">Course Content</h3>
+            <div className="h-full flex flex-col md:h-[calc(100vh-80px)]">
+  {/* Sidebar Header with Close Button */}
+  <div className="flex items-center justify-between border-b border-gray-300 px-4 pb-3 pt-2 ">
+    <h2 className="text-lg font-bold">Course Content</h2>
+    <button 
+      className="md:hidden p-2 rounded-full hover:bg-gray-100"
+      onClick={() => setShowSidebar(false)}
+    >
+      <X size={20} />
+    </button>
+  </div>
 
-                {/* Close button (only visible on small screens) */}
-              </div>
-
-              {/* Sidebar Content */}
-
-              <div className="p-4">
-                {showSidebar && (
-                  <button
-                    className="block md:hidden top-0 left-64 p-2 rounded-full hover:bg-gray-100 relative z-50"
-                    onClick={() => setShowSidebar(false)}
-                    aria-label="Close sidebar"
-                  >
-                    <X className="text-black " size={24} />
-                  </button>
-                  
-
-                )}
-
-                {course.videos.length > 0 ? (
-                  course.videos.slice(0, visibleCount).map((video) => (
-                    <div key={video._id} className="mb-3">
-                    
-                      <div
-                        className={`
-    flex justify-between items-center p-3 rounded cursor-pointer transition-all duration-300 border-2 
-    ${
-      openModule === video._id
-        ? "border-orange-400 bg-orange-50 shadow-sm"
-        : video.isPreview
-        ? "bg-gray-50 border-transparent hover:border-gray-300"
-        : "bg-gray-100 border-transparent hover:border-gray-300"
-    }
-  `}
-                        onClick={() => {
-                          toggleModule(video._id);
-                          playLesson(video.url, video.title);
-                        }}
-                      >
-                        <span className="text-sm font-medium text-black truncate w-full pr-2">
-                          {video.title}
-                        </span>
-
-                        {openModule === video._id ? (
-                          <CircleDot
-                            size={18}
-                            className="animate-pulse text-orange-400"
-                          />
-                        ) : (
-                          <Circle size={18} className="text-orange-500" />
-                        )}
-                      </div>
-                    </div>
-                  ))
+  {/* Sidebar Content and Buttons Wrapper */}
+  <div className="flex-1 flex flex-col overflow-hidden ">
+    {/* Scrollable Video List */}
+    <div className="flex-1 overflow-y-auto p-4">
+      {course.videos.length > 0 ? (
+        <div className="flex flex-col gap-3">
+          {course.videos.slice(0, visibleCount).map((video) => (
+            <div key={video._id}>
+              <div
+                className={`
+                  flex justify-between items-center p-3 rounded cursor-pointer transition-all duration-300 border-2 
+                  ${
+                    openModule === video._id
+                      ? "border-orange-400 bg-orange-50 shadow-sm"
+                      
+                      : "bg-gray-100 border hover:border-gray-300"
+                  }
+                `}
+                onClick={() => {
+                  toggleModule(video._id);
+                  playLesson(video.url, video.title);
+                }}
+              >
+                <span className="text-sm font-medium text-black truncate w-full pr-2">
+                  {video.title}
+                </span>
+                {openModule === video._id ? (
+                  <CircleDot size={18} className="animate-pulse text-orange-400" />
                 ) : (
-                  <p className="text-center text-gray-500 py-4">
-                    Currently, No videos available for this course.
-                  </p>
+                  <Circle size={18} className="text-orange-500" />
                 )}
               </div>
-
-              {/* Load More/Less Buttons */}
-              {course.videos.length > 0 && (
-                <div className="flex justify-center gap-2 flex-wrap px-4 pb-4 ">
-                  {visibleCount < course.videos.length && (
-                    <button
-                      className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300 "
-                      onClick={loadMore}
-                    >
-                      Load More
-                    </button>
-                  )}
-                  {visibleCount > 5 && (
-                    <button
-                      className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
-                      onClick={loadLess}
-                    >
-                      Load Less
-                    </button>
-                  )}
-                </div>
-              )}
             </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-gray-500 py-4">
+          Currently, no videos available for this course.
+        </div>
+      )}
+    </div>
+
+    {/* Sticky Load More/Less Buttons */}
+    {course.videos.length > 0 && (
+      <div className="p-4 border-t border-gray-300 bg-white flex justify-center gap-2 flex-wrap">
+        {visibleCount < course.videos.length && (
+          <button
+            className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
+            onClick={loadMore}
+          >
+            Load More
+          </button>
+        )}
+        {visibleCount > 5 && (
+          <button
+            className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
+            onClick={loadLess}
+          >
+            Load Less
+          </button>
+        )}
+      </div>
+    )}
+  </div>
+</div>
+
           </div>
         </div>
       ) : (

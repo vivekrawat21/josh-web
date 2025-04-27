@@ -256,7 +256,7 @@ const handleVideoSelection = (video) => {
     src={
       selectedVideo && Boolean(selectedVideo.isPreview)
         ? selectedVideo.url
-        : courseData?.courseIntrovideo
+        : courseData?.courseIntrovideo || "https://www.youtube.com/embed/XcwGoxSYrPo"
     }
     title={
       selectedVideo?.isPreview
