@@ -11,7 +11,7 @@ const DashboardLayout = () => {
     <>
     <Navbar/>
     {/* <Outlet/> */}
-    <div className="mt-24">
+    <div className="mt-16">
     <Dashboard/>
     </div>
   

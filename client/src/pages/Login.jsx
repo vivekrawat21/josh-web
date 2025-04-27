@@ -17,14 +17,13 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const handleShowPassword = () => setShowPassword(!showPassword);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsgs([]);
     const userInfo = { email, password };
+
     try {
       setLoading(true);
       const res = await axios.post(`${BASE_URL}/auth/login`, userInfo, {
@@ -36,115 +35,94 @@ const Login = () => {
         navigate("/dashboard");
       }
     } catch (error) {
-      console.log(error);
       const backendError = error.response?.data?.message;
-      if (backendError) {
-        setErrorMsgs(Array.isArray(backendError) ? backendError : [backendError]);
-      } else {
-        setErrorMsgs(["Something went wrong. Please try again."]);
-      }
+      setErrorMsgs(
+        backendError ? (Array.isArray(backendError) ? backendError : [backendError]) : ["Something went wrong. Please try again."]
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex md:h-screen h-auto w-full md:items-center md:justify-center flex-col md:flex-row space-y-0 lg:space-y-0 lg:space-x-5 bg-gray-50 px-4 py-4">
+    <div className="bg-white lg:bg-gradient-to-br lg:from-orange-50 lg:to-blue-50 flex flex-col lg:flex-row items-center min-h-screen px-4 sm:px-6 mt-8">
       {/* Image Section */}
-      <div className="hidden w-full md:w-2/5 md:flex items-center justify-center">
+      <div className="hidden lg:flex w-1/2 justify-start pr-8">
         <img
           src="/login.png"
-          alt="login"
-          className="w-full h-auto object-contain"
+          alt="Login"
+          className="w-[90%] h-auto object-contain rounded-2xl"
         />
       </div>
 
       {/* Form Section */}
-      <div className="w-full md:w-2/5 lg:w-3/5 flex items-center justify-center py-4">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-sm w-full">
-          <h1 className="text-3xl font-bold mb-6 text-center text-gray-700">
-            Welcome Back
-          </h1>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Email or Phone
-              </label>
-              <input
-                type="text"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
-                placeholder="Enter email or phone number"
-                required
-              />
-            </div>
+      <div className="w-full max-w-screen-sm mx-auto bg-white lg:max-w-xl lg:shadow-xl lg:rounded-2xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 sm:mx-auto">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-8 md:mb-10 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text">
+          Login to Joshguru
+        </h2>
 
-            <div className="relative mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
-                placeholder="Enter your password"
-              />
-              <button
-                type="button"
-                onClick={handleShowPassword}
-                className="absolute right-2 top-9 text-gray-500"
-              >
-                {showPassword ? <FiEyeOff /> : <FiEye />}
-              </button>
-            </div>
-
-            <div className="mb-4 text-right">
-              <Link
-                to="/forgotpassword"
-                className="text-sm text-blue-500 hover:underline"
-              >
-                Forgot Password?
-              </Link>
-            </div>
-
+        <form onSubmit={handleSubmit} className="space-y-4 text-sm sm:text-base">
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email or Phone number"
+            className="border p-2 sm:p-3 rounded w-full"
+            required
+          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="border p-2 sm:p-3 rounded w-full"
+              required
+            />
             <button
-              type="submit"
-              className="w-full bg-orange-500 text-white py-2 px-4 rounded-md text-lg font-semibold hover:bg-orange-600 transition duration-200"
-              disabled={loading}
+              type="button"
+              onClick={handleShowPassword}
+              className="absolute right-3 top-4 text-gray-500"
             >
-              {loading ? <Loader size={20} color="white" className="m-auto animate-spin" /> : "Login"}
+              {showPassword ? <FiEyeOff /> : <FiEye />}
             </button>
+          </div>
 
-            {errorMsgs.length > 0 && (
-              <div className="bg-red-100 border border-red-400 text-red-700 rounded-md px-4 py-3 mt-4 relative flex gap-2 items-start">
-                <button
-                  type="button"
-                  className="text-red-600 hover:text-red-800 mt-1"
-                  onClick={() => setErrorMsgs([])}
-                >
-                  <FiXCircle size={18} />
-                </button>
-                <div className="text-sm space-y-1">
-                  {errorMsgs.map((msg, idx) => (
-                    <div key={idx}>{msg}</div>
-                  ))}
-                </div>
-              </div>
-            )}
+          <div className="text-right">
+            <Link
+              to="/forgotpassword"
+              className="text-sm text-blue-500 hover:underline"
+            >
+              Forgot Password?
+            </Link>
+          </div>
 
-            <p className="text-center text-sm text-gray-600 mt-4">
-              Don't have an account?{" "}
-              <Link
-                to="/signup"
-                className="text-blue-500 font-medium hover:underline"
-              >
-                Sign Up
-              </Link>
-            </p>
-          </form>
-        </div>
+          <button
+            type="submit"
+            className="w-full bg-orange-500 text-white py-2 sm:py-3 rounded-md hover:bg-orange-600 transition"
+            disabled={loading}
+          >
+            {loading ? <Loader size={20} className="animate-spin mx-auto" /> : "Login"}
+          </button>
+
+          {errorMsgs.length > 0 && (
+            <div className="bg-red-100 text-red-700 border border-red-400 p-3 mt-4 rounded flex items-start gap-2">
+              <FiXCircle className="mt-1" />
+              <ul className="text-sm">
+                {errorMsgs.map((msg, idx) => (
+                  <li key={idx}>{msg}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <p className="text-center text-sm text-gray-600 mt-4">
+            Don&apos;t have an account?{" "}
+            <Link to="/signup" className="text-blue-500 hover:underline">
+              Sign Up
+            </Link>
+          </p>
+        </form>
       </div>
     </div>
   );

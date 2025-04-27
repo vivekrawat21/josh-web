@@ -1,12 +1,18 @@
 import { useEffect, useState, useRef } from "react";
-import { FaChevronDown, FaBars, FaTimes, FaShoppingCart, FaUser } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  FaChevronDown,
+  FaBars,
+  FaTimes,
+  FaShoppingCart,
+  FaUser,
+} from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "@fontsource/fugaz-one";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser, setUser } from "@/features/user/userSlice";
 import axios from "axios";
 import Sidebar from "./Sidebar";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { BASE_URL } from "@/utils/utils";
 import {
   DropdownMenu,
@@ -16,6 +22,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { setBundle } from "@/features/bundles/BundleSlice";
 import { addCourse } from "@/features/courses/courseSlice";
+
+const special = [
+  {
+    _id: "1",
+    bundleName: "Freelancing Road To 1 lakhs",
+    link: "/basicBundle",
+  },
+  {
+    _id: "2",
+    bundleName: "Freelancing Road To 3 Lakhs",
+    link: "/intermediateBundle",
+  },
+  {
+    _id: "3",
+    bundleName: "Freelancing Road To 5 Lakhs",
+    link: "/advanceBundle",
+  },
+];
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -30,14 +54,20 @@ const Navbar = () => {
   const user = useSelector((state) => state.user);
   const [loggedIn, setIsLoggedIn] = useState(!!user?.email);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const coursesDropdownRef = useRef(null);
   const coursesButtonRef = useRef(null);
+  const cartItems = useSelector((state) => state.cart.cart);
 
-  // Toggle Sidebar
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  // Close dropdown if clicked outside
+  // Close on route change
+  useEffect(() => {
+    setIsOpenCourse(false);
+    setIsRotating(false);
+  }, [location]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -67,7 +97,9 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/user`, { withCredentials: true });
+        const res = await axios.get(`${BASE_URL}/user`, {
+          withCredentials: true,
+        });
         dispatch(setUser(res.data.data.user));
         setIsLoggedIn(true);
       } catch {
@@ -77,10 +109,13 @@ const Navbar = () => {
 
     const fetchBundles = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/course/getBundles`, { withCredentials: true });
-        const allBundles = res.data.data.bundles;
+        const res = await axios.get(`${BASE_URL}/bundle/getBundles`, {
+          withCredentials: true,
+        });
+        const allBundles = res?.data?.data.bundles;
         setBundles(allBundles);
         dispatch(setBundle(allBundles));
+
       } catch (error) {
         console.error("Error fetching bundles:", error);
       }
@@ -88,8 +123,10 @@ const Navbar = () => {
 
     const fetchCourses = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/course/getCourses`, { withCredentials: true });
-        const all = res.data.data.courses;
+        const res = await axios.get(`${BASE_URL}/course/getCourses`, {
+          withCredentials: true,
+        });
+        const all = res?.data?.data.courses;
         setAllCourses(all);
         setTrendingCourses(all.filter((course) => course.isTrending));
         dispatch(addCourse(all));
@@ -104,12 +141,11 @@ const Navbar = () => {
   }, [user, dispatch]);
 
   useEffect(() => {
-    const filteredSpecialBundles = bundles.filter((bundle) => bundle.isSpecial);
-    setSpecialBundles(filteredSpecialBundles);
+    setSpecialBundles(special);
   }, [bundles]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 mx-auto bg-white shadow-sm rounded-xl z-50 transition-all duration-300 py-1 px-auto">
+    <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm rounded-xl z-50 py-1 px-auto">
       <div className="flex justify-between items-center font-['Fugaz One'] mx-auto max-w-[90%]">
         <div className="flex items-center space-x-20 relative">
           <div className="flex flex-col items-center">
@@ -120,22 +156,18 @@ const Navbar = () => {
                 className="w-[60px] h-[60px] object-cover"
               />
             </Link>
-            <p className="absolute text-center font-bold text-[6px] md:text-[8px] top-[63.5%] text-gray-900 md:w-[130px] md:top-[63%]">
+            <p className="absolute text-[6px] md:text-[8px] top-[63.5%] text-gray-900 md:w-[130px] md:top-[63%] text-center font-bold">
               Powered by <span className="text-gray-900">NIITF</span>
             </p>
           </div>
 
           <ul className="hidden md:flex items-center space-x-10 text-[16px] pt-4">
-            <li>
-              <Link to="/" className="hover:text-orange-400 transition">Home</Link>
-            </li>
-            <li>
-              <Link to="/about" className="hover:text-orange-400 transition">About</Link>
-            </li>
-            <li className="relative group">
+            <li><Link to="/" className="hover:text-orange-400 transition">Home</Link></li>
+            <li><Link to="/about" className="hover:text-orange-400 transition">About</Link></li>
+            <li className="relative">
               <button
                 ref={coursesButtonRef}
-                className="flex items-center space-x-2 hover:text-orange-500 transition"
+                className="flex items-center space-x-2 hover:text-orange-500"
                 onClick={() => {
                   setIsOpenCourse(!isOpenCourse);
                   setIsRotating(!isRotating);
@@ -143,86 +175,70 @@ const Navbar = () => {
               >
                 <span>Courses</span>
                 <motion.div animate={{ rotate: isRotating ? 180 : 0 }}>
-                  <FaChevronDown className="text-base transition-transform duration-300" />
+                  <FaChevronDown className="text-base" />
                 </motion.div>
               </button>
 
-              {isOpenCourse && (
-                <div
-                  ref={coursesDropdownRef}
-                  className="absolute lg:left-[400%] left-1/2 top-full transform -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-8 w-[80vw] h-[50vh] grid grid-cols-4 gap-8 opacity-100 transition-opacity duration-300 pointer-events-auto overflow-y-auto border border-gray-200 bg-white"
-                >
-                  {/* Special Bundles */}
-                  <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-7">SPECIAL BUNDLES</h3>
-                    <ul className="space-y-2 text-md">
-                      {specialBundles.slice(0, 6).map((bundle) => (
-                        <li key={bundle._id} className="hover:text-orange-500 transition">
-                          <Link to={`/specialBundle/${bundle._id}`} className="relative hover:after:w-full after:transition-all after:duration-300">
-                            {bundle.bundleName}
+              <AnimatePresence>
+                {isOpenCourse && (
+                  <motion.div
+                    ref={coursesDropdownRef}
+                    className="absolute lg:left-[-370%]   transform -translate-x-1/2 mt-3 shadow-2xl rounded-2xl p-8 w-[80vw] h-[50vh] grid grid-cols-4 gap-8 border bg-white border-gray-200 overflow-y-auto z-50"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {[
+                      { title: "SPECIAL BUNDLES", items: bundles, type: "bundle" },
+                      { title: "TRENDING COURSES", items: trendingCourses, type: "course" }, 
+                      { title: "DIGITAL LEARNING BUNDLES", items: specialBundles, type: "specialBundle" },
+                      { title: "CHOOSE YOUR SKILL", items: allCourses, type: "course" },
+                    ].map((section, idx) => (
+                      <div className="pr-6" key={idx}>
+                        <h3 className="text-orange-500 text-xl font-bold mb-7">{section.title}</h3>
+                        <ul className="space-y-2 text-md">
+                          {section.items.slice(0, 6).map((item) => (
+                            <li key={item._id}>
+                              <Link
+                                to={`/${section.type}/${item._id}`}
+                                className="relative group transition-colors duration-300 hover:text-orange-500"
+                              >
+                                {item?.title || item?.bundleName}
+                                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                        {section.items.length > 6 && (
+                          <Link
+                            to={`/${section.type === "specialBundle" ? "specialBundles" : section.type + "s"}`}
+                            className="text-sm text-orange-500 mt-2 inline-block"
+                          >
+                            See All →
                           </Link>
-                        </li>
-                      ))}
-                    </ul>
-                    {specialBundles.length > 6 && (
-                      <Link to="/specialBundles" className="text-sm text-orange-500 mt-2 inline-block">See All →</Link>
-                    )}
-                  </div>
-
-                  {/* Trending Courses */}
-                  <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-7">TRENDING COURSES</h3>
-                    <ul className="space-y-2 text-md">
-                      {trendingCourses.slice(0, 6).map((course) => (
-                        <li key={course._id} className="hover:text-orange-500 transition">
-                          <Link to={`/course/${course._id}`}>{course.title}</Link>
-                        </li>
-                      ))}
-                    </ul>
-                    {trendingCourses.length > 6 && (
-                      <Link to="/courses/trending" className="text-sm text-orange-500 mt-2 inline-block">See All →</Link>
-                    )}
-                  </div>
-
-                  {/* All Bundles */}
-                  <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-7">ALL BUNDLES</h3>
-                    <ul className="space-y-2 text-md">
-                      {bundles.slice(0, 6).map((bundle) => (
-                        <li key={bundle._id} className="hover:text-orange-500 transition">
-                          <Link to={`/bundle/${bundle._id}`}>{bundle.bundleName}</Link>
-                        </li>
-                      ))}
-                    </ul>
-                    {bundles.length > 6 && (
-                      <Link to="/bundles" className="text-sm text-orange-500 mt-2 inline-block">See All →</Link>
-                    )}
-                  </div>
-
-                  {/* All Courses */}
-                  <div className="pr-6">
-                    <h3 className="text-orange-500 text-xl font-bold mb-7">ALL COURSES</h3>
-                    <ul className="space-y-2 text-md">
-                      {allCourses.slice(0, 6).map((course) => (
-                        <li key={course._id} className="hover:text-orange-500 transition">
-                          <Link to={`/course/${course._id}`}>{course.title}</Link>
-                        </li>
-                      ))}
-                    </ul>
-                    {allCourses.length > 6 && (
-                      <Link to="/courses" className="text-sm text-orange-500 mt-2 inline-block">See All →</Link>
-                    )}
-                  </div>
-                </div>
-              )}
+                        )}
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </li>
           </ul>
         </div>
 
-        {/* Right-side icons and auth */}
+        {/* Right Icons */}
         <div className="flex items-center space-x-4">
-          <Link to="/cart">
-            <FaShoppingCart className="text-4xl text-gray-900 shadow-md rounded-lg p-2 bg-transparent" />
+          <Link
+            to="/cart"
+            className="relative flex items-center gap-2 p-2 rounded-lg bg-white shadow hover:shadow-lg transition-all"
+          >
+            <FaShoppingCart className="text-3xl text-gray-800" />
+            {cartItems?.length > 0 && (
+              <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                {cartItems.length}
+              </span>
+            )}
           </Link>
 
           {!loggedIn ? (
@@ -235,17 +251,27 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <FaUser className="text-2xl cursor-pointer" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="" sideOffset={3} className="bg-white p-4 rounded-lg shadow-lg">
-                <DropdownMenuItem><Link to="/dashboard/profile/personalinformation">My Profile</Link></DropdownMenuItem>
-                <DropdownMenuItem><Link to="/dashboard/mywallet">My Wallet</Link></DropdownMenuItem>
-                <DropdownMenuItem><Link to="/dashboard/mycourses">My Courses</Link></DropdownMenuItem>
-                <DropdownMenuItem><Link to="/dashboard/help&support">Help and Support</Link></DropdownMenuItem>
-                <DropdownMenuItem><button onClick={logout}>Logout</button></DropdownMenuItem>
+              <DropdownMenuContent className="bg-white p-4 rounded-lg shadow-lg">
+                <DropdownMenuItem>
+                  <Link to="/dashboard/profile/personalinformation">My Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/dashboard/mycourses">My Courses</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/dashboard/help&support">Help and Support</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <button onClick={logout}>Logout</button>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
 
-          <button onClick={toggleSidebar} className="md:hidden text-2xl ml-auto text-gray-900 mr-4">
+          <button
+            onClick={toggleSidebar}
+            className="md:hidden text-2xl ml-auto text-gray-900 mr-4"
+          >
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
@@ -259,6 +285,7 @@ const Navbar = () => {
         bundles={bundles}
         specialBundles={specialBundles}
         trendingCourses={trendingCourses}
+        allCourses={allCourses}
       />
     </nav>
   );

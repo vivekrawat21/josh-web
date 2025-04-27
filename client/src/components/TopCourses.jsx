@@ -12,15 +12,35 @@ import { Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
 
 const TopCourses = () => {
   const { courses, loading, error } = useSelector((state) => state.course);
   const trendingCourses = courses[0]?.filter((course) => course.isTrending) || [];
+  // console.log(JSON.stringify(trendingCourses));
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  const navigate = useNavigate();
 
+  // Check if the user is enrolled
+ 
+  const handleClick = (course) => {
+    // const isEnrolled = user?.courses?.includes(course._id);
+    const isEnrolled = user?.courses?.some(c => c._id.toString() === course._id.toString()
+  );
+
+   
+    if(isEnrolled){
+      navigate(`/course/${course._id}/learn`);
+    }
+    else {
+ navigate(`/course/${course._id}`);
+    }
+  }
   return (
-    <section className="mt-8 pb-6 px-4 md:px-10 w-full mx-auto text-center relative overflow-hidden mb-4 ">
-      <h2 className="text-[1.80rem] lg:text-7xl font-semibold text-center  my-10 text-gray-900">
+    <section className=" pb-6 px-4 md:px-10 w-full mx-auto text-center relative overflow-hidden mb-4  ">
+      <h2 className="text-[1.80rem] lg:text-7xl font-semibold text-center  my-6 text-gray-900">
         Trending <span className="text-orange-500">Courses</span>
       </h2>
 
@@ -43,11 +63,11 @@ const TopCourses = () => {
           <CarouselContent>
             {trendingCourses.map((course) => (
               <CarouselItem
-                className="md:basis-1/3 lg:basis-1/4 flex justify-center"
+                className="md:basis-1/3 lg:basis-1/4 flex justify-center "
                 key={course._id}
               >
-                <Card className="w-[95%] md:w-[85%] lg:w-[90%] flex flex-col">
-                  <CourseCard course={course} />
+                <Card className="w-[95%] md:w-[85%] lg:w-[90%] flex flex-col ">
+                  <CourseCard course={course} handleClick = {handleClick} />
                 </Card>
               </CarouselItem>
             ))}
@@ -67,7 +87,7 @@ const TopCourses = () => {
   );
 };
 
-function CourseCard({ course }) {
+function CourseCard({ course, handleClick }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
   const defaultImage = "https://via.placeholder.com/300x200.png?text=No+Image";
 
@@ -88,13 +108,13 @@ function CourseCard({ course }) {
         />
 
         {/* Content Section */}
-        <div className="p-4 md:p-5 flex flex-col text-center w-full">
+        <div className="p-4 md:px-3 flex flex-col text-center w-full">
           <h3 className="text-lg md:text-xl font-semibold text-gray-800 truncate">
             {course?.title}
           </h3>
 
           <p className="mt-2 text-sm md:text-base text-gray-600 italic line-clamp-3">
-            {course?.description || "No description available"}
+            {course?.description  || "No description available"}
           </p>
 
           {/* Duration and Button (moved here) */}
@@ -102,15 +122,19 @@ function CourseCard({ course }) {
             <div className="flex items-center justify-center space-x-2 text-gray-700 font-medium">
               <Clock size={18} className="text-orange-500" />
               <span className="text-sm md:text-base">
-                {course.duration || "6 Months"}
+              {course?.duration
+  ? `${course.duration.charAt(0)} Months`
+  : "No description available"}
+
               </span>
             </div>
 
-            <Link to={`/course/${course._id}`} className="w-full">
-              <Button className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white px-4 rounded-lg shadow-md">
+            {/* <Link to={courseLink} className="w-full"> */}
+              <Button onClick={() => handleClick(course)}
+className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white px-4 rounded-lg shadow-md">
                 View Program
               </Button>
-            </Link>
+            {/* </Link> */}
           </div>
         </div>
       </div>

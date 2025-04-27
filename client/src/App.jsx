@@ -27,7 +27,8 @@ import RefundAndPolicy from "./pages/RefundAndPolicy";
 import LicenseAndAgreement from "./pages/LicenseAndAgreement";
 import Scroll from "./Scroll";
 // import Admin from "./pages/Admin";
-import AllCourses from "./components/AllCourses"
+import AdminCourses from "./components/AdminCourses"
+import AdminBundles from "./components/AdminBundles";
 import AdminLogin from "./components/AdminLogin";
 import AdminSettings from "./components/AdminSettings";
 import Students from "./components/Students";
@@ -46,6 +47,10 @@ import CoursePlayer from "./pages/CoursePlayer";
 import BundleRouter from "./pages/bundleRouter";
 import Webinars from "./pages/Webinars";
 import AdminWebinar from "./pages/AdminWebinar";
+import Upgrade from "./components/Upgrade";
+import EditCourse from "./components/EditCourse";
+import EditBundle from "./components/EditBundle";
+
 function App() {
   return (
     <>
@@ -54,7 +59,10 @@ function App() {
         <Routes>
           <Route path="/admin" element={<AdminLayout />} >
           <Route index element={<AdminLogin  />} />
-          <Route path="/admin/courses" element={<AllCourses />} />
+          <Route path="/admin/courses" element={<AdminCourses />} />
+          <Route path="/admin/bundles" element={<AdminBundles />} />
+          <Route path="/admin/editBundle/:id" element={<EditBundle />} />
+          <Route path="/admin/editCourse/:id" element={<EditCourse />} />
           <Route path="/admin/login" element={<AdminLogin />} />
 
           <Route path="/admin/settings" element={<AdminSettings />} />
@@ -71,7 +79,9 @@ function App() {
         <Route path="profile/personalinformation" element={<PersonalInformation />} />
         <Route path="profile/invoices" element={<Invoices />} />
         <Route path="profile/privacyandsecurity" element={<PrivacyAndSecurity />} />
+        <Route path="mycourse/upgrade" element={<Upgrade />} />
         <Route path="mycourses" element={<MyCourses />} />
+       
         <Route path="mywallet" element={<Mywallet />} />
 
         <Route path="refer&earn" element={<Refer />} />
@@ -97,6 +107,8 @@ function App() {
                 element={<Bundle />}
               ></Route>
               <Route path="/course/:courseId" element={<Course />} />
+              <Route path="/course/:courseId/learn" element={<CoursePlayer />} />
+
               <Route path="/courses" element={<Courses />} />
                 <Route path="/coursePlayer" element={<CoursePlayer />} />
 
@@ -113,6 +125,7 @@ function App() {
 
 
               <Route path="/blogs" element={<Blogs />} />
+          
               <Route path="/webinars" element={<Webinars />} />
               
               <Route path="/goal/:id" element={<Goals />} />
