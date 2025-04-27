@@ -82,7 +82,7 @@ const Login = () => {
             <button
               type="button"
               onClick={handleShowPassword}
-              className="absolute right-3 top-3 text-gray-500"
+              className="absolute right-3 top-4 text-gray-500"
             >
               {showPassword ? <FiEyeOff /> : <FiEye />}
             </button>

@@ -171,13 +171,13 @@ const Signup = () => {
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="border p-2 sm:p-3 rounded w-full" required />
             <div className="relative">
               <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 6 chars)" className="border p-2 sm:p-3 rounded w-full" minLength={6} required />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-gray-500">
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-4 text-gray-500">
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
             <div className="relative">
               <input type={showConfirmPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm password" className="border p-2 sm:p-3 rounded w-full" minLength={6} required />
-              <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-3 text-gray-500">
+              <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-4 text-gray-500">
                 {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
