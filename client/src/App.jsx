@@ -49,6 +49,7 @@ import BundleRouter from "./pages/bundleRouter";
 import Upgrade from "./components/Upgrade";
 import EditCourse from "./components/EditCourse";
 import EditBundle from "./components/EditBundle";
+import AdminAssignMentor from "./components/AdminAssignMentor";
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
           <Route path="/admin/editBundle/:id" element={<EditBundle />} />
           <Route path="/admin/editCourse/:id" element={<EditCourse />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/:mentorId/assignMentor" element={<AdminAssignMentor />} />
 
           <Route path="/admin/mentors" element={<AdminMentor />} />
           <Route path="/admin/students" element={<Students />} />
