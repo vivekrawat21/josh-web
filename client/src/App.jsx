@@ -36,7 +36,6 @@ import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminOffers from "./components/AdminOffers.jsx";
 import Blog from "./pages/Blog";
-import Webinars from "./pages/Webinars";
 import IntermediateBundle from "./pages/IntermediateBundle";
 import BasicBundle from "./pages/BasicBundle";
 import AdvanceBundle from "./pages/AdvanceBundle";
@@ -46,6 +45,8 @@ import Disclaimer from "./pages/Disclaimer";
 import Terms from "./pages/Terms";
 import CoursePlayer from "./pages/CoursePlayer";
 import BundleRouter from "./pages/bundleRouter";
+import Webinars from "./pages/Webinars";
+import AdminWebinar from "./pages/AdminWebinar";
 import Upgrade from "./components/Upgrade";
 import EditCourse from "./components/EditCourse";
 import EditBundle from "./components/EditBundle";
@@ -68,6 +69,7 @@ function App() {
           <Route path="/admin/students" element={<Students />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/offers" element={<AdminOffers />} />
+          <Route path="/admin/webinars" element={<AdminWebinar />} />
 
 
           

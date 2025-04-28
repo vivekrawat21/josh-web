@@ -288,7 +288,7 @@ const HeroLanding = () => {
             <div className="relative mt-0 pt-0 min-h-[250px] md:min-h-[350px] w-full">
               {/* Rocket */}
               <motion.div
-                className="absolute left-1/2 md:left-48 top-11 -translate-x-1/2 z-20"
+                className="absolute left-1/2 md:left-[12.75rem] top-11 -translate-x-1/2 z-20"
                 style={{
                   bottom: `${20 + rocketYPosition}%`,
                 }}

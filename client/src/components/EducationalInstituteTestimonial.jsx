@@ -94,7 +94,7 @@ const EducationalInstituteTestimonial = () => {
 
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Video Section */}
-        <div className="relative w-full lg:w-2/3 aspect-video rounded-xl overflow-hidden shadow-xl bg-black">
+        <div className="relative w-full lg:w-2/3 lg:h-[29.5rem] aspect-video rounded-xl overflow-hidden shadow-xl bg-black">
           {!showIframe ? (
             <>
               <img
@@ -136,7 +136,7 @@ const EducationalInstituteTestimonial = () => {
 
           <div>
             <div className="flex gap-2 items-center">
-              <img src={current.representativeImage} alt="representativeImage" width={20} height={20} />
+              <img src={current.representativeImage} alt="representativeImage" width={40} height={40} className=" border-2 rounded-full border-orange-600"/>
               <h3 className="text-lg font-bold">{current.representative}</h3>
             </div>
             <p className="text-sm text-gray-500">{current.title}</p>
