@@ -6,11 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import axios from "axios";
 import { BASE_URL } from "@/utils/utils";
-import { useToast } from "@/hooks/use-toast"; // Import toast hook
+import CustomToast from "@/components/CustomToast"; // Import the CustomToast component
 
 const AddNewBundle = ({ addBundle, setAddBundle }) => {
-  const { toast } = useToast(); // Initialize toast
-
   const initialState = {
     bundleName: "",
     description: "",
@@ -22,6 +20,9 @@ const AddNewBundle = ({ addBundle, setAddBundle }) => {
   const [bundleData, setBundleData] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  const [showToast, setShowToast] = useState(false); // Show toast state
+  const [toastInfo, setToastInfo] = useState({ message: "", type: "success" }); // Toast content
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -103,20 +104,23 @@ const AddNewBundle = ({ addBundle, setAddBundle }) => {
 
       console.log(res.data);
 
-      toast({
-        title: "Bundle Uploaded",
-        description: "Your new bundle has been uploaded successfully!",
-        variant: "default",
+      // Show success toast
+      setToastInfo({
+        message: "Bundle uploaded successfully!",
+        type: "success",
       });
+      setShowToast(true);
 
       resetFormFields();
     } catch (error) {
       console.error("Error uploading bundle:", error);
-      toast({
-        title: "Upload Failed",
-        description: "Something went wrong while uploading the bundle.",
-        variant: "destructive",
+
+      // Show error toast
+      setToastInfo({
+        message: "Failed to upload bundle!",
+        type: "error",
       });
+      setShowToast(true);
     } finally {
       setLoading(false);
     }
@@ -231,6 +235,15 @@ const AddNewBundle = ({ addBundle, setAddBundle }) => {
           Reset
         </Button>
       </div>
+
+      {/* Custom Toast - show if it's active */}
+      {showToast && (
+        <CustomToast
+          message={toastInfo.message}
+          type={toastInfo.type}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </form>
   );
 };
