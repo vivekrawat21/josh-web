@@ -30,7 +30,7 @@ import Scroll from "./Scroll";
 import AdminCourses from "./components/AdminCourses"
 import AdminBundles from "./components/AdminBundles";
 import AdminLogin from "./components/AdminLogin";
-import AdminSettings from "./components/AdminSettings";
+import AdminMentor from "./components/AdminMentor";
 import Students from "./components/Students";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./components/AdminDashboard";
@@ -64,7 +64,7 @@ function App() {
           <Route path="/admin/bundleCourse/:id" element={<BundleCourse />} />
           <Route path="/admin/login" element={<AdminLogin />} />
 
-          <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/admin/mentors" element={<AdminMentor />} />
           <Route path="/admin/students" element={<Students />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/offers" element={<AdminOffers />} />
