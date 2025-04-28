@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { BASE_URL } from "@/utils/utils";
 import CustomToast from "@/components/CustomToast";
-
 import {
   Select,
   SelectContent,
@@ -19,7 +18,14 @@ const AddBundleCourse = ({ bundle, refreshBundle }) => {
   const [toast, setToast] = useState({ message: '', type: '', open: false });
 
   useEffect(() => {
+    // Fetch all courses
     fetchAllCourses();
+    
+    // Check localStorage for any existing toast state
+    const savedToast = JSON.parse(localStorage.getItem("toastState"));
+    if (savedToast) {
+      setToast(savedToast);
+    }
   }, []);
 
   const fetchAllCourses = async () => {
@@ -49,7 +55,9 @@ const AddBundleCourse = ({ bundle, refreshBundle }) => {
 
   const addCoursesToBundle = async () => {
     if (selectedCourses.length === 0) {
-      setToast({ message: 'Please select at least one course.', type: 'error', open: true });
+      const errorToast = { message: 'Please select at least one course.', type: 'error', open: true };
+      setToast(errorToast);
+      localStorage.setItem("toastState", JSON.stringify(errorToast));
       return;
     }
     setSubmitting(true);
@@ -59,15 +67,24 @@ const AddBundleCourse = ({ bundle, refreshBundle }) => {
         { bundleId: bundle._id, courses: selectedCourses },
         { withCredentials: true }
       );
-      setToast({ message: 'Courses added successfully!', type: 'success', open: true });
+      const successToast = { message: 'Courses added successfully!', type: 'success', open: true };
+      setToast(successToast);
+      localStorage.setItem("toastState", JSON.stringify(successToast));
       setSelectedCourses([]);
       await refreshBundle();
     } catch (error) {
       console.error('Error adding courses:', error);
-      setToast({ message: 'Failed to add courses.', type: 'error', open: true });
+      const failureToast = { message: 'Failed to add courses.', type: 'error', open: true };
+      setToast(failureToast);
+      localStorage.setItem("toastState", JSON.stringify(failureToast));
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleToastClose = () => {
+    setToast({ message: '', type: '', open: false });
+    localStorage.removeItem("toastState");  // Clear toast state from localStorage
   };
 
   return (
@@ -124,7 +141,7 @@ const AddBundleCourse = ({ bundle, refreshBundle }) => {
         <CustomToast
           message={toast.message}
           type={toast.type}
-          onClose={() => setToast({ message: '', type: '', open: false })}
+          onClose={handleToastClose}
         />
       )}
     </div>

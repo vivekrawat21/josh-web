@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '@/utils/utils';
 import { FaTrash } from "react-icons/fa";
@@ -20,6 +20,14 @@ const RemoveBundleCourse = ({ bundle, refreshBundle }) => {
   const [toast, setToast] = useState({ open: false, message: '', type: '' });
   const [selectedCourse, setSelectedCourse] = useState(null);
 
+  useEffect(() => {
+    // Check localStorage for any existing toast state
+    const savedToast = JSON.parse(localStorage.getItem("toastState"));
+    if (savedToast) {
+      setToast(savedToast);
+    }
+  }, []);
+
   const handleRemoveCourse = async (courseId, courseTitle) => {
     try {
       setLoading(true);
@@ -28,15 +36,24 @@ const RemoveBundleCourse = ({ bundle, refreshBundle }) => {
         { bundleId: bundle._id, courseId },
         { withCredentials: true }
       );
-      setToast({ open: true, message: `Removed "${courseTitle}" successfully!`, type: 'success' });
+      const successToast = { open: true, message: `Removed "${courseTitle}" successfully!`, type: 'success' };
+      setToast(successToast);
+      localStorage.setItem("toastState", JSON.stringify(successToast));
       await refreshBundle();
     } catch (error) {
       console.error('Error removing course:', error);
-      setToast({ open: true, message: 'Failed to remove course.', type: 'error' });
+      const errorToast = { open: true, message: 'Failed to remove course.', type: 'error' };
+      setToast(errorToast);
+      localStorage.setItem("toastState", JSON.stringify(errorToast));
     } finally {
       setLoading(false);
       setSelectedCourse(null);
     }
+  };
+
+  const handleToastClose = () => {
+    setToast({ open: false, message: '', type: '' });
+    localStorage.removeItem("toastState");  // Clear toast state from localStorage
   };
 
   return (
@@ -99,7 +116,7 @@ const RemoveBundleCourse = ({ bundle, refreshBundle }) => {
         <CustomToast
           message={toast.message}
           type={toast.type}
-          onClose={() => setToast({ open: false, message: '', type: '' })}
+          onClose={handleToastClose}
         />
       )}
     </div>

@@ -36,21 +36,14 @@ import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminOffers from "./components/AdminOffers.jsx";
 import Blog from "./pages/Blog";
-<<<<<<< HEAD
-import IntermediateBundle from "./pages/IntermediateBundle";
-import BasicBundle from "./pages/BasicBundle";
-import AdvanceBundle from "./pages/AdvanceBundle";
-=======
 import Webinars from "./pages/Webinars";
 import BundleCourse from "./components/BundleCourse";
->>>>>>> f224bb7 (Add BundleCourse component and related UI elements; update package.json dependencies)
 import Goals from "./pages/Goals";
 import Gallery from "./pages/Gallery";
 import Disclaimer from "./pages/Disclaimer";
 import Terms from "./pages/Terms";
 import CoursePlayer from "./pages/CoursePlayer";
 import BundleRouter from "./pages/bundleRouter";
-import Webinars from "./pages/Webinars";
 import AdminWebinar from "./pages/AdminWebinar";
 import Upgrade from "./components/Upgrade";
 import EditCourse from "./components/EditCourse";

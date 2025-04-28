@@ -37,7 +37,7 @@ const BundleCourse = () => {
       {/* Title and Back Button */}
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold text-gray-800">
-          Manage Bundle: {bundle?.title || "Untitled"}
+          Manage Bundle: {bundle?.bundleName || "Untitled"}
         </h1>
         <button
           onClick={() => navigate(-1)}
