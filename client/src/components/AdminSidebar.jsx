@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaBook, FaGift, FaHeadset, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaBook, FaGift,  FaSignOutAlt } from 'react-icons/fa';
 import {BiSolidOffer} from 'react-icons/bi';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../features/user/userSlice';
 import { BASE_URL } from '../utils/utils';
+import { FaChalkboardTeacher } from "react-icons/fa";
 
 const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
-  const [profileMenu, setProfileMenu] = useState(false);
+  // const [profileMenu, setProfileMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -48,8 +49,8 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
       <Link to="/admin/students" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
         <FaGift /> Students
       </Link>
-      <Link to="/admin/settings" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
-        <FaHeadset /> Settings
+      <Link to="/admin/mentors" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
+        <FaChalkboardTeacher /> Mentor
       </Link>
       <Link to="/admin/offers"
         className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"

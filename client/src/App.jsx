@@ -30,7 +30,7 @@ import Scroll from "./Scroll";
 import AdminCourses from "./components/AdminCourses"
 import AdminBundles from "./components/AdminBundles";
 import AdminLogin from "./components/AdminLogin";
-import AdminSettings from "./components/AdminSettings";
+import AdminMentor from "./components/AdminMentor";
 import Students from "./components/Students";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./components/AdminDashboard";
@@ -48,6 +48,7 @@ import AdminWebinar from "./pages/AdminWebinar";
 import Upgrade from "./components/Upgrade";
 import EditCourse from "./components/EditCourse";
 import EditBundle from "./components/EditBundle";
+import AdminAssignMentor from "./components/AdminAssignMentor";
 
 function App() {
   return (
@@ -63,8 +64,9 @@ function App() {
           <Route path="/admin/editCourse/:id" element={<EditCourse />} />
           <Route path="/admin/bundleCourse/:id" element={<BundleCourse />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/:mentorId/assignMentor" element={<AdminAssignMentor />} />
 
-          <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/admin/mentors" element={<AdminMentor />} />
           <Route path="/admin/students" element={<Students />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/offers" element={<AdminOffers />} />
