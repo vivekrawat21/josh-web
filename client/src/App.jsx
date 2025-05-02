@@ -82,10 +82,9 @@ function App() {
         <Route path="profile/privacyandsecurity" element={<PrivacyAndSecurity />} />
         <Route path="mycourse/upgrade" element={<Upgrade />} />
         <Route path="mycourses" element={<MyCourses />} />
-       
         <Route path="mywallet" element={<Mywallet />} />
-
         <Route path="refer&earn" element={<Refer />} />
+        <Route path="webinars" element={<Webinars />} />
         <Route path="help&support" element={<Help />} />
       </Route>
 
