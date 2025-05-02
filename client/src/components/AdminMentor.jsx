@@ -16,12 +16,13 @@ const AdminMentor = () => {
  
   // Form state
   const [formData, setFormData] = useState({
-    name: 'vijay',
-    email: 'vijay1234@gmail.com',
-    mobileNumber: '7895641230',
+    name: '',
+    email: '',
+    mobileNumber: '',
     image: null,
-    about: 'this is a test',
+    about: '',
     socialLinks: [], // Initialized as an array
+    position:''
   });
 
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -53,6 +54,8 @@ const AdminMentor = () => {
   };
   const handleMentorToggle = (mentorId) => {
     // Toggle the update section
+    // console.log("updating mentor")
+    setUpdateMentor(!updateMentor);
     setUpdateMentorId(prevId => prevId === mentorId ? null : mentorId);
   };
 
@@ -71,6 +74,46 @@ const AdminMentor = () => {
     }));
   };
  const handleUpdateMentor = async() => {
+    const payload = new FormData();
+    payload.append('name', formData.name);
+    payload.append('email', formData.email);
+    payload.append('mobileNumber', formData.mobileNumber);
+    payload.append('about', formData.about);
+    payload.append('position', formData.position);
+
+    if (formData.image) {
+      payload.append('mentorImage', formData.image);
+    }
+
+    payload.append('socialLinks', JSON.stringify(formData.socialLinks));
+
+    try {
+      const res = await axios.patch(`${BASE_URL}/mentors/update/${updateMentorId}`, payload, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (res.data.statusCode === 200) {
+        alert('Mentor updated successfully!');
+        setUpdateMentor(false);
+        setFormData({
+          name: '',
+          email: '',
+          mobileNumber: '',
+          mentorImage: null,
+          about: '',
+          socialLinks: [],
+        });
+        setSelectedOptions([]);
+        // Re-fetch mentors
+        const refreshedMentors = await axios.get(`${BASE_URL}/mentors/getAllMentors`, { withCredentials: true });
+        setMentors(refreshedMentors.data.data.mentors || []);
+      }
+    } catch (err) {
+      console.log('Error updating mentor:', err);
+    }
 
  }
   const handleSocialLinkChange = (platform, value) => {
@@ -96,6 +139,7 @@ const AdminMentor = () => {
     payload.append('email', formData.email);
     payload.append('mobileNumber', formData.mobileNumber);
     payload.append('about', formData.about);
+    payload.append('position', formData.position);
 
     if (formData.image) {
       payload.append('mentorImage', formData.image);
@@ -176,6 +220,14 @@ const AdminMentor = () => {
             placeholder="Mobile Number"
             className="border p-2 rounded-md"
             value={formData.mobileNumber}
+            onChange={handleInputChange}
+          />
+           <input
+            type="text"
+            name="position"
+            placeholder="Enter mentor position"
+            className="border p-2 rounded-md"
+            value={formData.position}
             onChange={handleInputChange}
           />
           <input
@@ -279,7 +331,7 @@ const AdminMentor = () => {
                   className="bg-green-500 hover:bg-green-800 text-white px-4 py-2 rounded-md ml-4"
                   onClick={() => handleMentorToggle(mentor._id)}
                 >
-                  Update Mentor
+                 {updateMentor ? " Cancel" : "Update Mentor"}
                 </button>
               </div>
               
@@ -305,6 +357,12 @@ const AdminMentor = () => {
                       type="text"
                       placeholder="Mobile Number"
                       defaultValue={mentor?.mobileNumber}
+                      className="block w-full p-2 mb-2 border rounded-md"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Mentor Position"
+                      defaultValue={mentor?.position}
                       className="block w-full p-2 mb-2 border rounded-md"
                     />
                     <input 
@@ -369,6 +427,7 @@ const AdminMentor = () => {
                     <button
                       type="submit"
                       className="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded-md"
+                      onClick={handleUpdateMentor}
                     >
                       Save Changes
                     </button>

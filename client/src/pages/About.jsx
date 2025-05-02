@@ -1,8 +1,9 @@
 // Vite + React with Framer Motion for Animations
 
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+// import { useSelector } from "react-redux";
 const About = () => {
   const galleryData = [
     {
@@ -47,7 +48,7 @@ const About = () => {
         "Emily designs user-friendly interfaces and experiences, ensuring our products are intuitive and accessible.",
     },
   ];
-
+  const mentors= useSelector((state) => state.mentor?.mentors[0] || []);
   return (
     <section className=" px-8 bg-gradient-to-b from-gray-50 to-white">
       <div className="flex flex-col items-center justify-center gap-16">
@@ -176,27 +177,27 @@ const About = () => {
             Meet Our Team
           </h2>
           <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
-            {teamMembers.map((member, index) => (
+            {mentors.map((member, index) => (
               <motion.div
-                key={member.id}
+                key={member?._id}
                 className="bg-white p-8 rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-300"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
               >
                 <img
-                  src={member.imageUrl || "/placeholder.svg"}
+                  src={member?.profileImage || "/placeholder.svg"}
                   alt={member.name}
                   className="w-48 h-48 mx-auto mb-6 rounded-full"
                 />
                 <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">
-                  {member.name}
+                  {member?.name}
                 </h2>
                 <p className="text-orange-500 font-semibold mb-4">
-                  {member.role}
+                  {member?.position}
                 </p>
                 <p className="text-sm leading-relaxed text-gray-600">
-                  {member.description}
+                  {member?.about}
                 </p>
               </motion.div>
             ))}
