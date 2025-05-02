@@ -30,10 +30,11 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [referralCode, setReferralCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(typeParam === 'cart' ? cartItems : {});
+  const referralCodeParam = queryParams.get('referralCode') || '';
+  const [referralCode, setReferralCode] = useState(referralCodeParam);
 
   const steps = ['Info', 'Course', 'PayU'];
 
