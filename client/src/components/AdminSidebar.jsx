@@ -8,10 +8,8 @@ import { useDispatch } from 'react-redux';
 import { logoutUser } from '../features/user/userSlice';
 import { BASE_URL } from '../utils/utils';
 import { FaChalkboardTeacher } from "react-icons/fa";
-import { is } from 'date-fns/locale';
 
 const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
-  // const [profileMenu, setProfileMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -62,7 +60,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
       <Link to="/admin/webinars"
         className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
       >
-        <FaVideo /> Webinars
+          <FaVideo /> Webinars
       </Link>
       <div className="mt-64">
         <button

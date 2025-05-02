@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { useSelector } from "react-redux";
 import { ChevronDown, CheckCircle, Users, Award } from "lucide-react"
-
 import { BASE_URL } from "@/utils/utils";
-
 import axios from "axios";
 
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 const IntermediateBundle = ({ page = "page2" }) => {
   const [bundle , setBundle] = React.useState([])
+  const user = useSelector((state) => state.user);
  
   const {id} = useParams()
   console.log(id)
@@ -26,7 +22,8 @@ const IntermediateBundle = ({ page = "page2" }) => {
   useEffect(() => {
     if(bundle.length === 0){
 
-    fetchBundle()
+    fetchBundle();
+  
     }
     // console.log("Bundle",bundle[0])
   }, [id])
@@ -354,7 +351,8 @@ const IntermediateBundle = ({ page = "page2" }) => {
       <div className="relative w-full h-auto py-3 md:h-[71.78px] bg-white/10 backdrop-blur-[12.5px] flex justify-between items-center px-4 md:px-6 lg:px-20 xl:px-56 shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] mx-auto">
         <img src="/logo1.png" alt="joshguru" className="w-[60px] md:w-[90px] h-[60px] object-cover" />
         <button className="px-4 md:px-6 py-2 bg-transparent text-white font-semibold border-2 border-white shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] transition-all duration-200 hover:bg-white hover:text-blue-600 text-sm md:text-base">
-          Enroll Now
+         <Link to={!user?"/signup?type=specialbundle&level=intermediate":"/payment"}>
+ Enroll Now</Link>
         </button>
       </div>
 
@@ -1043,7 +1041,7 @@ const IntermediateBundle = ({ page = "page2" }) => {
             </div>
           </div>
           <button className="w-full md:w-auto px-4 py-2 md:px-6 md:py-3 bg-white/10 border border-white rounded-[4px] mt-3 md:mt-0">
-            <span className="text-white text-sm md:text-[15.125px]">Enroll Now</span>
+            <span className="text-white text-sm md:text-[15.125px]"><Link to={!user?"/signup?type=specialbundle&level=intermediate":"/payment"}>  Enroll Now</Link></span>
           </button>
         </div>
       </div>

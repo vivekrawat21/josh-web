@@ -15,8 +15,10 @@ const Signup = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+
   const courseId = queryParams.get('courseId');
   const typeParam = queryParams.get('type') || 'bundle';
+  const levelParam = queryParams.get('level');
 
   const bundles = useSelector((state) => state.bundle?.bundles[0] || []);
   const courses = useSelector((state) => state.course?.courses[0] || []);
@@ -32,15 +34,28 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState(typeParam === 'cart' ? cartItems : {});
-  const referralCodeParam = queryParams.get('referralCode') || '';
-  const [referralCode, setReferralCode] = useState(referralCodeParam);
+  const [referralCode, setReferralCode] = useState(queryParams.get('referralCode') || '');
 
   const steps = ['Info', 'Course', 'PayU'];
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [step]);
+  const getSpecialBundleData = (level) => {
+    switch (level) {
+      case 'basic':
+        return { title: 'Basic Bundle', image: '/specialBundle1.jpg', price: 49999 };
+      case 'intermediate':
+        return { title: 'Intermediate Bundle', image: '/specialBundle2.jpg', price: 79999 };
+      case 'advance':
+        return { title: 'Advance Bundle', image: '/specialBundle3.jpg', price: 99999 };
+      default:
+        return null;
+    }
+  };
+
+  const [selectedCourse, setSelectedCourse] = useState(() => {
+    if (typeParam === 'cart') return cartItems;
+    if (typeParam === 'specialbundle') return getSpecialBundleData(levelParam);
+    return {};
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -102,8 +117,6 @@ const Signup = () => {
     };
 
     try {
-      // console.log("user info to check referral code")
-      // console.log(userInfo)
       const res = await axios.post(`${BASE_URL}/auth/register`, userInfo);
       if (res?.data?.data?.user) {
         dispatch(setUser(res.data.data.user));
@@ -119,9 +132,11 @@ const Signup = () => {
 
   const itemsToShow = typeParam === 'cart'
     ? cartItems
-    : courseId
-      ? [(typeParam === 'course' ? courses : bundles).find((item) => item._id === courseId)].filter(Boolean)
-      : (typeParam === 'course' ? courses : bundles);
+    : typeParam === 'specialbundle'
+      ? [getSpecialBundleData(levelParam)].filter(Boolean)
+      : courseId
+        ? [(typeParam === 'course' ? courses : bundles).find((item) => item._id === courseId)].filter(Boolean)
+        : (typeParam === 'course' ? courses : bundles);
 
   if (typeParam === 'cart' && cartItems.length === 0) {
     return (
@@ -219,7 +234,7 @@ const Signup = () => {
           <div className="text-center">
             <Payment
               data={selectedCourse}
-              type={typeParam || 'bundle'}
+              type={typeParam}
               setStep={setStep}
               handleFinalSubmit={handleFinalSubmit}
             />
