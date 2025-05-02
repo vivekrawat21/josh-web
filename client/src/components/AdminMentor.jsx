@@ -48,7 +48,7 @@ const AdminMentor = () => {
 
     fetchMentors();
   }, []);
-
+  console.log(mentors)
   const handleAddMentor = () => {
     setAddMentor(!addMentor);
   };
