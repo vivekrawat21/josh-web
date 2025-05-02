@@ -1,146 +1,89 @@
-import React from "react";
-import {
-  FaUser,
-  FaRupeeSign,
-  FaUsers,
-  FaMoneyBillWave,
-  FaBolt,
-  FaCalendarWeek,
-  FaCalendarAlt,
-  FaGift,
-} from "react-icons/fa";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import DefaultProfile from "../assets/DefaultProfile.png";
 
 const PersonalInformation = () => {
   const user = useSelector((state) => state?.user);
-  // console.log(user)
-  const getIncomeBreakdown = (user) => {
-    const today = new Date();
-    const startOfToday = new Date(today.setHours(0, 0, 0, 0));
-    const last7Days = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    const last30Days = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  
-    let todayIncome = 0;
-    let income7Days = 0;
-    let income30Days = 0;
-  
-    user?.incomeHistory.forEach((entry) => {
-      const entryDate = new Date(entry.date);
-      if (entryDate >= startOfToday) {
-        todayIncome += entry.amount;
-      }
-      if (entryDate >= last7Days) {
-        income7Days += entry.amount;
-      }
-      if (entryDate >= last30Days) {
-        income30Days += entry.amount;
-      }
-    });
-  
-    return {
-      todayIncome,
-      income7Days,
-      income30Days,
-      totalIncome: user?.total_income,
-    };
+
+  const [formData, setFormData] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
+    profilePic: user?.profilePic || "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
-  const { todayIncome, income7Days, income30Days } = getIncomeBreakdown(user);
-  const totalIncome = user?.total_income || 0;
-  // const totalTeam = user?.total_team || 0;
-  const incentive = user?.incentive || 0;
-  
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: Connect with backend to update user info
+    console.log("Updated Info:", formData);
+  };
+
   return (
-    <div className="flex  justify-center bg-gray-100 p-4 ">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-white shadow-lg rounded-lg p-4 w-full max-w-md sm:max-w-xl"
-      >
-        {/* Profile Section */}
-        <div className="flex items-center justify-between mb-4 p-4 bg-gray-200 rounded-lg">
+    <div className="flex justify-center bg-gray-100 p-4">
+      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md sm:max-w-xl">
+        <div className="flex items-center justify-center mb-6">
           <img
-            src={user?.profilePic || DefaultProfile}
+            src={formData.profilePic || DefaultProfile}
             alt="Profile"
-            className="w-16 h-16 rounded-full object-cover"
+            className="w-20 h-20 rounded-full object-cover border-2 border-gray-300"
           />
-          <div className="text-right flex-1 ml-4">
-            <h2 className="text-base sm:text-lg font-semibold">
-              <span className="text-orange-500 font-bold">Welcome </span>
-              <span className="font-bold">{user?.name || "User"}</span>
-            </h2>
-            <p className="text-gray-600 text-sm sm:text-base font-semibold">
-              Referral ID: {user?.sharableReferralCode || "N/A"}
-            </p>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
           </div>
-        </div>
-
-        {/* Cards Section */}
-        <div className="space-y-3">
-          <InfoCard
-            title="My Total Team"
-            value={user?.totalTeam || 0}
-            icon={<FaUsers />}
-            gradient="from-[#FFA500] to-[#FF8C00]"
-          />
-          <InfoCard
-            title="My Total Income"
-            value={totalIncome}
-            currency
-            icon={<FaMoneyBillWave />}
-            gradient="from-[#00BFFF] to-[#1E90FF]"
-          />
-          <InfoCard
-            title="Today Income"
-            value={todayIncome}
-            currency
-            icon={<FaBolt />}
-            gradient="from-[#FFA500] to-[#FF8C00]"
-          />
-          <InfoCard
-            title="Last 7 Days Income"
-            value={income7Days}
-            currency
-            icon={<FaCalendarWeek />}
-            gradient="from-[#00BFFF] to-[#1E90FF]"
-          />
-          <InfoCard
-            title="Last 30 Days Income"
-            value={income30Days}
-            currency
-            icon={<FaCalendarAlt />}
-            gradient="from-[#FFA500] to-[#FF8C00]"
-          />
-          <InfoCard
-            title="Incentive"
-            value={incentive}
-            currency
-            icon={<FaGift />}
-            gradient="from-[#00BFFF] to-[#1E90FF]"
-          />
-        </div>
-      </motion.div>
-    </div>
-  );
-};
-
-const InfoCard = ({ title, value, icon, currency, gradient }) => {
-  return (
-    <div
-      className={`flex items-center justify-between bg-gradient-to-r ${gradient} text-white p-3 sm:p-4 rounded-lg shadow-md text-sm sm:text-base`}
-    >
-      <div className="flex items-center space-x-2">
-        {icon && (
-          <span className="text-xl sm:text-1xl" style={{ color: "bg-gradient-to-r from-[#0090cc] to-[#1667c7]" }}>
-            {icon}
-          </span>
-        )}
-        <p className="font-bold">{title}</p>
-      </div>
-      <div className="font-extrabold text-white">
-        {currency && <FaRupeeSign className="inline mr-1" />} {value || 0}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700">Phone</label>
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700">Profile Picture URL</label>
+            <input
+              type="text"
+              name="profilePic"
+              value={formData.profilePic}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-orange-500 text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 transition"
+          >
+            Update Info
+          </button>
+        </form>
       </div>
     </div>
   );

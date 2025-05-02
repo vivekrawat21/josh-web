@@ -101,5 +101,10 @@
     @apply text-sm md:text-base lg:text-lg text-gray-600;
   }
 }
+/* In global.css or tailwind layer */
+/* .btn {
+  @apply px-3 py-1 bg-gray-200 hover:bg-gray-300 text-sm rounded;
+} */
+
 
 
