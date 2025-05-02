@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaBook, FaGift, FaHeadset, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaBook, FaGift,  FaSignOutAlt, FaVideo } from 'react-icons/fa';
 import {BiSolidOffer} from 'react-icons/bi';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../features/user/userSlice';
 import { BASE_URL } from '../utils/utils';
+import { FaChalkboardTeacher } from "react-icons/fa";
 
 const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
-  const [profileMenu, setProfileMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,7 +29,8 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
       initial={{ x: -100, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="hidden md:flex flex-col bg-white shadow-lg p-5 w-1/5 min-h-screen text-base"
+      className="hidden md:flex flex-col bg-white shadow-lg p-5 w-1/5 min-h-screen text-base  "
+
     >
       <Link
         to="/admin/dashboard"
@@ -39,7 +40,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
           <FaUser className="text-gray-600" /> Dashboard
         </div>
       </Link>
-      <Link to="/admin/courses" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
+      <Link to="/admin/courses" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg ">
         <FaBook /> Courses
       </Link>
       <Link to="/admin/bundles" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
@@ -48,20 +49,35 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
       <Link to="/admin/students" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
         <FaGift /> Students
       </Link>
-      <Link to="/admin/settings" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
-        <FaHeadset /> Settings
+      <Link to="/admin/mentors" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
+        <FaChalkboardTeacher /> Mentor
       </Link>
       <Link to="/admin/offers"
         className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
       >
         <BiSolidOffer /> Offers
       </Link>
+      <Link to="/admin/webinars"
+        className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
+      >
+          <FaVideo /> Webinars
+      </Link>
       <div className="mt-64">
         <button
           onClick={isLoggedIn ? handleLogout : null}
-          className="border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-3 px-5 rounded-lg hover:bg-orange-500 hover:text-white transition text-lg w-full"
+          className="border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-3 px-5 rounded-lg hover:bg-orange-500 hover:text-white transition fixed bottom-30 text-lg lg:w-64 "
         >
-          <FaSignOutAlt /> {isLoggedIn ? 'Logout' : 'Login'}
+    {
+      isLoggedIn ? (
+        <>
+          <FaSignOutAlt /> Logout
+        </>
+      ) : (
+        <>
+          <FaSignOutAlt /> Login
+        </>
+      )
+    }
         </button>
       </div>
     </motion.div>

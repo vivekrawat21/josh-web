@@ -6,12 +6,13 @@ import { logoutUser } from "../features/user/userSlice" // Adjust import path
 import { FaChevronDown, FaWallet, FaBook, FaGift, FaHeadset, FaUser, FaSignOutAlt } from "react-icons/fa";
 import { BASE_URL } from "../utils/utils"; // Adjust import path
 import axios from 'axios';
+import { FaVideo } from 'react-icons/fa';
 const DashboardSidebar = () => {
     const [profileMenu, setProfileMenu] = useState(false);
       const dispatch = useDispatch();
       const navigate = useNavigate();
       const handleLogout = async() => {
-        const res = await axios.post(
+         await axios.post(
           `${BASE_URL}/auth/logout`,
           {},
           { withCredentials: true }
@@ -24,7 +25,7 @@ const DashboardSidebar = () => {
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="hidden md:flex flex-col bg-white shadow-lg p-5 w-1/5 min-h-screen text-base"
+        className="hidden md:flex flex-col bg-white shadow-lg p-5 w-1/5 min-h-screen text-base relative"
       >
         {/* Profile Dropdown */}
         <button
@@ -68,19 +69,14 @@ const DashboardSidebar = () => {
         <Link to="/dashboard/refer&earn" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
           <FaGift /> Refer & Earn
         </Link>
+        <Link to={"/dashboard/webinars"} className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
+          <FaVideo /> Webinars
+        </Link>
+
         <Link to="/dashboard/help&support" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg">
           <FaHeadset /> Help & Support
         </Link>
 
-        {/* Logout Button - Positioned Above the Bottom */}
-        <div className="mt-64">
-          <button
-            onClick={handleLogout}
-            className="border border-orange-500 text-orange-500 flex items-center justify-center gap-2 py-3 px-5 rounded-lg hover:bg-orange-500 hover:text-white transition text-lg w-full "
-          >
-            <FaSignOutAlt /> Logout
-          </button>
-        </div>
       </motion.div> 
 
   )

@@ -16,13 +16,14 @@ import {
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useSelector } from 'react-redux';
-
+import { BASE_URL } from '../utils/utils';
 const ReferAndEarn = () => {
   const user = useSelector((state) => state.user);
   const [incomeHistory, setIncomeHistory] = useState([]);
 
   const handleCopyReferralLink = () => {
-    navigator.clipboard.writeText(user?.sharableReferralCode);
+    navigator.clipboard.writeText(referralHeader + user?.sharableReferralCode);
+
   };
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const ReferAndEarn = () => {
       setIncomeHistory(updatedIncome);
     }
   }, [user]);
-
+  const referralHeader = `http://joshguru.com/signup?referralCode=`
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-6 flex flex-col items-center">
       <motion.div
@@ -54,6 +55,7 @@ const ReferAndEarn = () => {
           <h2 className="text-base sm:text-lg font-semibold text-gray-700 mb-2">Your Referral Code</h2>
           <div className="flex flex-col items-start justify-between bg-gray-100 p-4 rounded-xl border border-gray-200 space-y-3 sm:space-y-0">
             <span className="text-lg font-medium text-gray-800 break-words">
+              {referralHeader}
               {user?.sharableReferralCode}
             </span>
 
@@ -113,11 +115,13 @@ const ReferAndEarn = () => {
 
         {/* Modified Referral Code Section (Visible only on Medium and Large Devices) */}
         <div className="hidden md:block mb-8">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-700 mb-2">Your Referral Code</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-gray-700 mb-2">Your Referral Link</h2>
           <div className="flex flex-row items-center justify-between bg-gray-100 p-4 rounded-xl border border-gray-200 space-y-3 sm:space-y-0">
-            <span className="text-lg font-medium text-gray-800 break-words">
-              {user?.sharableReferralCode}
-            </span>
+          <span className="text-lg font-medium text-gray-800 break-words">
+  {referralHeader}
+  {user?.sharableReferralCode}
+</span>
+
 
             <Dialog>
               <DialogTrigger asChild>
@@ -143,7 +147,8 @@ const ReferAndEarn = () => {
                     </Label>
                     <Input
                       id="link"
-                      defaultValue={user?.sharableReferralCode}
+                      defaultValue={`${referralHeader}${user?.sharableReferralCode}`}
+
                       readOnly
                       className="w-full"
                     />

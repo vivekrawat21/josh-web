@@ -21,7 +21,7 @@ import { MdDownload } from "react-icons/md";
 import { FiMaximize } from "react-icons/fi";
 
 const Course = () => {
-  const [showModal, setShowModal] = useState(false);
+const [showModal, setShowModal] = useState(false);
 const [courseData, setCourseData] = useState(null);
 const [hoveredIndex, setHoveredIndex] = useState(null);
 const { courseId } = useParams();

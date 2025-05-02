@@ -9,53 +9,66 @@ const SelectionBundleCourse = ({
 }) => {
   const isSingleItem = itemsToShow.length === 1;
 
-  // Scroll to top when the page is loaded
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   useEffect(() => {
-    if (typeParam === 'cart') return; // no need to set selectedCourse for cart
+    if (typeParam === 'cart') return;
     if (isSingleItem && !selectedCourse) {
       setSelectedCourse(itemsToShow[0]);
     }
   }, [isSingleItem, itemsToShow, selectedCourse, setSelectedCourse, typeParam]);
 
-  const handleContinue = () => {
-    setStep(3);
-  };
+  const handleContinue = () => setStep(3);
+  const handleBackToSelection = () => setStep(1);
 
-  const handleBackToSelection = () => {
-    setStep(1);
+  const getTitle = (item) =>
+    item?.bundleName || item?.title || item?.name || 'Untitled';
+
+  const getImage = (item) =>
+    item?.bundleImage || item?.image || '/placeholder.png';
+
+  const getId = (item) => item?._id || item?.id || getTitle(item); // fallback ID for specialbundle
+
+  const renderHeading = () => {
+    if (typeParam === 'cart') return 'Review Your Cart Items';
+    if (isSingleItem) {
+      return `Selected ${
+        typeParam === 'course'
+          ? 'Course'
+          : typeParam === 'specialbundle'
+          ? 'Special Bundle'
+          : 'Bundle'
+      }`;
+    }
+    return `Select a ${
+      typeParam === 'course'
+        ? 'Course'
+        : typeParam === 'specialbundle'
+        ? 'Special Bundle'
+        : 'Bundle'
+    }`;
   };
 
   return (
     <div className="px-4 sm:px-6">
-      <h3 className="text-lg sm:text-xl font-semibold mb-4 text-center">
-        {typeParam === 'cart'
-          ? 'Review Your Cart Items'
-          : isSingleItem
-          ? `Selected ${typeParam === 'course' ? 'Course' : 'Bundle'}`
-          : `Select a ${typeParam === 'course' ? 'Course' : 'Bundle'}`}
-      </h3>
+      <h3 className="text-lg sm:text-xl font-semibold mb-4 text-center">{renderHeading()}</h3>
 
       {typeParam === 'cart' ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
-          {itemsToShow.map((item) => (
+          {itemsToShow.map((item, idx) => (
             <div
-              key={item._id}
+              key={getId(item) + idx}
               className="border p-3 rounded-xl flex flex-col items-center bg-blue-50"
             >
               <img
-                src={item?.image || item?.bundleImage}
-                alt={item?.title || item?.bundleName}
+                src={getImage(item)}
+                alt={getTitle(item)}
                 className="w-full h-24 object-cover rounded mb-2"
               />
               <span className="font-semibold text-center text-xs sm:text-sm">
-                {item?.title || item?.bundleName}
+                {getTitle(item)}
               </span>
             </div>
           ))}
@@ -63,38 +76,38 @@ const SelectionBundleCourse = ({
       ) : isSingleItem ? (
         <div className="border p-4 rounded-xl flex flex-col items-center bg-blue-50 mx-auto w-full sm:w-1/3 h-[21vh]">
           <img
-            src={itemsToShow[0]?.bundleImage || itemsToShow[0]?.image}
-            alt={itemsToShow[0]?.bundleName || itemsToShow[0]?.title}
+            src={getImage(itemsToShow[0])}
+            alt={getTitle(itemsToShow[0])}
             className="w-full h-24 object-cover rounded mb-2"
           />
           <span className="font-semibold text-center text-xs sm:text-sm">
-            {itemsToShow[0]?.bundleName || itemsToShow[0]?.title}
+            {getTitle(itemsToShow[0])}
           </span>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
-          {itemsToShow.map((item) => (
+          {itemsToShow.map((item, idx) => (
             <label
-              key={item._id}
+              key={getId(item) + idx}
               className={`border p-4 rounded-xl flex flex-col items-center cursor-pointer transition ${
-                selectedCourse?._id === item._id
+                getId(selectedCourse) === getId(item)
                   ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200'
               }`}
             >
               <img
-                src={item?.bundleImage || item?.image}
-                alt={item?.bundleName || item?.title}
+                src={getImage(item)}
+                alt={getTitle(item)}
                 className="w-full h-24 object-cover rounded mb-2"
               />
               <span className="font-semibold text-center text-xs sm:text-sm">
-                {item?.bundleName || item?.title}
+                {getTitle(item)}
               </span>
               <input
                 type="radio"
                 name="course"
-                value={item._id}
-                checked={selectedCourse?._id === item._id}
+                value={getId(item)}
+                checked={getId(selectedCourse) === getId(item)}
                 onChange={() => setSelectedCourse(item)}
                 className="mt-2"
               />

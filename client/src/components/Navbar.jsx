@@ -261,8 +261,8 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to="/dashboard/help&support">Help and Support</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <button onClick={logout}>Logout</button>
+                <DropdownMenuItem onClick={logout}>
+                 Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

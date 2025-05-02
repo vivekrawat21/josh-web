@@ -11,9 +11,36 @@ import DownloadApp from '@/components/DownloadApp'
 import SkillUpCourses from '@/components/SkillUpCourses'
 import EducationalInstituteTestimonial from '@/components/EducationalInstituteTestimonial'
 import WebinarBanner from '@/components/webinarBanner'
-
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux';
+import { addMentors } from '@/features/mentors/mentorSlice'
+import { useState } from 'react';
+import axios from 'axios';
+import { BASE_URL } from '../utils/utils'
 
 const Home = () => {
+
+  // const [mentors, setMentors] = useState([]);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/mentors/getAllMentors`, {
+          withCredentials: true,
+        });
+        const mentorList = response.data.data.mentors;
+        // setMentors(mentorList);
+        dispatch(addMentors(mentorList)); // <-- Dispatching here
+        console.log(mentorList);
+      } catch (error) {
+        console.error("Error fetching mentors:", error);
+      }
+    };
+  
+    fetchMentors();
+  }, [dispatch]);
+  
   return (
     
     <div className="min-h-screen my-0">

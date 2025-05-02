@@ -194,7 +194,9 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
           <Link to={"/dashboard/mycourses"}><MenuItem icon={<FaBook />} label="My Courses" path="/dashboard/courses" /></Link>
           <Link to={"/dashboard/refer&earn"}><MenuItem icon={<FaGift />} label="Refer & Earn" path="/dashboard/refer&earn" /></Link>
           <Link to={"/dashboard/help&support"}><MenuItem icon={<FaHeadset />} label="Help & Support" path="/dashboard/support" /></Link>
+          <Link to={"webinars"}><MenuItem icon={<FaVideo />} label="Webinars" path="/webinars" /></Link>
           <Link to={"/blogs"}><MenuItem icon={<FaBlog />} label="Blogs" path="/blogs" /></Link>
+
           <motion.div variants={itemVariants} className="pt-4 px-3">
             <button
               onClick={logout}
@@ -210,6 +212,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
           <Link to={"/about"}><MenuItem icon={<FaInfoCircle />} label="About" path="/about" /></Link>
           <MenuItem icon={<FaGraduationCap />} label="Courses" path="/courses" onClick={navigateToCategories} />
           <Link to={"/courses"}><MenuItem icon={<MdExplore />} label="Explore" path="/course" /></Link>
+          <Link to={"/webinars"}><MenuItem icon={<FaVideo />} label="Webinars" path="/webinars" /></Link>
           <Link to={"/blogs"}><MenuItem icon={<FaBlog />} label="Blogs" path="/blogs" /></Link>
           <motion.div variants={itemVariants} className="pt-4 px-3">
             <Link to={"/login"}>
