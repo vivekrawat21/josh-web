@@ -133,7 +133,6 @@ function App() {
               {/* <Route path="/specialBundle/:id" element={<BasicBundle />} /> */}
               <Route path="/gallery/:type" element={<Gallery />} />
 
-
               <Route path="/blogs/:id" element={<Blog />} />
 
 
