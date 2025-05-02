@@ -8,52 +8,17 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import axios from "axios"
 import { BASE_URL } from "../utils/utils";
+import { useNavigate } from "react-router-dom"
 
 const Webinars = () => {
-    // const webinars = [
-    //     {
-    //         id: 1,
-    //         title: "Introduction to Next.js",
-    //         description: "Learn the basics of Next.js and how to build modern web applications with the latest features.",
-    //         authorImage: "/logo1.png",
-    //         author: "Sarah Johnson",
-    //         authorRole: "Senior Developer Advocate",
-    //         date: "May 15, 2025",
-    //         time: "2:00 PM - 3:30 PM EST",
-    //         isLive: true,
-    //         image: "/logo1.png",
-    //     },
-    //     {
-    //         id: 2,
-    //         title: "Advanced React Patterns",
-    //         description:"Dive deep into advanced React patterns and performance optimization techniques for professional developers.",
-    //         authorImage: "/logo1.png",
-    //         author: "Michael Chen",
-    //         authorRole: "Lead Frontend Engineer",
-    //         date: "May 22, 2025",
-    //         time: "1:00 PM - 3:00 PM EST",
-    //         isLive: false,
-    //         image: "/logo1.png",
-    //     },
-    //     {
-    //         id: 3,
-    //         title: "Building E-commerce with Next.js",
-    //         description: "A comprehensive guide to building scalable e-commerce solutions with Next.js and modern APIs.",
-    //         authorImage: "/logo1.png",
-    //         author: "Jessica Williams",
-    //         authorRole: "E-commerce Solutions Architect",
-    //         date: "June 5, 2025",
-    //         time: "11:00 AM - 1:00 PM EST",
-    //         isLive: false,
-    //         image: "/logo1.png",
-    //     },
-    // ]
 
     const [registeredWebinars, setRegisteredWebinars] = useState([])
     const [selectedWebinar, setSelectedWebinar] = useState(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [formSubmitted, setFormSubmitted] = useState(false)
     const [webinars, setWebinars] = useState([]);
+
+    const navigate = useNavigate()
 
 
     const fetchWebinars = async () => {
@@ -101,7 +66,7 @@ const Webinars = () => {
             };
             console.log("Register User Data:", registerUserData);
             
-            const response = await await axios.post(`${BASE_URL}/webinar/register/${selectedWebinar}`, registerUserData, {
+            const response = await axios.post(`${BASE_URL}/webinar/register/${selectedWebinar}`, registerUserData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -127,6 +92,14 @@ const Webinars = () => {
         return registeredWebinars.includes(webinarId)
     }
 
+    const handleSingleWebinar = (webinarId) => {
+        const webinar = webinars.find(w => w._id === webinarId);
+        if (!webinar) return;
+
+        const slug = webinar.categories;
+        navigate(`/${slug}/${webinarId}`);
+    }
+
     const currentWebinar = selectedWebinar !== null ? webinars.find((w) => w._id === selectedWebinar) : null
     return (
         <main className="min-h-screen bg-orange-50">
@@ -139,7 +112,18 @@ const Webinars = () => {
             </header>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
-            {webinars.map((webinar) => (
+            {webinars.sort((a, b) => {
+                // First sort by date
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                const dateComparison = dateA - dateB;
+                
+                // If dates are different, return the date comparison
+                if (dateComparison !== 0) return dateComparison;
+                
+                // If dates are the same, sort by time
+                return a.time.localeCompare(b.time);
+            }).map((webinar) => (
                 <Card key={webinar.id} className="border-orange-200 overflow-hidden flex flex-col h-full">
                 <div className="relative">
                     <img
@@ -191,12 +175,20 @@ const Webinars = () => {
                         Registered
                     </Button>
                     ) : (
-                    <Button
-                        onClick={() => handleRegister(webinar._id)}
-                        className="w-full my-auto bg-orange-600 hover:bg-orange-700 text-white"
-                    >
-                        Register Now
-                    </Button>
+                    <div className="flex flex-row gap-2 w-full">
+                        <Button
+                            onClick={() => handleRegister(webinar._id)}
+                            className="w-full my-auto bg-orange-600 hover:bg-orange-700 text-white"
+                        >
+                            Register Now
+                        </Button>
+                        <Button
+                            onClick={() => handleSingleWebinar(webinar._id)}
+                            className="w-full my-auto bg-black hover:bg-black text-white"
+                        >
+                            Learn More
+                        </Button>
+                    </div>
                     )}
                 </CardFooter>
                 </Card>

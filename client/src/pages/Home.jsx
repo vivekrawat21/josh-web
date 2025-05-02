@@ -10,6 +10,7 @@ import DiscountPopup from '@/components/DiscountPopup'
 import DownloadApp from '@/components/DownloadApp'
 import SkillUpCourses from '@/components/SkillUpCourses'
 import EducationalInstituteTestimonial from '@/components/EducationalInstituteTestimonial'
+import WebinarBanner from '@/components/webinarBanner'
 
 
 const Home = () => {
@@ -22,6 +23,7 @@ const Home = () => {
       <SpecialBundles />
       <SkillUpCourses/>
       <TopCourses />
+      <WebinarBanner/>
       <DownloadApp />
       <TopMentors/>
       <EducationalInstituteTestimonial/>

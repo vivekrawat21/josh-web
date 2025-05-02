@@ -72,12 +72,28 @@ export default {
   		},
 		animation:{
 			"loop-scroll": "loop-scroll 10s linear infinite",
+			slideLeft: 'slideLeft 1s ease-out forwards',
+			slideRight: 'slideRight 1s ease-out forwards',
+			scaleUp: 'scaleUp 0.8s ease-out forwards',
 		},
 		keyframes:{
 			"loop-scroll": {
 				from: { transform: "translateX(0)" },
 				to: { transform: "translateX(-100%)" }
-		}
+			},
+
+			slideLeft: {
+				'0%': { transform: 'translateX(-100%) scale(0)' },
+				'100%': { transform: 'translateX(0) scale(1)' },
+			},
+			slideRight: {
+				'0%': { transform: 'translateX(100%) scale(0)' },
+				'100%': { transform: 'translateX(0) scale(1)' },
+			},
+			scaleUp: {
+				'0%': { transform: 'scale(0)' },
+				'100%': { transform: 'scale(1)' },
+			},
   	}
   },
   
