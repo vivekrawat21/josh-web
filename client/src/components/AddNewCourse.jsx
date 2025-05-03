@@ -15,9 +15,9 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
     bundleName: "",
     description: "",
     video: "",
-    image: "",
+    image:null,
     isTrending: false,
-    isOffline: false,
+    isOffline:  false,
     whyCourse: [""],
     videos: [{ title: "", url: "" }],
     whatYouWillLearn: [""],
@@ -74,7 +74,15 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
   const resetForm = () => {
     setCourseData(initialState);
   };
-
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (files.length > 0) {
+      setCourseData((prev) => ({
+        ...prev,
+        [name]: files[0],
+      }));
+    }
+  };
   const uploadCourse = async (e) => {
     e.preventDefault();
     try {
@@ -146,7 +154,7 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
           "duration",
           "bundleName",
           "video",
-          "image",
+          
         ].map((field) => (
           <div key={field} className="space-y-2">
             <Label htmlFor={field}>
@@ -165,6 +173,18 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
         ))}
       </div>
 
+
+      {/* Image Upload */}
+      <div>
+          <label className="block mb-2 font-medium">Thumbnail Image</label>
+          {courseData?.image && (
+            <div className="mb-2">
+              <img src={courseData?.image} alt="Current thumbnail" className="h-20 object-contain" />
+              <p className="text-sm text-gray-500">Current image</p>
+            </div>
+          )}
+          <input type="file" name="imageFile" accept="image/*" onChange={handleFileChange} />
+        </div>
       {/* Description */}
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>

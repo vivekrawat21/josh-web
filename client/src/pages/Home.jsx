@@ -55,7 +55,6 @@ const Home = () => {
       <TopMentors/>
       <EducationalInstituteTestimonial/>
       <TestimonialBento />
-
       <FAQ />
       <DiscountPopup/>
     </div>

@@ -20,7 +20,7 @@ const Bundle = () => {
 
   return (
     <motion.div
-      className="max-w-7xl mx-auto px-4 md:px-6 py-4 bg-gradient-to-b te space-y-8"
+      className="max-w-7xl mx-auto px-4 md:px-6 py-4 bg-gradient-to-b te space-y-8 mt-20"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}

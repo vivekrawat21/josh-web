@@ -103,13 +103,20 @@ const Webinars = () => {
     const currentWebinar = selectedWebinar !== null ? webinars.find((w) => w._id === selectedWebinar) : null
     return (
         <main className="min-h-screen bg-orange-50">
-        <div className="container mx-auto py-8 px-4">
+        <div className="container mx-auto py-8 px-4 mt-12">
             <header className="mb-10 text-center">
             <h1 className="text-4xl font-bold text-orange-600 mb-2">Upcoming Webinars</h1>
             <p className="text-gray-600 max-w-4xl mx-auto">
                 Join our expert-led webinars to enhance your skills and stay updated with the latest industry trends.
             </p>
             </header>
+            {!webinars.length && (
+                <div className="flex justify-center items-center h-96">
+                    <p className="text-gray-500">No webinars available at the moment.</p>
+                </div>
+            )
+
+            }
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
             {webinars.sort((a, b) => {

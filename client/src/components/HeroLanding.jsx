@@ -126,7 +126,7 @@ const HeroLanding = () => {
   const rocketYPosition = Math.min(100, scrollPosition / 5)
 
   return (
-    <div className="relative flex flex-col items-center justify-between min-h-screen w-full px-4 md:flex-row md:space-x-12 md:px-12">
+    <div className="relative flex flex-col items-center justify-between min-h-screen w-full px-4 md:flex-row md:space-x-12 md:px-12 mt-8 lg:mt-4">
       <div className="relative w-full h-auto pt-10 pb-5 md:h-screen md:-top-14">
         {/* Background Images - Responsive positioning */}
         <motion.img

@@ -173,7 +173,7 @@ const Navbar = () => {
                   setIsRotating(!isRotating);
                 }}
               >
-                <span>Courses</span>
+                Courses
                 <motion.div animate={{ rotate: isRotating ? 180 : 0 }}>
                   <FaChevronDown className="text-base" />
                 </motion.div>
@@ -183,7 +183,7 @@ const Navbar = () => {
                 {isOpenCourse && (
                   <motion.div
                     ref={coursesDropdownRef}
-                    className="absolute lg:left-[-370%]   transform -translate-x-1/2 mt-3 shadow-2xl rounded-2xl p-8 w-[80vw] h-[50vh] grid grid-cols-4 gap-8 border bg-white border-gray-200 overflow-y-auto z-50"
+                    className="absolute lg:left-[-370%]   transform -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-8 w-[80vw] h-[50vh] grid grid-cols-4 gap-8 border bg-white border-gray-200 overflow-y-auto z-50"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
@@ -224,6 +224,7 @@ const Navbar = () => {
                 )}
               </AnimatePresence>
             </li>
+            <li><Link to="/webinars" className="hover:text-orange-400 transition">Webinars</Link></li>
           </ul>
         </div>
 

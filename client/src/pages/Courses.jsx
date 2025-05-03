@@ -76,7 +76,7 @@ const Courses = () => {
   });
 
   return (
-    <div className="container mx-auto px-4 md:py-8">
+    <div className="container mx-auto px-4 md:py-8 mt-16">
       <h1 className="text-3xl font-bold mb-8">
         <span className="text-orange-500">Explore</span> Courses
       </h1>
