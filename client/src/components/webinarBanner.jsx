@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, X, Clock, Calendar } from "lucide-react"
@@ -155,6 +153,10 @@ function WebinarBannerItem({ webinar }) {
 
         {/* Content */}
         <div className="flex-1 text-white">
+          <div className="inline-flex items-center gap-2 bg-white/20 px-3 py-1.5 rounded-full border border-white/20 text-sm font-semibold w-fit mb-4">
+            <span className="animate-pulse">🔥</span>
+            Upcoming Webinar
+          </div>
           {/* Webinar details */}
           <h2 className="text-xl md:text-2xl font-bold mb-3">{webinar.title}</h2>
 
