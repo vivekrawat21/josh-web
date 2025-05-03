@@ -61,15 +61,16 @@ const AdminMentor = () => {
   };
 
   const handleMentorToggle = (mentorId) => {
+    console.log("mentor update button clicked");
     const selectedMentor = mentors.find(m => m._id === mentorId);
     setFormData({
-      name: selectedMentor.name || '',
-      email: selectedMentor.email || '',
-      mobileNumber: selectedMentor.mobileNumber || '',
-      mentorImage: null,
-      about: selectedMentor.about || '',
-      socialLinks: selectedMentor.socialLinks || [],
-      position: selectedMentor.position || ''
+      name: selectedMentor?.name || '',
+      email: selectedMentor?.email || '',
+      mobileNumber: selectedMentor?.mobileNumber || '',
+      mentorImage: selectedMentor?.profileImage || null,
+      about: selectedMentor?.about || '',
+      socialLinks: selectedMentor?.socialLinks || [],
+      position: selectedMentor?.position || ''
     });
 
     const selectedPlatforms = (selectedMentor.socialLinks || []).map(link => ({
@@ -89,7 +90,10 @@ const AdminMentor = () => {
   };
 
   const handleFileChange = (e) => {
+    console.log("file changed")
+    console.log(e.target.files[0])
     setFormData(prev => ({ ...prev, mentorImage: e.target.files[0] }));
+    console.log(mentorImage)
   };
 
   const handleSocialLinkChange = (platform, value) => {
@@ -163,6 +167,7 @@ const AdminMentor = () => {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      console.log(res.data);
       if (res.data.statusCode === 201) {
         toast.success('Mentor added successfully!');
         resetForm();
@@ -188,18 +193,29 @@ const AdminMentor = () => {
 
   const handleUpdateMentor = async () => {
     if (!validateForm()) return;
-    
+    console.log("updating mentor")
     setSubmitting(true);
     const loadingToast = toast.loading("Updating mentor...");
     
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      if (key !== 'socialLinks' && value) payload.append(key, value);
+      if (key !== 'socialLinks' && key !== 'image' && value) {
+        payload.append(key, value);
+      }
     });
-    if (formData.image) payload.append('mentorImage', formData.image);
+    
+    if (formData.image) {
+      payload.append('mentorImage', formData.image); // ✅ expected by backend
+    }
+    
     payload.append('socialLinks', JSON.stringify(formData.socialLinks));
 
     try {
+      for (let [key, value] of payload.entries()) {
+        console.log(`${key}:`, value);
+      }
+      console.log("this is the payload")
+      console.log(payload)
       const res = await axios.patch(`${BASE_URL}/mentors/update/${updateMentorId}`, payload, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -417,7 +433,7 @@ const AdminMentor = () => {
       {Array.isArray(mentors) && mentors.length > 0 ? (
         <div className="grid gap-6">
           {mentors.map(mentor => (
-            <div key={mentor._id} className="border p-4 rounded-md shadow-md flex flex-col sm:flex-row sm:justify-between hover:shadow-lg transition-shadow">
+            <div key={mentor?._id} className="border p-4 rounded-md shadow-md flex flex-col sm:flex-row sm:justify-between hover:shadow-lg transition-shadow">
               <div className="flex gap-4 items-center">
                 <img src={mentor.profileImage} alt={mentor.name} className="w-20 h-20 rounded-full object-cover shadow-sm" />
                 <div>
