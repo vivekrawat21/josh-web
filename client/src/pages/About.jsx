@@ -1,9 +1,7 @@
-// Vite + React with Framer Motion for Animations
 
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux";
 const About = () => {
   const galleryData = [
     {
@@ -50,7 +48,7 @@ const About = () => {
   ];
   const mentors= useSelector((state) => state.mentor?.mentors[0] || []);
   return (
-    <section className=" px-8 bg-gradient-to-b from-gray-50 to-white">
+    <section className=" px-8 bg-gradient-to-b from-gray-50 to-white mt-20">
       <div className="flex flex-col items-center justify-center gap-16">
         {/* About Section */}
         <motion.div

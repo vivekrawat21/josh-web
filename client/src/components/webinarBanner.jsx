@@ -57,7 +57,7 @@ const WebinarBanner = () => {
   };
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden ">
 
       <AnimatePresence mode="wait">
         {isVisible && (
