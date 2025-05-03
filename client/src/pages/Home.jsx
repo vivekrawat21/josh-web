@@ -10,7 +10,7 @@ import DiscountPopup from '@/components/DiscountPopup'
 import DownloadApp from '@/components/DownloadApp'
 import SkillUpCourses from '@/components/SkillUpCourses'
 import EducationalInstituteTestimonial from '@/components/EducationalInstituteTestimonial'
-import WebinarBanner from '@/components/webinarBanner'
+import WebinarBanner from '@/components/WebinarBanner'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { addMentors } from '@/features/mentors/mentorSlice'
