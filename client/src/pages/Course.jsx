@@ -131,7 +131,7 @@ const handleVideoSelection = (video) => {
   }
 };
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="min-h-screen bg-white text-black mt-16">
       <div className="container mx-auto px-4 py-6">
         {courseData ? (
           <div className="flex flex-col lg:flex-row gap-6">

@@ -2,443 +2,455 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../utils/utils';
 import Select from 'react-select';
-
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Link } from 'react-router-dom';
+import { Toaster, toast } from 'react-hot-toast';
+import { Loader2 } from 'lucide-react';
+
 const AdminMentor = () => {
   const [mentors, setMentors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [addMentor, setAddMentor] = useState(false);
   const [updateMentor, setUpdateMentor] = useState(false);
   const [updateMentorId, setUpdateMentorId] = useState(null);
 
- 
-  // Form state
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     mobileNumber: '',
-    image: null,
+    mentorImage: null,
     about: '',
-    socialLinks: [], // Initialized as an array
-    position:''
+    socialLinks: [],
+    position: ''
   });
 
   const [selectedOptions, setSelectedOptions] = useState([]);
-
   const options = [
     { value: 'LinkedIn', label: 'LinkedIn' },
     { value: 'Twitter', label: 'Twitter' },
   ];
 
   useEffect(() => {
-    const fetchMentors = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/mentors/getAllMentors`, { withCredentials: true });
-        if (res.data.statusCode === 200) {
-          setMentors(res.data.data.mentors || []);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchMentors();
   }, []);
 
+  const fetchMentors = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${BASE_URL}/mentors/getAllMentors`, { withCredentials: true });
+      if (res.data.statusCode === 200) {
+        setMentors(res.data.data.mentors || []);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Failed to fetch mentors");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleAddMentor = () => {
     setAddMentor(!addMentor);
+    if (updateMentor) {
+      setUpdateMentor(false);
+      setUpdateMentorId(null);
+      resetForm();
+    }
   };
+
   const handleMentorToggle = (mentorId) => {
-    // Toggle the update section
-    // console.log("updating mentor")
-    setUpdateMentor(!updateMentor);
-    setUpdateMentorId(prevId => prevId === mentorId ? null : mentorId);
+    const selectedMentor = mentors.find(m => m._id === mentorId);
+    setFormData({
+      name: selectedMentor.name || '',
+      email: selectedMentor.email || '',
+      mobileNumber: selectedMentor.mobileNumber || '',
+      mentorImage: null,
+      about: selectedMentor.about || '',
+      socialLinks: selectedMentor.socialLinks || [],
+      position: selectedMentor.position || ''
+    });
+
+    const selectedPlatforms = (selectedMentor.socialLinks || []).map(link => ({
+      value: link.platform,
+      label: link.platform
+    }));
+    setSelectedOptions(selectedPlatforms);
+
+    setUpdateMentor(true);
+    setUpdateMentorId(mentorId);
+    setAddMentor(false);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      image: e.target.files[0],
-    }));
+    setFormData(prev => ({ ...prev, mentorImage: e.target.files[0] }));
   };
- const handleUpdateMentor = async() => {
+
+  const handleSocialLinkChange = (platform, value) => {
+    setFormData(prev => {
+      const updated = [...prev.socialLinks];
+      const idx = updated.findIndex(link => link.platform === platform);
+      if (idx !== -1) updated[idx] = { platform, link: value };
+      else updated.push({ platform, link: value });
+      return { ...prev, socialLinks: updated };
+    });
+  };
+
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      mobileNumber: '',
+      mentorImage: null,
+      about: '',
+      socialLinks: [],
+      position: ''
+    });
+    setSelectedOptions([]);
+  };
+
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      toast.error("Name is required");
+      return false;
+    }
+    if (!formData.email.trim()) {
+      toast.error("Email is required");
+      return false;
+    }
+    // Add more validations as needed
+    return true;
+  };
+
+  const addNewMentor = async () => {
+    if (!validateForm()) return;
+    
+    setSubmitting(true);
+    const loadingToast = toast.loading("Adding mentor...");
+    
     const payload = new FormData();
+    
+    // Add text fields explicitly
     payload.append('name', formData.name);
     payload.append('email', formData.email);
-    payload.append('mobileNumber', formData.mobileNumber);
-    payload.append('about', formData.about);
-    payload.append('position', formData.position);
-
-    if (formData.image) {
-      payload.append('mentorImage', formData.image);
+    if (formData.mobileNumber) payload.append('mobileNumber', formData.mobileNumber);
+    if (formData.position) payload.append('position', formData.position);
+    if (formData.about) payload.append('about', formData.about);
+    
+    // Add the file with exactly the right field name
+    if (formData.mentorImage) {
+      payload.append('mentorImage', formData.mentorImage);
+      console.log('Added file:', formData.mentorImage.name);
+    }
+    
+    // Add socialLinks as JSON string
+    payload.append('socialLinks', JSON.stringify(formData.socialLinks));
+    
+    // Debug the FormData
+    console.log("FormData contents:");
+    for (let pair of payload.entries()) {
+      console.log(pair[0] + ': ' + (pair[1] instanceof File ? `File: ${pair[1].name}` : pair[1]));
     }
 
+    try {
+      const res = await axios.post(`${BASE_URL}/mentors/add`, payload, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      if (res.data.statusCode === 201) {
+        toast.success('Mentor added successfully!');
+        resetForm();
+        setAddMentor(false);
+        fetchMentors();
+      } else {
+        toast.error(res.data.message || 'Failed to add mentor');
+      }
+    } catch (err) {
+      console.error('Error adding mentor:', err);
+      if (err.response) {
+        console.error('Response data:', err.response.data);
+        console.error('Response status:', err.response.status);
+        toast.error(err.response.data.message || `Error ${err.response.status}: Failed to add mentor`);
+      } else {
+        toast.error('Network error or server not responding');
+      }
+    } finally {
+      toast.dismiss(loadingToast);
+      setSubmitting(false);
+    }
+  };
+
+  const handleUpdateMentor = async () => {
+    if (!validateForm()) return;
+    
+    setSubmitting(true);
+    const loadingToast = toast.loading("Updating mentor...");
+    
+    const payload = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key !== 'socialLinks' && value) payload.append(key, value);
+    });
+    if (formData.image) payload.append('mentorImage', formData.image);
     payload.append('socialLinks', JSON.stringify(formData.socialLinks));
 
     try {
       const res = await axios.patch(`${BASE_URL}/mentors/update/${updateMentorId}`, payload, {
         withCredentials: true,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-
       if (res.data.statusCode === 200) {
-        alert('Mentor updated successfully!');
+        toast.success('Mentor updated successfully!');
         setUpdateMentor(false);
-        setFormData({
-          name: '',
-          email: '',
-          mobileNumber: '',
-          mentorImage: null,
-          about: '',
-          socialLinks: [],
-        });
-        setSelectedOptions([]);
-        // Re-fetch mentors
-        const refreshedMentors = await axios.get(`${BASE_URL}/mentors/getAllMentors`, { withCredentials: true });
-        setMentors(refreshedMentors.data.data.mentors || []);
-      }
-    } catch (err) {
-      console.log('Error updating mentor:', err);
-    }
-
- }
-  const handleSocialLinkChange = (platform, value) => {
-    setFormData((prev) => {
-      // Ensure socialLinks is an array
-      const updatedSocialLinks = [...prev.socialLinks];
-      
-      // Update the specific platform link or add a new one if not already present
-      const index = updatedSocialLinks.findIndex(link => link.platform === platform);
-      if (index !== -1) {
-        updatedSocialLinks[index] = { platform, link: value };
+        setUpdateMentorId(null);
+        resetForm();
+        fetchMentors();
       } else {
-        updatedSocialLinks.push({ platform, link: value });
-      }
-
-      return { ...prev, socialLinks: updatedSocialLinks };
-    });
-  };
-
-  const addNewMentor = async () => {
-    const payload = new FormData();
-    payload.append('name', formData.name);
-    payload.append('email', formData.email);
-    payload.append('mobileNumber', formData.mobileNumber);
-    payload.append('about', formData.about);
-    payload.append('position', formData.position);
-
-    if (formData.image) {
-      payload.append('mentorImage', formData.image);
-    }
-
-    payload.append('socialLinks', JSON.stringify(formData.socialLinks));
-
-    try {
-      const res = await axios.post(`${BASE_URL}/mentors/add`, payload, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      if (res.data.statusCode === 201) {
-        alert('Mentor added successfully!');
-        setAddMentor(false);
-        setFormData({
-          name: '',
-          email: '',
-          mobileNumber: '',
-          mentorImage: null,
-          about: '',
-          socialLinks: [],
-        });
-        setSelectedOptions([]);
-        // Re-fetch mentors
-        const refreshedMentors = await axios.get(`${BASE_URL}/mentors/getAllMentors`, { withCredentials: true });
-        setMentors(refreshedMentors.data.data.mentors || []);
+        toast.error(res.data.message || 'Failed to update mentor');
       }
     } catch (err) {
-      console.log('Error adding mentor:', err);
+      console.error('Error updating mentor:', err);
+      toast.error(err.response?.data?.message || 'Error updating mentor');
+    } finally {
+      toast.dismiss(loadingToast);
+      setSubmitting(false);
     }
   };
+
+  const renderLoading = () => (
+    <div className="flex flex-col justify-center items-center h-screen">
+      <Loader2 className="h-12 w-12 animate-spin text-gray-800 mb-4" />
+      <h1 className="text-2xl font-bold">Loading mentors...</h1>
+    </div>
+  );
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <h1 className="text-2xl font-bold">Loading...</h1>
-      </div>
-    );
+    return renderLoading();
   }
 
   return (
     <div className="p-6">
+      <Toaster position="top-right" />
+      
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Mentors</h1>
-        <button
-          className="bg-gray-800 text-white px-4 py-2 rounded-md ml-4"
-          onClick={handleAddMentor}
-        >
-          {addMentor ? 'Cancel' : 'Add Mentor'}
-        </button>
+        <div className="flex gap-2">
+          <button
+            className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors"
+            onClick={fetchMentors}
+            disabled={loading}
+          >
+            {loading ? (
+              <div className="flex items-center">
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                Refreshing...
+              </div>
+            ) : (
+              "Refresh"
+            )}
+          </button>
+          <button
+            className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors"
+            onClick={handleAddMentor}
+          >
+            {addMentor ? 'Cancel' : 'Add Mentor'}
+          </button>
+        </div>
       </div>
 
-      {addMentor && (
-        <div className="flex flex-col gap-4 my-4 bg-gray-100 p-6 rounded-md delay-100 transform  scale-95 animate-open">
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            className="border p-2 rounded-md"
-            value={formData.name}
-            onChange={handleInputChange}
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className="border p-2 rounded-md"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="mobileNumber"
-            placeholder="Mobile Number"
-            className="border p-2 rounded-md"
-            value={formData.mobileNumber}
-            onChange={handleInputChange}
-          />
-           <input
-            type="text"
-            name="position"
-            placeholder="Enter mentor position"
-            className="border p-2 rounded-md"
-            value={formData.position}
-            onChange={handleInputChange}
-          />
-          <input
-            type="file"
-            name="mentorImage"
-            accept="image/*"
-            placeholder="Upload Image"
-            className="border p-2 rounded-md"
-            onChange={handleFileChange}
-          />
-          <textarea
-            name="about"
-            placeholder="About the mentor"
-            className="border p-2 rounded-md"
-            value={formData.about}
-            onChange={handleInputChange}
-          />
+      {(addMentor || updateMentor) && (
+        <div className="bg-gray-100 p-6 rounded-md mb-6 shadow-md">
+          <h2 className="text-xl font-bold mb-4">{updateMentor ? 'Update Mentor' : 'Add New Mentor'}</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <Label htmlFor="name">Name *</Label>
+              <Input 
+                id="name" 
+                type="text" 
+                name="name" 
+                placeholder="Full Name" 
+                value={formData.name} 
+                onChange={handleInputChange} 
+                className="w-full" 
+                required 
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="email">Email *</Label>
+              <Input 
+                id="email" 
+                type="email" 
+                name="email" 
+                placeholder="Email Address" 
+                value={formData.email} 
+                onChange={handleInputChange} 
+                className="w-full" 
+                required 
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="mobileNumber">Mobile Number</Label>
+              <Input 
+                id="mobileNumber" 
+                type="text" 
+                name="mobileNumber" 
+                placeholder="Mobile Number" 
+                value={formData.mobileNumber} 
+                onChange={handleInputChange} 
+                className="w-full" 
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="position">Position</Label>
+              <Input 
+                id="position" 
+                type="text" 
+                name="position" 
+                placeholder="Position/Title" 
+                value={formData.position} 
+                onChange={handleInputChange} 
+                className="w-full" 
+              />
+            </div>
+          </div>
+          
+          <div className="mb-4">
+            <Label htmlFor="mentorImage">Profile Image</Label>
+            <Input 
+              id="mentorImage" 
+              type="file" 
+              name="mentorImage"  // This name attribute must match Multer's expected field
+              accept="image/*" 
+              onChange={handleFileChange} 
+              className="w-full" 
+            />
+            {formData.mentorImage && (
+              <p className="text-sm text-gray-500 mt-1">
+                Selected file: {formData.mentorImage.name}
+              </p>
+            )}
+          </div>
+          
+          <div className="mb-4">
+            <Label htmlFor="about">About</Label>
+            <textarea 
+              id="about" 
+              name="about" 
+              placeholder="About the mentor" 
+              value={formData.about} 
+              onChange={handleInputChange} 
+              className="border p-2 rounded-md w-full min-h-[100px]" 
+            />
+          </div>
 
-          {/* Social Media Select */}
-          <Select
-            options={options}
-            isMulti
-            value={selectedOptions}
-            onChange={(selected) => {
-              setSelectedOptions(selected);
-              // Clean up unselected platforms
-              const updatedSocialLinks = [];
-              selected.forEach((opt) => {
-                if (formData.socialLinks.find(link => link.platform === opt.value)) {
-                  updatedSocialLinks.push(
-                    formData.socialLinks.find(link => link.platform === opt.value)
-                  );
-                } else {
-                  updatedSocialLinks.push({ platform: opt.value, link: '' });
-                }
-              });
-              setFormData((prev) => ({
-                ...prev,
-                socialLinks: updatedSocialLinks,
-              }));
-            }}
-            className="text-black"
-          />
+          <div className="mb-4">
+            <Label>Social Media</Label>
+            <Select
+              options={options}
+              isMulti
+              value={selectedOptions}
+              onChange={(selected) => {
+                setSelectedOptions(selected);
+                const updated = selected.map(opt =>
+                  formData.socialLinks.find(link => link.platform === opt.value) || { platform: opt.value, link: '' }
+                );
+                setFormData(prev => ({ ...prev, socialLinks: updated }));
+              }}
+              className="mt-1"
+            />
+          </div>
 
-          {/* Dynamic Social Media Inputs */}
-          {selectedOptions.map((option) => (
-            <div key={option.value} className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-700">
-                {option.label} Profile Link
-              </label>
-              <input
+          {selectedOptions.map(opt => (
+            <div key={opt.value} className="mb-3">
+              <Label htmlFor={`link-${opt.value}`}>{opt.label} Link</Label>
+              <Input
+                id={`link-${opt.value}`}
                 type="text"
-                placeholder={`Enter your ${option.label} profile link`}
-                className="border p-2 rounded-md"
-                value={
-                  formData.socialLinks.find((link) => link.platform === option.value)?.link || ''
-                }
-                onChange={(e) =>
-                  handleSocialLinkChange(option.value, e.target.value)
-                }
+                className="w-full"
+                placeholder={`${opt.label} profile URL`}
+                value={formData.socialLinks.find(l => l.platform === opt.value)?.link || ''}
+                onChange={(e) => handleSocialLinkChange(opt.value, e.target.value)}
               />
             </div>
           ))}
 
-          <button
-            className="bg-green-600 text-white px-4 py-2 rounded-md ml-4"
-            onClick={addNewMentor}
-          >
-            Add Mentor
-          </button>
+          <div className="flex gap-4 mt-6">
+            <button
+              className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50"
+              onClick={updateMentor ? handleUpdateMentor : addNewMentor}
+              disabled={submitting}
+            >
+              {submitting ? (
+                <div className="flex items-center">
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  {updateMentor ? 'Updating...' : 'Adding...'}
+                </div>
+              ) : (
+                updateMentor ? 'Update Mentor' : 'Add Mentor'
+              )}
+            </button>
+
+            <button
+              className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-400 transition-colors"
+              onClick={() => {
+                updateMentor ? setUpdateMentor(false) : setAddMentor(false);
+                setUpdateMentorId(null);
+                resetForm();
+              }}
+              disabled={submitting}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       )}
 
-      {/* Mentor List */}
       {Array.isArray(mentors) && mentors.length > 0 ? (
-        <div className="flex flex-col gap-4 my-4">
-          {mentors.map((mentor) => (
-            <div
-              key={mentor._id}
-              className="flex flex-wrap justify-between items-center border p-4 rounded-md mb-4"
-            >
-              <div className="flex flex-col items-center sm:items-start sm:w-auto w-full p-4">
-                <div className="w-24 h-24 sm:w-16 sm:h-16 rounded-full overflow-hidden mb-4">
-                  <img
-                    className="w-full h-full object-cover"
-                    src={mentor?.profileImage}
-                    alt={mentor?.name}
-                  />
+        <div className="grid gap-6">
+          {mentors.map(mentor => (
+            <div key={mentor._id} className="border p-4 rounded-md shadow-md flex flex-col sm:flex-row sm:justify-between hover:shadow-lg transition-shadow">
+              <div className="flex gap-4 items-center">
+                <img src={mentor.profileImage} alt={mentor.name} className="w-20 h-20 rounded-full object-cover shadow-sm" />
+                <div>
+                  <h2 className="text-xl font-bold">{mentor.name}</h2>
+                  <p className="text-gray-600">{mentor.email}</p>
+                  <p className="text-gray-600">{mentor.mobileNumber}</p>
+                  <p className="italic text-sm text-gray-600">{mentor.position}</p>
                 </div>
-                <h2 className="text-xl font-bold text-center sm:text-left">{mentor?.name}</h2>
-                <p className="text-gray-600 text-center sm:text-left">{mentor?.email}</p>
-                <p className="text-gray-600 text-center sm:text-left">{mentor?.mobileNumber}</p>
               </div>
-              <div className="flex flex-row sm:flex-col gap-4">
-                <Link to={`/admin/${mentor._id}/assignMentor`}> 
-                <button className="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded-md ml-4">
-                  Assign Course
-                </button>
+              <div className="flex gap-2 mt-4 sm:mt-0 sm:flex-col sm:items-end">
+                <Link to={`/admin/${mentor._id}/assignMentor`}>
+                  <button className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors w-full">Assign Course</button>
                 </Link>
                 <button
-                  className="bg-green-500 hover:bg-green-800 text-white px-4 py-2 rounded-md ml-4"
+                  className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors w-full"
                   onClick={() => handleMentorToggle(mentor._id)}
                 >
-                 {updateMentor ? " Cancel" : "Update Mentor"}
+                  Update
                 </button>
               </div>
-              
-              {updateMentorId === mentor._id && (
-                <div className=" w-full mt-4 bg-gray-200 p-4 rounded-md">
-                  <h3 className="font-bold">Update Mentor Information</h3>
-                  {/* You can replace this with the actual form to update mentor details */}
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Name"
-                      defaultValue={mentor?.name}
-                      className="block w-full p-2 mb-2 border rounded-md"
-                    />
-
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      defaultValue={mentor?.email}
-                      className="block w-full p-2 mb-2 border rounded-md"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Mobile Number"
-                      defaultValue={mentor?.mobileNumber}
-                      className="block w-full p-2 mb-2 border rounded-md"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Mentor Position"
-                      defaultValue={mentor?.position}
-                      className="block w-full p-2 mb-2 border rounded-md"
-                    />
-                    <input 
-                    type="file"
-                    accept="image/*"
-                    placeholder="Upload Image"
-                    className="block w-full p-2 mb-2 border rounded-md"
-                    onChange={handleFileChange}
-                    name='mentorImage'
-
-                    />
-                    <span>Previous Image ****</span>
-                    <img src={mentor?.profileImage} alt="" />
-                    <Select
-                      options={options}
-                      isMulti
-                      value={selectedOptions}
-                      onChange={(selected) => {
-                        setSelectedOptions(selected);
-                        // Clean up unselected platforms
-                        const updatedSocialLinks = [];
-                        selected.forEach((opt) => {
-                          if (formData.socialLinks.find(link => link.platform === opt.value)) {
-                            updatedSocialLinks.push(
-                              formData.socialLinks.find(link => link.platform === opt.value)
-                            );
-                          } else {
-                            updatedSocialLinks.push({ platform: opt.value, link: '' });
-                          }
-                        });
-                        setFormData((prev) => ({
-                          ...prev,
-                          socialLinks: updatedSocialLinks,
-                        }));
-                      }}
-                      className="text-black"
-                    />
-                     {selectedOptions.map((option) => (
-            <div key={option.value} className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-700">
-                {option.label} Profile Link
-              </label>
-              <input
-                type="text"
-                placeholder={`Enter your ${option.label} profile link`}
-                className="border p-2 rounded-md"
-                value={
-                  formData.socialLinks.find((link) => link.platform === option.value)?.link || ''
-                }
-                onChange={(e) =>
-                  handleSocialLinkChange(option.value, e.target.value)
-                }
-              />
-            </div>
-          ))}
-                    <textarea
-                      placeholder="About"
-                      defaultValue={mentor?.about}
-                      className="block w-full mt-4 p-2 mb-2 border rounded-md"
-                    />
-                    {/* Add a save button to handle form submission */}
-                    <button
-                      type="submit"
-                      className="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded-md"
-                      onClick={handleUpdateMentor}
-                    >
-                      Save Changes
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           ))}
         </div>
       ) : (
-        <h1 className="text-2xl font-bold text-center">No Mentors Found</h1>
+        <div className="text-center py-12 bg-gray-50 rounded-md">
+          <p className="text-xl text-gray-500">No mentors found.</p>
+          <button 
+            className="mt-4 bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors"
+            onClick={() => setAddMentor(true)}
+          >
+            Add your first mentor
+          </button>
+        </div>
       )}
     </div>
   );
