@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { color, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { ArrowRight } from "lucide-react";
 const bundles = [
   {
     title: "Basic Bundle",
@@ -16,6 +15,7 @@ const bundles = [
     ribbonText: "Basic",
     ribbonTextColor: "text-yellow-300",
     direction: "-100%", // Slide from Left
+    type: "basic",
   },
   {
     title: "Intermediate Bundle",
@@ -29,6 +29,8 @@ const bundles = [
     ribbonText: "Intermediate",
     ribbonTextColor: "text-gray-900",
     direction: "100%", // Slide from Right
+    type: "/intermediate",
+    
   },
   {
     title: "Pro Bundle",
@@ -42,6 +44,7 @@ const bundles = [
     ribbonText: "Pro",
     ribbonTextColor: "text-yellow-900",
     direction: "-100%", // Slide from Left
+    type: "/advance",
   },
 ];
 

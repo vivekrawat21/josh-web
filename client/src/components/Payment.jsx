@@ -13,12 +13,8 @@ const Payment = ({ data, type = 'bundle', setStep, handleFinalSubmit }) => {
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  // Scroll to top when the page is loaded
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const handlePayment = async () => {
@@ -32,6 +28,9 @@ const Payment = ({ data, type = 'bundle', setStep, handleFinalSubmit }) => {
 
   const isCart = type === 'cart';
   const isBundle = type === 'bundle';
+  const isSpecial = type === 'specialbundle';
+  const isCourse = type === 'course';
+
   const items = Array.isArray(data) ? data : [data];
 
   if (!items || items.length === 0) {
@@ -47,30 +46,78 @@ const Payment = ({ data, type = 'bundle', setStep, handleFinalSubmit }) => {
   return (
     <div className="w-full mt-6 p-4 sm:p-6 lg:p-8 bg-white lg:shadow-xl lg:rounded-2xl">
       <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center">
-        {isCart ? 'Cart Payment' : isBundle ? 'Bundle Payment' : 'Course Payment'}
+        {isCart
+          ? 'Cart Payment'
+          : isSpecial
+          ? 'Special Bundle Payment'
+          : isBundle
+          ? 'Bundle Payment'
+          : 'Course Payment'}
       </h2>
 
-      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
-        {items.map((item, idx) => {
-          const imgSrc = isBundle ? item?.bundleImage : item?.image;
-          const title = isBundle ? item?.bundleName : item?.title;
+      {items.length === 1 ? (
+        <div className="flex justify-center mb-6">
+          {items.map((item, idx) => {
+            const imgSrc =
+              isBundle || isCart ? item?.bundleImage :
+              isSpecial ? item?.image :
+              item?.image;
 
-          return (
-            <div
-              key={idx}
-              className="border rounded-xl bg-blue-50 overflow-hidden flex flex-col items-center p-4"
-            >
-              <img
-                src={imgSrc}
-                alt={title}
-                className="w-full h-28 object-cover rounded mb-2"
-              />
-              <h3 className="text-sm font-semibold text-center text-gray-800 mb-1">{title}</h3>
-              <p className="text-green-700 font-bold text-sm">{formatPrice(item?.price)}</p>
-            </div>
-          );
-        })}
-      </div>
+            const title =
+              isBundle || isCart ? item?.bundleName :
+              isSpecial ? item?.title :
+              item?.title;
+
+            return (
+              <div
+                key={idx}
+                className="border rounded-xl bg-blue-50 overflow-hidden flex flex-col items-center p-4 w-full sm:w-1/3"
+              >
+                {imgSrc && (
+                  <img
+                    src={imgSrc}
+                    alt={title}
+                    className="w-full h-28 object-cover rounded mb-2"
+                  />
+                )}
+                <h3 className="text-sm font-semibold text-center text-gray-800 mb-1">{title}</h3>
+                <p className="text-green-700 font-bold text-sm">{formatPrice(item?.price)}</p>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
+          {items.map((item, idx) => {
+            const imgSrc =
+              isBundle || isCart ? item?.bundleImage :
+              isSpecial ? item?.image :
+              item?.image;
+
+            const title =
+              isBundle || isCart ? item?.bundleName :
+              isSpecial ? item?.title :
+              item?.title;
+
+            return (
+              <div
+                key={idx}
+                className="border rounded-xl bg-blue-50 overflow-hidden flex flex-col items-center p-4"
+              >
+                {imgSrc && (
+                  <img
+                    src={imgSrc}
+                    alt={title}
+                    className="w-full h-28 object-cover rounded mb-2"
+                  />
+                )}
+                <h3 className="text-sm font-semibold text-center text-gray-800 mb-1">{title}</h3>
+                <p className="text-green-700 font-bold text-sm">{formatPrice(item?.price)}</p>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <div className="text-center mb-4">
         <h4 className="text-lg font-semibold">

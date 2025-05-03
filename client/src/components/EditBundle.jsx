@@ -16,8 +16,10 @@ const EditBundle = () => {
     whyBundle: []
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isImageLoading, setIsImageLoading] = useState(false); // New state for image loading
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     fetchBundleData();
@@ -71,16 +73,42 @@ const EditBundle = () => {
     setBundle({ ...bundle, whyBundle: updatedWhy });
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setBundle({ ...bundle, bundleImage: file }); // Store the file object
+    }
+  };
+
   const updateData = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.put(`${BASE_URL}/bundle/updateBundle/${id}`, bundle, {
+      const formData = new FormData();
+      formData.append('bundleName', bundle.bundleName);
+      formData.append('description', bundle.description);
+      formData.append('price', bundle.price);
+      formData.append('discount', bundle.discount);
+      formData.append('hasDiscount', bundle.hasDiscount);
+      formData.append('isSpecial', bundle.isSpecial);
+      formData.append('whyBundle', JSON.stringify(bundle.whyBundle));
+
+      // Only append the image if it's been selected
+      if (bundle.bundleImage instanceof File) {
+        formData.append('image', bundle.bundleImage);
+      }
+
+      const res = await axios.put(`${BASE_URL}/bundle/updateBundle/${id}`, formData, {
         withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data', // Ensure that it's treated as form data
+        }
       });
+
       console.log('Bundle updated:', res.data);
       setSuccessMessage('Bundle updated successfully!');
-      setTimeout(() => setSuccessMessage(''), 3000);
+      setToast('Bundle updated successfully!');
+      setTimeout(() => setToast(null), 3000); // Custom toast disappears after 3 seconds
     } catch (error) {
       console.error('Error updating bundle:', error);
       setError('Failed to update bundle. Please try again.');
@@ -101,19 +129,26 @@ const EditBundle = () => {
   return (
     <div className="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg">
       <h2 className="text-3xl font-bold mb-6 text-gray-800 border-b pb-2">Edit Bundle</h2>
-      
+
+      {/* Custom Toast */}
+      {toast && (
+        <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md">
+          {toast}
+        </div>
+      )}
+
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
           {error}
         </div>
       )}
-      
+
       {successMessage && (
         <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md">
           {successMessage}
         </div>
       )}
-      
+
       <form onSubmit={updateData} className="space-y-6">
         <div className="space-y-2">
           <label htmlFor="bundleName" className="block text-sm font-medium text-gray-700">
@@ -184,18 +219,33 @@ const EditBundle = () => {
           </div>
         </div>
 
+        {/* Image Display */}
         <div className="space-y-2">
           <label htmlFor="bundleImage" className="block text-sm font-medium text-gray-700">
-            Image URL
+            Image
           </label>
+
+          {/* Show existing image if available */}
+          {bundle.bundleImage && typeof bundle.bundleImage === 'string' && (
+            <div className="mb-4">
+              <img src={bundle.bundleImage} alt="Bundle Preview" className="w-32 h-32 object-cover rounded-md" />
+            </div>
+          )}
+
+          {/* Show the image if it's a file (new image uploaded) */}
+          {bundle.bundleImage && typeof bundle.bundleImage !== 'string' && (
+            <div className="mb-4">
+              <img src={URL.createObjectURL(bundle.bundleImage)} alt="Bundle Preview" className="w-32 h-32 object-cover rounded-md" />
+            </div>
+          )}
+
+          {/* File input to upload new image */}
           <input
             id="bundleImage"
-            type="text"
-            name="bundleImage"
-            value={bundle.bundleImage}
-            onChange={handleChange}
-            className="w-full border border-gray-300 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter image URL"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-80 border border-gray-300 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
 
@@ -228,18 +278,18 @@ const EditBundle = () => {
             <button
               type="button"
               onClick={addWhyPoint}
-              className="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-sm"
+              className="px-4 py-1 text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
             >
               <span className="text-xl">+</span> Add Benefit
             </button>
           </div>
-          
+
           {bundle.whyBundle.length === 0 && (
             <p className="text-gray-500 italic text-sm">
               No benefits added. Click the button above to add your first benefit.
             </p>
           )}
-          
+
           {bundle.whyBundle.map((point, index) => (
             <div key={index} className="flex items-center gap-2">
               <input
@@ -267,22 +317,19 @@ const EditBundle = () => {
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {isLoading ? (
-              <>
-                <span className="animate-spin h-4 w-4 border-2 border-t-transparent border-white rounded-full"></span>
-                <span>Updating...</span>
-              </>
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
             ) : (
-              'Update Bundle'
+              'Save Changes'
             )}
           </button>
         </div>

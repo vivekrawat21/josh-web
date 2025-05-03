@@ -9,53 +9,54 @@ import {
 } from "@/components/ui/carousel";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
-
-const mentors = [
-  {
-    id: 1,
-    name: "John Doe",
-    role: "Full Stack Developer",
-    image:
-      "https://plus.unsplash.com/premium_photo-1689539137236-b68e436248de?w=500&auto=format&fit=crop&q=60",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    role: "Expert Digital Marketer",
-    image:
-    "https://media.istockphoto.com/id/2148494746/photo/portrait-of-young-businesswoman-with-curly-hairstyle-wear-trendy-smart-casual-outfit-isolated.webp?a=1&b=1&s=612x612&w=0&k=20&c=lnZqq-hMGNQan6PWh5PodvY_2kHodR_0pISRS6Ji_G8=",
-  },
-  {
-    id: 3,
-    name: "Robert Brown",
-    role: "AI & ML Specialist",
-    image:
-      "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=500&auto=format&fit=crop&q=60",
-  },
-  {
-    id: 4,
-    name: "Maria Johnson",
-    role: "Cyber Security Expert",
-    image:
-      "https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049?w=600&auto=format&fit=crop&q=60",
-  },
-  {
-    id: 5,
-    name: "Michael Williams",
-    role: "Data Scientist",
-    image:
-      "https://media.istockphoto.com/id/2148494746/photo/portrait-of-young-businesswoman-with-curly-hairstyle.webp",
-  },
-  {
-    id: 6,
-    name: "Jennifer Brown",
-    role: "UX/UI Designer",
-    image:
-      "https://plus.unsplash.com/premium_photo-1678197937465-bdbc4ed95815?w=600&auto=format&fit=crop&q=60",
-  },
-];
+import { useSelector } from "react-redux";
+// const mentors = [
+//   {
+//     id: 1,
+//     name: "John Doe",
+//     role: "Full Stack Developer",
+//     image:
+//       "https://plus.unsplash.com/premium_photo-1689539137236-b68e436248de?w=500&auto=format&fit=crop&q=60",
+//   },
+//   {
+//     id: 2,
+//     name: "Jane Smith",
+//     role: "Expert Digital Marketer",
+//     image:
+//     "https://media.istockphoto.com/id/2148494746/photo/portrait-of-young-businesswoman-with-curly-hairstyle-wear-trendy-smart-casual-outfit-isolated.webp?a=1&b=1&s=612x612&w=0&k=20&c=lnZqq-hMGNQan6PWh5PodvY_2kHodR_0pISRS6Ji_G8=",
+//   },
+//   {
+//     id: 3,
+//     name: "Robert Brown",
+//     role: "AI & ML Specialist",
+//     image:
+//       "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=500&auto=format&fit=crop&q=60",
+//   },
+//   {
+//     id: 4,
+//     name: "Maria Johnson",
+//     role: "Cyber Security Expert",
+//     image:
+//       "https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049?w=600&auto=format&fit=crop&q=60",
+//   },
+//   {
+//     id: 5,
+//     name: "Michael Williams",
+//     role: "Data Scientist",
+//     image:
+//       "https://media.istockphoto.com/id/2148494746/photo/portrait-of-young-businesswoman-with-curly-hairstyle.webp",
+//   },
+//   {
+//     id: 6,
+//     name: "Jennifer Brown",
+//     role: "UX/UI Designer",
+//     image:
+//       "https://plus.unsplash.com/premium_photo-1678197937465-bdbc4ed95815?w=600&auto=format&fit=crop&q=60",
+//   },
+// ];
 
 const TopMentor = () => {
+  const mentors = useSelector((state) => state.mentor?.mentors[0] || []);
   return (
     <section className="  px-4 md:px-8 lg:px-10 w-full mx-auto text-center relative overflow-hidden mb-10 ">
       <h2 className="text-3xl sm:text-4xl mtext-[1.80rem] lg:text-7xl font-semibold text-center  mb-10 text-gray-900">
@@ -96,7 +97,7 @@ const TopMentor = () => {
             {mentors.map((mentor) => (
                 <CarouselItem
                   className="md:basis-1/4 lg:basis-1/4 flex justify-center "
-                  key={mentor.id}
+                  key={mentor?._id}
                 >
                   <Card className="w-[95%] md:w-[85%] lg:w-[90%] flex flex-col ">
             
@@ -136,8 +137,8 @@ function MentorCard({ mentor }) {
     >
       <div className="relative overflow-hidden rounded-lg shadow-lg w-[330px] h-[350px] ">
         <img
-          src={mentor.image}
-          alt={mentor.name}
+          src={mentor?.profileImage}
+          alt={mentor?.name}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent flex items-end p-4 sm:p-6">
@@ -148,7 +149,7 @@ function MentorCard({ mentor }) {
               transition={{ delay: 0.2, duration: 0.5 }}
               className="text-white text-lg sm:text-xl font-bold"
             >
-              {mentor.name}
+              {mentor?.name}
             </motion.h3>
             <motion.p
               initial={{ opacity: 0, y: 10 }}
@@ -156,7 +157,7 @@ function MentorCard({ mentor }) {
               transition={{ delay: 0.4, duration: 0.5 }}
               className="text-gray-300 text-sm sm:text-lg font-medium"
             >
-              {mentor.role}
+              {mentor?.position}
             </motion.p>
           </div>
         </div>

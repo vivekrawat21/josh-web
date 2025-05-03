@@ -30,22 +30,20 @@ import Scroll from "./Scroll";
 import AdminCourses from "./components/AdminCourses"
 import AdminBundles from "./components/AdminBundles";
 import AdminLogin from "./components/AdminLogin";
-import AdminSettings from "./components/AdminSettings";
+import AdminMentor from "./components/AdminMentor";
 import Students from "./components/Students";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminOffers from "./components/AdminOffers.jsx";
 import Blog from "./pages/Blog";
-import IntermediateBundle from "./pages/IntermediateBundle";
-import BasicBundle from "./pages/BasicBundle";
-import AdvanceBundle from "./pages/AdvanceBundle";
+import Webinars from "./pages/Webinars";
+import BundleCourse from "./components/BundleCourse";
 import Goals from "./pages/Goals";
 import Gallery from "./pages/Gallery";
 import Disclaimer from "./pages/Disclaimer";
 import Terms from "./pages/Terms";
 import CoursePlayer from "./pages/CoursePlayer";
 import BundleRouter from "./pages/bundleRouter";
-import Webinars from "./pages/Webinars";
 import AdminWebinar from "./pages/AdminWebinar";
 import Upgrade from "./components/Upgrade";
 import EditCourse from "./components/EditCourse";
@@ -55,7 +53,7 @@ import DigitalMarketingWebinar from "./pages/DigitalMarketingWebinar";
 import WebDevelopmentWebinar from "./pages/WebDevelopmentWebinar";
 import MicrosoftDynamicsWebinar from "./pages/MicrosoftDynamicsWebinar";
 import OdooERPWebinar from "./pages/OdooErpWebinar";
-
+import AdminAssignMentor from "./components/AdminAssignMentor";
 
 function App() {
   return (
@@ -70,9 +68,11 @@ function App() {
           <Route path="/admin/bundles" element={<AdminBundles />} />
           <Route path="/admin/editBundle/:id" element={<EditBundle />} />
           <Route path="/admin/editCourse/:id" element={<EditCourse />} />
+          <Route path="/admin/bundleCourse/:id" element={<BundleCourse />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/:mentorId/assignMentor" element={<AdminAssignMentor />} />
 
-          <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/admin/mentors" element={<AdminMentor />} />
           <Route path="/admin/students" element={<Students />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/offers" element={<AdminOffers />} />
@@ -88,10 +88,9 @@ function App() {
         <Route path="profile/privacyandsecurity" element={<PrivacyAndSecurity />} />
         <Route path="mycourse/upgrade" element={<Upgrade />} />
         <Route path="mycourses" element={<MyCourses />} />
-       
         <Route path="mywallet" element={<Mywallet />} />
-
         <Route path="refer&earn" element={<Refer />} />
+        <Route path="webinars" element={<Webinars />} />
         <Route path="help&support" element={<Help />} />
       </Route>
 
@@ -142,7 +141,6 @@ function App() {
               <Route path="/goal/:id" element={<Goals />} />
               {/* <Route path="/specialBundle/:id" element={<BasicBundle />} /> */}
               <Route path="/gallery/:type" element={<Gallery />} />
-
 
               <Route path="/blogs/:id" element={<Blog />} />
 

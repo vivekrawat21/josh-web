@@ -10,12 +10,12 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
   const initialState = {
     title: "",
     category: "",
-    price: 0,
+    price: "",
     duration: "",
     bundleName: "",
     description: "",
     video: "",
-    image: null,
+    image: "",
     isTrending: false,
     isOffline: false,
     whyCourse: [""],
@@ -26,8 +26,6 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
     reason: [""],
     courseHighlights: [""],
     HowWillHelpYou: "",
-    certificatePath: null,
-    pdfPath: null,
   };
 
   const [courseData, setCourseData] = useState(initialState);
@@ -78,40 +76,17 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
   };
 
   const uploadCourse = async (e) => {
-  e.preventDefault();
-  const formData = new FormData();
-
-  // Append primitive values
-  for (const key in courseData) {
-    const value = courseData[key];
-    if (Array.isArray(value)) {
-      value.forEach((item) => formData.append(key, item));
-    } else if (typeof value === "object" && value !== null && key === "videos") {
-      formData.append(key, JSON.stringify(value));
-    } else if (value !== null) {
-      formData.append(key, value);
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${BASE_URL}/course/createCourse`, courseData, {
+        withCredentials: true,
+      });
+      resetForm();
+      console.log(res);
+    } catch (error) {
+      console.error(error);
     }
-  }
-
-  // Log the formData contents
-  for (let [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
-
-  try {
-    const res = await axios.post(`${BASE_URL}/course/createCourse`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      withCredentials: true,
-    });
-    resetForm();
-    console.log(res);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
+  };
 
   const handleVideoChange = (index, field, value) => {
     const updatedVideos = [...courseData.videos];
@@ -157,14 +132,6 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
     </div>
   );
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setCourseData((prev) => ({
-      ...prev,
-      [name]: Array.from(files), // Convert FileList to an array
-    }));
-  };
-
   return (
     <form
       onSubmit={uploadCourse}
@@ -179,6 +146,7 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
           "duration",
           "bundleName",
           "video",
+          "image",
         ].map((field) => (
           <div key={field} className="space-y-2">
             <Label htmlFor={field}>
@@ -195,39 +163,6 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
             />
           </div>
         ))}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="image">Thumbnail Image</Label>
-        <Input
-          id="image"
-          name="imageFile"
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="pdf">Choose Syllabus PDF</Label>
-        <Input
-          id="pdf"
-          name="pdfFile"
-          type="file"
-          accept="application/pdf"
-          onChange={handleFileChange}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="certificate">Choose Certificate Image</Label>
-        <Input
-          id="certificate"
-          name="certificateFile"
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
       </div>
 
       {/* Description */}
@@ -271,10 +206,10 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
       {renderArrayField("Who Should Enroll", "whoShouldEnroll")}
       {renderArrayField("Still Confused", "stillConfused")}
       {renderArrayField("Reasons To Join", "reason")}
-      {/* {renderArrayField("Course Highlights", "courseHighlights")} */}
+      {renderArrayField("Course Highlights", "courseHighlights")}
 
       {/* HowWillHelpYou */}
-      {/* <div className="space-y-2">
+      <div className="space-y-2">
         <Label htmlFor="HowWillHelpYou">How Will This Course Help You?</Label>
         <Textarea
           id="HowWillHelpYou"
@@ -284,7 +219,7 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
           placeholder="Explain how this course benefits the learner"
           className="min-h-[100px]"
         />
-      </div> */}
+      </div>
 
       {/* Video Section */}
       <div className="space-y-4">
