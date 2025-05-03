@@ -48,11 +48,17 @@ import AdminWebinar from "./pages/AdminWebinar";
 import Upgrade from "./components/Upgrade";
 import EditCourse from "./components/EditCourse";
 import EditBundle from "./components/EditBundle";
+import WebinarLanding from "./pages/WebinarLanding";
+import DigitalMarketingWebinar from "./pages/DigitalMarketingWebinar";
+import WebDevelopmentWebinar from "./pages/WebDevelopmentWebinar";
+import MicrosoftDynamicsWebinar from "./pages/MicrosoftDynamicsWebinar";
+import OdooERPWebinar from "./pages/OdooErpWebinar";
 import AdminAssignMentor from "./components/AdminAssignMentor";
 
 function App() {
   return (
     <>
+      {/* <WebinarLanding/> */}
       <BrowserRouter basename="/">
         <Scroll />
         <Routes>
@@ -127,6 +133,10 @@ function App() {
               <Route path="/blogs" element={<Blogs />} />
           
               <Route path="/webinars" element={<Webinars />} />
+              <Route path="/digital-marketing/:webinarId" element={<DigitalMarketingWebinar />} />
+              <Route path="/full-stack/:webinarId" element={<WebDevelopmentWebinar />} />
+              <Route path="/microsoft-dynamic/:webinarId" element={<MicrosoftDynamicsWebinar />} />
+              <Route path="/odoo-erp/:webinarId" element={<OdooERPWebinar />} />
               
               <Route path="/goal/:id" element={<Goals />} />
               {/* <Route path="/specialBundle/:id" element={<BasicBundle />} /> */}
@@ -149,7 +159,7 @@ function App() {
             </Route>
           </Route>
         </Routes>
-      </BrowserRouter> 
+      </BrowserRouter>
     </>
   );
 }

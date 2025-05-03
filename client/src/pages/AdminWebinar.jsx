@@ -1,4 +1,3 @@
-"use client"
 
 import { useState, useRef, useEffect } from "react"
 import { Calendar, Clock, Users, Edit, Trash, Radio, Eye, ArrowLeft, Search, Download, Send, Plus, Mail, ImageIcon, Upload } from 'lucide-react'
@@ -7,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -18,120 +17,6 @@ import { Toaster } from "@/components/ui/toaster"
 import axios from "axios"
 import { BASE_URL } from "../utils/utils";
 import Loader from "../components/Loader"
-
-// Mock data for webinars
-// const initialWebinars = [
-//   {
-//     id: 1,
-//     title: "Introduction to Next.js",
-//     description: "Learn the basics of Next.js and how to build modern web applications with the latest features.",
-//     author: "Sarah Johnson",
-//     authorRole: "Senior Developer Advocate",
-//     date: "2025-05-15",
-//     time: "14:00",
-//     duration: 90, // in minutes
-//     status: "scheduled", // scheduled, live, completed, cancelled
-//     image: "/member1.jpg",
-//     thumbnail: "/member1.jpg",
-//     registeredUsers: [
-//       { id: 1, name: "John Doe", email: "john@example.com", phone: "555-123-4567", registeredOn: "2025-04-01" },
-//       { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "555-987-6543", registeredOn: "2025-04-02" },
-//       { id: 3, name: "Robert Johnson", email: "robert@example.com", phone: "555-456-7890", registeredOn: "2025-04-03" },
-//       { id: 4, name: "Emily Davis", email: "emily@example.com", phone: "555-789-0123", registeredOn: "2025-04-05" },
-//     ],
-//   },
-//   {
-//     id: 2,
-//     title: "Advanced React Patterns",
-//     description:
-//       "Dive deep into advanced React patterns and performance optimization techniques for professional developers.",
-//     author: "Michael Chen",
-//     authorRole: "Lead Frontend Engineer",
-//     date: "2025-05-22",
-//     time: "13:00",
-//     duration: 120, // in minutes
-//     status: "scheduled",
-//     image: "/placeholder.svg?height=400&width=600",
-//     thumbnail: "/placeholder.svg?height=200&width=350",
-//     registeredUsers: [
-//       { id: 5, name: "Alex Wilson", email: "alex@example.com", phone: "555-234-5678", registeredOn: "2025-04-02" },
-//       {
-//         id: 6,
-//         name: "Sophia Martinez",
-//         email: "sophia@example.com",
-//         phone: "555-876-5432",
-//         registeredOn: "2025-04-04",
-//       },
-//     ],
-//   },
-//   {
-//     id: 3,
-//     title: "Building E-commerce with Next.js",
-//     description: "A comprehensive guide to building scalable e-commerce solutions with Next.js and modern APIs.",
-//     author: "Jessica Williams",
-//     authorRole: "E-commerce Solutions Architect",
-//     date: "2025-06-05",
-//     time: "11:00",
-//     duration: 120,
-//     status: "scheduled",
-//     image: "/placeholder.svg?height=400&width=600",
-//     thumbnail: "/placeholder.svg?height=200&width=350",
-//     registeredUsers: [
-//       { id: 7, name: "David Brown", email: "david@example.com", phone: "555-345-6789", registeredOn: "2025-04-01" },
-//       { id: 8, name: "Olivia Taylor", email: "olivia@example.com", phone: "555-654-3210", registeredOn: "2025-04-03" },
-//       { id: 9, name: "James Anderson", email: "james@example.com", phone: "555-432-1098", registeredOn: "2025-04-06" },
-//     ],
-//   },
-//   {
-//     id: 4,
-//     title: "Responsive Design Principles",
-//     description: "Master the art of creating responsive web designs that work flawlessly across all devices.",
-//     author: "Daniel Lee",
-//     authorRole: "UX/UI Design Lead",
-//     date: "2025-04-10",
-//     time: "10:00",
-//     duration: 90,
-//     status: "completed",
-//     image: "/placeholder.svg?height=400&width=600",
-//     thumbnail: "/placeholder.svg?height=200&width=350",
-//     registeredUsers: [
-//       { id: 10, name: "Emma Wilson", email: "emma@example.com", phone: "555-567-8901", registeredOn: "2025-03-15" },
-//       { id: 11, name: "Noah Garcia", email: "noah@example.com", phone: "555-678-9012", registeredOn: "2025-03-16" },
-//       { id: 12, name: "Ava Martinez", email: "ava@example.com", phone: "555-789-0123", registeredOn: "2025-03-18" },
-//       { id: 13, name: "Liam Johnson", email: "liam@example.com", phone: "555-890-1234", registeredOn: "2025-03-20" },
-//       { id: 14, name: "Mia Thompson", email: "mia@example.com", phone: "555-901-2345", registeredOn: "2025-03-22" },
-//     ],
-//   },
-//   {
-//     id: 5,
-//     title: "API Integration Strategies",
-//     description: "Learn effective strategies for integrating third-party APIs into your web applications.",
-//     author: "Ryan Cooper",
-//     authorRole: "Backend Developer",
-//     date: "2025-04-18",
-//     time: "15:00",
-//     duration: 60,
-//     status: "cancelled",
-//     image: "/placeholder.svg?height=400&width=600",
-//     thumbnail: "/placeholder.svg?height=200&width=350",
-//     registeredUsers: [
-//       {
-//         id: 15,
-//         name: "William Davis",
-//         email: "william@example.com",
-//         phone: "555-012-3456",
-//         registeredOn: "2025-03-25",
-//       },
-//       {
-//         id: 16,
-//         name: "Sofia Rodriguez",
-//         email: "sofia@example.com",
-//         phone: "555-123-4567",
-//         registeredOn: "2025-03-27",
-//       },
-//     ],
-//   },
-// ]
 
 // Status badge colors
 const statusColors = {
@@ -179,6 +64,7 @@ export default function AdminDashboard() {
   const [newWebinar, setNewWebinar] = useState({
     title: "",
     description: "",
+    categories: '',
     presenterName: "",
     presenterRole: "",
     date: "",
@@ -216,6 +102,7 @@ export default function AdminDashboard() {
         `${BASE_URL}/webinar/status/${webinarId}`,
         { status: "live" },
         {
+          withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
           }
@@ -253,6 +140,7 @@ export default function AdminDashboard() {
         `${BASE_URL}/webinar/status/${webinarId}`,
         { status: "cancelled" },
         {
+          withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
           }
@@ -280,6 +168,36 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleDelete = async (webinarId) => {
+    try {
+      setIsLoading(true);
+      
+      // API call to delete webinar
+      const response = await axios.delete(
+        `${BASE_URL}/webinar/${webinarId}`,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+  
+      // Handle successful deletion
+      if (response.status === 200) {
+        // Update UI state or show success message
+        setWebinars(prev => prev.filter(webinar => webinar._id !== webinarId));
+        toast.success('Webinar deleted successfully');
+      }
+      
+    } catch (error) {
+      console.error('Delete error:', error);
+      toast.error(error.response?.data?.message || 'Failed to delete webinar');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Open reschedule modal
   const handleOpenReschedule = (webinar) => {
     setSelectedWebinar(webinar)
@@ -303,6 +221,7 @@ export default function AdminDashboard() {
         `${BASE_URL}/webinar/reschedule/${selectedWebinar._id}`,
         formData,
         {
+          withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
           }
@@ -353,7 +272,18 @@ export default function AdminDashboard() {
     const matchesStatus = statusFilter === "all" || webinar.status === statusFilter
 
     return matchesSearch && matchesStatus
-  })
+  }).sort((a, b) => {
+    // First sort by date
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    const dateComparison = dateA - dateB;
+    
+    // If dates are different, return the date comparison
+    if (dateComparison !== 0) return dateComparison;
+    
+    // If dates are the same, sort by time
+    return a.time.localeCompare(b.time);
+  });
 
   // Format date for display
   const formatDate = (dateString) => {
@@ -416,6 +346,7 @@ export default function AdminDashboard() {
     // Append regular fields
     formData.append('title', newWebinar.title);
     formData.append('description', newWebinar.description);
+    formData.append('categories', newWebinar.categories);
     formData.append('presenterName', newWebinar.presenterName);
     formData.append('presenterRole', newWebinar.presenterRole);
     formData.append('date', newWebinar.date);
@@ -435,6 +366,7 @@ export default function AdminDashboard() {
 
     // Send to backend
     const response = await axios.post(`${BASE_URL}/webinar/create`, formData, {
+      withCredentials: true,
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -455,6 +387,7 @@ export default function AdminDashboard() {
     setNewWebinar({
       title: "",
       description: "",
+      categories: "",
       presenterName: "",
       presenterRole: "",
       date: "",
@@ -475,6 +408,7 @@ export default function AdminDashboard() {
       // Append all fields
       formData.append('title', newWebinar.title);
       formData.append('description', newWebinar.description);
+      formData.append('categories', newWebinar.categories);
       formData.append('presenterName', newWebinar.presenterName);
       formData.append('presenterRole', newWebinar.presenterRole);
       formData.append('date', newWebinar.date);
@@ -528,6 +462,7 @@ export default function AdminDashboard() {
     setNewWebinar({
       title: webinar.title,
       description: webinar.description,
+      categories: webinar.categories,
       presenterName: webinar.presenterName,
       presenterRole: webinar.presenterRole,
       date: webinar.date.split('T')[0],
@@ -775,6 +710,15 @@ export default function AdminDashboard() {
                         >
                           <Mail className="h-3.5 w-3.5 mr-1" />
                           Email
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleDelete(webinar._id)}
+                          className="border-red-200 text-red-600 hover:bg-red-50"
+                        >
+                          <Trash className="h-3.5 w-3.5 mr-1" />
+                          Delete
                         </Button>
                       </CardFooter>
                     </Card>
@@ -1166,6 +1110,35 @@ export default function AdminDashboard() {
               />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="categories">Webinar categories</Label>
+              <Select
+                value={newWebinar.categories}
+                onValueChange={(value) => setNewWebinar({ ...newWebinar, categories: value })}
+              >
+                <SelectTrigger className="border-orange-200">
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Categories</SelectLabel>
+                    <SelectItem value="digital-marketing">
+                      Digital Marketing 
+                    </SelectItem>
+                    <SelectItem value="full-stack">
+                      Full Stack
+                    </SelectItem>
+                    <SelectItem value="microsoft-dynamic">
+                      Microsoft Dynamic
+                    </SelectItem>
+                    <SelectItem value="odoo-erp">
+                      Odoo ERP
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="presenterName">Presenter Name</Label>
@@ -1329,6 +1302,35 @@ export default function AdminDashboard() {
                 onChange={(e) => setNewWebinar({ ...newWebinar, description: e.target.value })}
                 className="border-orange-200 min-h-[100px]"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="categories">Webinar categories</Label>
+              <Select
+                value={newWebinar.categories}
+                onValueChange={(value) => setNewWebinar({ ...newWebinar, categories: value })}
+              >
+                <SelectTrigger className="border-orange-200">
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Categories</SelectLabel>
+                    <SelectItem value="digital-marketing">
+                      Digital Marketing 
+                    </SelectItem>
+                    <SelectItem value="full-stack">
+                      Full Stack
+                    </SelectItem>
+                    <SelectItem value="microsoft-dynamic">
+                      Microsoft Dynamic
+                    </SelectItem>
+                    <SelectItem value="odoo-erp">
+                      Odoo ERP
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

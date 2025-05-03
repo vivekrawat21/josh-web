@@ -10,12 +10,14 @@ import DiscountPopup from '@/components/DiscountPopup'
 import DownloadApp from '@/components/DownloadApp'
 import SkillUpCourses from '@/components/SkillUpCourses'
 import EducationalInstituteTestimonial from '@/components/EducationalInstituteTestimonial'
+import WebinarBanner from '@/components/webinarBanner'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { addMentors } from '@/features/mentors/mentorSlice'
 import { useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../utils/utils'
+
 const Home = () => {
 
   // const [mentors, setMentors] = useState([]);
@@ -48,6 +50,7 @@ const Home = () => {
       <SpecialBundles />
       <SkillUpCourses/>
       <TopCourses />
+      <WebinarBanner/>
       <DownloadApp />
       <TopMentors/>
       <EducationalInstituteTestimonial/>

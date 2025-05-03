@@ -67,24 +67,24 @@ const SpecialBundles = () => {
     {
       _id: "1",
       title: "Freelancing Road To 1 lakhs",
-      image: '/specialBundle1.jpg',
-      titleColor: "#DAD5DD",
+      image: '/specialBundle1.png',
+      titleColor: "#F2B46F",
       link: "/basicBundle",
     },
     
     {
       _id: "2",
       title: "Freelancing Road To 3 Lakhs",
-      image: '/specialBundle2.jpg',
-      titleColor: "#AAB2D1",
+      image: '/specialBundle2.png',
+      titleColor: "#88BD9F",
       link: "/intermediateBundle",
     },
 
     {
       _id: "3",
       title: "Freelancing Road To 5 Lakhs",
-      image: '/specialBundle3.jpg',
-      titleColor: "#c7ccce",
+      image: '/specialBundle3.png',
+      titleColor: "#3E72BE",
       link: "/advanceBundle",
     }
   ];
