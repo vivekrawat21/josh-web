@@ -1,12 +1,37 @@
+"use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Calendar, Clock, Users, Edit, Trash, Radio, Eye, ArrowLeft, Search, Download, Send, Plus, Mail, ImageIcon, Upload } from 'lucide-react'
+import {
+  Calendar,
+  Clock,
+  Users,
+  Edit,
+  Trash,
+  Radio,
+  Eye,
+  ArrowLeft,
+  Search,
+  Download,
+  Send,
+  Plus,
+  Mail,
+  Upload,
+  Link,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -15,8 +40,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "../hooks/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 import axios from "axios"
-import { BASE_URL } from "../utils/utils";
-import Loader from "../components/Loader"
+import { BASE_URL } from "../utils/utils"
 
 // Status badge colors
 const statusColors = {
@@ -49,11 +73,13 @@ export default function AdminDashboard() {
   const [emailBody, setEmailBody] = useState("")
   const [selectedUsers, setSelectedUsers] = useState([])
   const [selectAllUsers, setSelectAllUsers] = useState(false)
-  const fileInputRefThumbnail = useRef(null);
-  const fileInputRefPresenter = useRef(null);
+  const fileInputRefThumbnail = useRef(null)
+  const fileInputRefPresenter = useRef(null)
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false)
+  const [webinarLink, setWebinarLink] = useState("")
 
   // Form state for rescheduling
   const [rescheduleDate, setRescheduleDate] = useState("")
@@ -64,7 +90,7 @@ export default function AdminDashboard() {
   const [newWebinar, setNewWebinar] = useState({
     title: "",
     description: "",
-    categories: '',
+    categories: "",
     presenterName: "",
     presenterRole: "",
     date: "",
@@ -89,14 +115,14 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => {
-    fetchWebinars();
+    fetchWebinars()
   }, [])
 
   // Handle setting a webinar to live
   const handleSetLive = async (webinarId) => {
     try {
-      setIsLoading(true);
-      
+      setIsLoading(true)
+
       // API call to update status
       const response = await axios.put(
         `${BASE_URL}/webinar/status/${webinarId}`,
@@ -104,37 +130,35 @@ export default function AdminDashboard() {
         {
           withCredentials: true,
           headers: {
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-  
+            "Content-Type": "application/json",
+          },
+        },
+      )
+
       // Update state with new status
-      setWebinars(webinars.map(webinar => 
-        webinar._id === webinarId ? { ...webinar, status: "live" } : webinar
-      ));
-  
+      setWebinars(webinars.map((webinar) => (webinar._id === webinarId ? { ...webinar, status: "live" } : webinar)))
+
       toast({
         title: "Status Updated",
         description: `Webinar status changed to ${response.data.data.webinar.status}`,
-      });
+      })
     } catch (error) {
-      console.error("Status change error:", error);
+      console.error("Status change error:", error)
       toast({
         title: "Update Failed",
         description: error.response?.data?.message || "Failed to update status",
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
   }
 
   // Handle cancelling a webinar
-  const handleCancel = async(webinarId) => {
+  const handleCancel = async (webinarId) => {
     try {
-      setIsLoading(true);
-      
+      setIsLoading(true)
+
       // API call to update status
       const response = await axios.put(
         `${BASE_URL}/webinar/status/${webinarId}`,
@@ -142,113 +166,258 @@ export default function AdminDashboard() {
         {
           withCredentials: true,
           headers: {
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-  
+            "Content-Type": "application/json",
+          },
+        },
+      )
+
       // Update state with new status
-      setWebinars(webinars.map(webinar => 
-        webinar._id === webinarId ? { ...webinar, status: "cancelled" } : webinar
-      ));
-  
+      setWebinars(
+        webinars.map((webinar) => (webinar._id === webinarId ? { ...webinar, status: "cancelled" } : webinar)),
+      )
+
       toast({
         title: "Status Updated",
         description: `Webinar status changed to ${response.data.data.webinar.status}`,
-      });
+      })
     } catch (error) {
-      console.error("Status change error:", error);
+      console.error("Status change error:", error)
       toast({
         title: "Update Failed",
         description: error.response?.data?.message || "Failed to update status",
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
   }
 
   const handleDelete = async (webinarId) => {
     try {
-      setIsLoading(true);
-      
+      setIsLoading(true)
+
       // API call to delete webinar
-      const response = await axios.delete(
-        `${BASE_URL}/webinar/${webinarId}`,
-        {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-  
+      const response = await axios.delete(`${BASE_URL}/webinar/${webinarId}`, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
       // Handle successful deletion
       if (response.status === 200) {
         // Update UI state or show success message
-        setWebinars(prev => prev.filter(webinar => webinar._id !== webinarId));
-        toast.success('Webinar deleted successfully');
+        setWebinars((prev) => prev.filter((webinar) => webinar._id !== webinarId))
+        toast.success("Webinar deleted successfully")
       }
-      
     } catch (error) {
-      console.error('Delete error:', error);
-      toast.error(error.response?.data?.message || 'Failed to delete webinar');
+      console.error("Delete error:", error)
+      toast.error(error.response?.data?.message || "Failed to delete webinar")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
-
-  // Open reschedule modal
-  const handleOpenReschedule = (webinar) => {
-    setSelectedWebinar(webinar)
-    setRescheduleDate(webinar.date.split('T')[0])
-    setRescheduleTime(webinar.time)
-    setRescheduleDuration(webinar.duration)
-    setIsRescheduleModalOpen(true)
   }
 
-  // Handle rescheduling a webinar
-  const handleReschedule = async () => {
+  const handleSetLink = async () => {
     try {
-      setIsLoading(true);
-      const formData = new FormData();
-      formData.append('date', rescheduleDate);
-      formData.append('time', rescheduleTime);
-      formData.append('duration', rescheduleDuration);
-      
-      // Call your API endpoint
-      const response = await axios.put(
-        `${BASE_URL}/webinar/reschedule/${selectedWebinar._id}`,
-        formData,
+      setIsLoading(true)
+
+      // API call to update webinar link
+      const response = await axios.post(
+        `${BASE_URL}/webinar/link/${selectedWebinar._id}`,
+        { link: webinarLink },
         {
           withCredentials: true,
           headers: {
-            'Content-Type': 'application/json',
-          }
+            "Content-Type": "application/json",
+          },
+        },
+      )
+
+      // Update state with new link
+      setWebinars(
+        webinars.map((webinar) => (webinar._id === selectedWebinar._id ? { ...webinar, link: webinarLink } : webinar)),
+      )
+
+      setIsLinkModalOpen(false)
+      toast({
+        title: "Link Updated",
+        description: "Webinar link has been updated successfully",
+      })
+    } catch (error) {
+      console.error("Link update error:", error)
+      toast({
+        title: "Update Failed",
+        description: error.response?.data?.message || "Failed to update webinar link",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSendEmail = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Prepare the email data
+      const emailData = {
+        subject: emailSubject,
+        text: emailBody
+      };
+  
+      // Make API call to send emails
+      const response = await axios.post(
+        `${BASE_URL}/webinar/send-mail/${selectedWebinar._id}`,
+        emailData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
       );
-      console.log(response.data.data.webinar)
-      // Update state with API response
-      setWebinars(webinars.map(webinar =>
-        webinar._id === selectedWebinar._id ? response.data.data.webinar : webinar
-      ));
   
-      setIsRescheduleModalOpen(false);
+      // Handle success
       toast({
-        title: "Rescheduled Successfully",
-        description: "Webinar has been rescheduled successfully",
+        title: "Email Sent",
+        description: `Email has been sent to all registered users.`,
       });
+      setIsEmailModalOpen(false);
     } catch (error) {
-      console.error("Reschedule error:", error);
+      console.error("Error sending email:", error);
       toast({
-        title: "Reschedule Failed",
-        description: error.response?.data?.message || "Failed to reschedule webinar",
+        title: "Error",
+        description: error.response?.data?.message || "Failed to send email",
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleExportAttendeeList = async (webinarId )=> {
+    try {
+      setIsLoading(true);
+      toast({ title: "⚙️ Preparing export..." });
+  
+      const response = await axios.get(
+        `${BASE_URL}/webinar/export-json-to-csv/${webinarId}`, {
+          withCredentials: true,
+          responseType: "blob",
+    
+        });
+  
+      // 2. Check for successful status code
+    if (response.status !== 200) {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
+
+    // 3. Create blob from response data
+    const blob = new Blob([response.data], { type: response.headers['content-type'] });
+    const url = window.URL.createObjectURL(blob);
+
+    // 4. Extract filename from headers
+    const contentDisposition = response.headers['content-disposition'];
+    let filename = 'attendees.csv';
+    
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
+      if (filenameMatch.length > 1) {
+        filename = filenameMatch[1];
+      }
+    }
+
+    // 5. Create and trigger download
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+
+    // 6. Cleanup
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(link);
+
+    toast({
+      title: "✅ Export Successful",
+      description: "Attendee list downloaded successfully",
+    });
+
+  } catch (error) {
+    console.error("Export error:", error);
+    let errorMessage = "Failed to download attendee list";
+    
+    // Handle axios-specific errors
+    if (error.response) {
+      errorMessage = error.response.data?.message || errorMessage;
+    } else if (error.request) {
+      errorMessage = "No response from server";
+    }
+
+    toast({
+      title: "⛔ Export Failed",
+      description: errorMessage,
+      variant: "destructive",
+    });
+  } finally {
+    setIsLoading(false);
+  }
+  }
+
+  // Open reschedule modal
+  const handleOpenReschedule = (webinar) => {
+    setSelectedWebinar(webinar)
+    setRescheduleDate(webinar.date.split("T")[0])
+    setRescheduleTime(webinar.time)
+    setRescheduleDuration(webinar.duration)
+    setIsRescheduleModalOpen(true)
+  }
+
+  const handleOpenLinkModal = (webinar) => {
+    setSelectedWebinar(webinar)
+    setWebinarLink(webinar.link || "")
+    setIsLinkModalOpen(true)
+  }
+
+  // Handle rescheduling a webinar
+  const handleReschedule = async () => {
+    try {
+      setIsLoading(true)
+      const formData = new FormData()
+      formData.append("date", rescheduleDate)
+      formData.append("time", rescheduleTime)
+      formData.append("duration", rescheduleDuration)
+
+      // Call your API endpoint
+      const response = await axios.put(`${BASE_URL}/webinar/reschedule/${selectedWebinar._id}`, formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      console.log(response.data.data.webinar)
+      // Update state with API response
+      setWebinars(
+        webinars.map((webinar) => (webinar._id === selectedWebinar._id ? response.data.data.webinar : webinar)),
+      )
+
+      setIsRescheduleModalOpen(false)
+      toast({
+        title: "Rescheduled Successfully",
+        description: "Webinar has been rescheduled successfully",
+      })
+    } catch (error) {
+      console.error("Reschedule error:", error)
+      toast({
+        title: "Reschedule Failed",
+        description: error.response?.data?.message || "Failed to reschedule webinar",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   // View webinar details and registered users
   const handleViewDetails = (webinar) => {
@@ -263,27 +432,29 @@ export default function AdminDashboard() {
   }
 
   // Filter webinars based on search term and status
-  const filteredWebinars = webinars.filter((webinar) => {
-    const matchesSearch =
-      webinar.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      webinar.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      webinar.presenterName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredWebinars = webinars
+    .filter((webinar) => {
+      const matchesSearch =
+        webinar.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        webinar.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        webinar.presenterName.toLowerCase().includes(searchTerm.toLowerCase())
 
-    const matchesStatus = statusFilter === "all" || webinar.status === statusFilter
+      const matchesStatus = statusFilter === "all" || webinar.status === statusFilter
 
-    return matchesSearch && matchesStatus
-  }).sort((a, b) => {
-    // First sort by date
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    const dateComparison = dateA - dateB;
-    
-    // If dates are different, return the date comparison
-    if (dateComparison !== 0) return dateComparison;
-    
-    // If dates are the same, sort by time
-    return a.time.localeCompare(b.time);
-  });
+      return matchesSearch && matchesStatus
+    })
+    .sort((a, b) => {
+      // First sort by date
+      const dateA = new Date(a.date)
+      const dateB = new Date(b.date)
+      const dateComparison = dateA - dateB
+
+      // If dates are different, return the date comparison
+      if (dateComparison !== 0) return dateComparison
+
+      // If dates are the same, sort by time
+      return a.time.localeCompare(b.time)
+    })
 
   // Format date for display
   const formatDate = (dateString) => {
@@ -313,67 +484,64 @@ export default function AdminDashboard() {
 
   // Handle file input change
   const handleFileInputChange = (e, field) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]
     if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setNewWebinar(prev => ({
+      const previewUrl = URL.createObjectURL(file)
+      setNewWebinar((prev) => ({
         ...prev,
         [field]: file, // Store File for upload
-        [`${field}Preview`]: previewUrl // Store URL for preview
-      }));
+        [`${field}Preview`]: previewUrl, // Store URL for preview
+      }))
     }
-  };
-  
+  }
+
   // Separate click handlers for each input
   const handleThumbnailUploadClick = () => {
-    fileInputRefThumbnail.current.click();
-  };
-  
+    fileInputRefThumbnail.current.click()
+  }
+
   const handlePresenterUploadClick = () => {
-    fileInputRefPresenter.current.click();
-  };
+    fileInputRefPresenter.current.click()
+  }
 
   // Add this function to handle adding a new webinar
-  const handleAddWebinar = async() => {
+  const handleAddWebinar = async () => {
+    setIsLoading(true)
 
-    setIsLoading(true);
+    console.log("Starting the process of sending data from frontend to backend")
 
-    console.log("Starting the process of sending data from frontend to backend");
-    
     // Create FormData
-    const formData = new FormData();
-    
+    const formData = new FormData()
+
     // Append regular fields
-    formData.append('title', newWebinar.title);
-    formData.append('description', newWebinar.description);
-    formData.append('categories', newWebinar.categories);
-    formData.append('presenterName', newWebinar.presenterName);
-    formData.append('presenterRole', newWebinar.presenterRole);
-    formData.append('date', newWebinar.date);
-    formData.append('time', newWebinar.time);
-    formData.append('duration', newWebinar.duration);
+    formData.append("title", newWebinar.title)
+    formData.append("description", newWebinar.description)
+    formData.append("categories", newWebinar.categories)
+    formData.append("presenterName", newWebinar.presenterName)
+    formData.append("presenterRole", newWebinar.presenterRole)
+    formData.append("date", newWebinar.date)
+    formData.append("time", newWebinar.time)
+    formData.append("duration", newWebinar.duration)
 
     // Append files from refs
     if (newWebinar.thumbnail instanceof File) {
-      formData.append('thumbnail', newWebinar.thumbnail);
+      formData.append("thumbnail", newWebinar.thumbnail)
     }
     if (newWebinar.presenterImage instanceof File) {
-      formData.append('presenterImage', newWebinar.presenterImage);
+      formData.append("presenterImage", newWebinar.presenterImage)
     }
 
-    console.log("Formdata is ready", formData);
-    
+    console.log("Formdata is ready", formData)
 
     // Send to backend
     const response = await axios.post(`${BASE_URL}/webinar/create`, formData, {
       withCredentials: true,
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+        "Content-Type": "multipart/form-data",
+      },
+    })
 
-    console.log("responed send successfull", response.data.data.webinar);
-    
+    console.log("responed send successfull", response.data.data.webinar)
 
     setWebinars([...webinars, response.data.data.webinar])
     setIsAddWebinarModalOpen(false)
@@ -402,59 +570,55 @@ export default function AdminDashboard() {
 
   // Add this function to handle editing a webinar
   const handleEditWebinar = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const formData = new FormData();
+      const formData = new FormData()
       // Append all fields
-      formData.append('title', newWebinar.title);
-      formData.append('description', newWebinar.description);
-      formData.append('categories', newWebinar.categories);
-      formData.append('presenterName', newWebinar.presenterName);
-      formData.append('presenterRole', newWebinar.presenterRole);
-      formData.append('date', newWebinar.date);
-      formData.append('time', newWebinar.time);
-      formData.append('duration', newWebinar.duration);
-  
+      formData.append("title", newWebinar.title)
+      formData.append("description", newWebinar.description)
+      formData.append("categories", newWebinar.categories)
+      formData.append("presenterName", newWebinar.presenterName)
+      formData.append("presenterRole", newWebinar.presenterRole)
+      formData.append("date", newWebinar.date)
+      formData.append("time", newWebinar.time)
+      formData.append("duration", newWebinar.duration)
+
       // Handle file uploads if they exist
       if (newWebinar.thumbnail instanceof File) {
-        formData.append('thumbnail', newWebinar.thumbnail);
+        formData.append("thumbnail", newWebinar.thumbnail)
       }
       if (newWebinar.presenterImage instanceof File) {
-        formData.append('presenterImage', newWebinar.presenterImage);
+        formData.append("presenterImage", newWebinar.presenterImage)
       }
-  
+
       // Make API call
-      const response = await axios.put(
-        `${BASE_URL}/webinar/${selectedWebinar._id}`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-  
+      const response = await axios.put(`${BASE_URL}/webinar/${selectedWebinar._id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+
       // Update state with response data
-      setWebinars(webinars.map(webinar =>
-        webinar._id === selectedWebinar._id ? response.data.data.webinar : webinar
-      ));
-  
-      setIsEditWebinarModalOpen(false);
+      setWebinars(
+        webinars.map((webinar) => (webinar._id === selectedWebinar._id ? response.data.data.webinar : webinar)),
+      )
+
+      setIsEditWebinarModalOpen(false)
       toast({
         title: "Webinar Updated",
         description: "The webinar details have been successfully updated.",
-      });
+      })
     } catch (error) {
-      console.error("Error updating webinar:", error);
+      console.error("Error updating webinar:", error)
       toast({
         title: "Error",
         description: "Failed to update webinar. Please try again.",
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   // Add this function to open edit modal
   const handleOpenEditModal = (webinar) => {
@@ -465,7 +629,7 @@ export default function AdminDashboard() {
       categories: webinar.categories,
       presenterName: webinar.presenterName,
       presenterRole: webinar.presenterRole,
-      date: webinar.date.split('T')[0],
+      date: webinar.date.split("T")[0],
       time: webinar.time,
       duration: webinar.duration,
       image: webinar.image,
@@ -485,29 +649,12 @@ export default function AdminDashboard() {
     setIsEmailModalOpen(true)
   }
 
-  // Add this function to handle sending emails
-  const handleSendEmail = () => {
-    const recipients = selectAllUsers
-      ? selectedWebinar.registeredUsers
-      : selectedWebinar.registeredUsers.filter((user) => selectedUsers.includes(user.id))
-
-    // In a real app, you would send the email here
-    console.log("Sending email to:", recipients)
-    console.log("Subject:", emailSubject)
-    console.log("Body:", emailBody)
-
-    setIsEmailModalOpen(false)
-    toast({
-      title: "Email Sent",
-      description: `Email has been sent to ${recipients.length} recipient(s).`,
-    })
-  }
 
   // Add this function to handle selecting all users
   const handleSelectAllUsers = (checked) => {
     setSelectAllUsers(checked)
     if (checked) {
-      setSelectedUsers(selectedWebinar.registeredUsers.map((user) => user.id))
+      setSelectedUsers(selectedWebinar.webinarUsers.map((user) => user.id))
     } else {
       setSelectedUsers([])
     }
@@ -525,14 +672,14 @@ export default function AdminDashboard() {
   useEffect(() => {
     return () => {
       // Cleanup object URLs when component unmounts
-      if (newWebinar.thumbnailPreview?.startsWith('blob:')) {
-        URL.revokeObjectURL(newWebinar.thumbnailPreview);
+      if (newWebinar.thumbnailPreview?.startsWith("blob:")) {
+        URL.revokeObjectURL(newWebinar.thumbnailPreview)
       }
-      if (newWebinar.presenterImagePreview?.startsWith('blob:')) {
-        URL.revokeObjectURL(newWebinar.presenterImagePreview);
+      if (newWebinar.presenterImagePreview?.startsWith("blob:")) {
+        URL.revokeObjectURL(newWebinar.presenterImagePreview)
       }
-    };
-  }, [newWebinar.thumbnailPreview, newWebinar.presenterImagePreview]);
+    }
+  }, [newWebinar.thumbnailPreview, newWebinar.presenterImagePreview])
 
   return (
     <main className="min-h-screen bg-orange-50">
@@ -650,6 +797,15 @@ export default function AdminDashboard() {
                             >
                               <Radio className="h-3.5 w-3.5 mr-1" />
                               Set Live
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleOpenLinkModal(webinar)}
+                              className="border-orange-200 text-orange-600"
+                            >
+                              <Link className="h-3.5 w-3.5 mr-1" />
+                              Set Link
                             </Button>
                             <Button
                               size="sm"
@@ -785,6 +941,14 @@ export default function AdminDashboard() {
                                   <Button
                                     size="sm"
                                     variant="ghost"
+                                    onClick={() => handleOpenLinkModal(webinar)}
+                                    className="h-8 w-8 p-0 text-orange-600"
+                                  >
+                                    <Link className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
                                     onClick={() => handleOpenReschedule(webinar)}
                                     className="h-8 w-8 p-0 text-orange-600"
                                   >
@@ -912,6 +1076,14 @@ export default function AdminDashboard() {
                       </Button>
                       <Button
                         variant="outline"
+                        onClick={() => handleOpenLinkModal(selectedWebinar)}
+                        className="border-orange-200 text-orange-600"
+                      >
+                        <Link className="h-4 w-4 mr-2" />
+                        Set Link
+                      </Button>
+                      <Button
+                        variant="outline"
                         onClick={() => handleOpenReschedule(selectedWebinar)}
                         className="border-orange-200 text-orange-600"
                       >
@@ -978,7 +1150,11 @@ export default function AdminDashboard() {
                   </div>
                 </CardContent>
                 <CardFooter className="border-t border-orange-100 bg-orange-50">
-                  <Button variant="outline" className="w-full border-orange-200 text-orange-600">
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-orange-200 text-orange-600"
+                    onClick={() => handleExportAttendeeList(selectedWebinar._id)}
+                  >
                     <Download className="h-4 w-4 mr-2" />
                     Export Attendee List
                   </Button>
@@ -1122,18 +1298,10 @@ export default function AdminDashboard() {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Categories</SelectLabel>
-                    <SelectItem value="digital-marketing">
-                      Digital Marketing 
-                    </SelectItem>
-                    <SelectItem value="full-stack">
-                      Full Stack
-                    </SelectItem>
-                    <SelectItem value="microsoft-dynamic">
-                      Microsoft Dynamic
-                    </SelectItem>
-                    <SelectItem value="odoo-erp">
-                      Odoo ERP
-                    </SelectItem>
+                    <SelectItem value="digital-marketing">Digital Marketing</SelectItem>
+                    <SelectItem value="full-stack">Full Stack</SelectItem>
+                    <SelectItem value="microsoft-dynamic">Microsoft Dynamic</SelectItem>
+                    <SelectItem value="odoo-erp">Odoo ERP</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -1211,7 +1379,7 @@ export default function AdminDashboard() {
                     <input
                       type="file"
                       ref={fileInputRefThumbnail}
-                      onChange={(e) => handleFileInputChange(e, 'thumbnail')}
+                      onChange={(e) => handleFileInputChange(e, "thumbnail")}
                       accept="image/*"
                       className="hidden"
                     />
@@ -1226,14 +1394,14 @@ export default function AdminDashboard() {
                     </Button>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Presenter Image</Label>
                   <div className="border border-dashed border-orange-300 rounded-md p-4 flex flex-col items-center justify-center bg-orange-50/50 h-40">
                     {newWebinar.presenterImage && (
                       <div className="relative w-full h-24 mb-2">
                         <img
-                          src={newWebinar.presenterImagePreview|| "/placeholder.svg"}
+                          src={newWebinar.presenterImagePreview || "/placeholder.svg" || "/placeholder.svg"}
                           alt="Presenter Image preview"
                           className="w-full h-full object-contain"
                         />
@@ -1242,7 +1410,7 @@ export default function AdminDashboard() {
                     <input
                       type="file"
                       ref={fileInputRefPresenter}
-                      onChange={(e) => handleFileInputChange(e, 'presenterImage')}
+                      onChange={(e) => handleFileInputChange(e, "presenterImage")}
                       accept="image/*"
                       className="hidden"
                     />
@@ -1316,18 +1484,10 @@ export default function AdminDashboard() {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Categories</SelectLabel>
-                    <SelectItem value="digital-marketing">
-                      Digital Marketing 
-                    </SelectItem>
-                    <SelectItem value="full-stack">
-                      Full Stack
-                    </SelectItem>
-                    <SelectItem value="microsoft-dynamic">
-                      Microsoft Dynamic
-                    </SelectItem>
-                    <SelectItem value="odoo-erp">
-                      Odoo ERP
-                    </SelectItem>
+                    <SelectItem value="digital-marketing">Digital Marketing</SelectItem>
+                    <SelectItem value="full-stack">Full Stack</SelectItem>
+                    <SelectItem value="microsoft-dynamic">Microsoft Dynamic</SelectItem>
+                    <SelectItem value="odoo-erp">Odoo ERP</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -1405,7 +1565,7 @@ export default function AdminDashboard() {
                     <input
                       type="file"
                       ref={fileInputRefThumbnail}
-                      onChange={(e) => handleFileInputChange(e, 'thumbnail')}
+                      onChange={(e) => handleFileInputChange(e, "thumbnail")}
                       accept="image/*"
                       className="hidden"
                     />
@@ -1420,14 +1580,14 @@ export default function AdminDashboard() {
                     </Button>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Presenter Image</Label>
                   <div className="border border-dashed border-orange-300 rounded-md p-4 flex flex-col items-center justify-center bg-orange-50/50 h-40">
                     {newWebinar.presenterImage && (
                       <div className="relative w-full h-24 mb-2">
                         <img
-                          src={newWebinar.presenterImage|| "/placeholder.svg"}
+                          src={newWebinar.presenterImage || "/placeholder.svg" || "/placeholder.svg"}
                           alt="Presenter Image preview"
                           className="w-full h-full object-contain"
                         />
@@ -1436,7 +1596,7 @@ export default function AdminDashboard() {
                     <input
                       type="file"
                       ref={fileInputRefPresenter}
-                      onChange={(e) => handleFileInputChange(e, 'presenterImage')}
+                      onChange={(e) => handleFileInputChange(e, "presenterImage")}
                       accept="image/*"
                       className="hidden"
                     />
@@ -1546,6 +1706,47 @@ export default function AdminDashboard() {
             >
               <Send className="h-4 w-4 mr-2" />
               Send Email
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Link Modal */}
+      <Dialog open={isLinkModalOpen} onOpenChange={setIsLinkModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Set Webinar Link</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="webinar-link">Webinar Link</Label>
+              <Input
+                id="webinar-link"
+                type="url"
+                value={webinarLink}
+                onChange={(e) => setWebinarLink(e.target.value)}
+                className="border-orange-200"
+                placeholder="https://example.com/webinar"
+              />
+              <p className="text-sm text-muted-foreground">Enter the URL where participants can join the webinar.</p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsLinkModalOpen(false)}
+              className="border-orange-200 text-orange-600"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSetLink}
+              className="bg-orange-600 hover:bg-orange-700 text-white"
+              disabled={!webinarLink}
+            >
+              Save Link
             </Button>
           </DialogFooter>
         </DialogContent>

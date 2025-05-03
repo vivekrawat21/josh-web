@@ -80,10 +80,10 @@ const EducationalInstituteTestimonial = () => {
   };
 
   return (
-    <div className=" bg-gradient-to-br from-orange-200 to-orange-50  mb-10
+    <div className=" bg-gradient-to-br from-orange-200 to-orange-50  mb-6
     p-6 md:p-12   shadow-lg mx-4
     ">
-      <div className="text-center mb-12">
+      <div className="text-center mb-6">
         <h2 className="text-2xl lg:text-6xl font-semibold text-black bg-clip-text">
           Trusted by Leading <span className="text-orange-500">Educational Institutions</span>
         </h2>
@@ -195,7 +195,7 @@ const EducationalInstituteTestimonial = () => {
       </div>
 
       {/* Pagination Dots */}
-      <div className="flex justify-center mt-8 gap-2">
+      <div className="flex justify-center mt-4 gap-2">
         {testimonials.map((_, index) => (
           <button
             key={index}

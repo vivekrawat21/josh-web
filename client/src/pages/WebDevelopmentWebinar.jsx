@@ -358,7 +358,7 @@ const WebDevelopmentWebinar = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="group items-center w-[30%]"
+                className="group items-center lg:w-[30%]"
               >
                 <div className="bg-white rounded-2xl overflow-hidden shadow-xl shadow-blue-100/50 border border-blue-100/50 transition-all duration-300 group-hover:-translate-y-2">
                   <div className="h-64 bg-gradient-to-br from-blue-400 to-blue-600 relative overflow-hidden">
