@@ -132,14 +132,23 @@ const AdminCourses = () => {
                       <TableCell>{course.bundleName || "N/A"}</TableCell>
                       <TableCell>
                         <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                            course.status === "Published" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-base font-medium ${
+                            course.isTrending && "bg-green-100 text-green-800" 
                           }`}
                         >
-                          {course.status || "Draft"}
+                          {/* {course.status || "Draft"} */}
+                          {course?.isTrending && "Trending" }
                         </span>
                       </TableCell>
-                      <TableCell>{course.date || "N/A"}</TableCell>
+                      <TableCell>
+  {course?.createdAt
+    ? new Date(course.createdAt).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "N/A"}
+</TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>

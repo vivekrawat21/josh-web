@@ -151,7 +151,10 @@ const EditCourse = () => {
     }
 
     try {
-      const response = await axios.patch(`${BASE_URL}/course/${id}`, formData, {
+      console.log("on updating ccourse")
+      console.log(id)
+      let courseId = id;
+      const response = await axios.patch(`${BASE_URL}/course/${courseId}`, formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -192,9 +195,18 @@ const EditCourse = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow rounded-lg">
+      <div className='flex justify-between items-center mb-6'>
       <h1 className="text-2xl font-bold mb-6">Edit Course</h1>
 
       {/* Toast Message */}
+      <button
+            type="button"
+            onClick={() => window.history.back()}
+            className="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+          >
+            Cancel
+          </button>
+          </div>
       {toast && (
         <div
           className={`mb-4 p-3 rounded-md ${
@@ -489,8 +501,17 @@ const EditCourse = () => {
           </button>
         </div>
         
+        
         {/* Submit */}
-        <div className="text-right">
+        <div className='flex justify-end gap-4'>
+        <button
+            type="button"
+            onClick={() => window.history.back()}
+            className="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+          >
+            Cancel
+          </button>
+        
           <button
             type="submit"
             className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 flex items-center gap-2 ml-auto"
@@ -500,6 +521,7 @@ const EditCourse = () => {
             ) : null}
             Save Changes
           </button>
+        
         </div>
       </form>
     </div>
