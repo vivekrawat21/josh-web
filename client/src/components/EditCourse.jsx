@@ -6,8 +6,7 @@ import { BASE_URL } from '@/utils/utils';
 const EditCourse = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [toast, setToast] = useState({ message: '', type: '' });
-  const [showToast, setShowToast] = useState(false);
+  const [toast, setToast] = useState(null);
   const [videos, setVideos] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -37,8 +36,11 @@ const EditCourse = () => {
       setVideos(courseData.videos || []);
     } catch (error) {
       console.error('Error fetching course:', error);
-      setToast({ message: 'Error fetching course data', type: 'error' });
-      setShowToast(true);
+      setToast({
+        message: 'Error fetching course data',
+        type: 'error'
+      });
+      setTimeout(() => setToast(null), 3000);
     } finally {
       setLoading(false);
     }
@@ -156,23 +158,26 @@ const EditCourse = () => {
         }
       });
       
-      setToast({ message: 'Course updated successfully!', type: 'success' });
-      setShowToast(true);
+      setToast({
+        message: 'Course updated successfully!',
+        type: 'success'
+      });
+      setTimeout(() => setToast(null), 3000);
       setTimeout(() => navigate('/admin/courses'), 2000);
     } catch (error) {
       console.error('Error updating course:', error.response?.data || error);
-      setToast({ 
-        message: error.response?.data?.message || 'Error updating course!', 
-        type: 'error' 
+      setToast({
+        message: error.response?.data?.message || 'Error updating course!',
+        type: 'error'
       });
-      setShowToast(true);
+      setTimeout(() => setToast(null), 3000);
     }
   };
 
   if (loading) {
     return (
-      <div className="text-center py-8">
-        <p>Loading course data...</p>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
@@ -189,10 +194,13 @@ const EditCourse = () => {
     <div className="max-w-4xl mx-auto p-6 bg-white shadow rounded-lg">
       <h1 className="text-2xl font-bold mb-6">Edit Course</h1>
 
-      {showToast && (
+      {/* Toast Message */}
+      {toast && (
         <div
-          className={`mb-4 p-3 rounded text-white ${
-            toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+          className={`mb-4 p-3 rounded-md ${
+            toast.type === 'success' 
+              ? 'bg-green-100 text-green-700' 
+              : 'bg-red-100 text-red-700'
           }`}
         >
           {toast.message}
@@ -422,8 +430,9 @@ const EditCourse = () => {
             Add Item
           </button>
         </div>
-      {/* still confused*/}
-      <div>
+        
+        {/* Still Confused */}
+        <div>
           <label className="block text-xl font-semibold mb-2">Still Confused?</label>
           {course.stillConfused.map((item, index) => (
             <div key={index} className="flex items-center gap-2 mb-2">
@@ -450,7 +459,8 @@ const EditCourse = () => {
             Add Item
           </button>
         </div>
-        {/* reason why */}
+        
+        {/* Reason Why */}
         <div>
           <label className="block text-xl font-semibold mb-2">Reason Why</label>
           {course.reasonWhyJoshGuru?.map((item, index) => (
@@ -478,12 +488,16 @@ const EditCourse = () => {
             Add Item
           </button>
         </div>
+        
         {/* Submit */}
         <div className="text-right">
           <button
             type="submit"
-            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 flex items-center gap-2 ml-auto"
           >
+            {loading ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+            ) : null}
             Save Changes
           </button>
         </div>
