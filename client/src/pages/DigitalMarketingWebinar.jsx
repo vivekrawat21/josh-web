@@ -410,41 +410,7 @@ const DigitalMarketingWebinar = () => {
                 <div className="absolute left-[31px] top-0 bottom-0 w-1 bg-gradient-to-b from-orange-600 to-orange-300 rounded-full"></div>
 
                 <div className="space-y-12">
-                    {[
-                    {
-                        number: "01",
-                        title: webinar.title,
-                        description:
-                        "An overview of how digital marketing has evolved and where the biggest opportunities lie.",
-                        duration: "15 minutes",
-                    },
-                    {
-                        number: "02",
-                        title: "Emerging Platforms and Technologies",
-                        description:
-                        "Exploring new digital channels and how early adoption can give you a competitive edge.",
-                        duration: "25 minutes",
-                    },
-                    {
-                        number: "03",
-                        title: "AI and Automation Opportunities",
-                        description:
-                        "How artificial intelligence is creating new marketing opportunities and automating processes.",
-                        duration: "25 minutes",
-                    },
-                    {
-                        number: "04",
-                        title: "Growth Strategies for Digital Marketers",
-                        description: "Actionable strategies to identify and capitalize on digital marketing opportunities.",
-                        duration: "15 minutes",
-                    },
-                    {
-                        number: "05",
-                        title: "Live Q&A Session",
-                        description: "Get your specific questions answered by our panel of experts.",
-                        duration: "20 minutes",
-                    },
-                    ].map((item, index) => (
+                    {webinar.agenda.map((item, index) => (
                     <motion.div
                         key={index}
                         initial={{ opacity: 0, x: -20 }}
@@ -455,7 +421,7 @@ const DigitalMarketingWebinar = () => {
                     >
                         <div className="relative">
                         <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center z-10 shadow-lg shadow-orange-200">
-                            <span className="text-xl font-bold text-white">{item.number}</span>
+                            <span className="text-xl font-bold text-white">{index+1}</span>
                         </div>
                         </div>
                         <div className="bg-white rounded-2xl p-6 shadow-lg shadow-orange-100/30 border border-orange-100/50 flex-1">
@@ -464,7 +430,7 @@ const DigitalMarketingWebinar = () => {
                         <div className="flex items-center gap-3 text-sm text-gray-500">
                             <div className="flex items-center gap-1">
                             <Clock className="h-4 w-4 text-orange-500" />
-                            <span>{item.duration}</span>
+                            <span>{item.timeToComplete}</span>
                             </div>
                         </div>
                         </div>

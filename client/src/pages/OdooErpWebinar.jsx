@@ -411,44 +411,7 @@ const OdooERPWebinar = () => {
               <div className="absolute left-[31px] top-0 bottom-0 w-1 bg-gradient-to-b from-green-600 to-green-300 rounded-full"></div>
 
               <div className="space-y-12">
-                {[
-                  {
-                    number: "01",
-                    title: "Odoo Overview & Architecture",
-                    description: "Understanding the Odoo ecosystem and how the different modules work together.",
-                    duration: "25 minutes",
-                  },
-                  {
-                    number: "02",
-                    title: "Sales, CRM & Marketing",
-                    description: "Managing the entire customer journey from lead to repeat business with Odoo.",
-                    duration: "30 minutes",
-                  },
-                  {
-                    number: "03",
-                    title: "Inventory & Manufacturing",
-                    description: "Streamlining inventory management and production processes with Odoo.",
-                    duration: "25 minutes",
-                  },
-                  {
-                    number: "04",
-                    title: "Accounting & Finance",
-                    description: "Managing financial operations and reporting with Odoo Accounting.",
-                    duration: "30 minutes",
-                  },
-                  {
-                    number: "05",
-                    title: "Customization & Integration",
-                    description: "Tailoring Odoo to your specific business needs and integrating with other systems.",
-                    duration: "20 minutes",
-                  },
-                  {
-                    number: "06",
-                    title: "Live Q&A Session",
-                    description: "Get your specific questions answered by our expert instructors.",
-                    duration: "20 minutes",
-                  },
-                ].map((item, index) => (
+                {webinar.agenda.map((item, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
@@ -459,7 +422,7 @@ const OdooERPWebinar = () => {
                   >
                     <div className="relative">
                       <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center z-10 shadow-lg shadow-green-200">
-                        <span className="text-xl font-bold text-white">{item.number}</span>
+                        <span className="text-xl font-bold text-white">{index+1}</span>
                       </div>
                     </div>
                     <div className="bg-white rounded-2xl p-6 shadow-lg shadow-green-100/30 border border-green-100/50 flex-1">
@@ -468,7 +431,7 @@ const OdooERPWebinar = () => {
                       <div className="flex items-center gap-3 text-sm text-gray-500">
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4 text-green-500" />
-                          <span>{item.duration}</span>
+                          <span>{item.timeToComplete}</span>
                         </div>
                       </div>
                     </div>

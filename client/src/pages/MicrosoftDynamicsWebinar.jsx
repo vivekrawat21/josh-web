@@ -412,47 +412,7 @@ const MicrosoftDynamicsWebinar = () => {
               <div className="absolute left-[31px] top-0 bottom-0 w-1 bg-gradient-to-b from-purple-600 to-purple-300 rounded-full"></div>
 
               <div className="space-y-12">
-                {[
-                  {
-                    number: "01",
-                    title: "Dynamics 365 Overview & Architecture",
-                    description:
-                      "Understanding the Dynamics 365 ecosystem and how the different applications work together.",
-                    duration: "25 minutes",
-                  },
-                  {
-                    number: "02",
-                    title: "Sales & Marketing Automation",
-                    description:
-                      "Leveraging Dynamics 365 for Sales and Marketing to streamline customer acquisition and retention.",
-                    duration: "30 minutes",
-                  },
-                  {
-                    number: "03",
-                    title: "Customer Service & Field Service",
-                    description: "Enhancing customer support and field operations with Dynamics 365.",
-                    duration: "25 minutes",
-                  },
-                  {
-                    number: "04",
-                    title: "Finance & Operations",
-                    description: "Managing financial processes and operations with Dynamics 365.",
-                    duration: "30 minutes",
-                  },
-                  {
-                    number: "05",
-                    title: "Integration & Customization",
-                    description:
-                      "Integrating Dynamics 365 with other Microsoft tools and customizing it for specific business needs.",
-                    duration: "20 minutes"
-                  },
-                  {
-                    number: "06",
-                    title: "Live Q&A Session",
-                    description: "Get your specific questions answered by our expert instructors.",
-                    duration: "20 minutes",
-                  },
-                ].map((item, index) => (
+                {webinar.agenda.map((item, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
@@ -463,7 +423,7 @@ const MicrosoftDynamicsWebinar = () => {
                   >
                     <div className="relative">
                       <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center z-10 shadow-lg shadow-purple-200">
-                        <span className="text-xl font-bold text-white">{item.number}</span>
+                        <span className="text-xl font-bold text-white">{index+1}</span>
                       </div>
                     </div>
                     <div className="bg-white rounded-2xl p-6 shadow-lg shadow-purple-100/30 border border-purple-100/50 flex-1">
@@ -472,7 +432,7 @@ const MicrosoftDynamicsWebinar = () => {
                       <div className="flex items-center gap-3 text-sm text-gray-500">
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4 text-purple-500" />
-                          <span>{item.duration}</span>
+                          <span>{item.timeToComplete}</span>
                         </div>
                       </div>
                     </div>

@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useRef, useEffect } from "react"
 import {
   Calendar,
@@ -41,6 +39,7 @@ import { toast } from "../hooks/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 import axios from "axios"
 import { BASE_URL } from "../utils/utils"
+import CubeLoader from "@/components/CubeLoader"
 
 // Status badge colors
 const statusColors = {
@@ -58,7 +57,7 @@ const statusNames = {
   cancelled: "Cancelled",
 }
 
-export default function AdminDashboard() {
+const AdminWebinar = () =>{
   const [webinars, setWebinars] = useState([])
   const [selectedWebinar, setSelectedWebinar] = useState(null)
   const [isViewingDetails, setIsViewingDetails] = useState(false)
@@ -102,6 +101,87 @@ export default function AdminDashboard() {
     presenterImagePreview: "/placeholder.svg?height=400&width=600",
   })
 
+  const [agendaItems, setAgendaItems] = useState([{ id: 1, title: "", description: "", timeToComplete: "" }])
+  const [agendaErrors, setAgendaErrors] = useState({})
+  const [generalErrors, setGeneralErrors] = useState([])
+
+  // Handle adding a new agenda item
+  const handleAddAgendaItem = () => {
+    setAgendaItems([...agendaItems, { id: agendaItems.length + 1, title: "", description: "", timeToComplete: "" }])
+  }
+
+  // Handle removing an agenda item
+  const handleRemoveAgendaItem = (id) => {
+    if (agendaItems.length > 1) {
+      setAgendaItems(agendaItems.filter((item) => item.id !== id))
+      // Renumber remaining items
+      setAgendaItems((prev) => prev.filter((item) => item.id !== id).map((item, index) => ({ ...item, id: index + 1 })))
+    } else {
+      setGeneralErrors(["At least one agenda item is required"])
+    }
+  }
+
+  // Handle agenda item field changes
+  const handleAgendaItemChange = (id, field, value) => {
+    setAgendaItems(agendaItems.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+
+    // Clear field-specific error when user types
+    if (agendaErrors[`${id}-${field}`]) {
+      setAgendaErrors((prev) => {
+        const newErrors = { ...prev }
+        delete newErrors[`${id}-${field}`]
+        return newErrors
+      })
+    }
+  }
+
+  // Validate time format (HH:MM)
+  const isValidTimeFormat = (time) => {
+    const regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
+    return regex.test(time)
+  }
+
+  // Validate agenda items
+  const validateAgendaItems = () => {
+    let isValid = true
+    const newErrors = {}
+    const titles = new Set()
+
+    agendaItems.forEach((item) => {
+      // Check required fields
+      if (!item.title.trim()) {
+        newErrors[`${item.id}-title`] = "Title is required"
+        isValid = false
+      }
+
+      if (!item.description.trim()) {
+        newErrors[`${item.id}-description`] = "Description is required"
+        isValid = false
+      }
+
+      if (!item.timeToComplete) {
+        newErrors[`${item.id}-timeToComplete`] = "Time is required"
+        isValid = false
+      } else if (!isValidTimeFormat(item.timeToComplete)) {
+        newErrors[`${item.id}-timeToComplete`] = "Use HH:MM format"
+        isValid = false
+      }
+
+      // Check for duplicate titles
+      if (item.title.trim()) {
+        if (titles.has(item.title.trim())) {
+          newErrors[`${item.id}-title`] = "Duplicate title"
+          isValid = false
+        } else {
+          titles.add(item.title.trim())
+        }
+      }
+    })
+
+    setAgendaErrors(newErrors)
+    return isValid
+  }
+
   const fetchWebinars = async () => {
     try {
       setIsLoading(true)
@@ -111,6 +191,8 @@ export default function AdminDashboard() {
       setIsLoading(false)
     } catch (error) {
       console.error("Error fetching webinars:", error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -258,111 +340,104 @@ export default function AdminDashboard() {
 
   const handleSendEmail = async () => {
     try {
-      setIsLoading(true);
-      
+      setIsLoading(true)
+
       // Prepare the email data
       const emailData = {
         subject: emailSubject,
-        text: emailBody
-      };
-  
+        text: emailBody,
+      }
+
       // Make API call to send emails
-      const response = await axios.post(
-        `${BASE_URL}/webinar/send-mail/${selectedWebinar._id}`,
-        emailData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-  
+      const response = await axios.post(`${BASE_URL}/webinar/send-mail/${selectedWebinar._id}`, emailData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
       // Handle success
       toast({
         title: "Email Sent",
         description: `Email has been sent to all registered users.`,
-      });
-      setIsEmailModalOpen(false);
+      })
+      setIsEmailModalOpen(false)
     } catch (error) {
-      console.error("Error sending email:", error);
+      console.error("Error sending email:", error)
       toast({
         title: "Error",
         description: error.response?.data?.message || "Failed to send email",
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
-
-  const handleExportAttendeeList = async (webinarId )=> {
-    try {
-      setIsLoading(true);
-      toast({ title: "⚙️ Preparing export..." });
-  
-      const response = await axios.get(
-        `${BASE_URL}/webinar/export-json-to-csv/${webinarId}`, {
-          withCredentials: true,
-          responseType: "blob",
-    
-        });
-  
-      // 2. Check for successful status code
-    if (response.status !== 200) {
-      throw new Error(`Request failed with status: ${response.status}`);
-    }
-
-    // 3. Create blob from response data
-    const blob = new Blob([response.data], { type: response.headers['content-type'] });
-    const url = window.URL.createObjectURL(blob);
-
-    // 4. Extract filename from headers
-    const contentDisposition = response.headers['content-disposition'];
-    let filename = 'attendees.csv';
-    
-    if (contentDisposition) {
-      const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
-      if (filenameMatch.length > 1) {
-        filename = filenameMatch[1];
-      }
-    }
-
-    // 5. Create and trigger download
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-
-    // 6. Cleanup
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(link);
-
-    toast({
-      title: "✅ Export Successful",
-      description: "Attendee list downloaded successfully",
-    });
-
-  } catch (error) {
-    console.error("Export error:", error);
-    let errorMessage = "Failed to download attendee list";
-    
-    // Handle axios-specific errors
-    if (error.response) {
-      errorMessage = error.response.data?.message || errorMessage;
-    } else if (error.request) {
-      errorMessage = "No response from server";
-    }
-
-    toast({
-      title: "⛔ Export Failed",
-      description: errorMessage,
-      variant: "destructive",
-    });
-  } finally {
-    setIsLoading(false);
   }
+
+  const handleExportAttendeeList = async (webinarId) => {
+    try {
+      setIsLoading(true)
+      toast({ title: "⚙️ Preparing export..." })
+
+      const response = await axios.get(`${BASE_URL}/webinar/export-json-to-csv/${webinarId}`, {
+        withCredentials: true,
+        responseType: "blob",
+      })
+
+      // 2. Check for successful status code
+      if (response.status !== 200) {
+        throw new Error(`Request failed with status: ${response.status}`)
+      }
+
+      // 3. Create blob from response data
+      const blob = new Blob([response.data], { type: response.headers["content-type"] })
+      const url = window.URL.createObjectURL(blob)
+
+      // 4. Extract filename from headers
+      const contentDisposition = response.headers["content-disposition"]
+      let filename = "attendees.csv"
+
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="?(.+)"?/)
+        if (filenameMatch.length > 1) {
+          filename = filenameMatch[1]
+        }
+      }
+
+      // 5. Create and trigger download
+      const link = document.createElement("a")
+      link.href = url
+      link.setAttribute("download", filename)
+      document.body.appendChild(link)
+      link.click()
+
+      // 6. Cleanup
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(link)
+
+      toast({
+        title: "✅ Export Successful",
+        description: "Attendee list downloaded successfully",
+      })
+    } catch (error) {
+      console.error("Export error:", error)
+      let errorMessage = "Failed to download attendee list"
+
+      // Handle axios-specific errors
+      if (error.response) {
+        errorMessage = error.response.data?.message || errorMessage
+      } else if (error.request) {
+        errorMessage = "No response from server"
+      }
+
+      toast({
+        title: "⛔ Export Failed",
+        description: errorMessage,
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   // Open reschedule modal
@@ -507,6 +582,15 @@ export default function AdminDashboard() {
   // Add this function to handle adding a new webinar
   const handleAddWebinar = async () => {
     setIsLoading(true)
+    setGeneralErrors([])
+
+    // Validate agenda items
+    const isAgendaValid = validateAgendaItems()
+    if (!isAgendaValid) {
+      setIsLoading(false)
+      setGeneralErrors(["Please fix the errors in the agenda section"])
+      return
+    }
 
     console.log("Starting the process of sending data from frontend to backend")
 
@@ -523,6 +607,9 @@ export default function AdminDashboard() {
     formData.append("time", newWebinar.time)
     formData.append("duration", newWebinar.duration)
 
+    // Append agenda items as JSON
+    formData.append("agenda", JSON.stringify(agendaItems))
+
     // Append files from refs
     if (newWebinar.thumbnail instanceof File) {
       formData.append("thumbnail", newWebinar.thumbnail)
@@ -533,44 +620,68 @@ export default function AdminDashboard() {
 
     console.log("Formdata is ready", formData)
 
-    // Send to backend
-    const response = await axios.post(`${BASE_URL}/webinar/create`, formData, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    try {
+      // Send to backend
+      const response = await axios.post(`${BASE_URL}/webinar/create`, formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
 
-    console.log("responed send successfull", response.data.data.webinar)
+      console.log("response send successful", response.data.data.webinar)
 
-    setWebinars([...webinars, response.data.data.webinar])
-    setIsAddWebinarModalOpen(false)
-    setIsLoading(false)
-    toast({
-      title: "Webinar Created",
-      description: "Your new webinar has been successfully created.",
-    })
+      setWebinars([...webinars, response.data.data.webinar])
+      setIsAddWebinarModalOpen(false)
+      toast({
+        title: "Webinar Created",
+        description: "Your new webinar has been successfully created.",
+      })
 
-    // Reset form
-    setNewWebinar({
-      title: "",
-      description: "",
-      categories: "",
-      presenterName: "",
-      presenterRole: "",
-      date: "",
-      time: "",
-      duration: "",
-      thumbnail: null,
-      thumbnailPreview: "/placeholder.svg?height=200&width=350",
-      presenterImage: null,
-      presenterImagePreview: "/placeholder.svg?height=400&width=600",
-    })
+      // Reset form
+      setNewWebinar({
+        title: "",
+        description: "",
+        categories: "",
+        presenterName: "",
+        presenterRole: "",
+        date: "",
+        time: "",
+        duration: "",
+        thumbnail: null,
+        thumbnailPreview: "/placeholder.svg?height=200&width=350",
+        presenterImage: null,
+        presenterImagePreview: "/placeholder.svg?height=400&width=600",
+      })
+      setAgendaItems([{ id: 1, title: "", description: "", timeToComplete: "" }])
+      setAgendaErrors({})
+    } catch (error) {
+      console.error("Error creating webinar:", error)
+      const errorMessage = error.response?.data?.message || "Failed to create webinar"
+      setGeneralErrors([errorMessage])
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   // Add this function to handle editing a webinar
   const handleEditWebinar = async () => {
     setIsLoading(true)
+    setGeneralErrors([])
+
+    // Validate agenda items
+    const isAgendaValid = validateAgendaItems()
+    if (!isAgendaValid) {
+      setIsLoading(false)
+      setGeneralErrors(["Please fix the errors in the agenda section"])
+      return
+    }
+
     try {
       const formData = new FormData()
       // Append all fields
@@ -582,6 +693,9 @@ export default function AdminDashboard() {
       formData.append("date", newWebinar.date)
       formData.append("time", newWebinar.time)
       formData.append("duration", newWebinar.duration)
+
+      // Append agenda items as JSON
+      formData.append("agenda", JSON.stringify(agendaItems))
 
       // Handle file uploads if they exist
       if (newWebinar.thumbnail instanceof File) {
@@ -610,9 +724,11 @@ export default function AdminDashboard() {
       })
     } catch (error) {
       console.error("Error updating webinar:", error)
+      const errorMessage = error.response?.data?.message || "Failed to update webinar"
+      setGeneralErrors([errorMessage])
       toast({
         title: "Error",
-        description: "Failed to update webinar. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       })
     } finally {
@@ -636,6 +752,21 @@ export default function AdminDashboard() {
       thumbnail: webinar.thumbnail,
       presenterImage: webinar.presenterImage,
     })
+
+    // Load agenda items if they exist, otherwise create a default one
+    if (webinar.agenda && webinar.agenda.length > 0) {
+      setAgendaItems(
+        webinar.agenda.map((item, index) => ({
+          ...item,
+          id: index + 1,
+        })),
+      )
+    } else {
+      setAgendaItems([{ id: 1, title: "", description: "", timeToComplete: "" }])
+    }
+
+    setAgendaErrors({})
+    setGeneralErrors([])
     setIsEditWebinarModalOpen(true)
   }
 
@@ -648,7 +779,6 @@ export default function AdminDashboard() {
     setEmailBody("")
     setIsEmailModalOpen(true)
   }
-
 
   // Add this function to handle selecting all users
   const handleSelectAllUsers = (checked) => {
@@ -1150,8 +1280,8 @@ export default function AdminDashboard() {
                   </div>
                 </CardContent>
                 <CardFooter className="border-t border-orange-100 bg-orange-50">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="w-full border-orange-200 text-orange-600"
                     onClick={() => handleExportAttendeeList(selectedWebinar._id)}
                   >
@@ -1429,6 +1559,93 @@ export default function AdminDashboard() {
             </div>
           </div>
 
+          {/* Add this right before the DialogFooter in the Add Webinar Modal */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label className="text-lg font-semibold">Webinar Agenda</Label>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleAddAgendaItem}
+                className="border-orange-200 text-orange-600"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Agenda Item
+              </Button>
+            </div>
+
+            {generalErrors.length > 0 && (
+              <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-4">
+                <ul className="list-disc pl-5 text-red-600 text-sm">
+                  {generalErrors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {agendaItems.map((item) => (
+              <div key={item.id} className="border border-orange-200 rounded-md p-4 space-y-3 ">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium text-orange-800">Agenda {item.id}</h4>
+                  {agendaItems.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => handleRemoveAgendaItem(item.id)}
+                      className="h-8 w-8 p-0 text-red-600"
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`agenda-title-${item.id}`}>Title</Label>
+                  <Input
+                    id={`agenda-title-${item.id}`}
+                    value={item.title}
+                    onChange={(e) => handleAgendaItemChange(item.id, "title", e.target.value)}
+                    className={`border-orange-200 ${agendaErrors[`${item.id}-title`] ? "border-red-500" : ""}`}
+                    aria-invalid={agendaErrors[`${item.id}-title`] ? "true" : "false"}
+                  />
+                  {agendaErrors[`${item.id}-title`] && (
+                    <p className="text-red-500 text-xs mt-1">{agendaErrors[`${item.id}-title`]}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`agenda-description-${item.id}`}>Description</Label>
+                  <Textarea
+                    id={`agenda-description-${item.id}`}
+                    value={item.description}
+                    onChange={(e) => handleAgendaItemChange(item.id, "description", e.target.value)}
+                    className={`border-orange-200 min-h-[80px] ${agendaErrors[`${item.id}-description`] ? "border-red-500" : ""}`}
+                    aria-invalid={agendaErrors[`${item.id}-description`] ? "true" : "false"}
+                  />
+                  {agendaErrors[`${item.id}-description`] && (
+                    <p className="text-red-500 text-xs mt-1">{agendaErrors[`${item.id}-description`]}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`agenda-time-${item.id}`}>Time to Complete (HH:MM)</Label>
+                  <Input
+                    id={`agenda-time-${item.id}`}
+                    value={item.timeToComplete}
+                    onChange={(e) => handleAgendaItemChange(item.id, "timeToComplete", e.target.value)}
+                    placeholder="00:30"
+                    className={`border-orange-200 ${agendaErrors[`${item.id}-timeToComplete`] ? "border-red-500" : ""}`}
+                    aria-invalid={agendaErrors[`${item.id}-timeToComplete`] ? "true" : "false"}
+                  />
+                  {agendaErrors[`${item.id}-timeToComplete`] && (
+                    <p className="text-red-500 text-xs mt-1">{agendaErrors[`${item.id}-timeToComplete`]}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
           <DialogFooter>
             <Button
               variant="outline"
@@ -1615,6 +1832,93 @@ export default function AdminDashboard() {
             </div>
           </div>
 
+          {/* Add this right before the DialogFooter in the Edit Webinar Modal */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label className="text-lg font-semibold">Webinar Agenda</Label>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleAddAgendaItem}
+                className="border-orange-200 text-orange-600"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Agenda Item
+              </Button>
+            </div>
+
+            {generalErrors.length > 0 && (
+              <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-4">
+                <ul className="list-disc pl-5 text-red-600 text-sm">
+                  {generalErrors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {agendaItems.map((item) => (
+              <div key={item.id} className="border border-orange-200 rounded-md p-4 space-y-3 bg-orange-50/50">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium text-orange-800">Agenda {item.id}</h4>
+                  {agendaItems.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => handleRemoveAgendaItem(item.id)}
+                      className="h-8 w-8 p-0 text-red-600"
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`edit-agenda-title-${item.id}`}>Title</Label>
+                  <Input
+                    id={`edit-agenda-title-${item.id}`}
+                    value={item.title}
+                    onChange={(e) => handleAgendaItemChange(item.id, "title", e.target.value)}
+                    className={`border-orange-200 ${agendaErrors[`${item.id}-title`] ? "border-red-500" : ""}`}
+                    aria-invalid={agendaErrors[`${item.id}-title`] ? "true" : "false"}
+                  />
+                  {agendaErrors[`${item.id}-title`] && (
+                    <p className="text-red-500 text-xs mt-1">{agendaErrors[`${item.id}-title`]}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`edit-agenda-description-${item.id}`}>Description</Label>
+                  <Textarea
+                    id={`edit-agenda-description-${item.id}`}
+                    value={item.description}
+                    onChange={(e) => handleAgendaItemChange(item.id, "description", e.target.value)}
+                    className={`border-orange-200 min-h-[80px] ${agendaErrors[`${item.id}-description`] ? "border-red-500" : ""}`}
+                    aria-invalid={agendaErrors[`${item.id}-description`] ? "true" : "false"}
+                  />
+                  {agendaErrors[`${item.id}-description`] && (
+                    <p className="text-red-500 text-xs mt-1">{agendaErrors[`${item.id}-description`]}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`edit-agenda-time-${item.id}`}>Time to Complete (HH:MM)</Label>
+                  <Input
+                    id={`edit-agenda-time-${item.id}`}
+                    value={item.timeToComplete}
+                    onChange={(e) => handleAgendaItemChange(item.id, "timeToComplete", e.target.value)}
+                    placeholder="00:30"
+                    className={`border-orange-200 ${agendaErrors[`${item.id}-timeToComplete`] ? "border-red-500" : ""}`}
+                    aria-invalid={agendaErrors[`${item.id}-timeToComplete`] ? "true" : "false"}
+                  />
+                  {agendaErrors[`${item.id}-timeToComplete`] && (
+                    <p className="text-red-500 text-xs mt-1">{agendaErrors[`${item.id}-timeToComplete`]}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
           <DialogFooter>
             <Button
               variant="outline"
@@ -1754,6 +2058,17 @@ export default function AdminDashboard() {
 
       {/* Add Toaster component */}
       <Toaster />
+
+      {/* Loading Indicator */}
+      {isLoading && (
+        <div className="fixed bottom-8 right-8 z-50">
+          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-lg">
+            <CubeLoader size="md" color="#f97316" className="z-50"/>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
+
+export default AdminWebinar

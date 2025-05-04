@@ -105,8 +105,6 @@ const WebDevelopmentWebinar = () => {
                 },
             })
 
-            console.log("Hello vishal")
-
             if (response) {
                 setRegisteredWebinars([...registeredWebinars, webinarId])
                 setSubmitted(true)
@@ -409,44 +407,7 @@ const WebDevelopmentWebinar = () => {
               <div className="absolute left-[31px] top-0 bottom-0 w-1 bg-gradient-to-b from-blue-600 to-blue-300 rounded-full"></div>
 
               <div className="space-y-12">
-                {[
-                  {
-                    number: "01",
-                    title: webinar.title,
-                    description: "Master HTML5, CSS3, JavaScript ES6+, and responsive design principles.",
-                    duration: "30 minutes",
-                  },
-                  {
-                    number: "02",
-                    title: "Frontend Frameworks",
-                    description: "Deep dive into React.js and Next.js for building dynamic user interfaces.",
-                    duration: "30 minutes",
-                  },
-                  {
-                    number: "03",
-                    title: "Backend Development",
-                    description: "Learn Node.js, Express, and RESTful API design patterns.",
-                    duration: "30 minutes",
-                  },
-                  {
-                    number: "04",
-                    title: "Databases & Authentication",
-                    description: "Working with SQL, NoSQL databases, and implementing secure authentication.",
-                    duration: "20 minutes",
-                  },
-                  {
-                    number: "05",
-                    title: "Full Stack Integration",
-                    description: "Connecting frontend and backend to build complete applications.",
-                    duration: "20 minutes"
-                  },
-                  {
-                    number: "06",
-                    title: "Live Q&A Session",
-                    description: "Get your specific questions answered by our expert instructors.",
-                    duration: "20 minutes",
-                  },
-                ].map((item, index) => (
+                {webinar.agenda.map((item, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
@@ -457,7 +418,7 @@ const WebDevelopmentWebinar = () => {
                   >
                     <div className="relative">
                       <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center z-10 shadow-lg shadow-blue-200">
-                        <span className="text-xl font-bold text-white">{item.number}</span>
+                        <span className="text-xl font-bold text-white">{index+1}</span>
                       </div>
                     </div>
                     <div className="bg-white rounded-2xl p-6 shadow-lg shadow-blue-100/30 border border-blue-100/50 flex-1">
@@ -466,7 +427,7 @@ const WebDevelopmentWebinar = () => {
                       <div className="flex items-center gap-3 text-sm text-gray-500">
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4 text-blue-500" />
-                          <span>{item.duration}</span>
+                          <span>{item.timeToComplete}</span>
                         </div>
                       </div>
                     </div>
