@@ -5,8 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
 import { BASE_URL } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
-import CustomToast from "@/components/CustomToast"; // Import the CustomToast component
-// import { set } from "lodash";
+import CustomToast from "@/components/CustomToast";
 
 const AddNewCourse = ({ addCourse, setAddCourse }) => {
   const initialState = {
@@ -69,9 +68,9 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
       ...prev,
       [name]: [...prev[name], ""],
     }));
-    setToast({ 
-      message: `New ${name.replace(/([A-Z])/g, ' $1').trim()} field added`, 
-      type: "success" 
+    setToast({
+      message: `New ${name.replace(/([A-Z])/g, ' $1').trim()} field added`,
+      type: "success"
     });
   };
 
@@ -82,17 +81,17 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
       ...prev,
       [name]: newArray,
     }));
-    setToast({ 
-      message: `Field removed successfully`, 
-      type: "success" 
+    setToast({
+      message: `Field removed successfully`,
+      type: "success"
     });
   };
 
   const resetForm = () => {
     setCourseData(initialState);
-    setToast({ 
-      message: "Form has been reset", 
-      type: "success" 
+    setToast({
+      message: "Form has been reset",
+      type: "success"
     });
   };
 
@@ -109,16 +108,13 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
   const uploadCourse = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Create FormData for file uploads
+
     const formData = new FormData();
-    
-    // Add all regular fields
+
     for (const key in courseData) {
-      // Skip files and arrays which need special handling
       if (
-        key !== 'imageFile' && 
-        key !== 'pdfFile' && 
+        key !== 'imageFile' &&
+        key !== 'pdfFile' &&
         key !== 'certificateFile' &&
         !Array.isArray(courseData[key]) &&
         !(courseData[key] instanceof File) &&
@@ -129,31 +125,28 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
         formData.append(key, courseData[key]);
       }
     }
-    
-    // Handle array fields - convert to JSON strings
-    ['whatYouWillLearn', 'whoShouldEnroll', 'whyCourse', 'stillConfused', 
-     'reason', 'reasonWhyJoshGuru', 'courseHighlights'].forEach(arrayField => {
-      if (courseData[arrayField] && Array.isArray(courseData[arrayField])) {
-        formData.append(arrayField, JSON.stringify(courseData[arrayField]));
-      }
-    });
-    
-    // Handle videos as JSON string
+
+    ['whatYouWillLearn', 'whoShouldEnroll', 'whyCourse', 'stillConfused',
+      'reason', 'reasonWhyJoshGuru', 'courseHighlights'].forEach(arrayField => {
+        if (courseData[arrayField] && Array.isArray(courseData[arrayField])) {
+          formData.append(arrayField, JSON.stringify(courseData[arrayField]));
+        }
+      });
+
     formData.append('videos', JSON.stringify(courseData.videos));
-    
-    // Handle file uploads
+
     if (courseData.imageFile instanceof File) {
       formData.append('imageFile', courseData.imageFile);
     }
-    
+
     if (courseData.pdfFile instanceof File) {
       formData.append('pdfFile', courseData.pdfFile);
     }
-    
+
     if (courseData.certificateFile instanceof File) {
       formData.append('certificateFile', courseData.certificateFile);
     }
-    
+
     try {
       const res = await axios.post(`${BASE_URL}/course/createCourse`, formData, {
         withCredentials: true,
@@ -162,17 +155,17 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
         }
       });
       resetForm();
-      setToast({ 
-        message: "Course uploaded successfully!", 
-        type: "success" 
+      setToast({
+        message: "Course uploaded successfully!",
+        type: "success"
       });
       setShowToast(true);
       console.log(res);
     } catch (error) {
       console.error(error);
-      setToast({ 
-        message: error.response?.data?.message || "Failed to upload course", 
-        type: "error" 
+      setToast({
+        message: error.response?.data?.message || "Failed to upload course",
+        type: "error"
       });
     } finally {
       setLoading(false);
@@ -190,18 +183,18 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
       ...courseData,
       videos: [...courseData.videos, { title: "", url: "", isPreview: false }],
     });
-    setToast({ 
-      message: "New video field added", 
-      type: "success" 
+    setToast({
+      message: "New video field added",
+      type: "success"
     });
   };
 
   const removeVideoInput = (index) => {
     const updatedVideos = courseData.videos.filter((_, i) => i !== index);
     setCourseData({ ...courseData, videos: updatedVideos });
-    setToast({ 
-      message: "Video field removed", 
-      type: "success" 
+    setToast({
+      message: "Video field removed",
+      type: "success"
     });
   };
 
@@ -218,16 +211,16 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
           />
           <Button
             type="button"
-            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded w-full sm:w-auto"
+            className="bg-black hover:bg-gray-900 text-white px-3 py-1 rounded-md w-full sm:w-auto"
             onClick={() => removeArrayItem(name, index)}
           >
             Remove
           </Button>
         </div>
       ))}
-      <Button 
-        type="button" 
-        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded w-full sm:w-auto"
+      <Button
+        type="button"
+        className="bg-black hover:bg-gray-900 text-white px-3 py-2 rounded-md w-full sm:w-auto"
         onClick={() => addArrayItem(name)}
       >
         Add Item
@@ -247,7 +240,6 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
       >
         <h1 className="text-2xl font-bold mb-6">Add New Course</h1>
 
-        {/* Basic Inputs - 2 columns on larger screens */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
             "title",
@@ -273,7 +265,6 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
           ))}
         </div>
 
-        {/* Description */}
         <div className="space-y-2">
           <Label htmlFor="description" className="block mb-2 font-medium">Description</Label>
           <Textarea
@@ -287,7 +278,6 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
           />
         </div>
 
-        {/* Course Introduction Video */}
         <div className="space-y-2">
           <Label htmlFor="courseIntrovideo" className="block mb-2 font-medium">Course Introduction URL</Label>
           <Input
@@ -301,31 +291,27 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
           />
         </div>
 
-        {/* Files Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Image Upload */}
           <div className="space-y-2">
             <label className="block mb-2 font-medium">Thumbnail Image</label>
             {courseData?.imageFile && (
               <div className="mb-2">
-                <img 
-                  src={URL.createObjectURL(courseData.imageFile)} 
-                  alt="Selected thumbnail" 
-                  className="h-20 object-contain" 
+                <img
+                  src={URL.createObjectURL(courseData.imageFile)}
+                  alt="Selected thumbnail"
+                  className="h-20 object-contain"
                 />
                 <p className="text-sm text-gray-500">Selected image</p>
               </div>
             )}
-            <input 
-              type="file" 
-              name="imageFile" 
-              accept="image/*" 
-              onChange={handleFileChange} 
+            <input
+              type="file"
+              name="imageFile"
+              accept="image/*"
+              onChange={handleFileChange}
               className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
           </div>
-
-          {/* PDF Upload */}
           <div className="space-y-2">
             <label className="block mb-2 font-medium">Syllabus PDF</label>
             {courseData?.pdfFile && (
@@ -333,39 +319,36 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
                 <p className="text-sm text-gray-500">Selected PDF: {courseData.pdfFile.name}</p>
               </div>
             )}
-            <input 
-              type="file" 
-              name="pdfFile" 
-              accept="application/pdf" 
-              onChange={handleFileChange} 
+            <input
+              type="file"
+              name="pdfFile"
+              accept="application/pdf"
+              onChange={handleFileChange}
               className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
           </div>
-
-          {/* Certificate Upload */}
           <div className="space-y-2">
             <label className="block mb-2 font-medium">Certificate Image</label>
             {courseData?.certificateFile && (
               <div className="mb-2">
-                <img 
-                  src={URL.createObjectURL(courseData.certificateFile)} 
-                  alt="Selected certificate" 
-                  className="h-20 object-contain" 
+                <img
+                  src={URL.createObjectURL(courseData.certificateFile)}
+                  alt="Selected certificate"
+                  className="h-20 object-contain"
                 />
                 <p className="text-sm text-gray-500">Selected certificate</p>
               </div>
             )}
-            <input 
-              type="file" 
-              name="certificateFile" 
-              accept="image/*" 
-              onChange={handleFileChange} 
+            <input
+              type="file"
+              name="certificateFile"
+              accept="image/*"
+              onChange={handleFileChange}
               className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
           </div>
         </div>
 
-        {/* Checkboxes */}
         <div className="flex flex-col sm:flex-row gap-6">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -389,7 +372,6 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
           </label>
         </div>
 
-        {/* How Will This Course Help You */}
         <div className="space-y-2">
           <Label htmlFor="HowWillHelpYou" className="block mb-2 font-medium">How Will This Course Help You?</Label>
           <Textarea
@@ -403,7 +385,6 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
           />
         </div>
 
-        {/* Array Fields */}
         <div className="space-y-8">
           {renderArrayField("What You Will Learn", "whatYouWillLearn")}
           {renderArrayField("Why Take This Course", "whyCourse")}
@@ -414,7 +395,6 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
           {renderArrayField("Course Highlights", "courseHighlights")}
         </div>
 
-        {/* Video Section */}
         <div className="space-y-4">
           <Label className="block text-xl font-semibold mb-2">Course Videos</Label>
           {courseData.videos.map((video, index) => (
@@ -456,7 +436,7 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
               {index > 0 && (
                 <Button
                   type="button"
-                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded w-full sm:w-auto mt-2"
+                  className="bg-black hover:bg-gray-900 text-white px-3 py-1 rounded-md w-full sm:w-auto mt-2"
                   onClick={() => removeVideoInput(index)}
                 >
                   Remove Video
@@ -464,20 +444,19 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
               )}
             </div>
           ))}
-          <Button 
-            type="button" 
-            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded w-full sm:w-auto"
+          <Button
+            type="button"
+            className="bg-black hover:bg-gray-900 text-white px-3 py-2 rounded-md w-full sm:w-auto"
             onClick={addVideoInput}
           >
             + Add Another Video
           </Button>
         </div>
 
-        {/* Submit/Reset Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button 
+          <Button
             type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded flex items-center justify-center gap-2 w-full sm:w-auto"
+            className="bg-black hover:bg-gray-900 text-white px-6 py-2 rounded-md flex items-center justify-center gap-2 w-full sm:w-auto"
             disabled={loading}
           >
             {loading ? (
@@ -485,9 +464,9 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
             ) : null}
             Upload Course
           </Button>
-          <Button 
-            type="button" 
-            className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded w-full sm:w-auto"
+          <Button
+            type="button"
+            className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-md w-full sm:w-auto"
             onClick={resetForm}
             disabled={loading}
           >
@@ -496,17 +475,15 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
         </div>
       </form>
 
-      {/* Toast Component */}
       {showToast && (
- <CustomToast
- message={toast.message}
- type={toast.type}
- onClose={()=>{
-  setShowToast(false);
- }}
-/>
-      )} 
-     
+        <CustomToast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => {
+            setShowToast(false);
+          }}
+        />
+      )}
     </div>
   );
 };

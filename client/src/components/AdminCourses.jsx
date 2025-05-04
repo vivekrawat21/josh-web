@@ -13,30 +13,29 @@ import {
 import axios from 'axios';
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import AddNewCourse from './AddNewCourse'; // Uncommented this import
-import { addCourse } from '@/features/courses/courseSlice';
+import AddNewCourse from './AddNewCourse';
 import { BASE_URL } from '@/utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { addCourse } from '@/features/courses/courseSlice';
 
 const AdminCourses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addNewCourse, setAddNewCourse] = useState(false);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate(); // Changed from navigator to navigate (conventional name)
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const handleCourseAddButton = () => {
     setAddNewCourse(!addNewCourse);
   };
-  
+
   useEffect(() => {
     const fetchCourses = async () => {
       setIsLoading(true);
       try {
         const res = await axios.get(`${BASE_URL}/course/getCourses`, { withCredentials: true });
-        console.log(res.data.data.courses);
         setCourses(res.data.data.courses);
         dispatch(addCourse(res.data.data.courses));
       } catch (error) {
@@ -47,24 +46,22 @@ const AdminCourses = () => {
     };
     
     fetchCourses();
-  }, []); // Remove dependency on dispatch, fetch on component mount
-  
+  }, []);
+
   const filteredCourses = courses.filter(
     (course) =>
       course.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       course.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
   const editCourse = (id) => {
     navigate(`/admin/editCourse/${id}`);
   };
 
   const deleteCourse = async (id) => {
-    // Add confirmation
     if (window.confirm("Are you sure you want to delete this course?")) {
       try {
         await axios.delete(`${BASE_URL}/course/deleteCourse/${id}`, { withCredentials: true });
-        // Update local state after successful deletion
         setCourses(courses.filter(course => course._id !== id));
       } catch (error) {
         console.error("Error deleting course:", error);
@@ -73,100 +70,106 @@ const AdminCourses = () => {
   };
 
   return (
-    <div>
+    <div className="max-w-screen mx-auto p-6 bg-white shadow rounded-lg">
       <div className='flex justify-between items-center my-4'>
-        <h1 className="text-2xl font-bold">Courses Dashboard</h1>
-        <Button onClick={handleCourseAddButton}>
+        <h1 className="text-2xl font-semibold text-gray-800">Courses Dashboard</h1>
+        <Button 
+          onClick={handleCourseAddButton}
+          className="bg-black text-white hover:bg-gray-800"
+        >
           {addNewCourse ? "Cancel" : "Add New Course"}
         </Button>
       </div>
       
       {addNewCourse && (
-        <div className='my-4 py-4 px-6 border-2 bg-white rounded-lg shadow-sm'>
+        <div className="my-4 py-4 px-6 border-2 bg-white rounded-lg shadow-sm">
           <AddNewCourse addNewCourse={addNewCourse} setAddNewCourse={setAddNewCourse} />
         </div>
       )}
       
-      <Card className="mt-6">
+      <Card className="mt-6 shadow-md">
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <CardTitle>Course Management</CardTitle>
-              <CardDescription>Manage your courses, edit details, or remove courses.</CardDescription>
+              <CardTitle className="text-xl font-semibold text-gray-800">Course Management</CardTitle>
+              <CardDescription className="text-sm text-gray-600">
+                Manage your courses, edit details, or remove courses.
+              </CardDescription>
             </div>
-            <div className="flex items-center gap-2">
-              <Input
-                placeholder="Search courses..."
-                className="w-[250px]"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+            <Input
+              placeholder="Search courses..."
+              className="w-full sm:w-64 border border-gray-300 px-3 py-1.5 rounded-lg focus:ring-2 focus:ring-blue-500"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </CardHeader>
+        
         <CardContent>
           {isLoading ? (
             <div className="flex justify-center py-8">
-              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Bundle</TableHead>
-                  <TableHead>Status</TableHead> {/* Added missing Status TableHead */}
-                  <TableHead>Added</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Title</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Category</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Price</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Bundle</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Status</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Added</TableHead>
+                  <TableHead className="text-right text-sm font-medium text-gray-700">Actions</TableHead>
                 </TableRow>
               </TableHeader>
+              
               <TableBody>
                 {filteredCourses.length > 0 ? (
                   filteredCourses.map((course) => (
-                    <TableRow key={course._id}>
-                      <TableCell className="font-medium">{course.title}</TableCell>
-                      <TableCell>{course.category}</TableCell>
-                      <TableCell>₹{course.price}</TableCell>
-                      <TableCell>{course.bundleName || "N/A"}</TableCell>
+                    <TableRow key={course._id} className="hover:bg-gray-50">
+                      <TableCell className="font-medium text-sm">{course.title}</TableCell>
+                      <TableCell className="text-sm text-gray-600">{course.category}</TableCell>
+                      <TableCell className="text-sm text-gray-600">₹{course.price}</TableCell>
+                      <TableCell className="text-sm text-gray-600">{course.bundleName || "N/A"}</TableCell>
                       <TableCell>
                         <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-base font-medium ${
-                            course.isTrending && "bg-green-100 text-green-800" 
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                            course.isTrending ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
                           }`}
                         >
-                          {/* {course.status || "Draft"} */}
-                          {course?.isTrending && "Trending" }
+                          {course?.isTrending ? "Trending" : "Standard"}
                         </span>
                       </TableCell>
-                      <TableCell>
-  {course?.createdAt
-    ? new Date(course.createdAt).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      })
-    : "N/A"}
-</TableCell>
+                      <TableCell className="text-sm text-gray-600">
+                        {course?.createdAt
+                          ? new Date(course.createdAt).toLocaleDateString("en-GB", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })
+                          : "N/A"}
+                      </TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
                               <span className="sr-only">Open menu</span>
-                              <MoreHorizontal className="h-4 w-4" />
+                              <MoreHorizontal className="h-4 w-4 text-gray-600" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => editCourse(course._id)}>
-                              <Edit className="mr-2 h-4 w-4" />
+                          <DropdownMenuContent align="end" className="shadow-lg rounded-md">
+                            <DropdownMenuLabel className="text-sm">Actions</DropdownMenuLabel>
+                            <DropdownMenuItem 
+                              onClick={() => editCourse(course._id)}
+                              className="text-sm px-3 py-1.5 hover:bg-gray-100"
+                            >
+                              <Edit className="mr-2 h-4 w-4 text-gray-600" />
                               Edit
                             </DropdownMenuItem>
-                            {/* <DropdownMenuItem>View Analytics</DropdownMenuItem>
-                            <DropdownMenuSeparator /> */}
+                            <DropdownMenuSeparator />
                             <DropdownMenuItem 
-                              className="text-red-600" 
+                              className="text-red-600 hover:bg-red-50 text-sm px-3 py-1.5"
                               onClick={() => deleteCourse(course._id)}
                             >
                               <Trash className="mr-2 h-4 w-4" />
@@ -179,7 +182,7 @@ const AdminCourses = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-6 text-gray-500">
+                    <TableCell colSpan={7} className="text-center py-6 text-sm text-gray-500">
                       {searchTerm ? "No courses match your search criteria" : "No courses found"}
                     </TableCell>
                   </TableRow>

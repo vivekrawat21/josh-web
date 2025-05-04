@@ -15,7 +15,7 @@ const Bundle = () => {
 
   useEffect(() => {
     const selected = bundles?.filter((bundle) => bundle._id === bundleId);
-    setBundle(selected?.[0]);
+  setBundle(selected?.[0]);
   }, [bundles, bundleId]);
 
   return (
