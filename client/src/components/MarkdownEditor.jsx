@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import { useRef } from 'react';
 import { BASE_URL } from '../utils/utils';
-// import { useEffect } from "react";
-
+import CustomToast from './CustomToast';
 const MarkdownEditor = ({ type, data }) => {
   const [markdown, setMarkdown] = useState(data?.content || '');
   const [selectedButton, setSelectedButton] = useState('');
-
+  const [loading, setLoading] = useState(false);
+ const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
   useEffect(() => {
     setMarkdown(data?.content || '');
   }, [data]);
+
+  const textareaRef = useRef(null);
+
+const autoResize = () => {
+  const textarea = textareaRef.current;
+  if (textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }
+};
+
+useEffect(() => {
+  autoResize();
+}, [markdown]);
 
   const insertAtCursor = (before, after = '', placeholder = '', buttonId) => {
     const textarea = document.getElementById('markdown-textarea');
@@ -45,15 +60,24 @@ const MarkdownEditor = ({ type, data }) => {
   };
 
   const handleClick = async (markdown, type) => {
+    setLoading(true);
     try {
       const res = await axios.patch(
         `${BASE_URL}/privacy/updatePrivacy?contentType=${type}`,
-        { content: markdown },
+        { content: markdown, renderedContent: markdownToHtml(markdown) },
         { withCredentials: true }
       );
+      if (res.data.status === 'success') {
+        setToastMessage('Updated successfully');
+        setShowToast(true);
+        setTimeout(() => {
+          setShowToast(false);
+        }, 3000);}
       console.log('Updated successfully', res.data);
     } catch (err) {
       console.error('Error updating:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,10 +89,6 @@ const MarkdownEditor = ({ type, data }) => {
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
-
-    html = html.replace(/&lt;span style="color:(red|blue|green)"&gt;(.*?)&lt;\/span&gt;/g,
-      '<span style="color:$1">$2</span>'
-    );
 
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
@@ -123,7 +143,7 @@ const MarkdownEditor = ({ type, data }) => {
       return `<pre><code class="language-${language}">${code}</code></pre>`;
     });
 
-    // Links
+    // Links - Fixing the link issue
     html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-blue-600 underline" target="_blank">$1</a>');
 
     return html;
@@ -163,12 +183,17 @@ const MarkdownEditor = ({ type, data }) => {
 
       {/* Editor */}
       <textarea
-        id="markdown-textarea"
-        className="border w-full p-3 h-60 rounded resize-none mb-6"
-        value={markdown}
-        onChange={(e) => setMarkdown(e.target.value)}
-        placeholder="Write your content in Markdown here..."
-      />
+  id="markdown-textarea"
+  ref={textareaRef}
+  className="border w-full p-3 rounded mb-6 resize-none overflow-hidden"
+  value={markdown}
+  onChange={(e) => {
+    setMarkdown(e.target.value);
+    autoResize();
+  }}
+  placeholder="Write your content in Markdown here..."
+/>
+
 
       {/* Preview */}
       <div className="border p-4 rounded bg-white shadow-sm">
@@ -178,11 +203,13 @@ const MarkdownEditor = ({ type, data }) => {
 
       {/* Submit */}
       <div className="flex justify-end mt-4">
+        {showToast && <CustomToast message={toastMessage} />}
         <button
-          className="bg-gray-900 text-white px-4 py-2 rounded-md"
+          className="bg-gray-900 text-white px-4 py-2 rounded-md disabled:opacity-50"
           onClick={() => handleClick(markdown, type)}
+          disabled={loading}
         >
-          Update
+          {loading ? 'Updating...' : 'Update'}
         </button>
       </div>
     </div>
