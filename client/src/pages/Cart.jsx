@@ -6,36 +6,6 @@ import { useDispatch } from "react-redux";
 import { removeFromCart } from "../features/cart/cartSlice";
 import { Link } from "react-router-dom";
 const Cart = () => {
-  // const cartItems = [
-  //   {
-  //     id: 1,
-  //     title: "Full-Stack Development",
-  //     price: 900,
-  //     type: "video",
-  //     image: "https://via.placeholder.com/150",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Digital Marketing",
-  //     price: 550,
-  //     type: "video + notes",
-  //     image: "https://via.placeholder.com/150",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Data Science",
-  //     price: 650,
-  //     type: "video + projects",
-  //     image: "https://via.placeholder.com/150",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "DevOps",
-  //     price: 800,
-  //     type: "video + projects",
-  //     image: "https://via.placeholder.com/150",
-  //   },
-  // ];
   const cartItems = useSelector((state) => state.cart.cart);
   const subtotal= cartItems.reduce((acc, item) => acc + item.price, 0);
   const discount = 0;
@@ -49,7 +19,7 @@ const Cart = () => {
     console.log("Item removed from cart");
   }
   return (
-    <section className="w-full min-h-screen px-4 md:px-8 lg:px-12 py-8 bg-gray-100">
+    <section className="w-full min-h-screen px-4 md:px-8 lg:px-12 py-8 bg-gray-100 mt-20">
       <div className="flex flex-col lg:flex-row lg:justify-center w-full lg:space-x-10 space-y-6 lg:space-y-0">
         {/* Cart Items Section */}
         <motion.div

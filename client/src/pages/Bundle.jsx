@@ -4,19 +4,47 @@ import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { FaBook, FaClock, FaUsers, FaCertificate } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
+import { LoaderCircle } from "lucide-react"; // <-- Lucide loading icon
 
 const Bundle = () => {
   const { bundleId } = useParams();
   const navigate = useNavigate();
-  const [bundle, setBundle] = useState({});
+  const [bundle, setBundle] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const bundles = useSelector((state) => state.bundle.bundles[0]);
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    const selected = bundles?.filter((bundle) => bundle._id === bundleId);
-  setBundle(selected?.[0]);
+    if (bundles?.length > 0) {
+      const selected = bundles.find((bundle) => bundle?._id === bundleId);
+      setBundle(selected || null);
+      setLoading(false);
+    }
   }, [bundles, bundleId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center text-gray-700">
+        <LoaderCircle className="animate-spin w-12 h-12 text-blue-500 mb-4" />
+        <p className="text-lg font-semibold">Loading Bundle...</p>
+      </div>
+    );
+  }
+
+  if (!bundle) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center text-gray-600">
+        <p className="text-2xl font-bold">Bundle not found</p>
+        <Link
+          to="/"
+          className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition"
+        >
+          Go Home
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -48,11 +76,21 @@ const Bundle = () => {
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-10 text-center py-6">
         <div>
           <FaBook className="text-blue-500 text-2xl sm:text-3xl md:text-4xl mb-2 mx-auto" />
-          <p className="text-xs sm:text-sm md:text-base font-semibold">8 Courses</p>
+          <p className="text-xs sm:text-sm md:text-base font-semibold">
+            {
+              bundle?.courses?.length > 0
+                ? `${bundle?.courses?.length} Courses`
+                : "No courses available"
+            }
+          </p>
         </div>
         <div>
           <FaClock className="text-blue-500 text-2xl sm:text-3xl md:text-4xl mb-2 mx-auto" />
-          <p className="text-xs sm:text-sm md:text-base font-semibold">67+ Hours</p>
+          <p className="text-xs sm:text-sm md:text-base font-semibold">{
+            bundle?.totalDuration
+              ? `${bundle?.totalDuration.slice(0,1)} months`
+              : "Duration not available"
+}</p>
         </div>
         <div>
           <FaUsers className="text-blue-500 text-2xl sm:text-3xl md:text-4xl mb-2 mx-auto" />
@@ -61,7 +99,7 @@ const Bundle = () => {
         <div>
           <FaCertificate className="text-blue-500 text-2xl sm:text-3xl md:text-4xl mb-2 mx-auto" />
           <p className="text-xs sm:text-sm md:text-base font-semibold">
-            Joshguru  Certificate
+            Joshguru Certificate
           </p>
         </div>
       </div>
@@ -117,7 +155,9 @@ const Bundle = () => {
           className="px-6 py-2 sm:px-8 sm:py-2 text-xs sm:text-sm md:text-base border-2 border-black font-semibold rounded-xl text-black hover:bg-orange-500 hover:text-white transition-all duration-300 mb-8"
           whileHover={{ scale: 1.05 }}
         >
-          <Link to={!user?`/signup?courseId=${bundle._id}&type=bundle`:'/payment'}  >Buy Bundle</Link>
+          <Link to={!user ? `/signup?courseId=${bundle._id}&type=bundle` : '/payment'}>
+            Buy Bundle
+          </Link>
         </motion.button>
       </div>
     </motion.div>
