@@ -38,7 +38,7 @@ const AdminDashboard = () => {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 rounded-t ${
-              activeTab === tab ? 'bg-blue-600 text-white' : 'bg-gray-100'
+              activeTab === tab ? 'bg-gray-600 text-white' : 'bg-gray-100'
             }`}
           >
             {tab === 'disclaimer'

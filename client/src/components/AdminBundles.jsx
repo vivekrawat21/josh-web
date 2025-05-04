@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Edit, MoreHorizontal, Trash, PlusCircle } from "lucide-react"; // Import PlusCircle icon
+import { Edit, MoreHorizontal, Trash, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -18,14 +18,14 @@ import { setBundle } from '@/features/bundles/BundleSlice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AddNewBundle from './AddNewBundle';
-import CustomToast from '@/components/CustomToast'; // Assuming CustomToast is in components/CustomToast.jsx
+import CustomToast from '@/components/CustomToast';
 
 const AdminBundles = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addBundle, setAddBundle] = useState(false);
   const [bundles, setBundles] = useState([]);
-  const [toastMessage, setToastMessage] = useState(null); // Toast message state
-  const [showToast, setShowToast] = useState(false); // State for controlling the visibility of the toast
+  const [toastMessage, setToastMessage] = useState(null);
+  const [showToast, setShowToast] = useState(false);
   const dispatch = useDispatch();
   const bundle = useSelector((state) => state.bundle.bundles[0]);
   const navigate = useNavigate();
@@ -51,132 +51,142 @@ const AdminBundles = () => {
     }
   };
 
-  // Handle Delete with Toast
   const handleDelete = async (id) => {
     try {
       const res = await axios.delete(`${BASE_URL}/bundle/removeBundle/${id}`, {
         withCredentials: true,
       });
       if (res.status === 200) {
-        // Remove the deleted bundle from the state
         setBundles((prevBundles) => prevBundles.filter((bundle) => bundle._id !== id));
-        // Show success toast
         setToastMessage({ type: 'success', message: "Bundle deleted successfully!" });
-        setShowToast(true); // Show the toast
+        setShowToast(true);
       }
     } catch (error) {
       console.error("Error deleting bundle:", error);
-      // Show error toast if deletion fails
       setToastMessage({ type: 'error', message: "Failed to delete the bundle." });
-      setShowToast(true); // Show the toast
+      setShowToast(true);
     }
   };
 
   useEffect(() => {
     fetchBundles();
-  }, []);
+    // If coming back from EditBundle with refresh flag, clear it
+    if (location.state?.refresh) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state]);
+
 
   const editBundle = (id) => {
     navigate(`/admin/editBundle/${id}`);
   };
 
-  // Add New Course Button for each individual bundle
   const handleAddNewCourse = (bundleId) => {
     navigate(`/admin/bundleCourse/${bundleId}`);
   };
 
-  return (
-    <div>
-      {/* Show the custom toast message if the state showToast is true */}
-      {showToast && (
-        <CustomToast
-          type={toastMessage.type}
-          message={toastMessage.message}
-          onClose={() => setShowToast(false)} // Close the toast when onClose is triggered
-        />
-      )}
+  // Filter bundles by search term
+  const filteredBundles = bundles.filter(
+    (bundle) =>
+      bundle.bundleName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      bundle.category?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-      <div className="flex justify-between my-2">
-        <div>Bundles Dashboard</div>
-        <div className="flex gap-4">
-          <Button onClick={handleBundleAddButton}>
-            {!addBundle ? "Add new Bundle" : "Back"}
+    return (
+      <div className="max-w-screen mx-auto p-6 bg-white shadow rounded-lg">
+        {showToast && (
+          <CustomToast
+            type={toastMessage.type}
+            message={toastMessage.message}
+            onClose={() => setShowToast(false)}
+          />
+        )}
+  
+        <div className='flex justify-between items-center my-4'>
+          <h1 className="text-2xl font-semibold text-gray-800">Bundles Dashboard</h1>
+          <Button 
+            onClick={() => setAddBundle(!addBundle)}
+            className="bg-black text-white hover:bg-gray-800"
+          >
+            {addBundle ? "Cancel" : "Add New Bundle"}
           </Button>
         </div>
-      </div>
-      {addBundle && (
-        <div className="my-2 py-2 px-4 border-2 bg-white rounded-lg">
-          <AddNewBundle addBundle={addBundle} setAddBundle={setAddBundle} />
-        </div>
-      )}
-      <div>
-        <Card>
+  
+        {addBundle && (
+          <div className="my-4 py-4 px-6 border-2 bg-white rounded-lg shadow-sm">
+            <AddNewBundle onSuccess={() => { setAddBundle(false); fetchBundles(); }} />
+          </div>
+        )}
+  
+        <Card className="mt-6 shadow-md">
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <CardTitle>Bundle Management</CardTitle>
-                <CardDescription>Manage your bundles, edit details, or remove bundles.</CardDescription>
+                <CardTitle className="text-xl font-semibold text-gray-800">Bundle Management</CardTitle>
+                <CardDescription className="text-sm text-gray-600">
+                  Manage your bundles, edit details, or remove bundles.
+                </CardDescription>
               </div>
-              <div className="flex items-center gap-2">
-                <Input
-                  placeholder="Search bundles..."
-                  className="w-[250px]"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
+              <Input
+                placeholder="Search bundles..."
+                className="w-full sm:w-64 border border-gray-300 px-3 py-1.5 rounded-lg focus:ring-2 focus:ring-blue-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
           </CardHeader>
+          
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Bundle</TableHead>
-                  <TableHead>Added</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Title</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Price</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Discount</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Status</TableHead>
+                  <TableHead className="text-right text-sm font-medium text-gray-700">Actions</TableHead>
                 </TableRow>
               </TableHeader>
+              
               <TableBody>
-                {bundles.map((bundle) => (
-                  <TableRow key={bundle?._id}>
-                    <TableCell className="font-medium">{bundle?.bundleName}</TableCell>
-                    <TableCell>{bundle?.category || bundle?.bundleName}</TableCell>
-                    <TableCell>₹{bundle?.price}</TableCell>
-                    <TableCell>{bundle?.bundleName}</TableCell>
-                    <TableCell>{bundle?.date}</TableCell>
+                {filteredBundles.map((bundle) => (
+                  <TableRow key={bundle._id} className="hover:bg-gray-50">
+                    <TableCell className="font-medium text-sm">{bundle.bundleName}</TableCell>
+                    <TableCell className="text-sm text-gray-600">₹{bundle.price}</TableCell>
+                    <TableCell className="text-sm text-gray-600">{bundle.discount}%</TableCell>
                     <TableCell>
-                      <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                          bundle?.status === "Published" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
-                        }`}
-                      >
-                        {bundle?.status}
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        bundle.isSpecial ? "bg-purple-100 text-purple-800" : "bg-gray-100 text-gray-800"
+                      }`}>
+                        {bundle.isSpecial ? "Special" : "Standard"}
                       </span>
                     </TableCell>
-                    <TableCell>{bundle?.lastUpdated}</TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
+                            <MoreHorizontal className="h-4 w-4 text-gray-600" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem onClick={() => editBundle(bundle?._id)}>
-                            <Edit className="mr-2 h-4 w-4" />
+                        <DropdownMenuContent align="end" className="shadow-lg rounded-md">
+                          <DropdownMenuLabel className="text-sm">Actions</DropdownMenuLabel>
+                          <DropdownMenuItem 
+                            onClick={() => navigate(`/admin/editBundle/${bundle._id}`)}
+                            className="text-sm px-3 py-1.5 hover:bg-gray-100"
+                          >
+                            <Edit className="mr-2 h-4 w-4 text-gray-600" />
                             Edit
                           </DropdownMenuItem>
+                          <DropdownMenuSeparator />
                           <DropdownMenuItem onClick={() => handleAddNewCourse(bundle?._id)}>
                             <PlusCircle className="mr-2 h-4 w-4" />
                             Add Course
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(bundle?._id)}>
+                          <DropdownMenuItem 
+                            className="text-red-600 hover:bg-red-50 text-sm px-3 py-1.5"
+                            onClick={() => handleDelete(bundle._id)}
+                          >
                             <Trash className="mr-2 h-4 w-4" />
                             Delete
                           </DropdownMenuItem>
@@ -185,13 +195,19 @@ const AdminBundles = () => {
                     </TableCell>
                   </TableRow>
                 ))}
+                {filteredBundles.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-6 text-sm text-gray-500">
+                      {searchTerm ? "No bundles match your search criteria" : "No bundles found"}
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
-};
-
-export default AdminBundles;
+    );
+  };
+  
+  export default AdminBundles;

@@ -1,10 +1,11 @@
-import React from "react";
-import { useEffect , useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../utils/utils";
+
 const Terms = () => {
   const [terms, setTerms] = useState(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchterms = async () => {
       try {
@@ -22,17 +23,23 @@ const Terms = () => {
     };
     fetchterms();
   }, []);
+
   return (
-    <section className="max-w-3xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-semibold mb-6 text-center text-gray-800">Terms & Conditions</h1>
-      {loading ? (
-      <p>Loading...</p>
-    ) : (
-      <div
-        className="prose prose-orange max-w-none"
-        dangerouslySetInnerHTML={{ __html: terms?.renderedContent }}
-      />
-    )}
+    <section className="bg-gray-100 min-h-screen px-6 py-16 sm:px-8 lg:px-12">
+      <div className=" mx-auto">
+        {/* <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">
+          Terms & Conditions
+        </h1> */}
+
+        {loading ? (
+          <div className="text-center text-gray-600">Loading terms and conditions...</div>
+        ) : (
+          <div
+            className="space-y-6 text-base sm:text-lg text-black"
+            dangerouslySetInnerHTML={{ __html: terms?.renderedContent }}
+          />
+        )}
+      </div>
     </section>
   );
 };

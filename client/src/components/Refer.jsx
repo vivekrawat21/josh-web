@@ -83,7 +83,7 @@ const ReferAndEarn = () => {
                     </Label>
                     <Input
                       id="link"
-                      defaultValue={user?.sharableReferralCode}
+                      defaultValue={`${referralHeader}${user?.sharableReferralCode}`}
                       readOnly
                       className="w-full"
                     />

@@ -33,6 +33,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_SSH_HOST }} << 'EOF'
           cd josh-web
           git pull origin main
+          git rebase
           cd client
           # Ensure Node.js and npm are installed
           if ! command -v node &> /dev/null; then

@@ -45,7 +45,7 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-white lg:bg-gradient-to-br lg:from-orange-50 lg:to-blue-50 flex flex-col lg:flex-row items-center min-h-screen px-4 sm:px-6 mt-8">
+    <div className="bg-white lg:bg-gradient-to-br lg:from-orange-50 lg:to-blue-50 flex flex-col lg:flex-row items-center min-h-screen px-4 sm:px-6 mt-16">
       {/* Image Section */}
       <div className="hidden lg:flex w-1/2 justify-start pr-8">
         <img

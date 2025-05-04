@@ -63,7 +63,7 @@ const AddBundleCourse = ({ bundle, refreshBundle }) => {
     setSubmitting(true);
     try {
       await axios.patch(
-        `${BASE_URL}/bundle/add-courses`,
+        `${BASE_URL}/bundle/addCourses`,
         { bundleId: bundle._id, courses: selectedCourses },
         { withCredentials: true }
       );

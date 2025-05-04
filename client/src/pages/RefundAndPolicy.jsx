@@ -1,11 +1,11 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../utils/utils";
-const RefundPolicy = () => {
+
+const RefundAndPolicy = () => {
   const [policy, setPolicy] = useState("");
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchPolicy = async () => {
       try {
@@ -16,46 +16,33 @@ const RefundPolicy = () => {
           setPolicy(res.data.data);
         }
       } catch (error) {
-        console.error("Error fetching disclaimer:", error);
+        console.error("Error fetching refund policy:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchPolicy();
   }, []);
-  
+
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4 text-orange-600">Refund Policy</h1>
-      {/* <p className="mb-4">
-        At <strong>Joshguru</strong>, we value your satisfaction. Due to the digital nature of
-        our services and courses, we maintain a no refund policy once the purchase is
-        completed.
-      </p>
-
-      <p className="mb-4">
-        We provide ample previews, course content details, and support to help you
-        make an informed decision before enrolling.
-      </p>
-
-      <p className="mb-4">
-        In rare cases of duplicate payment or incorrect transaction, we will evaluate
-        the issue and refund upon verification within 7–10 business days.
-      </p>
-
-      <p className="mb-4 font-semibold text-orange-500">
-        Please ensure you read all course details and FAQs before purchase.
-      </p> */}
-          {loading ? (
-      <p>Loading...</p>
-    ) : (
-      <div
-        className="prose prose-orange max-w-none"
-        dangerouslySetInnerHTML={{ __html: policy?.renderedContent }}
-      />
-    )}
+    <div className="bg-white min-h-screen px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto ">
+        {/* Optional Title */}
+        {/* <h1 className="text-3xl font-bold mb-4 text-orange-600">Refund Policy</h1> */}
+        
+        {/* Loading State */}
+        {loading ? (
+          <p className="text-center text-gray-500">Loading refund policy...</p>
+        ) : (
+          // Render the fetched policy content
+          <div
+            className="space-y-6 text-base sm:text-lg text-black"
+            dangerouslySetInnerHTML={{ __html: policy?.renderedContent }}
+          />
+        )}
+      </div>
     </div>
   );
 };
 
-export default RefundPolicy;
+export default RefundAndPolicy;

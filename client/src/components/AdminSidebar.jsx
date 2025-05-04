@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaBook, FaGift,  FaSignOutAlt, FaVideo } from 'react-icons/fa';
+import { MdPolicy } from 'react-icons/md';
 import {BiSolidOffer} from 'react-icons/bi';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -29,7 +30,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
       initial={{ x: -100, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="hidden md:flex flex-col bg-white shadow-lg p-5 w-1/5 min-h-screen text-base  "
+      className="hidden md:flex flex-col bg-white shadow-lg p-5 w-1/5 min-h-screen text-base fixed  top-0 "
 
     >
       <Link
@@ -37,7 +38,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
         className="flex items-center justify-between w-full text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
       >
         <div className="flex items-center gap-2">
-          <FaUser className="text-gray-600" /> Dashboard
+          <MdPolicy  /> Privacy And Policy 
         </div>
       </Link>
       <Link to="/admin/courses" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg ">

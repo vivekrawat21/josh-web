@@ -48,16 +48,17 @@ const Admin = () => {
         />
       )}
       {/* Main Content */}
-      <div className="w-full md:w-4/5 p-6">
-        {!isLoggedIn ? (
-          <AdminLogin
-            setIsLoggedIn={setIsLoggedIn}
-            toggleLoggedIn={toggleLoggedIn}
-          />
-        ) : (
-          <Outlet />
-        )}
-      </div>
+      <div className="flex-1 md:ml-[20%] p-6">
+    {!isLoggedIn ? (
+      <AdminLogin
+        setIsLoggedIn={setIsLoggedIn}
+        toggleLoggedIn={toggleLoggedIn}
+      />
+    ) : (
+      <Outlet />
+    )}
+  </div>
+
     </div>
   );
 };

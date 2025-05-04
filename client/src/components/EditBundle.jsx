@@ -1,10 +1,12 @@
 import { BASE_URL } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import CustomToast from '@/components/CustomToast';
 
 const EditBundle = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [bundle, setBundle] = useState({
     bundleName: '',
     description: '',
@@ -16,13 +18,13 @@ const EditBundle = () => {
     whyBundle: []
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [isImageLoading, setIsImageLoading] = useState(false); // New state for image loading
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [toast, setToast] = useState(null);
+  const [toastMessage, setToastMessage] = useState(null);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     fetchBundleData();
+    // eslint-disable-next-line
   }, [id]);
 
   const fetchBundleData = async () => {
@@ -44,7 +46,6 @@ const EditBundle = () => {
       });
       setError(null);
     } catch (error) {
-      console.error('Error fetching bundle data:', error);
       setError('Failed to load bundle data. Please try again.');
     } finally {
       setIsLoading(false);
@@ -53,8 +54,7 @@ const EditBundle = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const newValue = type === 'checkbox' ? checked : value;
-    setBundle({ ...bundle, [name]: newValue });
+    setBundle({ ...bundle, [name]: type === 'checkbox' ? checked : value });
   };
 
   const handleWhyChange = (index, value) => {
@@ -76,7 +76,7 @@ const EditBundle = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setBundle({ ...bundle, bundleImage: file }); // Store the file object
+      setBundle({ ...bundle, bundleImage: file });
     }
   };
 
@@ -92,27 +92,22 @@ const EditBundle = () => {
       formData.append('hasDiscount', bundle.hasDiscount);
       formData.append('isSpecial', bundle.isSpecial);
       formData.append('whyBundle', JSON.stringify(bundle.whyBundle));
-
-      // Only append the image if it's been selected
       if (bundle.bundleImage instanceof File) {
-        formData.append('image', bundle.bundleImage);
+        formData.append('bundleImage', bundle.bundleImage);
       }
 
-      const res = await axios.put(`${BASE_URL}/bundle/updateBundle/${id}`, formData, {
+      await axios.patch(`${BASE_URL}/bundle/${id}`, formData, {
         withCredentials: true,
-        headers: {
-          'Content-Type': 'multipart/form-data', // Ensure that it's treated as form data
-        }
       });
 
-      console.log('Bundle updated:', res.data);
-      setSuccessMessage('Bundle updated successfully!');
-      setToast('Bundle updated successfully!');
-      setTimeout(() => setToast(null), 3000); // Custom toast disappears after 3 seconds
+      setToastMessage({ type: 'success', message: 'Bundle updated successfully!' });
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+        navigate(-1, { state: { refresh: true } });
+      }, 1500);
     } catch (error) {
-      console.error('Error updating bundle:', error);
       setError('Failed to update bundle. Please try again.');
-      setTimeout(() => setError(''), 3000);
     } finally {
       setIsLoading(false);
     }
@@ -121,53 +116,57 @@ const EditBundle = () => {
   if (isLoading && !bundle.bundleName) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800 border-b pb-2">Edit Bundle</h2>
-
-      {/* Custom Toast */}
-      {toast && (
-        <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md">
-          {toast}
-        </div>
+    <div className="p-5 max-w-3xl mx-auto bg-white shadow-md rounded-lg text-sm relative">
+      {/* Toast */}
+      {showToast && (
+        <CustomToast
+          type={toastMessage.type}
+          message={toastMessage.message}
+          onClose={() => setShowToast(false)}
+        />
       )}
 
+      {/* Top right back button */}
+      <button
+        type="button"
+        onClick={() => window.history.back()}
+        className="absolute top-5 right-5 bg-black text-white px-4 py-1.5 rounded hover:bg-gray-800 text-sm"
+      >
+        Back
+      </button>
+
+      <h2 className="text-2xl font-semibold mb-5 text-gray-800 border-b pb-2">Edit Bundle</h2>
+
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+        <div className="mb-3 p-2 bg-red-100 text-red-700 rounded-md text-sm">
           {error}
         </div>
       )}
 
-      {successMessage && (
-        <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md">
-          {successMessage}
-        </div>
-      )}
-
-      <form onSubmit={updateData} className="space-y-6">
-        <div className="space-y-2">
-          <label htmlFor="bundleName" className="block text-sm font-medium text-gray-700">
+      <form onSubmit={updateData} className="space-y-5">
+        <div>
+          <label htmlFor="bundleName" className="block text-gray-700 mb-1 text-sm font-medium">
             Bundle Name
           </label>
           <input
             id="bundleName"
-            type="text"
             name="bundleName"
             value={bundle.bundleName}
             onChange={handleChange}
-            className="w-full border border-gray-300 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border border-gray-300 px-3 py-1.5 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
             placeholder="Enter bundle name"
             required
           />
         </div>
 
-        <div className="space-y-2">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+        <div>
+          <label htmlFor="description" className="block text-gray-700 mb-1 text-sm font-medium">
             Description
           </label>
           <textarea
@@ -175,159 +174,140 @@ const EditBundle = () => {
             name="description"
             value={bundle.description}
             onChange={handleChange}
-            rows="4"
-            className="w-full border border-gray-300 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter bundle description"
+            rows="3"
+            className="w-full border border-gray-300 px-3 py-1.5 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+            placeholder="Enter description"
             required
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-              Price ($)
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="price" className="block text-gray-700 mb-1 text-sm font-medium">
+              Price (₹)
             </label>
             <input
               id="price"
-              type="number"
               name="price"
+              type="number"
               value={bundle.price}
               onChange={handleChange}
-              className="w-full border border-gray-300 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter price"
+              className="w-full border border-gray-300 px-3 py-1.5 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
               min="0"
-              step="0.01"
               required
             />
           </div>
-
-          <div className="space-y-2">
-            <label htmlFor="discount" className="block text-sm font-medium text-gray-700">
-              Discount ($)
+          <div>
+            <label htmlFor="discount" className="block text-gray-800 mb-1 text-sm font-medium">
+              Discount (%)
             </label>
             <input
               id="discount"
-              type="number"
               name="discount"
+              type="number"
               value={bundle.discount}
               onChange={handleChange}
-              className="w-full border border-gray-300 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter discount amount"
+              className="w-full border border-gray-400 px-3 py-1.5 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm text-gray-900"
               min="0"
-              step="0.01"
+              max="100"
+              step="1"
+              placeholder="e.g. 10"
             />
           </div>
         </div>
 
-        {/* Image Display */}
-        <div className="space-y-2">
-          <label htmlFor="bundleImage" className="block text-sm font-medium text-gray-700">
+        <div>
+          <label htmlFor="bundleImage" className="block text-gray-700 mb-1 text-sm font-medium">
             Image
           </label>
-
-          {/* Show existing image if available */}
           {bundle.bundleImage && typeof bundle.bundleImage === 'string' && (
-            <div className="mb-4">
-              <img src={bundle.bundleImage} alt="Bundle Preview" className="w-32 h-32 object-cover rounded-md" />
-            </div>
+            <img src={bundle.bundleImage} alt="Preview" className="w-24 h-24 object-cover rounded-md mb-2" />
           )}
-
-          {/* Show the image if it's a file (new image uploaded) */}
           {bundle.bundleImage && typeof bundle.bundleImage !== 'string' && (
-            <div className="mb-4">
-              <img src={URL.createObjectURL(bundle.bundleImage)} alt="Bundle Preview" className="w-32 h-32 object-cover rounded-md" />
-            </div>
+            <img src={URL.createObjectURL(bundle.bundleImage)} alt="Preview" className="w-24 h-24 object-cover rounded-md mb-2" />
           )}
-
-          {/* File input to upload new image */}
           <input
             id="bundleImage"
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="w-80 border border-gray-300 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border border-gray-300 px-3 py-1.5 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-6">
-          <label className="inline-flex items-center cursor-pointer">
+        <div className="flex flex-wrap gap-4">
+          <label className="flex items-center gap-2 text-gray-700 text-sm">
             <input
               type="checkbox"
               name="hasDiscount"
               checked={bundle.hasDiscount}
               onChange={handleChange}
-              className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              className="h-4 w-4 rounded"
             />
-            <span className="ml-2 text-gray-700">Has Discount</span>
+            Has Discount
           </label>
-          <label className="inline-flex items-center cursor-pointer">
+          <label className="flex items-center gap-2 text-gray-700 text-sm">
             <input
               type="checkbox"
               name="isSpecial"
               checked={bundle.isSpecial}
               onChange={handleChange}
-              className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              className="h-4 w-4 rounded"
             />
-            <span className="ml-2 text-gray-700">Special Bundle</span>
+            Special Bundle
           </label>
         </div>
 
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium text-gray-700">Bundle Benefits</h3>
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <h3 className="text-gray-800 font-medium text-sm">Bundle Benefits</h3>
             <button
               type="button"
               onClick={addWhyPoint}
-              className="px-4 py-1 text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              className="text-xs px-3 py-1 bg-black text-white rounded hover:bg-gray-800"
             >
-              <span className="text-xl">+</span> Add Benefit
+              + Add Benefit
             </button>
           </div>
-
           {bundle.whyBundle.length === 0 && (
-            <p className="text-gray-500 italic text-sm">
-              No benefits added. Click the button above to add your first benefit.
-            </p>
+            <p className="text-gray-500 italic text-xs">No benefits added yet.</p>
           )}
-
           {bundle.whyBundle.map((point, index) => (
             <div key={index} className="flex items-center gap-2">
               <input
                 type="text"
                 value={point}
                 onChange={(e) => handleWhyChange(index, e.target.value)}
-                className="flex-1 border border-gray-300 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="flex-1 border border-gray-400 px-3 py-1 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm text-gray-900"
                 placeholder={`Benefit #${index + 1}`}
               />
               <button
                 type="button"
                 onClick={() => removeWhyPoint(index)}
-                className="p-2 text-red-500 hover:text-red-700 focus:outline-none"
-                aria-label="Remove benefit"
+                className="text-red-600 hover:text-red-800 text-lg px-2"
+                aria-label="Remove"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
+                &times;
               </button>
             </div>
           ))}
         </div>
 
-        <div className="pt-4 flex items-center justify-between">
+        <div className="pt-4 flex justify-between">
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+            className="text-sm px-4 py-1.5 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="text-sm px-4 py-1.5 bg-black text-white rounded hover:bg-gray-800 disabled:opacity-50 flex items-center gap-2"
           >
             {isLoading ? (
-              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+              <div className="animate-spin h-4 w-4 border-t-2 border-b-2 border-white rounded-full"></div>
             ) : (
               'Save Changes'
             )}
