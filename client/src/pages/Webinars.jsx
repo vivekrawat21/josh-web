@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import axios from "axios"
 import { BASE_URL } from "../utils/utils";
 import { useNavigate } from "react-router-dom"
+import { toast } from "../hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 
 const Webinars = () => {
 
@@ -28,6 +30,11 @@ const Webinars = () => {
             setWebinars(response.data.data.webinars)
         } catch (error) {
             console.error("Error fetching webinars:", error)
+            toast({
+                title: "Error",
+                description: error || "Failed to fetch webinars. Please try again later.",
+                variant: "destructive",
+            })
         }
     }
 
@@ -52,38 +59,43 @@ const Webinars = () => {
     }
 
     const handleSubmitRegistration = async(e) => {
-        e.preventDefault()
-        console.log("Form submitted")
-        
-        console.log("Selected Webinar ID:", selectedWebinar)
+        e.preventDefault();
+        console.log("Form submitted");
+
+        console.log("Selected Webinar ID:", selectedWebinar);
         if (selectedWebinar) {
-            console.log("Selected Webinar ID:", selectedWebinar)
+            console.log("Selected Webinar ID:", selectedWebinar);
             const formData = new FormData(e.target);
             const registerUserData = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                mobile: formData.get('mobile'),
+            name: formData.get('name'),
+            email: formData.get('email'),
+            mobile: formData.get('mobile'),
             };
             console.log("Register User Data:", registerUserData);
-            
+
+            try {
             const response = await axios.post(`${BASE_URL}/webinar/register/${selectedWebinar}`, registerUserData, {
                 headers: {
-                    'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
                 },
-            })
-
-            console.log("Hello vishal")
+            });
 
             if (response) {
-                setRegisteredWebinars([...registeredWebinars, selectedWebinar])
-                setFormSubmitted(true)
+                setRegisteredWebinars([...registeredWebinars, selectedWebinar]);
+                setFormSubmitted(true);
 
                 setTimeout(() => {
-                    setIsModalOpen(false)
-                    setFormSubmitted(false)
-                }, 3000)
-            }else{
-                console.error("Registration failed")
+                setIsModalOpen(false);
+                setFormSubmitted(false);
+                }, 3000);
+            }
+            } catch (error) {
+            console.error("Registration failed:", error);
+            toast({
+                title: "Registration Failed",
+                description: error.message || "An error occurred. Please try again.",
+                variant: "destructive",
+            });
             }
         }
     }
@@ -283,6 +295,9 @@ const Webinars = () => {
                 )}
             </DialogContent>
             </Dialog>
+
+            {/* Add Toaster component */}
+            <Toaster />
         </div>
         </main>
     )

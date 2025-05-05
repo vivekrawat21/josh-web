@@ -8,6 +8,8 @@ import { useParams } from "react-router-dom"
 import axios from "axios"
 import { BASE_URL } from "../utils/utils"
 import CubeLoader from "@/components/CubeLoader"
+import { toast } from "../hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 
 const DigitalMarketingWebinar = () => {
     const { webinarId } = useParams()
@@ -28,7 +30,12 @@ const DigitalMarketingWebinar = () => {
                 setWebinar(response.data.data.webinar)
                 setLoading(false)
             } catch (err) {
-                setError(err.response?.data?.message || "Failed to fetch webinar")
+                setError(err.message || "Failed to fetch webinar")
+                toast({
+                    title: "Error",
+                    description: "Failed to fetch webinar details. Please try again later.",
+                    variant: "destructive",
+                })
                 setLoading(false)
             }
         }
@@ -89,6 +96,7 @@ const DigitalMarketingWebinar = () => {
         
         console.log("Selected Webinar ID:", webinarId)
         if (webinarId) {
+            try {
             console.log("Selected Webinar ID:", webinarId)
             const formData = new FormData(e.target);
             const registerUserData = {
@@ -100,24 +108,29 @@ const DigitalMarketingWebinar = () => {
             
             const response = await axios.post(`${BASE_URL}/webinar/register/${webinarId}`, registerUserData, {
                 headers: {
-                    'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
                 },
             })
-
-            console.log("Hello vishal")
 
             if (response) {
                 setRegisteredWebinars([...registeredWebinars, webinarId])
                 setSubmitted(true)
 
                 setTimeout(() => {
-                    setSubmitted(false)
+                setSubmitted(false)
                 }, 3000)
-            }else{
+            } else {
                 console.error("Registration failed")
             }
+            } catch (error) {
+            console.error("Error during registration:", error)
+            toast({
+                title: "Registration Failed",
+                description:error.message || "An error occurred while registering. Please try again later.",
+                variant: "destructive",
+            })
+            }
         }
-        setSubmitted(true)
     }
 
     const fadeIn = {
@@ -272,7 +285,7 @@ const DigitalMarketingWebinar = () => {
         </section>
 
         {/* About Section */}
-        <section id="about" className="py-20">
+        <section id="about" className="pb-10">
             <div className="container mx-auto px-4">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -639,6 +652,8 @@ const DigitalMarketingWebinar = () => {
             </div>
             </div>
         </section>
+
+        <Toaster/>
         </div>
     )
 }

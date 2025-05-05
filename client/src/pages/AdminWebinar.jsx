@@ -184,17 +184,19 @@ const AdminWebinar = () =>{
 
   const fetchWebinars = async () => {
     try {
-      setIsLoading(true)
-      const response = await axios.get(`${BASE_URL}/webinar/`)
-      console.log(response.data.data.webinars)
-      setWebinars(response.data.data.webinars)
-      setIsLoading(false)
+      setIsLoading(true);
+      const response = await axios.get(`${BASE_URL}/webinar/`);
+      setWebinars(response.data.data.webinars);
     } catch (error) {
-      console.error("Error fetching webinars:", error)
+      toast({
+        title: "Failed to load webinars",
+        description: error.message,
+        variant: "destructive",
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchWebinars()
@@ -656,7 +658,7 @@ const AdminWebinar = () =>{
       setAgendaItems([{ id: 1, title: "", description: "", timeToComplete: "" }])
       setAgendaErrors({})
     } catch (error) {
-      console.error("Error creating webinar:", error)
+      console.error("Error creating webinar:", error.response?.data?.message)
       const errorMessage = error.response?.data?.message || "Failed to create webinar"
       setGeneralErrors([errorMessage])
       toast({
