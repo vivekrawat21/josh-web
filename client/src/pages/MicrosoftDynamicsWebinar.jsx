@@ -9,138 +9,151 @@ import { useParams } from "react-router-dom"
 import axios from "axios"
 import { BASE_URL } from "../utils/utils"
 import CubeLoader from "@/components/CubeLoader"
+import { toast } from "../hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 
 const MicrosoftDynamicsWebinar = () => {
   const { webinarId } = useParams()
-    const [email, setEmail] = useState("")
-    const [name, setName] = useState("")
-    const [submitted, setSubmitted] = useState(false)
-    const [isVisible, setIsVisible] = useState(false)
-    const [webinar, setWebinar] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [registeredWebinars, setRegisteredWebinars] = useState([])
+  const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
+  const [submitted, setSubmitted] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+  const [webinar, setWebinar] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [registeredWebinars, setRegisteredWebinars] = useState([])
 
-    useEffect(() => {
-        const fetchWebinar = async () => {
-            try {
-                console.log(webinarId);
-                
-                const response = await axios.get(`${BASE_URL}/webinar/${webinarId}`)
-                setWebinar(response.data.data.webinar)
-                setLoading(false)
-            } catch (err) {
-                setError(err.response?.data?.message || "Failed to fetch webinar")
-                setLoading(false)
-            }
-        }
+  useEffect(() => {
+      const fetchWebinar = async () => {
+          try {
+              console.log(webinarId);
+              
+              const response = await axios.get(`${BASE_URL}/webinar/${webinarId}`)
+              setWebinar(response.data.data.webinar)
+              setLoading(false)
+          } catch (err) {
+              setError(err.message || "Failed to fetch webinar")
+              toast({
+                  title: "Error",
+                  description: "Failed to fetch webinar details. Please try again later.",
+                  variant: "destructive",
+              })
+              setLoading(false)
+          }
+      }
 
-        fetchWebinar()
-        setIsVisible(true)
-    }, [webinarId])
+      fetchWebinar()
+      setIsVisible(true)
+  }, [webinarId])
 
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            timeZone: 'UTC',
-            month: 'long',      
-            day: 'numeric',     
-            year: 'numeric'     
-        });
-    }
+  function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+          timeZone: 'UTC',
+          month: 'long',      
+          day: 'numeric',     
+          year: 'numeric'     
+      });
+  }
 
-    const calculateDaysLeft = () => {
-        if (!webinar?.date) return 0;
-        
-        const webinarDate = new Date(webinar.date);
-        const currentDate = new Date();
-        
-        // Calculate difference in milliseconds
-        const differenceMs = webinarDate - currentDate;
-        
-        // Convert milliseconds to days
-        return Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
-    };
+  const calculateDaysLeft = () => {
+      if (!webinar?.date) return 0;
+      
+      const webinarDate = new Date(webinar.date);
+      const currentDate = new Date();
+      
+      // Calculate difference in milliseconds
+      const differenceMs = webinarDate - currentDate;
+      
+      // Convert milliseconds to days
+      return Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
+  };
 
-    const formatWebinarTime = (startTime, duration) => {
-        try {
-            const [startHour, startMinute] = startTime.split(':').map(Number);
-            
-            if (isNaN(startHour)) throw new Error('Invalid start time');
-            if (isNaN(duration)) throw new Error('Invalid duration');
-        
-            const startDate = new Date();
-            startDate.setHours(startHour, startMinute || 0, 0, 0);
-            
-            const endDate = new Date(startDate.getTime() + duration * 60000);
-            
-            const options = { hour: 'numeric', minute: '2-digit', hour12: true };
-            
-            return `${startDate.toLocaleTimeString('en-US', options)} - ${
-                endDate.toLocaleTimeString('en-US', options)
-            } EST`;
-            } catch (error) {
-            console.error('Error formatting time:', error);
-            return 'Time not available';
-        }
-    };
+  const formatWebinarTime = (startTime, duration) => {
+      try {
+          const [startHour, startMinute] = startTime.split(':').map(Number);
+          
+          if (isNaN(startHour)) throw new Error('Invalid start time');
+          if (isNaN(duration)) throw new Error('Invalid duration');
+      
+          const startDate = new Date();
+          startDate.setHours(startHour, startMinute || 0, 0, 0);
+          
+          const endDate = new Date(startDate.getTime() + duration * 60000);
+          
+          const options = { hour: 'numeric', minute: '2-digit', hour12: true };
+          
+          return `${startDate.toLocaleTimeString('en-US', options)} - ${
+              endDate.toLocaleTimeString('en-US', options)
+          } EST`;
+          } catch (error) {
+          console.error('Error formatting time:', error);
+          return 'Time not available';
+      }
+  };
 
-    const handleSubmit = async(e) => {
-        e.preventDefault()
-        console.log("Form submitted")
-        
-        console.log("Selected Webinar ID:", webinarId)
-        if (webinarId) {
-            console.log("Selected Webinar ID:", webinarId)
-            const formData = new FormData(e.target);
-            const registerUserData = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                mobile: formData.get('mobile'),
-            };
-            console.log("Register User Data:", registerUserData);
-            
-            const response = await axios.post(`${BASE_URL}/webinar/register/${webinarId}`, registerUserData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
+  const handleSubmit = async(e) => {
+      e.preventDefault()
+      console.log("Form submitted")
+      
+      console.log("Selected Webinar ID:", webinarId)
+      if (webinarId) {
+          try {
+          console.log("Selected Webinar ID:", webinarId)
+          const formData = new FormData(e.target);
+          const registerUserData = {
+              name: formData.get('name'),
+              email: formData.get('email'),
+              mobile: formData.get('mobile'),
+          };
+          console.log("Register User Data:", registerUserData);
+          
+          const response = await axios.post(`${BASE_URL}/webinar/register/${webinarId}`, registerUserData, {
+              headers: {
+              'Content-Type': 'application/json',
+              },
+          })
 
-            console.log("Hello vishal")
+          if (response) {
+              setRegisteredWebinars([...registeredWebinars, webinarId])
+              setSubmitted(true)
 
-            if (response) {
-                setRegisteredWebinars([...registeredWebinars, webinarId])
-                setSubmitted(true)
+              setTimeout(() => {
+              setSubmitted(false)
+              }, 3000)
+          } else {
+              console.error("Registration failed")
+          }
+          } catch (error) {
+          console.error("Error during registration:", error)
+          toast({
+              title: "Registration Failed",
+              description:error.message || "An error occurred while registering. Please try again later.",
+              variant: "destructive",
+          })
+          }
+      }
+  }
 
-                setTimeout(() => {
-                    setSubmitted(false)
-                }, 3000)
-            }else{
-                console.error("Registration failed")
-            }
-        }
-        setSubmitted(true)
-    }
+  const fadeIn = {
+      hidden: { opacity: 0, y: 20 },
+      visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  }
 
-    const fadeIn = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-    }
+  const staggerContainer = {
+      hidden: { opacity: 0 },
+      visible: {
+      opacity: 1,
+      transition: {
+          staggerChildren: 0.2,
+      },
+      },
+  }
 
-    const staggerContainer = {
-        hidden: { opacity: 0 },
-        visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.2,
-        },
-        },
-    }
-
-    if(loading){
-        return (
-            <CubeLoader/>
-        )
-    }
+  if(loading){
+      return (
+          <CubeLoader/>
+      )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50/50 to-white">
@@ -273,7 +286,7 @@ const MicrosoftDynamicsWebinar = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20">
+      <section id="about" className="pb-10">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -639,6 +652,8 @@ const MicrosoftDynamicsWebinar = () => {
           </div>
         </div>
       </section>
+
+      <Toaster />
     </div>
   )
 }
