@@ -59,21 +59,44 @@ const AssignCourse = ({ assignType, studentId }) => {
     setName(searchValue);
 
     // Standardize the list to check against both bundleName and title
-    const standardizedList = list.map((item) => ({
-      ...item,
-      displayName: item.bundleName || item.title || "",
-    }));
-
+    let standardizedList = [];
+    if(assignType === "course") {
+      standardizedList = list.map((item) => ({
+        ...item,
+        displayName: item.title   || "",
+      }));
+    }
+    else {
+      standardizedList = list.map((item) => ({
+        ...item,
+        displayName: item.bundleName   || "",
+      }));
+    }
+   console.log("standardizedList")
+    standardizedList.forEach(item => {
+      console.log("Course Title:", item.title,  item._id);
+    });
     // If searchValue is at least 3 characters long, filter the list
     if (searchValue.length > 2) {
-      const results = standardizedList.filter((item) =>
-        item.displayName.toLowerCase().includes(searchValue)
-      );
-      setFilteredList(results);
+      if(assignType === "course") {
+        const results = standardizedList.filter((item) =>
+          item.title.toLowerCase().includes(searchValue)
+        );
+        setFilteredList(results);
+      }
+      else {
+        const results = standardizedList.filter((item) =>
+          item.displayName.toLowerCase().includes(searchValue)
+        );
+        setFilteredList(results);
+      }
+     
     } else {
       setFilteredList([]); // Clear filtered list if search term is too short
     }
   };
+//  console.log("courses list", list);
+
 
   const handleCourseSelect = (course) => {
     setSelectedCourse(course); // Set the selected course
@@ -86,12 +109,12 @@ const AssignCourse = ({ assignType, studentId }) => {
         assignType === "course"
           ? `${BASE_URL}/course/assignCourse`
           : `${BASE_URL}/bundle/assignBundle`;
-
+       let field = assignType === "course" ? "courseId" : "bundleId";
       const response = await axios.patch(
         endpoint,
         {
           studentId,
-          courseId: selectedCourse?._id,
+          [field]: selectedCourse?._id,
         },
         {
           withCredentials: true,
