@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AddNewBundle from './AddNewBundle';
 import CustomToast from '@/components/CustomToast';
-
+import exportToExcel from '@/utils/exportToExcel';
 const AdminBundles = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addBundle, setAddBundle] = useState(false);
@@ -91,7 +91,14 @@ const AdminBundles = () => {
       bundle.bundleName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       bundle.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+  const exportData = (filteredBundles.length > 0 ? filteredBundles : bundles).map(item => ({
+    Name: item.bundleName || "",
+    Price: item.price || "",
+    Status: item.isSpecial ? "Special" : "Standard",
+    ID: item._id,
+    // Topics: Array.isArray(item.courses) ? item.course.title.join(", ") : "", // Convert array to comma-separated string
+    // Tags: Array.isArray(item.bundles) ? item.bundles.bundleName.join(", ") : "",       // Another example
+  }));
     return (
       <div className="max-w-screen mx-auto p-6 bg-white shadow rounded-lg">
         {showToast && (
@@ -102,15 +109,26 @@ const AdminBundles = () => {
           />
         )}
   
-        <div className='flex justify-between items-center my-4'>
-          <h1 className="text-2xl font-semibold text-gray-800">Bundles Dashboard</h1>
-          <Button 
-            onClick={() => setAddBundle(!addBundle)}
-            className="bg-black text-white hover:bg-gray-800"
-          >
-            {addBundle ? "Cancel" : "Add New Bundle"}
-          </Button>
-        </div>
+  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 my-4">
+  <h1 className="text-2xl font-semibold text-gray-800">Bundles Dashboard</h1>
+
+  <div className="flex flex-col sm:flex-row gap-2">
+    <Button 
+      onClick={() => setAddBundle(!addBundle)}
+      className="bg-black text-white hover:bg-gray-800 w-full sm:w-auto"
+    >
+      {addBundle ? "Cancel" : "Add New Bundle"}
+    </Button>
+
+    <Button
+      onClick={() => exportToExcel(exportData, "Bundles")}
+      className="bg-green-600 text-white rounded w-full sm:w-auto"
+    >
+      Export to Excel
+    </Button>
+  </div>
+</div>
+
   
         {addBundle && (
           <div className="my-4 py-4 px-6 border-2 bg-white rounded-lg shadow-sm">
