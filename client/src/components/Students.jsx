@@ -22,7 +22,7 @@ const Students = () => {
   useEffect(() => {
     fetchStudents();
   }, []);
- console.log(students)
+
   const filteredStudents = students.filter((student) =>
     student.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
