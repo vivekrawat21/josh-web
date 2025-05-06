@@ -155,7 +155,7 @@ const DigitalMarketingWebinar = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-orange-50/50 to-white">
+        <div className="min-h-screen bg-gradient-to-b from-orange-500 to-white">
         {/* Hero Section */}
         <section className="relative pt-20 pb-48 md:pb-56 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-orange-600 to-orange-500 -z-10"></div>
@@ -285,7 +285,7 @@ const DigitalMarketingWebinar = () => {
         </section>
 
         {/* About Section */}
-        <section id="about" className="pb-10">
+        <section id="about" className="py-10">
             <div className="container mx-auto px-4">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

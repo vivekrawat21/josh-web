@@ -156,7 +156,7 @@ const MicrosoftDynamicsWebinar = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50/50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-purple-500 to-white">
       {/* Hero Section */}
       <section className="relative pt-20 pb-48 md:pb-56 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-purple-500 -z-10"></div>
