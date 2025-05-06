@@ -15,7 +15,7 @@ import DefaultProfile from "../assets/DefaultProfile.png";
 
 const MyWallet = () => {
   const user = useSelector((state) => state?.user);
-  // console.log(user)
+
   const getIncomeBreakdown = (user) => {
     const today = new Date();
     const startOfToday = new Date(today.setHours(0, 0, 0, 0));

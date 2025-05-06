@@ -160,7 +160,7 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
         type: "success"
       });
       setShowToast(true);
-      console.log(res);
+    
     } catch (error) {
       console.error(error);
       setToast({
