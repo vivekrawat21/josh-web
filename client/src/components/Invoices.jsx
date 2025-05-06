@@ -31,11 +31,7 @@ const Courses = () => {
 
     fetchUserCourses();
   }, [user]);
-  console.log("this is user")
-console.log(user)
-console.log("user courses", userCourses)
 
-console.log("user bundles", userBundles)
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-6 flex flex-col items-center">
       <motion.div

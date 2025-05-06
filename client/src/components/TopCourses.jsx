@@ -18,9 +18,9 @@ import { useNavigate } from "react-router-dom";
 const TopCourses = () => {
   const { courses, loading, error } = useSelector((state) => state.course);
   const trendingCourses = courses[0]?.filter((course) => course.isTrending) || [];
-  // console.log(JSON.stringify(trendingCourses));
+
   const user = useSelector((state) => state.user);
-  console.log(user);
+ 
   const navigate = useNavigate();
 
   // Check if the user is enrolled

@@ -32,7 +32,7 @@ const Home = () => {
         const mentorList = response.data.data.mentors;
         // setMentors(mentorList);
         dispatch(addMentors(mentorList)); // <-- Dispatching here
-        console.log(mentorList);
+      
       } catch (error) {
         console.error("Error fetching mentors:", error);
       }

@@ -73,7 +73,7 @@ useEffect(() => {
         setTimeout(() => {
           setShowToast(false);
         }, 3000);}
-      console.log('Updated successfully', res.data);
+      // console.log('Updated successfully', res.data);
     } catch (err) {
       console.error('Error updating:', err);
     } finally {

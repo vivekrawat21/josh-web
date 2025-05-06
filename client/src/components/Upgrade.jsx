@@ -14,7 +14,7 @@ const Upgrade = () => {
   };
 
   const handleContinue = () => {
-    console.log("Selected Bundles:", selectedBundles);
+    // console.log("Selected Bundles:", selectedBundles);
   };
 
   const isLoading = bundles.length === 0;
