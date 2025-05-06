@@ -156,7 +156,7 @@ const OdooERPWebinar = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50/50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-green-500 to-white">
       {/* Hero Section */}
       <section className="relative pt-20 pb-48 md:pb-56 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-green-600 to-green-500 -z-10"></div>
