@@ -1,56 +1,36 @@
-
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+
 const About = () => {
   const galleryData = [
     {
       title: "Events",
       image: "/event1.webp",
       path: "/gallery/events",
+      date: "March 10, 2024",
     },
     {
       title: "Trips",
       image: "/event2.webp",
       path: "/gallery/Trips",
+      date: "March 10, 2024",
     },
     {
       title: "Occasions",
       image: "/event3.webp",
       path: "/gallery/occassions",
+      date: "April 5, 2024",
     },
   ];
-  const teamMembers = [
-    {
-      id: 1,
-      name: "John Doe",
-      role: "Project Manager",
-      imageUrl: "/member1.jpg",
-      description:
-        "John leads our projects with a focus on delivering quality and innovation. He has over 10 years of experience managing teams.",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-            role: "Lead Developer",
-      imageUrl: "/member2.jpg",
-      description:
-        "Jane is an expert in full-stack development and ensures that our technical solutions are cutting-edge and efficient.",
-    },
-    {
-      id: 3,
-      name: "Emily Johnson",
-      role: "UX/UI Designer",
-      imageUrl: "/member4.jpg",
-      description:
-        "Emily designs user-friendly interfaces and experiences, ensuring our products are intuitive and accessible.",
-    },
-  ];
-  const mentors= useSelector((state) => state.mentor?.mentors[0] || []);
+
+  const mentors = useSelector((state) => state.mentor?.mentors[0] || []);
+
   return (
-    <section className=" px-8 bg-gradient-to-b from-gray-50 to-white mt-20">
-      <div className="flex flex-col items-center justify-center gap-16">
-        {/* About Section */}
+    <section className="px-4 md:px-10 lg:px-20 py-10 bg-gradient-to-b from-gray-50 to-white mt-20">
+      <div className="flex flex-col items-center gap-12">
+
+        {/* About Banner */}
         <motion.div
           className="w-full max-w-6xl"
           initial={{ opacity: 0, y: 50 }}
@@ -60,58 +40,41 @@ const About = () => {
           <img
             src="/aboutus.jpeg"
             alt="About us"
-            className="w-full h-[400px] object-cover rounded-lg shadow-2xl"
+            className="w-full h-[400px] object-cover rounded-2xl shadow-2xl"
           />
         </motion.div>
 
-        {/* About section text */}
+        {/* About Text */}
         <motion.div
-          className="text-justify text-base md:text-lg lg:text-xl mt-6"
+          className="text-justify text-base md:text-lg lg:text-xl mt-4 max-w-5xl"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <p className="leading-relaxed text-gray-600 text-sm md:text-base">
-            Joshguru is an Ed-Tech Platform that Provides Skills development
-            program to all youth in India. Joshguru has various types of courses
-            available for Skills enhancement like Public Speaking, Personality
-            Development, English Speaking, Communication Skills, Preparation for
-            Interviews, Attraction Marketing, MS Excel, Social Media Mastery,
-            Website Designing, Graphic Designing, Finance Mastery, Artificial
-            Intelligence mastery, Stock Market, etc. Joshguru also provide you
-            an Opportunity to become an Affiliates with Joshguru and Earn
-            Commission on the promotion of Courses available on Joshguru.in
+          <p className="leading-relaxed text-gray-600">
+            Joshguru is an Ed-Tech Platform that provides skill development programs to youth across India. We offer a wide range of courses such as Public Speaking, Personality Development, English Communication, MS Excel, Social Media Mastery, Website Designing, AI Mastery, Stock Market, and more. Join us as a student or become an affiliate and earn commissions by promoting our courses.
           </p>
         </motion.div>
 
         {/* Founder Section */}
-        <div className="w-full max-w-6xl flex flex-col items-center justify-between gap-12 md:flex-row">
+        <div className="w-full max-w-6xl flex flex-col md:flex-row items-center gap-8">
           <motion.div
             className="md:w-1/2 text-center"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl text-orange-500 font-bold mb-8">
-              Our Founder
+            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+              <span className="text-black">Our </span>
+              <span className="text-orange-500">Founder</span>
             </h2>
-            <div className="w-full rounded-lg overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300">
-              <img
-                src="/founder.jpeg"
-                alt="Founder"
-                className="h-96 w-full object-cover"
-              />
+            <div className="overflow-hidden rounded-xl shadow-2xl hover:scale-105 transition duration-300">
+              <img src="/founder.jpeg" alt="Founder" className="h-96 w-full object-cover" />
             </div>
           </motion.div>
-          <div className="text-sm md:text-base lg:text-lg text-gray-700 md:w-1/2">
-            <p className="leading-relaxed text-justify">
-              Kamal Joshi is The Founder, Managing Director of'Joshguru Pvt
-              Ltd’. He has 10 year of experience in marketing industry. He is a
-              professional networker and marketing expert who built his career
-              in marketing industry last 11 Years and direct selling industry
-              which he entered at a young age of 24 in 2017. He created history
-              by touching the heights of success and by supporting youth in
-              becoming successful.
+          <div className="text-gray-700 md:w-1/2 text-justify">
+            <p className="leading-relaxed">
+              Kamal Joshi, the Founder and Managing Director of Joshguru Pvt. Ltd, has 10+ years of experience in the marketing industry. A professional networker who began his journey in direct selling at age 24, Kamal has empowered youth to become independent and successful through education and entrepreneurship.
             </p>
           </div>
         </div>
@@ -123,21 +86,15 @@ const About = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-2xl md:text-3xl lg:text-4xl text-orange-500 font-bold mb-6">
-            Our Mission
+          <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+            <span className="text-black">Our </span>
+            <span className="text-orange-500">Mission</span>
           </h2>
-          <div className="text-sm md:text-base lg:text-lg text-gray-700">
-            <p className="leading-relaxed text-justify">
-              Joshguru’s MISSION is to provide skills development education to
-              youth in every village and corner of India. Joshguru will help all
-              capableyouth to change their skills, their presence of mind and
-              the lives of their families . Our VISION is to make more and more
-              youth independent so that theydo not bother for jobs after 12th,
-              and can live their life in a better way ,"General Education
-              Requirements ".
-            </p>
-          </div>
+          <p className="text-gray-700 text-justify text-base md:text-lg leading-relaxed">
+            Our mission is to bring skill-based education to every corner of India, transforming youth into capable and independent individuals who can support themselves and their families through modern skills.
+          </p>
         </motion.div>
+
         {/* Vision Section */}
         <motion.div
           className="w-full max-w-6xl text-center"
@@ -145,40 +102,34 @@ const About = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-2xl md:text-3xl lg:text-4xl text-orange-500 font-bold mb-6">
-            Our Vision
-          </h2>
-          <div className="text-sm md:text-base lg:text-lg text-gray-700">
-            <p className="leading-relaxed text-justify">
-              At Joshguru, our vision is to empower the youth of India with
-              practical and modern skills that will not only enhance their
-              professional careers but also foster a culture of continuous
-              learning and personal development. We aim to bridge the gap
-              between traditional education and the current market demands,
-              ensuring that every individual, regardless of their background,
-              has access to high-quality, skills-oriented training. We envision
-              a future where every young person has the tools and resources to
-              become self-reliant and successful, transforming their lives and
-              the communities around them.
+          
+          <div className="bg-white shadow-md rounded-xl p-6 mt-4 relative">
+            <p className="text-gray-600 text-base md:text-lg leading-relaxed italic relative">
+              <span className="text-6xl text-orange-400 absolute -top-6 -left-4">“</span>
+              <span className="mx-6 block">
+                We aim to bridge the gap between traditional education and the current job market's demands, fostering a generation of self-reliant youth equipped with practical skills that empower them to thrive in their careers.
+              </span>
+              <span className="text-6xl text-orange-400 absolute -bottom-6 right-4 rotate-180">“</span>
             </p>
           </div>
         </motion.div>
 
         {/* Team Section */}
         <motion.div
-          className="w-full max-w-6xl text-center"
+          className="w-full max-w-6xl"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl text-orange-500 font-bold mb-12">
-            Meet Our Team
+          <h2 className="text-4xl lg:text-5xl font-bold text-center mb-6">
+            <span className="text-black">Meet Our </span>
+            <span className="text-orange-500">Team</span>
           </h2>
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
+          <div className="flex gap-6 overflow-x-auto pb-4 px-2 scroll-smooth">
             {mentors.map((member, index) => (
               <motion.div
                 key={member?._id}
-                className="bg-white p-8 rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-300"
+                className="min-w-[280px] bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
@@ -186,45 +137,48 @@ const About = () => {
                 <img
                   src={member?.profileImage || "/placeholder.svg"}
                   alt={member.name}
-                  className="w-48 h-48 mx-auto mb-6 rounded-full"
+                  className="w-40 h-40 mx-auto mb-4 rounded-full object-cover"
                 />
-                <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">
-                  {member?.name}
-                </h2>
-                <p className="text-orange-500 font-semibold mb-4">
-                  {member?.position}
-                </p>
-                <p className="text-sm leading-relaxed text-gray-600">
-                  {member?.about}
-                </p>
+                <h3 className="text-lg font-bold text-gray-800">{member?.name}</h3>
+                <p className="text-orange-500 font-medium">{member?.position}</p>
+                <p className="text-sm mt-2 text-gray-600">{member?.about}</p>
               </motion.div>
             ))}
           </div>
         </motion.div>
-        <section className="w-full px-6 py-10">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8 text-gray-900">Gallery</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {galleryData.map((item, index) => (
-            <Link
-              key={index}
-              to={item.path}
-              className="relative group overflow-hidden rounded-xl shadow-lg transition hover:shadow-2xl"
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <h3 className="text-white text-xl font-semibold">{item.title}</h3>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
 
+        {/* Gallery Section */}
+        <section className="w-full max-w-7xl">
+          <h2 className="text-4xl lg:text-5xl font-bold text-center mb-8">
+            <span className="text-black">Our </span>
+            <span className="text-orange-500">Gallery</span>
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4">
+            {galleryData.map((item, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.03 }}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="relative group overflow-hidden rounded-xl shadow-xl hover:shadow-2xl bg-white"
+              >
+                <Link to={item.path}>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                    <h3 className="text-white text-xl font-semibold">{item.title}</h3>
+                    <p className="text-gray-300 text-sm">{item.date}</p>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </section>
       </div>
     </section>
   );
