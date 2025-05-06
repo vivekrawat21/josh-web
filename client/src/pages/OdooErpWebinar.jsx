@@ -368,34 +368,43 @@ const OdooERPWebinar = () => {
           </motion.div>
 
           <div className="flex justify-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="group items-center lg:w-[30%]"
-              >
-                <div className="bg-white rounded-2xl overflow-hidden shadow-xl shadow-green-100/50 border border-green-100/50 transition-all duration-300 group-hover:-translate-y-2">
-                  <div className="h-64 bg-gradient-to-br from-green-400 to-green-600 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-                    <img
-                      src={webinar.presenterImage}
-                      alt="presenter Image"
-                      width={400}
-                      height={300}
-                      className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-                      <h3 className="text-2xl font-bold text-white mb-1">{webinar.presenterName}</h3>
-                      <p className="text-green-200">{webinar.presenterRole}</p>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className="group w-full lg:w-[60%]"
+                >
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl shadow-orange-100/50 border border-orange-100/50 transition-all duration-300 group-hover:-translate-y-2 flex flex-col md:flex-row">
+                    {/* Image Section */}
+                    <div className="md:w-1/2">
+                        <div className="h-64 md:h-full bg-gradient-to-br from-orange-400 to-orange-600 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+                        <img
+                            src={webinar.presenterImage}
+                            alt="presenter Image"
+                            width={400}
+                            height={300}
+                            className="object-cover w-full md:h-72 h-full transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 p-6 z-20 md:hidden">
+                            <h3 className="text-2xl font-bold text-white mb-1">{webinar.presenterName}</h3>
+                            <p className="text-orange-200">{webinar.presenterRole}</p>
+                        </div>
+                        </div>
                     </div>
-                  </div>
-                  <div className="p-6">
-                    <p className="text-gray-700">{webinar.presenterName + " "}has implemented Odoo for over 100 businesses across various industries and is an Odoo Certified Trainer.</p>
-                  </div>
-                </div>
-              </motion.div>
-          </div>
+
+                    {/* Content Section */}
+                    <div className="md:w-1/2 p-6 md:flex-col items-center justify-center">
+                        <div className="hidden md:block">
+                            <h3 className="text-2xl font-bold mb-1">{webinar.presenterName}</h3>
+                            <p className="text-orange-200">{webinar.presenterRole}</p>
+                        </div>
+                        <p className="text-gray-700">{webinar.presenterName + " "}has implemented Odoo for over 100 businesses across various industries and is an Odoo Certified Trainer.</p>
+                    </div>
+                    </div>
+                </motion.div>
+            </div>
         </div>
       </section>
 
