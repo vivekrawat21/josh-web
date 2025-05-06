@@ -34,7 +34,7 @@ const AdminOffers = () => {
   const getPopUp = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/popup`, { withCredentials: true });
-      console.log("Popups:", res.data.data.popup);
+ 
       setMessages(res.data.data.popup|| []);
     } catch (error) {
       console.error("Error fetching popups:", error);

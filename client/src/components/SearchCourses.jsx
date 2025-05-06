@@ -352,7 +352,7 @@ const SearchComponent = () => {
   // const courses = useSelector((state) => state.courses);
   // const [coursesData, setCoursesData] = useState(courses[0]);
   const coursesData = courses[0];
-  console.log("courses", courses[0]);
+
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);

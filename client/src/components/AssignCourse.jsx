@@ -72,10 +72,10 @@ const AssignCourse = ({ assignType, studentId }) => {
         displayName: item.bundleName   || "",
       }));
     }
-   console.log("standardizedList")
-    standardizedList.forEach(item => {
-      console.log("Course Title:", item.title,  item._id);
-    });
+  //  console.log("standardizedList")
+    // standardizedList.forEach(item => {
+    //   console.log("Course Title:", item.title,  item._id);
+    // });
     // If searchValue is at least 3 characters long, filter the list
     if (searchValue.length > 2) {
       if(assignType === "course") {

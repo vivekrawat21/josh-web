@@ -102,7 +102,6 @@ const AddNewBundle = ({ addBundle, setAddBundle }) => {
         },
       });
 
-      console.log(res.data);
 
       // Show success toast
       setToastInfo({

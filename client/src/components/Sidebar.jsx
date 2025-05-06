@@ -188,7 +188,9 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
     <motion.div initial="hidden" animate="visible" exit="exit" variants={slideIn} className="flex flex-col space-y-1 w-full">
       {isLoggedIn ? (
         <>
-          <Link to={"dashboard/profile/personalinformation"}><MenuItem icon={<FaUser />} label="Personal Info" path="/dashboard/profile" /></Link>
+          <Link to={"/dashboard/profile/personalinformation"}><MenuItem icon={<FaUser />} label="Personal Info" path="/dashboard/profile" /></Link>
+          <Link to={"/dashboard/profile/invoices"}><MenuItem icon={<FaUser />} label="Invoices" path="/dashboard/profile/invoices" /></Link>
+          <Link to={"/dashboard/profile/privacyandsecurity"}><MenuItem icon={<FaUser />} label="Privacy" path="/dashboard/profile/privacyandsecurity" /></Link>
           <Link to={"/about"}><MenuItem icon={<FaInfoCircle />} label="About" path="/about" /></Link>
           <Link to={"/dashboard/mywallet"}><MenuItem icon={<FaWallet />} label="My Wallet" path="/dashboard/wallet" /></Link>
           <Link to={"/dashboard/mycourses"}><MenuItem icon={<FaBook />} label="My Courses" path="/dashboard/courses" /></Link>
