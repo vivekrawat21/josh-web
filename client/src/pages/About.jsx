@@ -52,7 +52,12 @@ const About = () => {
           transition={{ duration: 0.8 }}
         >
           <p className="leading-relaxed text-gray-600">
-            Joshguru is an Ed-Tech Platform that provides skill development programs to youth across India. We offer a wide range of courses such as Public Speaking, Personality Development, English Communication, MS Excel, Social Media Mastery, Website Designing, AI Mastery, Stock Market, and more. Join us as a student or become an affiliate and earn commissions by promoting our courses.
+            Joshguru Technologies Private Limited is a new-age EdTech company dedicated to empowering youth with in-demand skills and guaranteed career growth.
+            We offer offline and online Monday to Friday industry-relevant courses like: <strong>Digital Marketing, Full Stack Development, Microsoft 365, Odoo ERP </strong>
+            With placement assistance, internships, and international job support, our goal is to make every student job-ready.
+            Whether you’re a fresher, working professional, or business owner, Joshguru is your trusted partner for skill development and success.
+
+            We have more courses but all those courses for affiliates and that courses in recorded format only.
           </p>
         </motion.div>
 
@@ -91,7 +96,7 @@ const About = () => {
             <span className="text-orange-500">Mission</span>
           </h2>
           <p className="text-gray-700 text-justify text-base md:text-lg leading-relaxed">
-            Our mission is to bring skill-based education to every corner of India, transforming youth into capable and independent individuals who can support themselves and their families through modern skills.
+          Joshguru’s mission is to provide skills development education to youth in every village and corner of India. Joshguru help all capable youth to change their skills, their presence of mind and the lives of their families. We are on here to provide a skill based learning to every interested student, professional, entrepreneur or a person of any background in very affordable prize.
           </p>
         </motion.div>
 
@@ -102,12 +107,13 @@ const About = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          
+
           <div className="bg-white shadow-md rounded-xl p-6 mt-4 relative">
             <p className="text-gray-600 text-base md:text-lg leading-relaxed italic relative">
               <span className="text-6xl text-orange-400 absolute -top-6 -left-4">“</span>
               <span className="mx-6 block">
-                We aim to bridge the gap between traditional education and the current job market's demands, fostering a generation of self-reliant youth equipped with practical skills that empower them to thrive in their careers.
+              Our Vision is to make more and more youth independent so that they do not bother for jobs after 12th, and can live their life in a better way and to upskill <strong>10 lakh+ learners</strong> by 2030 through high-quality, practical education.
+
               </span>
               <span className="text-6xl text-orange-400 absolute -bottom-6 right-4 rotate-180">“</span>
             </p>
