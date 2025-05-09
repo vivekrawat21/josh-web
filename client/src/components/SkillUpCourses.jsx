@@ -13,7 +13,7 @@ const SkillUpCourses = () => {
 
   // Fallback in case API data isn't ready
   const courses =
-    cours?.courses?.[0]?.map((course) => ({
+ cours.courses[0]?.filter((c)=>!c.isTrending).map((course) => ({
       id: course?._id,
       title: course?.title,
       image:

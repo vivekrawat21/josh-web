@@ -1,8 +1,34 @@
 import { motion } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useEffect,useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { addMentors } from "@/features/mentors/mentorSlice";
+import axios from "axios";
+import { BASE_URL } from "../utils/utils";
 
 const About = () => {
+  const dispatch = useDispatch();
+  const mentors = useSelector((state) => state.mentor?.mentors[0] || []);
+  const [selected, setSelected] = useState(null);
+
+  const fetchMentors = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/mentors/getAllMentors`, {
+        withCredentials: true,
+      });
+      const mentorList = response.data.data.mentors;
+      dispatch(addMentors(mentorList));
+    } catch (error) {
+      console.error("Error fetching mentors:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (mentors.length === 0) {
+      fetchMentors();
+    }
+  }, []);
+
   const galleryData = [
     {
       title: "Events",
@@ -23,8 +49,6 @@ const About = () => {
       date: "April 5, 2024",
     },
   ];
-
-  const mentors = useSelector((state) => state.mentor?.mentors[0] || []);
 
   return (
     <section className="px-4 md:px-10 lg:px-20 py-10 bg-gradient-to-b from-gray-50 to-white mt-20">
@@ -52,7 +76,11 @@ const About = () => {
           transition={{ duration: 0.8 }}
         >
           <p className="leading-relaxed text-gray-600">
-            Joshguru is an Ed-Tech Platform that provides skill development programs to youth across India. We offer a wide range of courses such as Public Speaking, Personality Development, English Communication, MS Excel, Social Media Mastery, Website Designing, AI Mastery, Stock Market, and more. Join us as a student or become an affiliate and earn commissions by promoting our courses.
+            Joshguru Technologies Private Limited is a new-age EdTech company dedicated to empowering youth with in-demand skills and guaranteed career growth.
+            We offer offline and online Monday to Friday industry-relevant courses like: <strong>Digital Marketing, Full Stack Development, Microsoft 365, Odoo ERP</strong>.
+            With placement assistance, internships, and international job support, our goal is to make every student job-ready.
+            Whether you’re a fresher, working professional, or business owner, Joshguru is your trusted partner for skill development and success.
+            We have more courses but all those courses for affiliates and that courses in recorded format only.
           </p>
         </motion.div>
 
@@ -91,7 +119,7 @@ const About = () => {
             <span className="text-orange-500">Mission</span>
           </h2>
           <p className="text-gray-700 text-justify text-base md:text-lg leading-relaxed">
-            Our mission is to bring skill-based education to every corner of India, transforming youth into capable and independent individuals who can support themselves and their families through modern skills.
+            Joshguru’s mission is to provide skills development education to youth in every village and corner of India. Joshguru helps all capable youth to change their skills, their presence of mind and the lives of their families. We are here to provide skill-based learning to every interested student, professional, entrepreneur, or a person of any background at a very affordable price.
           </p>
         </motion.div>
 
@@ -102,12 +130,11 @@ const About = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          
           <div className="bg-white shadow-md rounded-xl p-6 mt-4 relative">
             <p className="text-gray-600 text-base md:text-lg leading-relaxed italic relative">
               <span className="text-6xl text-orange-400 absolute -top-6 -left-4">“</span>
               <span className="mx-6 block">
-                We aim to bridge the gap between traditional education and the current job market's demands, fostering a generation of self-reliant youth equipped with practical skills that empower them to thrive in their careers.
+                Our Vision is to make more and more youth independent so that they do not bother for jobs after 12th, and can live their life in a better way and to upskill <strong>10 lakh+ learners</strong> by 2030 through high-quality, practical education.
               </span>
               <span className="text-6xl text-orange-400 absolute -bottom-6 right-4 rotate-180">“</span>
             </p>
@@ -116,36 +143,72 @@ const About = () => {
 
         {/* Team Section */}
         <motion.div
-          className="w-full max-w-6xl"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+      className="w-full max-w-6xl mx-auto"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+    >
+      <h2 className="text-4xl lg:text-5xl font-bold text-center mb-6">
+        <span className="text-black">Meet Our </span>
+        <span className="text-orange-500">Team</span>
+      </h2>
+
+      {/* Horizontal scrollable grid */}
+      <div className="flex gap-6 px-2 overflow-x-auto scrollbar-thin scrollbar-thumb-orange-300 pb-4">
+        {mentors.map((member, index) => (
+          <motion.div
+            key={member?._id}
+            className="min-w-[260px] max-w-[280px] bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 flex-shrink-0 cursor-pointer flex flex-col items-center text-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1, duration: 0.6 }}
+            onClick={() => setSelected(member)}
+          >
+            <img
+              src={member?.profileImage || "/placeholder.svg"}
+              alt={member.name}
+              className="w-24 h-24 mb-4 rounded-full object-cover border-4 border-orange-400"
+            />
+            <h3 className="text-lg font-bold text-gray-800">{member?.name}</h3>
+            <p className="text-orange-500 font-medium">{member?.position}</p>
+            {/* Hide about/description here */}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Modal for mentor details */}
+      {selected && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+          onClick={() => setSelected(null)}
         >
-          <h2 className="text-4xl lg:text-5xl font-bold text-center mb-6">
-            <span className="text-black">Meet Our </span>
-            <span className="text-orange-500">Team</span>
-          </h2>
-          <div className="flex gap-6 overflow-x-auto pb-4 px-2 scroll-smooth">
-            {mentors.map((member, index) => (
-              <motion.div
-                key={member?._id}
-                className="min-w-[280px] bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-              >
-                <img
-                  src={member?.profileImage || "/placeholder.svg"}
-                  alt={member.name}
-                  className="w-40 h-40 mx-auto mb-4 rounded-full object-cover"
-                />
-                <h3 className="text-lg font-bold text-gray-800">{member?.name}</h3>
-                <p className="text-orange-500 font-medium">{member?.position}</p>
-                <p className="text-sm mt-2 text-gray-600">{member?.about}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+          <motion.div
+            className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-[90vw] relative text-center"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold"
+              onClick={() => setSelected(null)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <img
+              src={selected?.profileImage || "/placeholder.svg"}
+              alt={selected.name}
+              className="w-28 h-28 mb-4 rounded-full object-cover border-4 border-orange-400 mx-auto"
+            />
+            <h3 className="text-2xl font-bold text-gray-800">{selected?.name}</h3>
+            <p className="text-orange-500 font-medium mb-2">{selected?.position}</p>
+            <p className="text-gray-700 mt-4">{selected?.about}</p>
+            {/* Add more details if needed */}
+          </motion.div>
+        </div>
+      )}
+    </motion.div>
 
         {/* Gallery Section */}
         <section className="w-full max-w-7xl">
