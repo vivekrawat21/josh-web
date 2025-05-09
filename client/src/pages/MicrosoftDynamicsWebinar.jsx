@@ -158,7 +158,7 @@ const MicrosoftDynamicsWebinar = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-500 to-white">
       {/* Hero Section */}
-      <section className="relative pt-20 pb-48 md:pb-56 overflow-hidden">
+      <section className="relative pt-20 pb-20 md:pb-56 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-purple-500 -z-10"></div>
         <div className="absolute inset-0 bg-[url('/placeholder.svg?height=100&width=100')] bg-repeat opacity-10 -z-10"></div>
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
@@ -178,7 +178,7 @@ const MicrosoftDynamicsWebinar = () => {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
                 {webinar.title}
               </h1>
-              <p className="text-xl text-white/90 leading-relaxed">
+              <p className="text-xl text-white/100 leading-relaxed">
                 Master the powerful capabilities of Microsoft Dynamics 365 to transform your business operations and
                 customer relationships.
               </p>
@@ -194,7 +194,7 @@ const MicrosoftDynamicsWebinar = () => {
                   </Button>
                 </motion.div>
               </div>
-              <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-white/100">
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1">
                   <Clock className="h-4 w-4" />
                   <span>{webinar.duration} minutes + Q&A</span>
@@ -286,7 +286,7 @@ const MicrosoftDynamicsWebinar = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="pb-10">
+      <section id="about" className="py-5 md:py-10">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -337,11 +337,26 @@ const MicrosoftDynamicsWebinar = () => {
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 className="bg-white rounded-2xl p-8 shadow-xl shadow-purple-100/50 border border-purple-100/50"
               >
-                <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
-                  <CheckCircle className="h-7 w-7 text-purple-600" />
+                <div className="flex flex-col items-start gap-4 md:gap-0">
+                  {/* Icon + Title Container */}
+                  <div className="flex flex-row items-center gap-4 md:flex-col md:gap-0">
+                    <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center shrink-0">
+                      <CheckCircle className="h-7 w-7 text-purple-600" />
+                    </div>
+                    {/* Title - always visible but changes layout */}
+                    <h3 className="text-lg md:hidden font-bold md:mt-6 md:mb-3 text-gray-900 md:text-center">
+                      {feature.title}
+                    </h3>
+                  </div>
+
+                  {/* Title - always visible but changes layout */}
+                  <h3 className="text-x1 hidden md:block font-bold md:mt-6 md:mb-3 text-gray-900">
+                    {feature.title}
+                  </h3>
+                  
+                  {/* Description - remains below on all screens */}
+                  <p className="text-gray-700 md:mt-0 mt-2">{feature.description}</p>
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-gray-900">{feature.title}</h3>
-                <p className="text-gray-700">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -349,7 +364,7 @@ const MicrosoftDynamicsWebinar = () => {
       </section>
 
       {/* Speakers Section */}
-      <section id="speakers" className="py-20 bg-gradient-to-b from-white to-purple-50/50">
+      <section id="speakers" className="py-10 bg-gradient-to-b from-white to-purple-50/50">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -376,10 +391,10 @@ const MicrosoftDynamicsWebinar = () => {
                     transition={{ duration: 0.5, delay: 0.1 }}
                     className="group w-full lg:w-[60%]"
                 >
-                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl shadow-orange-100/50 border border-orange-100/50 transition-all duration-300 group-hover:-translate-y-2 flex flex-col md:flex-row">
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl shadow-purple-100/50 border border-purple-100/50 transition-all duration-300 group-hover:-translate-y-2 flex flex-col md:flex-row">
                     {/* Image Section */}
                     <div className="md:w-1/2">
-                        <div className="h-64 md:h-full bg-gradient-to-br from-orange-400 to-orange-600 relative overflow-hidden">
+                        <div className="h-64 md:h-full bg-gradient-to-br from-purple-400 to-purple-600 relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
                         <img
                             src={webinar.presenterImage}
@@ -390,7 +405,7 @@ const MicrosoftDynamicsWebinar = () => {
                         />
                         <div className="absolute bottom-0 left-0 right-0 p-6 z-20 md:hidden">
                             <h3 className="text-2xl font-bold text-white mb-1">{webinar.presenterName}</h3>
-                            <p className="text-orange-200">{webinar.presenterRole}</p>
+                            <p className="text-purple-200">{webinar.presenterRole}</p>
                         </div>
                         </div>
                     </div>
@@ -399,7 +414,7 @@ const MicrosoftDynamicsWebinar = () => {
                     <div className="md:w-1/2 p-6 md:flex-col items-center justify-center">
                         <div className="hidden md:block">
                             <h3 className="text-2xl font-bold mb-1">{webinar.presenterName}</h3>
-                            <p className="text-orange-200">{webinar.presenterRole}</p>
+                            <p className="text-purple-200">{webinar.presenterRole}</p>
                         </div>
                         <p className="text-gray-700">{webinar.presenterName + " "}has implemented Dynamics 365 solutions for over 50 enterprise clients and is a Microsoft Certified Trainer.</p>
                     </div>
@@ -410,7 +425,7 @@ const MicrosoftDynamicsWebinar = () => {
       </section>
 
       {/* Agenda Section */}
-      <section id="agenda" className="py-20 bg-white">
+      <section id="agenda" className="py-10 bg-white">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -467,7 +482,7 @@ const MicrosoftDynamicsWebinar = () => {
       </section>
 
       {/* Registration Section */}
-      <section id="register" className="py-20 bg-gradient-to-br from-purple-50 to-purple-100/50">
+      <section id="register" className="py-10 bg-gradient-to-br from-purple-50 to-purple-100/50">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
@@ -634,7 +649,7 @@ const MicrosoftDynamicsWebinar = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-purple-600 to-purple-500 text-white">
+      <section className="py-10 bg-gradient-to-r from-purple-600 to-purple-500 text-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div
