@@ -71,9 +71,12 @@ const MyWallet = () => {
               <span className="text-orange-500 font-bold">Welcome </span>
               <span className="font-bold">{user?.name || "User"}</span>
             </h2>
-            <p className="text-gray-600 text-sm sm:text-base font-semibold">
-              Referral ID: {user?.sharableReferralCode || "N/A"}
-            </p>
+            {user?.canRefer && (
+               <p className="text-gray-600 text-sm sm:text-base font-semibold">
+               Referral ID: {user?.sharableReferralCode || "N/A"}
+             </p>
+              )}
+           
           </div>
         </div>
 
