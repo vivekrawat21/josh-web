@@ -24,7 +24,7 @@ const PersonalInformation = () => {
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
-    phone: user?.phone || "",
+    mobilenumber: user?.mobilenumber || "",
     sharableReferralCode: user?.sharableReferralCode || user?.referalcode || "",
   });
   const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ const PersonalInformation = () => {
           setFormData({
             name: u.name || "",
             email: u.email || "",
-            phone: u.phone || "",
+            mobilenumber: u.mobilenumber || "",
             sharableReferralCode: u.sharableReferralCode || u.referalcode || "",
           });
           // dispatch(setUser(u)); // Uncomment if you want to update Redux
@@ -81,13 +81,13 @@ const PersonalInformation = () => {
               letterSpacing: "2px",
             }}
           >
-            {getInitials(formData.name)}
+            {getInitials(formData?.name)}
           </div>
           <div className="mt-3 text-lg font-semibold text-orange-700">
             {loading ? (
               <span className="text-gray-400">Loading...</span>
             ) : (
-              formData.name || <span className="text-gray-400">Not set</span>
+              formData?.name || <span className="text-gray-400">Not set</span>
             )}
           </div>
         </div>
@@ -98,7 +98,7 @@ const PersonalInformation = () => {
             <div className="text-base text-gray-900 px-2 py-1">
               {loading
                 ? <span className="text-gray-400">Loading...</span>
-                : formData.name || <span className="text-gray-400">Not set</span>}
+                : formData?.name || <span className="text-gray-400">Not set</span>}
             </div>
           </div>
           <div>
@@ -106,25 +106,28 @@ const PersonalInformation = () => {
             <div className="text-base text-gray-900 px-2 py-1">
               {loading
                 ? <span className="text-gray-400">Loading...</span>
-                : formData.email || <span className="text-gray-400">Not set</span>}
+                : formData?.email || <span className="text-gray-400">Not set</span>}
             </div>
           </div>
           <div>
-            <label className="block text-base font-semibold text-orange-700 mb-1">Phone</label>
+            <label className="block text-base font-semibold text-orange-700 mb-1">Mobile Number</label>
             <div className="text-base text-gray-900 px-2 py-1">
               {loading
                 ? <span className="text-gray-400">Loading...</span>
-                : formData.phone || <span className="text-gray-400">Not set</span>}
+                : formData?.mobilenumber|| <span className="text-gray-400">Not set</span>}
             </div>
           </div>
-          <div>
-            <label className="block text-base font-semibold text-orange-700 mb-1">Referral Code</label>
-            <div className="text-base text-gray-900 px-2 py-1">
-              {loading
-                ? <span className="text-gray-400">Loading...</span>
-                : formData.sharableReferralCode || <span className="text-gray-400">Not set</span>}
-            </div>
-          </div>
+          {user?.canRefer && (
+               <div>
+               <label className="block text-base font-semibold text-orange-700 mb-1">Referral Code</label>
+               <div className="text-base text-gray-900 px-2 py-1">
+                 {loading
+                   ? <span className="text-gray-400">Loading...</span>
+                   : formData.sharableReferralCode || <span className="text-gray-400">Not set</span>}
+               </div>
+             </div>
+            )}
+       
         </div>
 
         {showToast && error && (
