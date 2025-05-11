@@ -31,6 +31,7 @@ const Courses = () => {
   const [allCourses, setAllCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const bundles = useSelector((state) => state.bundle.bundles[0])
+  const user = useSelector((state) => state.user);
   useEffect(() => {
    
     const fetchBundles = async () => {
@@ -74,7 +75,19 @@ const Courses = () => {
 
     return matchesCategory && matchesSearch;
   });
+  const handleClick = (course) => {
+    // const isEnrolled = user?.courses?.includes(course._id);
+    const isEnrolled = user?.courses?.some(c => c._id.toString() === course._id.toString()
+  );
 
+   
+    if(isEnrolled){
+      navigate(`/course/${course._id}/learn`);
+    }
+    else {
+ navigate(`/course/${course._id}`);
+    }
+  }
   return (
     <div className="container mx-auto px-4 md:py-8 mt-16">
       <h1 className="text-3xl font-bold mb-8">
@@ -124,7 +137,7 @@ const Courses = () => {
             <Card
               key={course._id}
               className="overflow-hidden cursor-pointer"
-              onClick={() => navigate(`/course/${course._id}`)}
+              onClick={() =>{handleClick(course)}}
             >
               <img src={course.image || "/placeholder.svg"} alt={course.title} className="w-full h-48 object-cover" />
               <CardHeader>

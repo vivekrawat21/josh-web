@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '@/utils/utils';
+import { Trash2 } from 'lucide-react';
 import CustomToast from '@/components/CustomToast'; // Import your custom toast
 
 const EditCourse = () => {
@@ -368,7 +369,7 @@ const EditCourse = () => {
                 className="text-red-500 hover:text-red-700 p-1 text-sm"
                 aria-label="Remove"
               >
-                &times;
+                <Trash2 className="h-4 w-4" />
               </button>
             </div>
           ))}
@@ -428,7 +429,7 @@ const EditCourse = () => {
                 className="text-red-500 hover:text-red-700 p-1"
                 aria-label="Remove"
               >
-                &times;
+                <Trash2 className="h-4 w-4" />
               </button>
             </div>
           ))}
@@ -464,7 +465,7 @@ const EditCourse = () => {
                 className="text-red-500 hover:text-red-700 p-1"
                 aria-label="Remove"
               >
-                &times;
+             <Trash2 className="h-4 w-4" />
               </button>
             </div>
           ))}
@@ -500,7 +501,7 @@ const EditCourse = () => {
                 className="text-red-500 hover:text-red-700 p-1"
                 aria-label="Remove"
               >
-                &times;
+                   <Trash2 className="h-4 w-4" />
               </button>
             </div>
           ))}
@@ -536,7 +537,7 @@ const EditCourse = () => {
                 className="text-red-500 hover:text-red-700 p-1"
                 aria-label="Remove"
               >
-                &times;
+                <Trash2 className="h-4 w-4" />
               </button>
             </div>
           ))}

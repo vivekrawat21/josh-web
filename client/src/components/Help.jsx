@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaTimes, FaLifeRing } from "react-icons/fa";
-
+import { Link } from "react-router-dom";
 const HelpSupport = () => {
   const [open, setOpen] = useState(false);
 
@@ -25,8 +25,8 @@ const HelpSupport = () => {
         </ul>
         
         <h2 className="text-xl font-semibold text-gray-700 mt-6 mb-3">Contact Us</h2>
-        <p className="text-gray-600">📧 Email: <span className="text-orange-600">support@example.com</span></p>
-        <p className="text-gray-600">📞 Phone: +1 234 567 890</p>
+        <p className="text-gray-600">📧 Email: <a href="mailto:support@joshguru.com" className="text-orange-600">support@joshguru.com</a></p>
+        <p className="text-gray-600">📞 Phone: +91- 8191980334</p>
       </motion.div>
       
       {/* Floating Help Button (Right Aligned) */}
