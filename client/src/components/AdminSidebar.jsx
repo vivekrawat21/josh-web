@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaBook, FaGift,  FaSignOutAlt, FaVideo } from 'react-icons/fa';
+import { FaBook, FaGift,  FaSignOutAlt, FaVideo } from 'react-icons/fa';
 import { MdPolicy } from 'react-icons/md';
 import {BiSolidOffer} from 'react-icons/bi';
 import axios from 'axios';
@@ -62,6 +62,16 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
         className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
       >
           <FaVideo /> Webinars
+      </Link>
+      <Link to="/admin/gallery"
+        className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
+      >
+          <FaVideo /> Gallery
+      </Link>
+      <Link to="/admin/faq"
+        className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
+      >
+          <FaVideo /> FAQ
       </Link>
       <div className="mt-64">
         <button

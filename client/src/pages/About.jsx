@@ -33,20 +33,17 @@ const About = () => {
     {
       title: "Events",
       image: "/event1.webp",
-      path: "/gallery/events",
-      date: "March 10, 2024",
+      path: "/Events",
     },
     {
       title: "Trips",
       image: "/event2.webp",
-      path: "/gallery/Trips",
-      date: "March 10, 2024",
+      path: "/Trips",
     },
     {
-      title: "Occasions",
+      title: "Ocassions",
       image: "/event3.webp",
-      path: "/gallery/occassions",
-      date: "April 5, 2024",
+      path: "/Ocassions",
     },
   ];
 
@@ -226,8 +223,7 @@ const About = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="relative group overflow-hidden rounded-xl shadow-xl hover:shadow-2xl bg-white"
-              >
-                <Link to={item.path}>
+              ><Link to={`/gallery${item.path}`}>
                   <img
                     src={item.image}
                     alt={item.title}

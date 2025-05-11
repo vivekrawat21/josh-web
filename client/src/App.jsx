@@ -8,8 +8,6 @@ import Signup from "./pages/Signup";
 import Course from "./pages/Course";
 import Bundle from "./pages/Bundle.jsx";
 import Cart from "./pages/Cart";
-import Dashboard from "./pages/Dashboard";
-import Profile from "./components/Profile";
 import Refer from "./components/Refer";
 import Help from "./components/Help";
 import MyCourses from "./components/MyCourses";
@@ -26,7 +24,6 @@ import Blogs from "./pages/Blogs";
 import RefundAndPolicy from "./pages/RefundAndPolicy";
 import LicenseAndAgreement from "./pages/LicenseAndAgreement";
 import Scroll from "./Scroll";
-// import Admin from "./pages/Admin";
 import AdminCourses from "./components/AdminCourses"
 import AdminBundles from "./components/AdminBundles";
 import AdminLogin from "./components/AdminLogin";
@@ -35,6 +32,7 @@ import Students from "./components/Students";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminOffers from "./components/AdminOffers.jsx";
+import AdminGallery from "./components/AdminGallery";
 import Blog from "./pages/Blog";
 import Webinars from "./pages/Webinars";
 import BundleCourse from "./components/BundleCourse";
@@ -48,7 +46,6 @@ import AdminWebinar from "./pages/AdminWebinar";
 import Upgrade from "./components/Upgrade";
 import EditCourse from "./components/EditCourse";
 import EditBundle from "./components/EditBundle";
-import WebinarLanding from "./pages/WebinarLanding";
 import DigitalMarketingWebinar from "./pages/DigitalMarketingWebinar";
 import WebDevelopmentWebinar from "./pages/WebDevelopmentWebinar";
 import MicrosoftDynamicsWebinar from "./pages/MicrosoftDynamicsWebinar";
@@ -71,15 +68,12 @@ function App() {
           <Route path="/admin/bundleCourse/:id" element={<BundleCourse />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/:mentorId/assignMentor" element={<AdminAssignMentor />} />
-
           <Route path="/admin/mentors" element={<AdminMentor />} />
           <Route path="/admin/students" element={<Students />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/offers" element={<AdminOffers />} />
           <Route path="/admin/webinars" element={<AdminWebinar />} />
-
-
-          
+          <Route path="/admin/gallery" element={<AdminGallery />} />
           </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
         <Route index element={<PersonalInformation />} />
@@ -114,9 +108,8 @@ function App() {
               ></Route>
               <Route path="/course/:courseId" element={<Course />} />
               <Route path="/course/:courseId/learn" element={<CoursePlayer />} />
-
               <Route path="/courses" element={<Courses />} />
-                <Route path="/coursePlayer" element={<CoursePlayer />} />
+              <Route path="/coursePlayer" element={<CoursePlayer />} />
 
               {/* <Route path="/course/:videoIndex" element={<CoursePlayer />} /> */}
 
@@ -140,7 +133,7 @@ function App() {
               
               <Route path="/goal/:id" element={<Goals />} />
               {/* <Route path="/specialBundle/:id" element={<BasicBundle />} /> */}
-              <Route path="/gallery/:type" element={<Gallery />} />
+              <Route path="/gallery/:category" element={<Gallery />} />
 
               <Route path="/blogs/:id" element={<Blog />} />
 
