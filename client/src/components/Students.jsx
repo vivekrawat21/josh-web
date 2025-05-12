@@ -15,6 +15,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+// import CustomToast from '@/components/CustomToast';
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -90,9 +91,42 @@ const Students = () => {
     Name: item.name || '',
     Email: item.email || '',
     Mobile: item.mobilenumber || '',
+    ReferralCode: item.sharableReferralCode || '',
+    BundleEnrolled: item.bundles.length || 0,
+    CourseEnrolled: item.courses.length || 0,
+    CreatedAt: new Date(item.createdAt).toISOString().split('T')[0] ||  '',
+
     ID: item._id,
   }));
+   const handleDelete = async (studentId) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this student?');
 
+    if (!confirmDelete) return;
+    try {
+      const res = await axios.delete(`${BASE_URL}/auth/deleteUser/${studentId}`, {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        setStudents((prevStudents) => prevStudents.filter((student) => student._id !== studentId));
+        // alert('Student deleted successfully!');
+        setSuccessMessage('Student deleted successfully!');
+        // Close the dialog after a short delay
+        setTimeout(() => {
+          setSuccessMessage('');
+          closeDialogRef.current?.click();
+        }, 1500);
+      }
+    } catch (error) {
+      console.error('Error deleting student:', error);
+      // alert('Failed to delete the student.');
+      setSuccessMessage('Failed to Delete!');
+      // Close the dialog after a short delay
+      setTimeout(() => {
+        setSuccessMessage('');
+        closeDialogRef.current?.click();
+      }, 1500);
+    }
+   }
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
@@ -160,11 +194,11 @@ const Students = () => {
         />
       </div>
 
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2  lg:grid-cols-3">
         {filteredStudents.map((student) => (
           <div
             key={student._id}
-            className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl"
+            className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl w-full"
           >
             <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2">
               {student.name}
@@ -172,9 +206,12 @@ const Students = () => {
             <p className="text-sm md:text-base text-gray-600 mb-1">Email: {student.email}</p>
             <p className="text-sm md:text-base text-gray-600 mb-1">ReferralCode: {student.sharableReferralCode}</p>
             <p className="text-sm md:text-base text-gray-600 mb-4">Mobile: {student.mobilenumber}</p>
-            <div className="flex flex-col sm:flex-row gap-2 w-full">
+            <div className="flex flex-col  gap-2 w-full">
+              <div className='flex flex-col  lg:flex-row gap-2 w-full'>
               <AssignCourse assignType="course" studentId={student._id} />
               <AssignCourse assignType="bundle" studentId={student._id} />
+              </div>
+              <Button className="bg-red-600 hover:bg-red-700" onClick={ ()=>{handleDelete(student._id)}}> Delete User </Button>
             </div>
           </div>
         ))}

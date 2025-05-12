@@ -90,35 +90,35 @@ const MyWallet = () => {
           />
           <InfoCard
             title="My Total Income"
-            value={totalIncome}
+            value={totalIncome.toFixed(2)}
             currency
             icon={<FaMoneyBillWave />}
             gradient="from-[#00BFFF] to-[#1E90FF]"
           />
           <InfoCard
             title="Today Income"
-            value={todayIncome}
+            value={todayIncome.toFixed(2)}
             currency
             icon={<FaBolt />}
             gradient="from-[#FFA500] to-[#FF8C00]"
           />
           <InfoCard
             title="Last 7 Days Income"
-            value={income7Days}
+            value={income7Days.toFixed(2)}
             currency
             icon={<FaCalendarWeek />}
             gradient="from-[#00BFFF] to-[#1E90FF]"
           />
           <InfoCard
             title="Last 30 Days Income"
-            value={income30Days}
+            value={income30Days.toFixed(2)}
             currency
             icon={<FaCalendarAlt />}
             gradient="from-[#FFA500] to-[#FF8C00]"
           />
           <InfoCard
             title="Incentive"
-            value={incentive}
+            value={incentive.toFixed(2)}
             currency
             icon={<FaGift />}
             gradient="from-[#00BFFF] to-[#1E90FF]"

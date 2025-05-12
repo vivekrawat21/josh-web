@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCourse } from '@/features/courses/courseSlice';
 import exportToExcel from '@/utils/exportToExcel';
+import Students from './Students';
 const AdminCourses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addNewCourse, setAddNewCourse] = useState(false);
@@ -58,6 +59,8 @@ const AdminCourses = () => {
     Bundle: item.bundleName || "",
     Price: item.price || "",
     Status: item.isTrending ? "Trending" : "Standard",
+    CreatedAt: new Date(item.createdAt).toISOString().split('T')[0] ||  '',
+    StudentsEnrolled: item.students.length || 0,
     ID: item._id,
     // Topics: Array.isArray(item.courses) ? item.course.title.join(", ") : "", // Convert array to comma-separated string
     // Tags: Array.isArray(item.bundles) ? item.bundles.bundleName.join(", ") : "",       // Another example
