@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { logoutUser } from '../features/user/userSlice';
 import { BASE_URL } from '../utils/utils';
 import { FaChalkboardTeacher } from "react-icons/fa";
+import { GrGallery } from "react-icons/gr";
 
 const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
   const dispatch = useDispatch();
@@ -66,13 +67,13 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
       <Link to="/admin/gallery"
         className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
       >
-          <FaVideo /> Gallery
+          <GrGallery /> Gallery
       </Link>
-      <Link to="/admin/faq"
+      {/* <Link to="/admin/faq"
         className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
       >
           <FaVideo /> FAQ
-      </Link>
+      </Link> */}
       <div className="mt-64">
         <button
           onClick={isLoggedIn ? handleLogout : null}
