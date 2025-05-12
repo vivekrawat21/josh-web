@@ -95,6 +95,9 @@ const AdminBundles = () => {
     Name: item.bundleName || "",
     Price: item.price || "",
     Status: item.isSpecial ? "Special" : "Standard",
+    Courses : item.courses.length || 0,
+    StudentsEnrolled: item.students.length || 0,
+    CreatedAt: new Date(item.createdAt).toISOString().split('T')[0] ||  '',
     ID: item._id,
     // Topics: Array.isArray(item.courses) ? item.course.title.join(", ") : "", // Convert array to comma-separated string
     // Tags: Array.isArray(item.bundles) ? item.bundles.bundleName.join(", ") : "",       // Another example

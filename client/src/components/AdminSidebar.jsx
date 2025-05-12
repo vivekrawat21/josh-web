@@ -35,11 +35,11 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
     >
       <Link
         to="/admin/dashboard"
-        className="flex items-center justify-between w-full text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
+        className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg"
       >
-        <div className="flex items-center gap-2">
-          <MdPolicy  /> Privacy And Policy 
-        </div>
+        
+          <MdPolicy  /> Privacy
+        
       </Link>
       <Link to="/admin/courses" className="flex items-center gap-2 text-gray-900 font-medium py-3 hover:text-orange-500 transition text-lg ">
         <FaBook /> Courses
