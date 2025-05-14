@@ -460,7 +460,7 @@ const AdminMentor = () => {
                 </div>
                 <div className="flex gap-2 mt-4 sm:mt-0 sm:items-start">
                   <Link to={`/admin/${mentor._id}/assignMentor`}>
-                    <button className="bg-gray-800 text-white px-3 py-2 rounded-md hover:bg-gray-700 transition-colors">
+                    <button className="bg-orange-500 text-white px-3 py-2 rounded-md hover:bg-orange-600 transition-colors">
                       Assign Course
                     </button>
                   </Link>

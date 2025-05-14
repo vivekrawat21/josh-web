@@ -38,8 +38,9 @@ const Admin = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-100 flex">
+    <div className="w-full min-h-screen  flex">
       {/* Sidebar */}
+      
       {isLoggedIn && (
         <AdminSidebar
           isLoggedIn={isLoggedIn}

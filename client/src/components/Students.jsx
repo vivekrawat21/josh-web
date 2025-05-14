@@ -134,14 +134,14 @@ const Students = () => {
         <h2 className="text-3xl font-bold text-gray-900 tracking-tight text-center md:text-left sm:text-4xl">
           Students Data
         </h2>
-        <div className='flex gap-2'>
-        <Dialog>
+        <div className='flex gap-2 '>
+        <Dialog >
           <DialogTrigger asChild>
             <Button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow-md">
               <span>Add Student</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="w-[95%] sm:max-w-md p-4 sm:p-6 mx-auto">
+          <DialogContent className="w-[90%] sm:max-w-md p-4 sm:p-6 mx-2">
             <DialogHeader>
               <DialogTitle>Create a new Student</DialogTitle>
               <DialogDescription>
@@ -155,7 +155,7 @@ const Students = () => {
               <Input value={mobilenumber} onChange={(e) => setMobileNumber(e.target.value)} placeholder="Enter Mobile Number" />
               <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter Password" />
               <Input value={referralCode} onChange={(e) => setReferralCode(e.target.value)} placeholder="Enter Referral Code (optional)" />
-              <Button onClick={createStudent}>Create Student</Button>
+           
               {successMessage && (
                 <div className="text-green-600 text-sm font-medium mt-2">
                   ✅ {successMessage}
@@ -163,7 +163,8 @@ const Students = () => {
               )}
             </div>
 
-            <DialogFooter className="justify-end mt-4">
+            <DialogFooter className="justify-center mt-4 flex gap-2 flex-row">
+            <Button className="bg-orange-500 hover:bg-orange-600" onClick={createStudent}>Create Student</Button>
               <DialogClose asChild>
                 <button
                   ref={closeDialogRef}
@@ -172,6 +173,7 @@ const Students = () => {
                   Close
                 </button>
               </DialogClose>
+             
             </DialogFooter>
           </DialogContent>
         </Dialog>
