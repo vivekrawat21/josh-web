@@ -4,347 +4,348 @@ import { ChevronDown, CheckCircle, Users, Award } from "lucide-react"
 import { Link } from "react-router-dom";
 import { BASE_URL } from "@/utils/utils";
 import axios from "axios";
+import Certificate from "/fileStore/certificate.png"
 
 import { useParams } from "react-router-dom";
 const BasicBundle = ({ page = "page2" }) => {
-const [bundle , setBundle] = React.useState([])
- const user = useSelector((state) => state.user);
- 
-  const {id} = useParams()
+  const [bundle, setBundle] = React.useState([])
+  const user = useSelector((state) => state.user);
+
+  const { id } = useParams()
   console.log(id)
-   const fetchBundle = async()=>{
-    const res  = await axios.get(`${BASE_URL}/course/getBundle/${id}`,{withCredentials:true})
+  const fetchBundle = async () => {
+    const res = await axios.get(`${BASE_URL}/course/getBundle/${id}`, { withCredentials: true })
     // console.log(res.data.data)
     setBundle(res.data.data.bundle)
     console.log(res.data.data)
 
 
-   }
+  }
   useEffect(() => {
-    if(bundle.length === 0){
+    if (bundle.length === 0) {
 
-    fetchBundle()
+      fetchBundle()
     }
     // console.log("Bundle",bundle[0])
   }, [id])
 
-    const [openIndex, setOpenIndex] = useState(0)
-    const [selected, setSelected] = useState("english")
-  
-    // Define color themes for each page
-    const themes = {
-      page1: { // Orange theme
-        primary: "#FFA500",
-        primaryLight: "#FFE0B2",
-        primaryDark: "#E65100",
-        secondary: "#FFB74D",
-        secondaryLight: "#FFE9CA",
-        secondaryDark: "#CC5500",
-        accent: "#FFCC80",
-        accentLight: "#FFF3E0",
-        accentDark: "#EF6C00",
-        background: "#FFF8F2",
-        text: "#333333",
-        textLight: "#666666",
-        border: "#FFB74D",
-        buttonGradientFrom: "#FFA500",
-        buttonGradientTo: "#E65100",
-        cardBorder: "#FFCC80",
-        timelineDot: "#FFA500",
-        mentorHighlight: "#FFE0B2",
-        footerBackground: "#CC5500",
-        footerBorder: "#FFCC80",
-        footerText: "#FFF3E0",
-        gradientStart: "#FFE0B2",
-        gradientMiddle: "#FFCC80",
-        gradientEnd: "#FFB74D",
-        timelineGradientStart: "#FFE9CA",
-        timelineGradientEnd: "#FFCC80",
-        moduleNumberGradientStart: "#FFCC80",
-        moduleNumberGradientEnd: "#FFB74D",
-        ctaGradientStart: "#FFE0B2",
-        ctaGradientEnd: "#FFA500",
-        bgHeroSectionImage:"/Freelancing_Road_To_1_Lakhs heading image.png",
-        fifteenMImage: "/15M.png",
-        oneBImage: "/1B.png",
-        twentyLImage: "/20L.png",
-      },
-      page2: { // Green theme
-        primary: "#4CAF50",
-        primaryLight: "#C8E6C9",
-        primaryDark: "#388E3C",
-        secondary: "#81C784",
-        secondaryLight: "#E8F5E9",
-        secondaryDark: "#66BB6A",
-        accent: "#A5D6A7",
-        accentLight: "#F1F8E9",
-        accentDark: "#43A047",
-        background: "#F1F8E9",
-        text: "#333333",
-        textLight: "#666666",
-        border: "#81C784",
-        buttonGradientFrom: "#66BB6A",
-        buttonGradientTo: "#388E3C",
-        cardBorder: "#A5D6A7",
-        timelineDot: "#4CAF50",
-        mentorHighlight: "#C8E6C9",
-        footerBackground: "#4CAF50",
-        footerBorder: "#A5D6A7",
-        footerText: "#E8F5E9",
-        gradientStart: "#C8E6C9",
-        gradientMiddle: "#A5D6A7",
-        gradientEnd: "#81C784",
-        timelineGradientStart: "#E8F5E9",
-        timelineGradientEnd: "#A5D6A7",
-        moduleNumberGradientStart: "#A5D6A7",
-        moduleNumberGradientEnd: "#81C784",
-        ctaGradientStart: "#81C784",
-        ctaGradientEnd: "#4CAF50",
-        bgHeroSectionImage:"/herolandingpage2.png",
-        fifteenMImage: "/15Mpage2.png",
-        oneBImage: "/1Bpage2.png",
-        twentyLImage: "/20Lpage2.png",
-        },
-      page3: { // Purple theme
-        primary: "#9C27B0",
-        primaryLight: "#E1BEE7",
-        primaryDark: "#6A1B9A",
-        secondary: "#AB47BC",
-        secondaryLight: "#F3E5F5",
-        secondaryDark: "#8E24AA",
-        accent: "#CE93D8",
-        accentLight: "#F8F0FB",
-        accentDark: "#7B1FA2",
-        background: "#F3E5F5",
-        text: "#333333",
-        textLight: "#666666",
-        border: "#AB47BC",
-        buttonGradientFrom: "#8E24AA",
-        buttonGradientTo: "#6A1B9A",
-        cardBorder: "#CE93D8",
-        timelineDot: "#9C27B0",
-        mentorHighlight: "#E1BEE7",
-        footerBackground: "#9C27B0",
-        footerBorder: "#CE93D8",
-        footerText: "#F3E5F5",
-        gradientStart: "#E1BEE7",
-        gradientMiddle: "#CE93D8",
-        gradientEnd: "#AB47BC",
-        timelineGradientStart: "#F3E5F5",
-        timelineGradientEnd: "#CE93D8",
-        moduleNumberGradientStart: "#CE93D8",
-        moduleNumberGradientEnd: "#AB47BC",
-        ctaGradientStart: "#AB47BC",
-        ctaGradientEnd: "#9C27B0",
-        bgHeroSectionImage:"/herolandingpage3.png",
-        fifteenMImage: "/15Mpage3.png",
-        oneBImage: "/1Bpage3.png",
-        twentyLImage: "/20Lpage3.png",
-      },
-    }
-  
-    // Get the current theme based on the page prop
-    const colors = themes[page] || themes.page1
-    const link = page === "page1" ? "basic" : page === "page2" ? "intermediate" : "advance"
-  
-    const toggleQuestion = (index) => {
-      setOpenIndex(openIndex === index ? null : index)
-    }
-  
-    const bonusSkills = [
-      {
-        id: 1,
-        name: "WordPress",
-        imageUrl: "/wordpress.svg",
-      },
-      {
-        id: 2,
-        name: "Photoshop",
-        imageUrl: "/ps.svg",
-      },
-      {
-        id: 3,
-        name: "JavaScript",
-        imageUrl: "/javascript.svg",
-      },
-      {
-        id: 4,
-        name: "Mobile Video Editing",
-        imageUrl: "/mobile_video_editing.svg",
-      },
-      {
-        id: 5,
-        name: "Launch E-Course",
-        imageUrl: "/launch_e_course.svg",
-      },
-      {
-        id: 6,
-        name: "Google Ads",
-        imageUrl: "/google_ads.svg",
-      },
-      {
-        id: 7,
-        name: "Taxation",
-        imageUrl: "/taxation.svg",
-      },
-      {
-        id: 8,
-        name: "Public Relations",
-        imageUrl: "/pr.svg",
-      },
-      {
-        id: 9,
-        name: "Content Writing",
-        imageUrl: "/content_writing.svg",
-      },
-      {
-        id: 10,
-        name: "Copy Writing",
-        imageUrl: "/copy_writing.svg",
-      },
-      {
-        id: 11,
-        name: "Printify",
-        imageUrl: "/printify.svg",
-      },
-      {
-        id: 12,
-        name: "Shipping",
-        imageUrl: "/shipping.svg",
-      },
-    ]
-  
-    const goldenAgeData = [
-      {
-        id: 1,
-        title: "Unstoppable Growth",
-        description:
-          "The freelance economy is expanding faster than ever, with businesses shifting to remote, flexible talent.",
-      },
-      {
-        id: 2,
-        title: "Endless Earnings",
-        description: "Say goodbye to fixed salaries—charge what you're worth and scale your income on your terms.",
-      },
-      {
-        id: 3,
-        title: "Freedom & Flexibility",
-        description: "Work from anywhere, choose your projects, and create a lifestyle that suits you.",
-      },
-    ]
-  
-    const ModulesData = [
-      {
-        id: 1,
-        title: "Foundation",
-        descriptionTitle: "Start Strong, Succeed",
-        description:
-          "Master the fundamentals of freelancing, including mindset, client acquisition, and essential skills.",
-      },
-      {
-        id: 2,
-        title: "Positioning",
-        descriptionTitle: "Stand Out, Get Noticed",
-        description: "Learn how to position yourself as a premium freelancer who charges top rates.",
-      },
-      {
-        id: 3,
-        title: "Showcasing",
-        descriptionTitle: "Showcase Your Talent",
-        description: "Create a portfolio that highlights your skills and attracts high-paying clients.",
-      },
-      {
-        id: 4,
-        title: "Networking",
-        descriptionTitle: "Connect, Collaborate, Thrive",
-        description: "Build a network of fellow freelancers, mentors, and potential clients to help you grow.",
-      },
-      {
-        id: 5,
-        title: "Outreach",
-        descriptionTitle: "Get Found, Get Hired",
-        description: "Learn how to effectively reach out to potential clients and pitch your services.",
-      },
-      {
-        id: 6,
-        title: "Managing",
-        descriptionTitle: "Stay Organized, Stay Productive",
-        description: "Master time management, project management, and client communication skills.",
-      },
-      {
-        id: 7,
-        title: "Scaling",
-        descriptionTitle: "Grow Your Business",
-        description: "Learn how to scale your freelancing business, including hiring a team and creating a brand.",
-      },
-    ]
-  
-    const questions = [
-      {
-        question: "How do I enroll in the course?",
-        answer:
-          "You can enroll directly from this page by clicking the button. Once you complete your purchase, you'll receive confirmation via WhatsApp and email.",
-      },
-      {
-        question: "What payment methods do you accept?",
-        answer:
-          "We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely through our payment gateway.",
-      },
-      {
-        question: "Is there a refund policy?",
-        answer:
-          "Yes, we offer a 30-day money-back guarantee. If you're not satisfied with the course, you can request a full refund within 30 days of purchase.",
-      },
-      {
-        question: "How long do I have access to the course materials?",
-        answer:
-          "Once enrolled, you have lifetime access to all course materials, including future updates and additional resources.",
-      },
-      {
-        question: "Are there any prerequisites for this course?",
-        answer:
-          "No specific prerequisites are required. The course is designed to accommodate beginners while also providing value to those with some experience.",
-      },
-      {
-        question: "Can I access the course on mobile devices?",
-        answer:
-          "Yes, our platform is fully responsive. You can access all course materials on desktop, tablet, and mobile devices.",
-      },
-      {
-        question: "Is there a community or support available?",
-        answer:
-          "You'll get access to our private community where you can connect with other students and instructors. We also provide dedicated support via email.",
-      },
-    ]
-  
-    const cards = [
-      {
-        title: "Apt High-Ticket Framework",
-        description:
-          "Learn how to position yourself as a premium freelancer who charges top rates. This framework helps you stand out from the crowd, attract high-paying clients, and deliver work that justifies premium pricing. Stop working more for less—start earning big for the value you bring.",
-        img: "/member2.jpg",
-      },
-      {
-        title: "Master High-Income Skills",
-        description:
-          "Freelancing success starts with skills that businesses are desperate for. Learn in-demand, high-paying skills like marketing, content, and AI tools—the ones that drive business results. Master what pays, so clients always need you. Stay ahead of the curve with future-proof skills that keep your income growing.",
-        img: "/member2.jpg",
-      },
-      {
-        title: "Automate Client Acquisition",
-        description:
-          "Forget begging for work—let clients come to you. Build a personal brand that positions you as the go-to expert, so clients see your value upfront. Learn to use AI tools, social proof, and content to attract high-paying leads consistently—without chasing anyone. Turn your profile into a client magnet that works 24/7.",
-        img: "/member4.jpg",
-      },
-    ]
-  
-    const heroSectionData = [
-      {
-        title: "Freelancing Road To 5 Lakhs Per Month",
-        subtitle: "Unlock High-Ticket Freelancing Success – Land Premium Clients, Scale Fast, and Work on Your Terms!",
-        numberOfCourses: "24 Skilled Courses",
-      },
-    ]
+  const [openIndex, setOpenIndex] = useState(0)
+  const [selected, setSelected] = useState("english")
+
+  // Define color themes for each page
+  const themes = {
+    page1: { // Orange theme
+      primary: "#FFA500",
+      primaryLight: "#FFE0B2",
+      primaryDark: "#E65100",
+      secondary: "#FFB74D",
+      secondaryLight: "#FFE9CA",
+      secondaryDark: "#CC5500",
+      accent: "#FFCC80",
+      accentLight: "#FFF3E0",
+      accentDark: "#EF6C00",
+      background: "#FFF8F2",
+      text: "#333333",
+      textLight: "#666666",
+      border: "#FFB74D",
+      buttonGradientFrom: "#FFA500",
+      buttonGradientTo: "#E65100",
+      cardBorder: "#FFCC80",
+      timelineDot: "#FFA500",
+      mentorHighlight: "#FFE0B2",
+      footerBackground: "#CC5500",
+      footerBorder: "#FFCC80",
+      footerText: "#FFF3E0",
+      gradientStart: "#FFE0B2",
+      gradientMiddle: "#FFCC80",
+      gradientEnd: "#FFB74D",
+      timelineGradientStart: "#FFE9CA",
+      timelineGradientEnd: "#FFCC80",
+      moduleNumberGradientStart: "#FFCC80",
+      moduleNumberGradientEnd: "#FFB74D",
+      ctaGradientStart: "#FFE0B2",
+      ctaGradientEnd: "#FFA500",
+      bgHeroSectionImage: "/Freelancing_Road_To_1_Lakhs heading image.png",
+      fifteenMImage: "/15M.png",
+      oneBImage: "/1B.png",
+      twentyLImage: "/20L.png",
+    },
+    page2: { // Green theme
+      primary: "#4CAF50",
+      primaryLight: "#C8E6C9",
+      primaryDark: "#388E3C",
+      secondary: "#81C784",
+      secondaryLight: "#E8F5E9",
+      secondaryDark: "#66BB6A",
+      accent: "#A5D6A7",
+      accentLight: "#F1F8E9",
+      accentDark: "#43A047",
+      background: "#F1F8E9",
+      text: "#333333",
+      textLight: "#666666",
+      border: "#81C784",
+      buttonGradientFrom: "#66BB6A",
+      buttonGradientTo: "#388E3C",
+      cardBorder: "#A5D6A7",
+      timelineDot: "#4CAF50",
+      mentorHighlight: "#C8E6C9",
+      footerBackground: "#4CAF50",
+      footerBorder: "#A5D6A7",
+      footerText: "#E8F5E9",
+      gradientStart: "#C8E6C9",
+      gradientMiddle: "#A5D6A7",
+      gradientEnd: "#81C784",
+      timelineGradientStart: "#E8F5E9",
+      timelineGradientEnd: "#A5D6A7",
+      moduleNumberGradientStart: "#A5D6A7",
+      moduleNumberGradientEnd: "#81C784",
+      ctaGradientStart: "#81C784",
+      ctaGradientEnd: "#4CAF50",
+      bgHeroSectionImage: "/herolandingpage2.png",
+      fifteenMImage: "/15Mpage2.png",
+      oneBImage: "/1Bpage2.png",
+      twentyLImage: "/20Lpage2.png",
+    },
+    page3: { // Purple theme
+      primary: "#9C27B0",
+      primaryLight: "#E1BEE7",
+      primaryDark: "#6A1B9A",
+      secondary: "#AB47BC",
+      secondaryLight: "#F3E5F5",
+      secondaryDark: "#8E24AA",
+      accent: "#CE93D8",
+      accentLight: "#F8F0FB",
+      accentDark: "#7B1FA2",
+      background: "#F3E5F5",
+      text: "#333333",
+      textLight: "#666666",
+      border: "#AB47BC",
+      buttonGradientFrom: "#8E24AA",
+      buttonGradientTo: "#6A1B9A",
+      cardBorder: "#CE93D8",
+      timelineDot: "#9C27B0",
+      mentorHighlight: "#E1BEE7",
+      footerBackground: "#9C27B0",
+      footerBorder: "#CE93D8",
+      footerText: "#F3E5F5",
+      gradientStart: "#E1BEE7",
+      gradientMiddle: "#CE93D8",
+      gradientEnd: "#AB47BC",
+      timelineGradientStart: "#F3E5F5",
+      timelineGradientEnd: "#CE93D8",
+      moduleNumberGradientStart: "#CE93D8",
+      moduleNumberGradientEnd: "#AB47BC",
+      ctaGradientStart: "#AB47BC",
+      ctaGradientEnd: "#9C27B0",
+      bgHeroSectionImage: "/herolandingpage3.png",
+      fifteenMImage: "/15Mpage3.png",
+      oneBImage: "/1Bpage3.png",
+      twentyLImage: "/20Lpage3.png",
+    },
+  }
+
+  // Get the current theme based on the page prop
+  const colors = themes[page] || themes.page1
+  const link = page === "page1" ? "basic" : page === "page2" ? "intermediate" : "advance"
+
+  const toggleQuestion = (index) => {
+    setOpenIndex(openIndex === index ? null : index)
+  }
+
+  const bonusSkills = [
+    {
+      id: 1,
+      name: "WordPress",
+      imageUrl: "/wordpress.svg",
+    },
+    {
+      id: 2,
+      name: "Photoshop",
+      imageUrl: "/ps.svg",
+    },
+    {
+      id: 3,
+      name: "JavaScript",
+      imageUrl: "/javascript.svg",
+    },
+    {
+      id: 4,
+      name: "Mobile Video Editing",
+      imageUrl: "/mobile_video_editing.svg",
+    },
+    {
+      id: 5,
+      name: "Launch E-Course",
+      imageUrl: "/launch_e_course.svg",
+    },
+    {
+      id: 6,
+      name: "Google Ads",
+      imageUrl: "/google_ads.svg",
+    },
+    {
+      id: 7,
+      name: "Taxation",
+      imageUrl: "/taxation.svg",
+    },
+    {
+      id: 8,
+      name: "Public Relations",
+      imageUrl: "/pr.svg",
+    },
+    {
+      id: 9,
+      name: "Content Writing",
+      imageUrl: "/content_writing.svg",
+    },
+    {
+      id: 10,
+      name: "Copy Writing",
+      imageUrl: "/copy_writing.svg",
+    },
+    {
+      id: 11,
+      name: "Printify",
+      imageUrl: "/printify.svg",
+    },
+    {
+      id: 12,
+      name: "Shipping",
+      imageUrl: "/shipping.svg",
+    },
+  ]
+
+  const goldenAgeData = [
+    {
+      id: 1,
+      title: "Unstoppable Growth",
+      description:
+        "The freelance economy is expanding faster than ever, with businesses shifting to remote, flexible talent.",
+    },
+    {
+      id: 2,
+      title: "Endless Earnings",
+      description: "Say goodbye to fixed salaries—charge what you're worth and scale your income on your terms.",
+    },
+    {
+      id: 3,
+      title: "Freedom & Flexibility",
+      description: "Work from anywhere, choose your projects, and create a lifestyle that suits you.",
+    },
+  ]
+
+  const ModulesData = [
+    {
+      id: 1,
+      title: "Foundation",
+      descriptionTitle: "Start Strong, Succeed",
+      description:
+        "Master the fundamentals of freelancing, including mindset, client acquisition, and essential skills.",
+    },
+    {
+      id: 2,
+      title: "Positioning",
+      descriptionTitle: "Stand Out, Get Noticed",
+      description: "Learn how to position yourself as a premium freelancer who charges top rates.",
+    },
+    {
+      id: 3,
+      title: "Showcasing",
+      descriptionTitle: "Showcase Your Talent",
+      description: "Create a portfolio that highlights your skills and attracts high-paying clients.",
+    },
+    {
+      id: 4,
+      title: "Networking",
+      descriptionTitle: "Connect, Collaborate, Thrive",
+      description: "Build a network of fellow freelancers, mentors, and potential clients to help you grow.",
+    },
+    {
+      id: 5,
+      title: "Outreach",
+      descriptionTitle: "Get Found, Get Hired",
+      description: "Learn how to effectively reach out to potential clients and pitch your services.",
+    },
+    {
+      id: 6,
+      title: "Managing",
+      descriptionTitle: "Stay Organized, Stay Productive",
+      description: "Master time management, project management, and client communication skills.",
+    },
+    {
+      id: 7,
+      title: "Scaling",
+      descriptionTitle: "Grow Your Business",
+      description: "Learn how to scale your freelancing business, including hiring a team and creating a brand.",
+    },
+  ]
+
+  const questions = [
+    {
+      question: "How do I enroll in the course?",
+      answer:
+        "You can enroll directly from this page by clicking the button. Once you complete your purchase, you'll receive confirmation via WhatsApp and email.",
+    },
+    {
+      question: "What payment methods do you accept?",
+      answer:
+        "We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely through our payment gateway.",
+    },
+    {
+      question: "Is there a refund policy?",
+      answer:
+        "Yes, we offer a 30-day money-back guarantee. If you're not satisfied with the course, you can request a full refund within 30 days of purchase.",
+    },
+    {
+      question: "How long do I have access to the course materials?",
+      answer:
+        "Once enrolled, you have lifetime access to all course materials, including future updates and additional resources.",
+    },
+    {
+      question: "Are there any prerequisites for this course?",
+      answer:
+        "No specific prerequisites are required. The course is designed to accommodate beginners while also providing value to those with some experience.",
+    },
+    {
+      question: "Can I access the course on mobile devices?",
+      answer:
+        "Yes, our platform is fully responsive. You can access all course materials on desktop, tablet, and mobile devices.",
+    },
+    {
+      question: "Is there a community or support available?",
+      answer:
+        "You'll get access to our private community where you can connect with other students and instructors. We also provide dedicated support via email.",
+    },
+  ]
+
+  const cards = [
+    {
+      title: "Apt High-Ticket Framework",
+      description:
+        "Learn how to position yourself as a premium freelancer who charges top rates. This framework helps you stand out from the crowd, attract high-paying clients, and deliver work that justifies premium pricing. Stop working more for less—start earning big for the value you bring.",
+      img: "/member2.jpg",
+    },
+    {
+      title: "Master High-Income Skills",
+      description:
+        "Freelancing success starts with skills that businesses are desperate for. Learn in-demand, high-paying skills like marketing, content, and AI tools—the ones that drive business results. Master what pays, so clients always need you. Stay ahead of the curve with future-proof skills that keep your income growing.",
+      img: "/member2.jpg",
+    },
+    {
+      title: "Automate Client Acquisition",
+      description:
+        "Forget begging for work—let clients come to you. Build a personal brand that positions you as the go-to expert, so clients see your value upfront. Learn to use AI tools, social proof, and content to attract high-paying leads consistently—without chasing anyone. Turn your profile into a client magnet that works 24/7.",
+      img: "/member4.jpg",
+    },
+  ]
+
+  const heroSectionData = [
+    {
+      title: "Freelancing Road To 5 Lakhs Per Month",
+      subtitle: "Unlock High-Ticket Freelancing Success – Land Premium Clients, Scale Fast, and Work on Your Terms!",
+      numberOfCourses: "24 Skilled Courses",
+    },
+  ]
 
 
   return (
@@ -352,11 +353,12 @@ const [bundle , setBundle] = React.useState([])
       {/* page nav bar */}
       <div className="relative w-full h-auto py-3 md:h-[71.78px] bg-white/10 backdrop-blur-[12.5px] flex justify-between items-center px-4 md:px-6 lg:px-20 xl:px-56 shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] mx-auto">
         <Link to="/">
-        <img src="/logo1.png" alt="joshguru" className="w-[60px] md:w-[90px] h-[60px] object-cover" />  
+          <img src="/logo1.png" alt="joshguru" className="w-[60px] md:w-[90px] h-[60px] object-cover" />
         </Link>
-        <button className="px-4 md:px-6 py-2 bg-transparent text-white font-semibold border-2 border-white shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] transition-all duration-200 hover:bg-white hover:text-blue-600 text-sm md:text-base">
-          <Link to={!user?`/signup?type=specialbundle&level=${link}`:"/payment"}>   Enroll Now</Link>
+        <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}><button className="px-4 md:px-6 py-2 bg-transparent text-white font-semibold border-2 border-white shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] transition-all duration-200 hover:bg-white hover:text-blue-600 text-sm md:text-base">
+          Enroll Now
         </button>
+        </Link>
       </div>
 
       {/* Optional hero section */}
@@ -388,11 +390,10 @@ const [bundle , setBundle] = React.useState([])
         {/* Language Tabs */}
         <div className="flex gap-3 mb-6 md:mb-10">
           <button
-            className={`w-[84.16px] h-[34.5px] rounded-full flex items-center justify-center text-white text-[13.94px] ${
-              selected === "english"
+            className={`w-[84.16px] h-[34.5px] rounded-full flex items-center justify-center text-white text-[13.94px] ${selected === "english"
                 ? `bg-gradient-to-r from-${colors.primaryLight} to-${colors.primary}`
                 : "bg-white/10"
-            }`}
+              }`}
             style={{
               background:
                 selected === "english" ? `linear-gradient(to right, ${colors.primaryLight}, ${colors.primary})` : "",
@@ -402,9 +403,8 @@ const [bundle , setBundle] = React.useState([])
             English
           </button>
           <button
-            className={`w-[84.16px] h-[34.5px] rounded-full flex items-center justify-center text-[#333333] text-[14.18px] ${
-              selected === "hindi" ? `bg-gradient-to-r from-${colors.primaryLight} to-${colors.primary}` : "bg-white/10"
-            }`}
+            className={`w-[84.16px] h-[34.5px] rounded-full flex items-center justify-center text-[#333333] text-[14.18px] ${selected === "hindi" ? `bg-gradient-to-r from-${colors.primaryLight} to-${colors.primary}` : "bg-white/10"
+              }`}
             style={{
               background:
                 selected === "hindi" ? `linear-gradient(to right, ${colors.primaryLight}, ${colors.primary})` : "",
@@ -450,37 +450,39 @@ const [bundle , setBundle] = React.useState([])
         </div>
 
         {/* Video Section */}
-          <div
-            className="w-full max-w-[950px] h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] bg-gradient-to-b rounded-[12px] overflow-hidden"
-            style={{
-              background: `linear-gradient(to bottom, ${colors.primary}, ${colors.secondary})`,
-            }}
-          >
-            <div className="w-full h-full p-[3px]">
-              <div className="w-full h-full bg-[#0F0F0F] rounded-[10px] overflow-hidden">
-                <video
-            src={
-              selected === "english"
-                ? bundle?.videoUrlEnglish || "https://www.w3schools.com/html/mov_bbb.mp4"
-                : bundle?.videoUrlHindi || "https://www.w3schools.com/html/mov_bbb.mp4"
-            }
-            controls
-            className="w-full h-full object-cover rounded-[10px]"
-                ></video>
-              </div>
+        <div
+          className="w-full max-w-[950px] h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] bg-gradient-to-b rounded-[12px] overflow-hidden"
+          style={{
+            background: `linear-gradient(to bottom, ${colors.primary}, ${colors.secondary})`,
+          }}
+        >
+          <div className="w-full h-full p-[3px]">
+            <div className="w-full h-full bg-[#0F0F0F] rounded-[10px] overflow-hidden">
+              <video
+                src={
+                  selected === "english"
+                    ? bundle?.videoUrlEnglish || "https://www.w3schools.com/html/mov_bbb.mp4"
+                    : bundle?.videoUrlHindi || "https://www.w3schools.com/html/mov_bbb.mp4"
+                }
+                controls
+                className="w-full h-full object-cover rounded-[10px]"
+              ></video>
             </div>
           </div>
-          <div className="mt-8 md:mt-12">
-            <button
-              className="h-[51px] rounded px-6 md:px-10 text-white text-base md:text-[16.7344px] leading-[27px] font-medium w-[250px] md:w-[350px] flex items-center justify-center"
-              style={{
-                background: `linear-gradient(to right, ${colors.buttonGradientFrom}, ${colors.buttonGradientTo})`,
-              }}
-              onClick={() => window.open(bundle?.startLearningUrl || "#", "_blank")}
-            >
-              Start Learning
-            </button>
-          </div>
+        </div>
+        <div className="mt-8 md:mt-12">
+          <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}>  <button
+            className="h-[51px] rounded px-6 md:px-10 text-white text-base md:text-[16.7344px] leading-[27px] font-medium w-[250px] md:w-[350px] flex items-center justify-center"
+            style={{
+              background: `linear-gradient(to right, ${colors.buttonGradientFrom}, ${colors.buttonGradientTo})`,
+            }}
+          >
+
+            Start Learning
+
+          </button>
+          </Link>
+        </div>
       </div>
 
       {/*Bonus Skills */}
@@ -678,7 +680,7 @@ const [bundle , setBundle] = React.useState([])
 
           {/* CTA Button */}
           <div className="flex justify-center">
-            <button
+            <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}> <button
               style={{
                 background: `linear-gradient(to right, ${colors.buttonGradientFrom}, ${colors.buttonGradientTo})`,
               }}
@@ -686,6 +688,7 @@ const [bundle , setBundle] = React.useState([])
             >
               Claim your spot
             </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -927,65 +930,65 @@ const [bundle , setBundle] = React.useState([])
       <section className="py-10 px-4 bg-white mt-10">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-3xl font-bold mb-6">
-            Before You Ask!
-            <span className="block w-32 h-1 bg- mt-2" style={{ backgroundColor: colors.primaryLight }}></span>
-          </h2>
-          <p className="text-lg mb-6 sm:mb-8">
-            Yes, you'll be certified for each course after passing the tests.
-          </p>
+            <div>
+              <h2 className="text-3xl font-bold mb-6">
+                Before You Ask!
+                <span className="block w-32 h-1 bg- mt-2" style={{ backgroundColor: colors.primaryLight }}></span>
+              </h2>
+              <p className="text-lg mb-6 sm:mb-8">
+                Yes, you'll be certified for each course after passing the tests.
+              </p>
 
-          <div className="space-y-6">
-            <div className="flex gap-4">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md flex items-center justify-center text-white flex-shrink-0"
-          style={{ backgroundColor: colors.secondary}}>
-            <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-          </div>
-          <p className="font-medium text-sm sm:text-base">
-            Official certificate from us to verify your achievements and increase your job prospects.
-          </p>
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md flex items-center justify-center text-white flex-shrink-0"
+                    style={{ backgroundColor: colors.secondary }}>
+                    <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" />
+                  </div>
+                  <p className="font-medium text-sm sm:text-base">
+                    Official certificate from us to verify your achievements and increase your job prospects.
+                  </p>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md flex items-center justify-center text-white flex-shrink-0"
+                    style={{ backgroundColor: colors.secondary }}>
+                    <Users className="h-5 w-5 sm:h-6 sm:w-6" />
+                  </div>
+                  <p className="font-medium text-sm sm:text-base">
+                    Easily shareable certificate for your portfolio to post on all platforms available.
+                  </p>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md flex items-center justify-center text-white flex-shrink-0"
+                    style={{ backgroundColor: colors.secondary }}>
+                    <Award className="h-5 w-5 sm:h-6 sm:w-6" />
+                  </div>
+                  <p className="font-medium text-sm sm:text-base">
+                    Use your certificate to enhance your professional credibility and stand out among your peers.
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="flex gap-4">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md flex items-center justify-center text-white flex-shrink-0"
-          style={{ backgroundColor: colors.secondary}}>
-            <Users className="h-5 w-5 sm:h-6 sm:w-6" />
-          </div>
-          <p className="font-medium text-sm sm:text-base">
-            Easily shareable certificate for your portfolio to post on all platforms available.
-          </p>
+            <div className="flex items-center justify-center">
+              <div
+                className="border-4 rounded-lg p-3 sm:p-4 bg-[#FFF8DC] max-w-xs sm:max-w-md"
+                style={{ borderColor: colors.primary }}
+              >
+                <img
+                  src={Certificate}
+                  alt="Certificate"
+                  className="rounded"
+                />
+              </div>
             </div>
-
-            <div className="flex gap-4">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md flex items-center justify-center text-white flex-shrink-0"
-          style={{ backgroundColor: colors.secondary}}>
-            <Award className="h-5 w-5 sm:h-6 sm:w-6" />
-          </div>
-          <p className="font-medium text-sm sm:text-base">
-            Use your certificate to enhance your professional credibility and stand out among your peers.
-          </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-center">
-          <div
-            className="border-4 rounded-lg p-3 sm:p-4 bg-[#FFF8DC] max-w-xs sm:max-w-md"
-            style={{ borderColor: colors.primary }}
-          >
-            <img
-          src="https://media.istockphoto.com/id/1427207629/vector/certificate-of-appreciation-template-gold-and-blue-color-clean-modern-certificate-with-gold.jpg?s=612x612&w=0&k=20&c=ZTN5SJx55fIbCEdynoE5tVb9qX9MIztBp8KYfn1DPq0="
-          alt="Certificate"
-          className="rounded"
-            />
-          </div>
-        </div>
           </div>
         </div>
       </section>
 
-        {/* Question */}
+      {/* Question */}
       <div className="w-full py-12 md:py-16 lg:py-20 mb-16">
         <div className="w-full max-w-4xl mx-auto px-4">
           <div className="text-center mb-8 md:mb-12">
@@ -1011,17 +1014,15 @@ const [bundle , setBundle] = React.useState([])
                   <span className="font-medium text-gray-800 text-sm md:text-base">{item.question}</span>
                   <ChevronDown
                     style={{ color: colors.primary }}
-                    className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-200 ${
-                      openIndex === index ? "transform rotate-180" : ""
-                    }`}
+                    className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-200 ${openIndex === index ? "transform rotate-180" : ""
+                      }`}
                   />
                 </button>
 
                 <div
                   style={{ backgroundColor: colors.background }}
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    openIndex === index ? "max-h-40 py-3 px-3 md:py-4 md:px-5" : "max-h-0"
-                  }`}
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index ? "max-h-40 py-3 px-3 md:py-4 md:px-5" : "max-h-0"
+                    }`}
                 >
                   <p className="text-gray-600 text-sm md:text-base">{item.answer}</p>
                 </div>
@@ -1049,11 +1050,13 @@ const [bundle , setBundle] = React.useState([])
               <span className="text-white text-base md:text-[18.5938px] font-bold">₹49,999</span>
             </div>
           </div>
-          <button className="w-full md:w-auto px-4 py-2 md:px-6 md:py-3 bg-white/10 border border-white rounded-[4px] mt-3 md:mt-0">
-            <span className="text-white text-sm md:text-[15.125px]"><Link to={!user?`/signup?type=specialbundle&level=${link}`:"/payment"}>
-                    Enroll Now
-                    </Link></span>
-          </button>
+          <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}>
+            <button className="w-full md:w-auto px-4 py-2 md:px-6 md:py-3 bg-white/10 border border-white rounded-[4px] mt-3 md:mt-0">
+              <span className="text-white text-sm md:text-[15.125px]">
+                Enroll Now
+              </span>
+            </button>
+          </Link>
         </div>
       </div>
     </div>
