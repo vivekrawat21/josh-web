@@ -1,31 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { useRef } from 'react';
 import { BASE_URL } from '../utils/utils';
 import CustomToast from './CustomToast';
+
 const MarkdownEditor = ({ type, data }) => {
   const [markdown, setMarkdown] = useState(data?.content || '');
   const [selectedButton, setSelectedButton] = useState('');
   const [loading, setLoading] = useState(false);
- const [showToast, setShowToast] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [toolbarExpanded, setToolbarExpanded] = useState(false);
+  
+  const textareaRef = useRef(null);
+
   useEffect(() => {
     setMarkdown(data?.content || '');
   }, [data]);
 
-  const textareaRef = useRef(null);
+  const autoResize = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  };
 
-const autoResize = () => {
-  const textarea = textareaRef.current;
-  if (textarea) {
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
-  }
-};
-
-useEffect(() => {
-  autoResize();
-}, [markdown]);
+  useEffect(() => {
+    autoResize();
+  }, [markdown]);
 
   const insertAtCursor = (before, after = '', placeholder = '', buttonId) => {
     const textarea = document.getElementById('markdown-textarea');
@@ -72,8 +74,8 @@ useEffect(() => {
         setShowToast(true);
         setTimeout(() => {
           setShowToast(false);
-        }, 3000);}
-      // console.log('Updated successfully', res.data);
+        }, 3000);
+      }
     } catch (err) {
       console.error('Error updating:', err);
     } finally {
@@ -149,63 +151,104 @@ useEffect(() => {
     return html;
   };
 
-  return (
-    <div className="w-full max-w-5xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Markdown Editor for {type} section</h1>
+  const formatButtons = [
+    { label: 'Bold', before: '**', after: '**', placeholder: 'bold text', id: 'bold' },
+    { label: 'Italic', before: '*', after: '*', placeholder: 'italic text', id: 'italic' },
+    { label: 'H2', before: '\n## ', after: '\n', placeholder: 'Heading 2', id: 'h2' },
+    { label: 'H3', before: '\n### ', after: '\n', placeholder: 'Heading 3', id: 'h3' },
+    { label: 'Bullet', before: '\n- ', after: '', placeholder: 'Bullet item', id: 'bullet' },
+    { label: 'Number', before: '\n1. ', after: '', placeholder: 'Numbered item', id: 'number' },
+    { label: 'Quote', before: '\n> ', after: '', placeholder: 'Blockquote', id: 'quote' },
+    { label: 'Code', before: '\n```js\n', after: '\n```', placeholder: 'console.log("Hello");', id: 'code' },
+    { label: 'Link', before: '[', after: '](url)', placeholder: 'text', id: 'link' },
+    { label: 'Red', before: '<span style="color:red">', after: '</span>', placeholder: 'Red text', id: 'red' },
+    { label: 'Blue', before: '<span style="color:blue">', after: '</span>', placeholder: 'Blue text', id: 'blue' },
+    { label: 'Green', before: '<span style="color:green">', after: '</span>', placeholder: 'Green text', id: 'green' },
+  ];
 
-      {/* Toolbar */}
-      <div className="flex flex-wrap gap-2 mb-3">
-        {[
-          { label: 'Bold', before: '**', after: '**', placeholder: 'bold text', id: 'bold' },
-          { label: 'Italic', before: '*', after: '*', placeholder: 'italic text', id: 'italic' },
-          { label: 'H2', before: '\n## ', after: '\n', placeholder: 'Heading 2', id: 'h2' },
-          { label: 'H3', before: '\n### ', after: '\n', placeholder: 'Heading 3', id: 'h3' },
-          { label: 'Bullet', before: '\n- ', after: '', placeholder: 'Bullet item', id: 'bullet' },
-          { label: 'Number', before: '\n1. ', after: '', placeholder: 'Numbered item', id: 'number' },
-          { label: 'Quote', before: '\n> ', after: '', placeholder: 'Blockquote', id: 'quote' },
-          { label: 'Code', before: '\n```js\n', after: '\n```', placeholder: 'console.log("Hello");', id: 'code' },
-          { label: 'Link', before: '[', after: '](url)', placeholder: 'text', id: 'link' },
-          { label: 'Red', before: '<span style="color:red">', after: '</span>', placeholder: 'Red text', id: 'red' },
-          { label: 'Blue', before: '<span style="color:blue">', after: '</span>', placeholder: 'Blue text', id: 'blue' },
-          { label: 'Green', before: '<span style="color:green">', after: '</span>', placeholder: 'Green text', id: 'green' },
-        ].map(btn => (
+  // For smaller screens, show only first 4 buttons and rest behind "More" button
+  const primaryButtons = formatButtons.slice(0, 4);
+  const secondaryButtons = formatButtons.slice(4);
+
+  return (
+    <div className="w-full max-w-full md:max-w-5xl mx-auto p-2 md:p-4">
+      <h1 className="text-lg md:text-2xl font-bold mb-2 md:mb-4">
+        <span className="capitalize">{type}</span> Editor
+      </h1>
+
+      {/* Responsive Toolbar */}
+      <div className="mb-3">
+        {/* Always visible toolbar buttons */}
+        <div className="flex flex-wrap gap-1 md:gap-2 mb-2">
+          {primaryButtons.map(btn => (
+            <button
+              key={btn.id}
+              onClick={() => insertAtCursor(btn.before, btn.after, btn.placeholder, btn.id)}
+              className={`px-2 py-1 md:px-4 md:py-2 rounded border text-xs md:text-sm font-semibold transition-colors ${
+                selectedButton === btn.id ? 'bg-blue-500 text-white' : 'bg-white hover:bg-gray-100'
+              }`}
+            >
+              {btn.label}
+            </button>
+          ))}
+          
+          {/* More/Less toggle button for smaller screens */}
           <button
-            key={btn.id}
-            onClick={() => insertAtCursor(btn.before, btn.after, btn.placeholder, btn.id)}
-            className={`px-4 py-2 rounded border text-sm font-semibold ${
-              selectedButton === btn.id ? 'bg-blue-500 text-white' : 'bg-white hover:bg-gray-100'
-            }`}
+            onClick={() => setToolbarExpanded(!toolbarExpanded)}
+            className="px-2 py-1 md:px-4 md:py-2 rounded border text-xs md:text-sm font-semibold bg-gray-100 hover:bg-gray-200 transition-colors"
           >
-            {btn.label}
+            {toolbarExpanded ? 'Less' : 'More'} 
+            <span className="ml-1">
+              {toolbarExpanded ? '▲' : '▼'}
+            </span>
           </button>
-        ))}
+        </div>
+        
+        {/* Expandable secondary toolbar */}
+        {toolbarExpanded && (
+          <div className="flex flex-wrap gap-1 md:gap-2 mb-2 animate-fadeIn">
+            {secondaryButtons.map(btn => (
+              <button
+                key={btn.id}
+                onClick={() => insertAtCursor(btn.before, btn.after, btn.placeholder, btn.id)}
+                className={`px-2 py-1 md:px-4 md:py-2 rounded border text-xs md:text-sm font-semibold transition-colors ${
+                  selectedButton === btn.id ? 'bg-blue-500 text-white' : 'bg-white hover:bg-gray-100'
+                }`}
+              >
+                {btn.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Editor */}
       <textarea
-  id="markdown-textarea"
-  ref={textareaRef}
-  className="border w-full p-3 rounded mb-6 resize-none overflow-hidden"
-  value={markdown}
-  onChange={(e) => {
-    setMarkdown(e.target.value);
-    autoResize();
-  }}
-  placeholder="Write your content in Markdown here..."
-/>
-
+        id="markdown-textarea"
+        ref={textareaRef}
+        className="border w-full p-2 md:p-3 rounded mb-4 md:mb-6 resize-none overflow-hidden text-sm md:text-base"
+        value={markdown}
+        onChange={(e) => {
+          setMarkdown(e.target.value);
+          autoResize();
+        }}
+        placeholder="Write your content in Markdown here..."
+      />
 
       {/* Preview */}
-      <div className="border p-4 rounded bg-white shadow-sm">
-        <h2 className="text-xl font-semibold mb-2">Preview</h2>
-        <div className="markdown-preview" dangerouslySetInnerHTML={{ __html: markdownToHtml(markdown) }} />
+      <div className="border p-2 md:p-4 rounded bg-white shadow-sm mb-4">
+        <h2 className="text-base md:text-xl font-semibold mb-2">Preview</h2>
+        <div className="markdown-preview prose prose-sm md:prose-base max-w-none overflow-x-auto" 
+             dangerouslySetInnerHTML={{ __html: markdownToHtml(markdown) }} />
       </div>
 
       {/* Submit */}
-      <div className="flex justify-end mt-4">
-        {showToast && <CustomToast message={toastMessage} />}
+      <div className="flex justify-between items-center">
+        <div className="relative">
+          {showToast && <CustomToast message={toastMessage} />}
+        </div>
         <button
-          className="bg-gray-900 text-white px-4 py-2 rounded-md disabled:opacity-50"
+          className="bg-gray-900 text-white px-3 py-1 md:px-4 md:py-2 rounded-md disabled:opacity-50 text-sm md:text-base transition-opacity"
           onClick={() => handleClick(markdown, type)}
           disabled={loading}
         >
