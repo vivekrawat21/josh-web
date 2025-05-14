@@ -51,6 +51,7 @@ import WebDevelopmentWebinar from "./pages/WebDevelopmentWebinar";
 import MicrosoftDynamicsWebinar from "./pages/MicrosoftDynamicsWebinar";
 import OdooERPWebinar from "./pages/OdooErpWebinar";
 import AdminAssignMentor from "./components/AdminAssignMentor";
+import AdminTestimonials from "./components/AdminTestimonials";
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
           <Route path="/admin/offers" element={<AdminOffers />} />
           <Route path="/admin/webinars" element={<AdminWebinar />} />
           <Route path="/admin/gallery" element={<AdminGallery />} />
+          <Route path="/admin/testimonials" element={<AdminTestimonials />} />
           </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
         <Route index element={<PersonalInformation />} />

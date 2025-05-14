@@ -10,6 +10,7 @@ import { logoutUser } from '../features/user/userSlice';
 import { BASE_URL } from '../utils/utils';
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
+import { VscFeedback } from "react-icons/vsc";
 
 const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
   const dispatch = useDispatch();
@@ -65,6 +66,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
     { path: '/admin/offers', icon: <BiSolidOffer />, text: 'Offers' },
     { path: '/admin/webinars', icon: <FaVideo />, text: 'Webinars' },
     { path: '/admin/gallery', icon: <GrGallery />, text: 'Gallery' },
+    {path: '/admin/testimonials', icon: <VscFeedback />, text: 'Testimonials' },
   ];
 
   const toggleMobileMenu = () => {
