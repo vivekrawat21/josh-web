@@ -16,6 +16,14 @@ const Signup = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
+  // Redirect if already logged in
+  const user = useSelector((state) => state.user);
+  useEffect(() => {
+    if (user && user.email) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
+
   const courseId = queryParams.get('courseId');
   const typeParam = queryParams.get('type') || 'bundle';
   const levelParam = queryParams.get('level');
@@ -153,7 +161,6 @@ const Signup = () => {
       <div className="hidden lg:flex w-1/2 justify-start pr-8">
         <img src="/signup.jpg" alt="Signup" className="w-[90%] h-auto object-contain rounded-2xl" />
       </div>
-
       <div className="w-full max-w-screen-sm mx-auto bg-white lg:max-w-xl lg:shadow-xl lg:rounded-2xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 sm:mx-auto">
         <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-8 md:mb-10 bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text ">
           Signup to Joshguru

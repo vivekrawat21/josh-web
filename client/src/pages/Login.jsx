@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff, FiXCircle } from "react-icons/fi";
 import axios from "axios";
 import { BASE_URL } from "../utils/utils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../features/user/userSlice";
 import { Loader } from "lucide-react";
 
@@ -16,6 +16,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -37,12 +38,23 @@ const Login = () => {
     } catch (error) {
       const backendError = error.response?.data?.message;
       setErrorMsgs(
-        backendError ? (Array.isArray(backendError) ? backendError : [backendError]) : ["Something went wrong. Please try again."]
+        backendError
+          ? Array.isArray(backendError)
+            ? backendError
+            : [backendError]
+          : ["Something went wrong. Please try again."]
       );
     } finally {
       setLoading(false);
     }
   };
+
+  // Redirect if user is logged in
+  useEffect(() => {
+    if (user && user.email) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="bg-white lg:bg-gradient-to-br lg:from-orange-50 lg:to-blue-50 flex flex-col lg:flex-row items-center min-h-screen px-4 sm:px-6 mt-16">

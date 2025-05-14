@@ -52,7 +52,6 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const [loggedIn, setIsLoggedIn] = useState(!!user?.email);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -86,7 +85,7 @@ const Navbar = () => {
 
   const logout = async () => {
     try {
-      await axios.post(`${BASE_URL}/auth/logout`, { withCredentials: true });
+      await axios.post(`${BASE_URL}/auth/logout`, {}, { withCredentials: true });
       dispatch(logoutUser());
       navigate("/login");
     } catch (error) {
@@ -101,7 +100,6 @@ const Navbar = () => {
           withCredentials: true,
         });
         dispatch(setUser(res.data.data.user));
-        setIsLoggedIn(true);
       } catch {
         dispatch(logoutUser());
       }
@@ -115,7 +113,6 @@ const Navbar = () => {
         const allBundles = res?.data?.data.bundles;
         setBundles(allBundles);
         dispatch(setBundle(allBundles));
-
       } catch (error) {
         console.error("Error fetching bundles:", error);
       }
@@ -135,7 +132,7 @@ const Navbar = () => {
       }
     };
 
-    if (!user) fetchUser();
+    if (!user || !user.email) fetchUser();
     fetchBundles();
     fetchCourses();
   }, [user, dispatch]);
@@ -160,7 +157,6 @@ const Navbar = () => {
               Powered by <span className="text-gray-900">NIITF</span>
             </p>
           </div>
-
           <ul className="hidden md:flex items-center space-x-10 text-[16px] pt-4">
             <li><Link to="/" className="hover:text-orange-400 transition">Home</Link></li>
             <li><Link to="/about" className="hover:text-orange-400 transition">About</Link></li>
@@ -242,7 +238,8 @@ const Navbar = () => {
             )}
           </Link>
 
-          {!loggedIn ? (
+          {/* Use Redux user state instead of loggedIn */}
+          {!user?.email ? (
             <div className="hidden md:flex space-x-4">
               <Link to="/login" className="bg-orange-500 text-white px-4 py-2 rounded-lg">Login</Link>
               <Link to="/signup" className="border border-orange-500 text-orange-500 px-4 py-2 rounded-lg">Register</Link>
@@ -263,7 +260,7 @@ const Navbar = () => {
                   <Link to="/dashboard/help&support">Help and Support</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={logout}>
-                 Logout
+                  Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -281,7 +278,7 @@ const Navbar = () => {
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={toggleSidebar}
-        isLoggedIn={loggedIn}
+        isLoggedIn={!!user?.email}
         logout={logout}
         bundles={bundles}
         specialBundles={specialBundles}
