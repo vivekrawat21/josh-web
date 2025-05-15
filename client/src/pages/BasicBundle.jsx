@@ -784,7 +784,7 @@ const BasicBundle = ({ page = "page2" }) => {
                 and impact you desire.
               </p>
               <div className="hidden lg:block">
-                <button
+              <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}>  <button
                   style={{
                     background: `linear-gradient(to right, ${colors.ctaGradientStart}, ${colors.ctaGradientEnd})`,
                   }}
@@ -792,6 +792,7 @@ const BasicBundle = ({ page = "page2" }) => {
                 >
                   Get Started Today
                 </button>
+                </Link>
               </div>
             </div>
 
@@ -906,19 +907,11 @@ const BasicBundle = ({ page = "page2" }) => {
 
               {/* Highlight background and name */}
               <div className="relative">
-                {/* Background Block */}
-                <div
-                  style={{ backgroundColor: colors.mentorHighlight }}
-                  className="absolute left-0 top-0 w-[102.97px] h-[20px] z-0"
-                />
-                {/* Name */}
-                <span className="relative z-10 text-[#333333] font-normal text-sm md:text-[14.25px]">
-                  Lakshit Sethiya
-                </span>
+            
 
                 {/* Inline text after name */}
                 <span className="ml-1 text-white text-sm md:text-[14.75px]">
-                  , the founder of Social Sellar Academy, is a seasoned freelancer and social media marketing expert who has helped thousands of freelancers transform their businesses. Starting from scratch, Lakshit built a thriving freelance career by mastering the art of driving revenue through strategic digital marketing. With his freelancing experience, Lakshit has developed a proven system that enables freelancers to leverage social media to build profitable personal brands, attract high paying clients, and generate sustainable income.
+              Lakshita Sethiya, the founder of Social Sellar Academy, is a seasoned freelancer and social media marketing expert who has helped thousands of freelancers transform their businesses. Starting from scratch, Lakshit built a thriving freelance career by mastering the art of driving revenue through strategic digital marketing. With his freelancing experience, Lakshit has developed a proven system that enables freelancers to leverage social media to build profitable personal brands, attract high paying clients, and generate sustainable income.
                 </span>
               </div>
             </div>
