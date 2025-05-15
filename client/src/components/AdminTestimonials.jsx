@@ -398,101 +398,112 @@ const AdminTestimonials = () => {
 
       {/* Testimonials Gallery */}
       {loading && <div className={getFontSize("base")}>Loading...</div>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {testimonials.map((t) => (
-          <div
-            key={t._id}
-            className={`bg-white rounded-2xl shadow border-l-4 border-black p-6 flex flex-col justify-between relative ${getFontSize("base")}`}
-          >
-            <div className="absolute top-3 right-3 flex gap-2">
-              <button
-                className="text-gray-500 hover:text-black p-2 rounded-full"
-                onClick={() => handleEdit(t)}
-                title="Edit"
-              >
-                <FaEdit size={16} />
-              </button>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <button
-                    className="text-red-500 hover:text-red-700 p-2 rounded-full"
-                    onClick={() => {
-                      setToDeleteId(t._id);
-                      setShowDeleteDialog(true);
-                    }}
-                    title="Delete"
-                  >
-                    <FaTrash size={16} />
-                  </button>
-                </AlertDialogTrigger>
-                {showDeleteDialog && toDeleteId === t._id && (
-                  <AlertDialogContent className={getFontSize("input")}>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle className={getFontSize("subheading")}>Are you sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This will permanently remove <strong>"{t.name}"</strong>'s testimonial. This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel
-                        onClick={() => setShowDeleteDialog(false)}
-                        className={getFontSize("button")}
-                      >
-                        Cancel
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={handleDelete}
-                        disabled={loading}
-                        className={getFontSize("button")}
-                      >
-                        {loading ? 'Removing...' : 'Delete'}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                )}
-              </AlertDialog>
-            </div>
-            <div className="flex items-center gap-4 mb-3">
-              <img
-                src={t.image}
-                alt={t.name}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-              <div>
-                <h3 className={`font-semibold ${getFontSize("subheading")}`}>{t.name}</h3>
-                <p className="text-gray-500">{t.course}</p>
+
+      {/* Show message if no testimonials */}
+      {!loading && testimonials.length === 0 && (
+        <div className="text-center text-gray-500 text-lg py-12">
+          No testimonials at the moment
+        </div>
+      )}
+
+      {/* Show testimonials if available */}
+      {!loading && testimonials.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {testimonials.map((t) => (
+            <div
+              key={t._id}
+              className={`bg-white rounded-2xl shadow border-l-4 border-black p-6 flex flex-col justify-between relative ${getFontSize("base")}`}
+            >
+              <div className="absolute top-3 right-3 flex gap-2">
+                <button
+                  className="text-gray-500 hover:text-black p-2 rounded-full"
+                  onClick={() => handleEdit(t)}
+                  title="Edit"
+                >
+                  <FaEdit size={16} />
+                </button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button
+                      className="text-red-500 hover:text-red-700 p-2 rounded-full"
+                      onClick={() => {
+                        setToDeleteId(t._id);
+                        setShowDeleteDialog(true);
+                      }}
+                      title="Delete"
+                    >
+                      <FaTrash size={16} />
+                    </button>
+                  </AlertDialogTrigger>
+                  {showDeleteDialog && toDeleteId === t._id && (
+                    <AlertDialogContent className={getFontSize("input")}>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className={getFontSize("subheading")}>Are you sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will permanently remove <strong>"{t.name}"</strong>'s testimonial. This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel
+                          onClick={() => setShowDeleteDialog(false)}
+                          className={getFontSize("button")}
+                        >
+                          Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={handleDelete}
+                          disabled={loading}
+                          className={getFontSize("button")}
+                        >
+                          {loading ? 'Removing...' : 'Delete'}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  )}
+                </AlertDialog>
               </div>
-            </div>
-            {t.isVideo ? (
-              <div className="my-2">
-                <FaVideo className="inline mr-1 text-black" />
-                <iframe
-                  src={t.videoUrl}
-                  title={t.name}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-32 rounded-lg"
+              <div className="flex items-center gap-4 mb-3">
+                <img
+                  src={t.image}
+                  alt={t.name}
+                  className="w-12 h-12 rounded-full object-cover"
                 />
-              </div>
-            ) : (
-              <div className="my-2">
-                <FaImage className="inline mr-1 text-black" />
-                <div className="bg-gray-100 rounded-lg p-3 mt-2">
-                  <p className={`italic text-gray-700 ${getFontSize("base")}`}>{t.testimonialText || t.description}</p>
+                <div>
+                  <h3 className={`font-semibold ${getFontSize("subheading")}`}>{t.name}</h3>
+                  <p className="text-gray-500">{t.course}</p>
                 </div>
               </div>
-            )}
-            <div className="flex items-center mt-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <FaStar
-                  key={i}
-                  className={`w-5 h-5 ${i < t.rating ? "text-black" : "text-gray-300"}`}
-                />
-              ))}
+              {t.isVideo ? (
+                <div className="my-2">
+                  <FaVideo className="inline mr-1 text-black" />
+                  <iframe
+                    src={t.videoUrl}
+                    title={t.name}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-32 rounded-lg"
+                  />
+                </div>
+              ) : (
+                <div className="my-2">
+                  <FaImage className="inline mr-1 text-black" />
+                  <div className="bg-gray-100 rounded-lg p-3 mt-2">
+                    <p className={`italic text-gray-700 ${getFontSize("base")}`}>{t.testimonialText || t.description}</p>
+                  </div>
+                </div>
+              )}
+              <div className="flex items-center mt-3">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <FaStar
+                    key={i}
+                    className={`w-5 h-5 ${i < t.rating ? "text-black" : "text-gray-300"}`}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
