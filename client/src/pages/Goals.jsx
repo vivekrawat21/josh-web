@@ -140,9 +140,9 @@ const Goals = () => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-4">
+    <div className="w-full max-w-6xl mx-auto p-4 mt-4">
       <div className="bg-gray-50 rounded-3xl p-6 md:p-12 flex flex-col md:flex-row gap-8 relative overflow-hidden">
-        <div className="flex flex-col gap-6 md:w-3/5 w-full">
+        <div className="flex flex-col gap-6 md:w-3/5 w-full mt-4">
           <div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
               {goal.title}
