@@ -11,6 +11,7 @@ import { BASE_URL } from '../utils/utils';
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
 import { VscFeedback } from "react-icons/vsc";
+import { BiSolidInstitution } from "react-icons/bi";
 
 const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
   const dispatch = useDispatch();
@@ -67,6 +68,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
     { path: '/admin/webinars', icon: <FaVideo />, text: 'Webinars' },
     { path: '/admin/gallery', icon: <GrGallery />, text: 'Gallery' },
     {path: '/admin/testimonials', icon: <VscFeedback />, text: 'Testimonials' },
+    {path: '/admin/institutiontestimonials', icon: <BiSolidInstitution />, text: 'Institutional Testimonial' },
   ];
 
   const toggleMobileMenu = () => {
