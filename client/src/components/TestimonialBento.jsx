@@ -169,19 +169,19 @@ const TestimonialBento = () => {
       </h2>
 
       {/* Mobile View */}
-      <div className="flex space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide md:hidden pb-4">
+      <div className="flex space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide md:hidden h-full  py-4">
         {testimonials.map((testimonial, i) => (
           <motion.div
             key={i}
-            className="min-w-[88%] mx-auto p-3 rounded-xl shadow-md bg-white border-l-4 border-orange-500 snap-start h-[260px] flex flex-col justify-between"
+            className="min-w-[88%] mx-auto px-3 rounded-xl shadow-md  border-l-4 border-orange-500 snap-start   flex flex-col justify-between"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", duration: 0.6, delay: i * 0.1 }}
           >
             {!testimonial.isVideo && (
-              <div className="flex justify-center mb-1 ">
-                <img src={testimonial.image} alt={testimonial.name} className="rounded-full w-14 h-14 object-cover" />
+              <div className="flex justify-center py-2  h-32 ">
+                <img src={testimonial.image} alt={testimonial.name} className="rounded-full object-cover" />
               </div>
             )}
             {testimonial.isVideo ? (
@@ -189,7 +189,7 @@ const TestimonialBento = () => {
                 <video
                   src={testimonial.videoUrl}
                   controls
-                  className="h-32 w-[95%] rounded-md object-cover mx-auto"
+                  className="h-[260px] w-[95%] rounded-md object-cover mx-auto"
                 />
                 <div className="text-center">
                   <h3 className="text-md font-semibold text-gray-800">{testimonial.name}</h3>
@@ -198,14 +198,14 @@ const TestimonialBento = () => {
               </>
             ) : (
               <>
-                <div className="text-center mt-1">
+                <div className="text-center mt-1 ">
                   <h3 className="text-md font-semibold text-gray-800">{testimonial.name}</h3>
                   <p className="text-sm text-gray-500">{testimonial.course}</p>
                 </div>
                 <p className="text-gray-700 italic text-sm text-center px-1 mt-1">
                   "{testimonial.testimonialText}"
                 </p>
-                <div className="flex justify-center ">
+                <div className="flex justify-center pb-2 ">
                   {Array.from({ length: 5 }).map((_, starIndex) => (
                     <FaStar
                       key={starIndex}
