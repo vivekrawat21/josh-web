@@ -42,7 +42,7 @@ const Home = () => {
   }, [dispatch]);
   
   return (
-    
+    dk
     <div className="min-h-screen my-0">
       <HeroLanding/>
       <Partner/>
