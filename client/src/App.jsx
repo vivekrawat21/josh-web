@@ -156,7 +156,7 @@ function App() {
             </Route>
           </Route>
         </Routes>
-      {/* </BrowserRouter> */}
+      </BrowserRouter>
     </>
   );
 }
