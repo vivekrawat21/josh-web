@@ -43,7 +43,7 @@ const Home = () => {
   
   return (
     <div className="min-h-screen my-0">
-      {/* <HeroLanding/>
+      <HeroLanding/>
       <Partner/>
       <SearchCourses/>
       <SpecialBundles />
@@ -55,7 +55,7 @@ const Home = () => {
       <EducationalInstituteTestimonial/>
       <TestimonialBento />
       <FAQ />
-      <DiscountPopup/> */}
+      <DiscountPopup/>
     </div>
    
   )
