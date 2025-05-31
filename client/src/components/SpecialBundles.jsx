@@ -84,7 +84,7 @@ const SpecialBundles = () => {
       _id: "3",
       title: "Freelancing Road To 5 Lakhs",
       image: '/specialBundle3.png',
-      titleColor: "#3E72BE",
+      titleColor: "#7C42B0",
       link: "/advanceBundle",
     }
   ];
