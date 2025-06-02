@@ -80,7 +80,7 @@ const EducationalInstituteTestimonial = () => {
   return (
     <div className="bg-gradient-to-br from-orange-200 to-orange-50 p-6 md:p-12 shadow-lg mb-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl md:text-4xl lg:text-6xl font-semibold text-black">
+        <h2 className="text-2xl md:text-4xl lg:text-5xl font-semibold text-black">
           Trusted by Leading{" "}
           <span className="text-orange-500">Educational Institutions</span>
         </h2>

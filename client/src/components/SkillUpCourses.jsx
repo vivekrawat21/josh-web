@@ -73,7 +73,7 @@ const SkillUpCourses = () => {
 
   return (
     <section className="mt-8 pb-6 px-4 md:px-10 w-full mx-auto text-center relative overflow-hidden ">
-      <h2 className="text-[1.80rem] lg:text-7xl font-semibold text-center md:my-3 mt-1 mb-1 text-gray-900">
+      <h2 className="text-[1.80rem] lg:text-5xl font-semibold text-center md:my-3 mt-1 mb-1 text-gray-900">
         Choose Your <span className="text-orange-500">Course</span>
       </h2>
       <p className="text-gray-500 text-sm md:text-sm max-w-xsm md:mx-auto my-0 font-semibold font-sans">
