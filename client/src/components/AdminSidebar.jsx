@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../features/user/userSlice';
 import { BASE_URL } from '../utils/utils';
-import { FaChalkboardTeacher } from "react-icons/fa";
+import { FaChalkboardTeacher,FaUser } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
 import { VscFeedback } from "react-icons/vsc";
 import { BiSolidInstitution } from "react-icons/bi";
@@ -59,7 +59,8 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
   };
 
   const navLinks = [
-    { path: '/admin/dashboard', icon: <MdPolicy />, text: 'Privacy' },
+    { path: '/admin/dashboard', icon: <FaUser />, text: 'Dashboard' },
+    { path: '/admin/privacy', icon: <MdPolicy />, text: 'Privacy' },
     { path: '/admin/courses', icon: <FaBook />, text: 'Courses' },
     { path: '/admin/bundles', icon: <FaBook />, text: 'Bundles' },
     { path: '/admin/students', icon: <FaGift />, text: 'Students' },
