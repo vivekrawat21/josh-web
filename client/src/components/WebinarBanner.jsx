@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom"
 
 const WebinarBanner = ({ isAdmin = true, autoRotateInterval = 60000 }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isVisible, setIsVisible] = useState(true)
   const [webinars, setWebinars] = useState([])
 
   const fetchWebinars = async () => {
@@ -25,14 +24,14 @@ const WebinarBanner = ({ isAdmin = true, autoRotateInterval = 60000 }) => {
   }, [])
 
   useEffect(() => {
-    if (!isVisible || webinars.length <= 1) return
+    if ( webinars.length <= 1) return
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % webinars.length)
     }, autoRotateInterval)
 
     return () => clearInterval(interval)
-  }, [webinars, autoRotateInterval, isVisible])
+  }, [webinars, autoRotateInterval, ])
 
   const goToPrevious = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + webinars.length) % webinars.length)
@@ -44,17 +43,7 @@ const WebinarBanner = ({ isAdmin = true, autoRotateInterval = 60000 }) => {
 
   return (
     <div className="relative w-full overflow-hidden px-2 sm:px-4 md:p-5">
-      {isAdmin && (
-        <button
-          onClick={() => setIsVisible(!isVisible)}
-          className="absolute top-4 right-4 z-50 p-2 bg-white/90 rounded-full shadow-md hover:bg-white transition-colors"
-          aria-label={isVisible ? "Hide banner" : "Show banner"}
-        >
-          <X className={`h-4 w-4 text-gray-700 transition-transform ${isVisible ? "" : "rotate-45"}`} />
-        </button>
-      )}
-
-      {isVisible && webinars.length > 0 && (
+      {webinars.length > 0 && (
         <>
           {/* Desktop View */}
           <div className="hidden md:block">

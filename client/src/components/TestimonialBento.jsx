@@ -164,7 +164,7 @@ const TestimonialBento = () => {
 
   return (
     <div className="pt-2 md:pt-5 px-2 md:px-12 bg-orange-100 shadow-lg pb-3">
-      <h2 className="text-2xl md:text-6xl font-bold text-center my-6 text-gray-900">
+      <h2 className="text-2xl md:text-5xl font-bold text-center my-6 text-gray-900">
         Students <span className="text-orange-500">Testimonials</span>
       </h2>
 

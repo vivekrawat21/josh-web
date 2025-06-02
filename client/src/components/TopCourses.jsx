@@ -40,7 +40,7 @@ const TopCourses = () => {
   }
   return (
     <section className=" pb-6 px-4 md:px-10 w-full mx-auto text-center relative overflow-hidden mb-4  ">
-      <h2 className="text-[1.80rem] lg:text-7xl font-semibold text-center  my-6 text-gray-900">
+      <h2 className="text-[1.80rem] lg:text-5xl font-semibold text-center  my-6 text-gray-900">
         Trending <span className="text-orange-500">Courses</span>
       </h2>
 

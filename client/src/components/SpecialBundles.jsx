@@ -98,7 +98,7 @@ const SpecialBundles = () => {
   }));
   return (
     <section className="py-8 px-4">
-      <h2 className="text-2xl lg:text-7xl font-semibold text-center  my-8 text-gray-900">
+      <h2 className="text-2xl lg:text-5xl font-semibold text-center  my-8 text-gray-900">
         Digital <span className="text-orange-500">Learning Bundles</span>
       </h2>
 
