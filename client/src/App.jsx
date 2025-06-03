@@ -30,7 +30,9 @@ import AdminLogin from "./components/AdminLogin";
 import AdminMentor from "./components/AdminMentor";
 import Students from "./components/Students";
 import AdminLayout from "./components/AdminLayout";
+import AdminPrivacy from "./components/AdminPrivacy";
 import AdminDashboard from "./components/AdminDashboard";
+
 import AdminOffers from "./components/AdminOffers.jsx";
 import AdminGallery from "./components/AdminGallery";
 import Blog from "./pages/Blog";
@@ -73,6 +75,8 @@ function App() {
           <Route path="/admin/mentors" element={<AdminMentor />} />
           <Route path="/admin/students" element={<Students />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/privacy" element={<AdminPrivacy />} />
+
           <Route path="/admin/offers" element={<AdminOffers />} />
           <Route path="/admin/webinars" element={<AdminWebinar />} />
           <Route path="/admin/gallery" element={<AdminGallery />} />
