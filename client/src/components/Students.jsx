@@ -44,7 +44,8 @@ const Students = () => {
   }, []);
 
   const createStudent = async () => {
-    const userInfo = { name, mobilenumber, email, password, referralCode };
+    let adminGeneratedPassword = password;
+    const userInfo = { name, mobilenumber, email, password, referralCode,adminGeneratedPassword };
 
     try {
       const checkRes = await axios.post(`${BASE_URL}/auth/checkuserexist`, {
@@ -71,6 +72,7 @@ const Students = () => {
             closeDialogRef.current?.click();
           }, 1500);
         }
+        console.log(userInfo)
       } else {
         alert('User already exists!');
       }
@@ -94,6 +96,7 @@ const Students = () => {
     ReferralCode: item.sharableReferralCode || '',
     BundleEnrolled: item.bundles.length || 0,
     CourseEnrolled: item.courses.length || 0,
+    adminGeneratedPassword: item.adminGeneratedPassword || '',
     CreatedAt: new Date(item.createdAt).toISOString().split('T')[0] ||  '',
 
     ID: item._id,
@@ -208,6 +211,9 @@ const Students = () => {
             <p className="text-sm md:text-base text-gray-600 mb-1">Email: {student.email}</p>
             <p className="text-sm md:text-base text-gray-600 mb-1">ReferralCode: {student.sharableReferralCode}</p>
             <p className="text-sm md:text-base text-gray-600 mb-4">Mobile: {student.mobilenumber}</p>
+            {student.adminGeneratedPassword && 
+            <p className="text-sm md:text-base text-gray-600 mb-4">Mobile: {student.adminGeneratedPassword}</p>}
+            
             <div className="flex flex-col  gap-2 w-full">
               <div className='flex flex-col  lg:flex-row gap-2 w-full'>
               <AssignCourse assignType="course" studentId={student._id} />
