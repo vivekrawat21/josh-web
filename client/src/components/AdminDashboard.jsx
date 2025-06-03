@@ -1,113 +1,131 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../utils/utils';
-import MarkdownEditor from './MarkdownEditor';
+import { BASE_URL } from '@/utils/utils';
+import CustomToast from './CustomToast';
+import { Eye, EyeOff } from 'lucide-react';
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('disclaimer');
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const tabNames = {
-    disclaimer: 'Disclaimer',
-    refund: 'Refund Policy',
-    license: 'License & Agreement',
-    terms: 'Terms & Conditions'
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+
+  // Toast state: message, type (success, error), and visibility
+  const [toast, setToast] = useState({ message: '', type: '', visible: false });
+
+  const showToast = (type, message) => {
+    setToast({ type, message, visible: true });
+    setTimeout(() => {
+      setToast((prev) => ({ ...prev, visible: false }));
+    }, 2000);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/privacy/getAll`, {
-          withCredentials: true,
-        });
-        if (res.data) {
-          setData(res.data.data);
-        }
-      } catch (error) {
-        console.error("Error while fetching all data:", error);
-      } finally {
-        setLoading(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await axios.patch(
+        `${BASE_URL}/auth/adminpassword`,
+        { oldPassword, newPassword },
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        showToast('success', 'Password changed successfully!');
+        setOldPassword('');
+        setNewPassword('');
+      } else {
+        showToast('error', res.data?.message || 'Failed to change password');
       }
-    };
-    fetchData();
-  }, []);
-
-  const selectedData = data.find(item => item.contentType === activeTab);
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-    setMobileMenuOpen(false); // Close dropdown on mobile when a tab is selected
+    } catch (error) {
+      console.error(error);
+      showToast('error', error.response?.data?.message || 'Error changing password');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="p-3 md:p-6 max-w-full">
-      <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Privacy Controller</h1>
+    <div className="max-w-md mx-auto mt-10 p-6 sm:p-8 border rounded-lg shadow-lg relative bg-white
+                    w-full sm:max-w-md
+                    ">
+      {/* CustomToast rendered conditionally */}
+      {toast.visible && (
+        <CustomToast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast({ ...toast, visible: false })}
+        />
+      )}
 
-      {/* Desktop Tabs - Hidden on small screens */}
-      <div className="hidden md:flex space-x-2 lg:space-x-4 mb-4 border-b pb-2 overflow-x-auto">
-        {Object.keys(tabNames).map(tab => (
-          <button
-            key={tab}
-            onClick={() => handleTabClick(tab)}
-            className={`px-3 py-2 md:px-4 whitespace-nowrap rounded-t transition-colors ${
-              activeTab === tab 
-                ? 'bg-gray-600 text-white' 
-                : 'bg-gray-100 hover:bg-gray-200'
+      <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-800">Admin Password Reset</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block mb-2 font-semibold text-gray-700 text-sm sm:text-base">Old Password</label>
+          <div className="relative">
+            <input
+              type={showOldPassword ? 'text' : 'password'}
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-md pr-12 text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              required
+              disabled={loading}
+              placeholder="Enter your old password"
+              autoComplete="current-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowOldPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-orange-600 transition"
+              tabIndex={-1}
+              aria-label={showOldPassword ? 'Hide old password' : 'Show old password'}
+            >
+              {showOldPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label className="block mb-2 font-semibold text-gray-700 text-sm sm:text-base">New Password</label>
+          <div className="relative">
+            <input
+              type={showNewPassword ? 'text' : 'password'}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-md pr-12 text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              required
+              disabled={loading}
+              placeholder="Enter your new password"
+              autoComplete="new-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowNewPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-orange-600 transition"
+              tabIndex={-1}
+              aria-label={showNewPassword ? 'Hide new password' : 'Show new password'}
+            >
+              {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full py-3 rounded-md text-white text-lg font-semibold transition
+            ${
+              loading
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-400'
             }`}
-          >
-            {tabNames[tab]}
-          </button>
-        ))}
-      </div>
-
-      {/* Mobile Dropdown - Visible only on small screens */}
-      <div className="md:hidden mb-4 relative">
-        <button 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="w-full flex items-center justify-between bg-gray-100 px-4 py-2 rounded border"
         >
-          <span>{tabNames[activeTab]}</span>
-          <svg 
-            className={`w-5 h-5 transition-transform ${mobileMenuOpen ? 'rotate-180' : ''}`} 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
+          {loading ? 'Changing...' : 'Change Password'}
         </button>
-        
-        {mobileMenuOpen && (
-          <div className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg">
-            {Object.keys(tabNames).map(tab => (
-              <button
-                key={tab}
-                onClick={() => handleTabClick(tab)}
-                className={`block w-full text-left px-4 py-2 hover:bg-gray-100 ${
-                  activeTab === tab ? 'bg-gray-100 font-medium' : ''
-                }`}
-              >
-                {tabNames[tab]}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Tab Content */}
-      <div className="border rounded p-2 md:p-4 bg-white shadow-sm">
-        {loading ? (
-          <div className="flex justify-center items-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
-          </div>
-        ) : (
-          <div className="w-full overflow-x-auto">
-            <MarkdownEditor type={activeTab} data={selectedData} />
-          </div>
-        )}
-      </div>
+      </form>
     </div>
   );
 };
