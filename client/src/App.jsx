@@ -53,6 +53,7 @@ import OdooERPWebinar from "./pages/OdooErpWebinar";
 import AdminAssignMentor from "./components/AdminAssignMentor";
 import AdminTestimonials from "./components/AdminTestimonials";
 import AdminInstitutionalTestimonial from "./components/AdminInstitutionalTestimonial";
+import ResetPassword from "./components/ResetPassword";
 
 function App() {
   return (
@@ -114,6 +115,7 @@ function App() {
               <Route path="/course/:courseId/learn" element={<CoursePlayer />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/coursePlayer" element={<CoursePlayer />} />
+              
 
               {/* <Route path="/course/:videoIndex" element={<CoursePlayer />} /> */}
 
@@ -123,22 +125,17 @@ function App() {
               <Route path="/disclaimer" element={<Disclaimer />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/licenseAndAgreement" element={<LicenseAndAgreement/>} />
-
               <Route path="/refund" element={<RefundAndPolicy />} />
-
-
               <Route path="/blogs" element={<Blogs />} />
-          
               <Route path="/webinars" element={<Webinars />} />
               <Route path="/digital-marketing/:webinarId" element={<DigitalMarketingWebinar />} />
               <Route path="/full-stack/:webinarId" element={<WebDevelopmentWebinar />} />
               <Route path="/microsoft-dynamic/:webinarId" element={<MicrosoftDynamicsWebinar />} />
               <Route path="/odoo-erp/:webinarId" element={<OdooERPWebinar />} />
-              
               <Route path="/goal/:id" element={<Goals />} />
               {/* <Route path="/specialBundle/:id" element={<BasicBundle />} /> */}
               <Route path="/gallery/:category" element={<Gallery />} />
-
+              <Route path="reset-password/:token" element={<ResetPassword />} />
               <Route path="/blogs/:id" element={<Blog />} />
 
 

@@ -44,7 +44,7 @@ const Home = () => {
   return (
     <div className="min-h-screen my-0">
       <HeroLanding/>
-      <Partner/>
+      <Partner/> 
       <SearchCourses/>
       <SpecialBundles />
       <SkillUpCourses/>
