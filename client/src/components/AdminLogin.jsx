@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../features/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import CustomToast from './CustomToast';
-
+import { Link } from 'react-router-dom';
 const AdminLogin = ({ setIsLoggedIn }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -48,7 +48,7 @@ const AdminLogin = ({ setIsLoggedIn }) => {
       dispatch(setUser(res.data.data.user));
       setIsLoggedIn(true);
       showToast('success', 'Successfully logged in as Admin');
-      navigate('/admin/dashboard');
+      navigate('/admin/privacy');
     } catch (error) {
       console.error('Login failed:', error);
       showToast('error', error.response?.data?.message || 'Login failed. Please check your credentials.');
@@ -59,7 +59,7 @@ const AdminLogin = ({ setIsLoggedIn }) => {
 
   useEffect(() => {
     if (user?.role === 'admin') {
-      navigate('/admin/dashboard');
+      navigate('/admin/privacy');
     }
   }, [user, navigate]);
 
@@ -117,6 +117,14 @@ const AdminLogin = ({ setIsLoggedIn }) => {
             >
               {loading ? 'Logging in...' : 'Login'}
             </button>
+          </div>
+          <div className="text-right">
+            <Link
+              to="/forgotpassword"
+              className="text-sm text-blue-500 hover:underline"
+            >
+              Forgot Password?
+            </Link>
           </div>
         </form>
       </div>

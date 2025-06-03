@@ -59,7 +59,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
   };
 
   const navLinks = [
-    { path: '/admin/dashboard', icon: <FaUser />, text: 'Dashboard' },
+    { path: '/admin/dashboard', icon: <FaUser />, text: 'Admin' },
     { path: '/admin/privacy', icon: <MdPolicy />, text: 'Privacy' },
     { path: '/admin/courses', icon: <FaBook />, text: 'Courses' },
     { path: '/admin/bundles', icon: <FaBook />, text: 'Bundles' },

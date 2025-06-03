@@ -77,7 +77,6 @@ function App() {
           <Route path="/admin/students" element={<Students />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/privacy" element={<AdminPrivacy />} />
-
           <Route path="/admin/offers" element={<AdminOffers />} />
           <Route path="/admin/webinars" element={<AdminWebinar />} />
           <Route path="/admin/gallery" element={<AdminGallery />} />
