@@ -70,6 +70,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
     { path: '/admin/gallery', icon: <GrGallery />, text: 'Gallery' },
     {path: '/admin/testimonials', icon: <VscFeedback />, text: 'Testimonials' },
     {path: '/admin/institutiontestimonials', icon: <BiSolidInstitution />, text: 'Institutional Testimonial' },
+    {path:"/admin/about" , icon: <FaUser />, text: 'About' }
   ];
 
   const toggleMobileMenu = () => {
