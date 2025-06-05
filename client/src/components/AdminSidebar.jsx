@@ -12,6 +12,8 @@ import { FaChalkboardTeacher,FaUser } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
 import { VscFeedback } from "react-icons/vsc";
 import { BiSolidInstitution } from "react-icons/bi";
+import { TiGroup } from "react-icons/ti";
+
 
 const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
   const dispatch = useDispatch();
@@ -62,6 +64,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
     { path: '/admin/dashboard', icon: <FaUser />, text: 'Admin' },
     { path: '/admin/privacy', icon: <MdPolicy />, text: 'Privacy' },
     { path: '/admin/courses', icon: <FaBook />, text: 'Courses' },
+    {path:"/admin/about" , icon: <TiGroup />, text: 'About Us' },
     { path: '/admin/bundles', icon: <FaBook />, text: 'Bundles' },
     { path: '/admin/students', icon: <FaGift />, text: 'Students' },
     { path: '/admin/mentors', icon: <FaChalkboardTeacher />, text: 'Mentor' },
@@ -70,7 +73,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
     { path: '/admin/gallery', icon: <GrGallery />, text: 'Gallery' },
     {path: '/admin/testimonials', icon: <VscFeedback />, text: 'Testimonials' },
     {path: '/admin/institutiontestimonials', icon: <BiSolidInstitution />, text: 'Institutional Testimonial' },
-    {path:"/admin/about" , icon: <FaUser />, text: 'About' }
+    
   ];
 
   const toggleMobileMenu = () => {

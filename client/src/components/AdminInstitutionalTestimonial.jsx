@@ -254,10 +254,10 @@ const AdminInstitutionalTestimonial = () => {
       )}
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2">
-        <h2 className="text-base font-bold">Admin Institutional Testimonials</h2>
+        <h2 className=" text-2xl font-bold">Admin Institutional Testimonials</h2>
         {!adding ? (
           <button
-            className="flex items-center gap-1 bg-black text-white px-3 py-1 rounded text-xs hover:bg-gray-800 transition-all"
+            className="flex items-center gap-1 bg-black text-white px-3 py-1 rounded text-sm hover:bg-gray-800 transition-all"
             onClick={() => {
               setAdding(true);
               setForm(initialForm);
@@ -266,7 +266,7 @@ const AdminInstitutionalTestimonial = () => {
               setEditingId(null);
             }}
           >
-            <FaPlus size={12} /> Add Testimonial
+            <FaPlus size={18} /> Add Testimonial
           </button>
         ) : (
           <button

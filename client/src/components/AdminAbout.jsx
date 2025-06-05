@@ -97,7 +97,18 @@ const AdminAbout = () => {
     }
 
     const payload = new FormData();
-    TEXT_FIELDS_KEYS.forEach(key => payload.append(key, formData[key]));
+
+    // Append text fields
+    TEXT_FIELDS_KEYS.forEach(key => {
+      payload.append(key, formData[key]);
+    });
+
+    // Append image files if they are File objects
+    IMAGE_FIELDS_KEYS.forEach(key => {
+      if (formData[key] instanceof File) {
+        payload.append(key, formData[key]);
+      }
+    });
 
     try {
       setLoading(true);
