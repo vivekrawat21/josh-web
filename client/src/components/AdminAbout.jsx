@@ -129,7 +129,7 @@ const AdminAbout = () => {
   const hasActualChanges = checkForChanges();
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6">
+    <div className="w-full  mx-auto px-4 py-6">
       <div className="bg-white p-6 rounded-xl shadow-lg mb-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl sm:text-2xl font-bold">About Section</h2>
