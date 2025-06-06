@@ -3,47 +3,45 @@ import axios from 'axios';
 import { BASE_URL } from '@/utils/utils';
 import CustomToast from '@/components/CustomToast';
 import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
 
-const TEXT_FIELDS_KEYS = ['description', 'ourMission', 'ourVision', 'aboutFounder'];
-const IMAGE_FIELDS_KEYS = ['bannerImage', 'founderImage'];
+const TEXT_FIELDS_KEYS = ['description', 'ourMission', 'ourVision'];
+const IMAGE_FIELDS_KEYS = ['bannerImage'];
 
 const AdminAbout = () => {
+  // About page states
   const [formData, setFormData] = useState({
     bannerImage: '',
-    founderImage: '',
     ourMission: '',
     ourVision: '',
-    aboutFounder: '',
     description: '',
   });
-
   const [initialServerData, setInitialServerData] = useState({ ...formData });
-  const [preview, setPreview] = useState({ bannerImage: '', founderImage: '' });
+  const [preview, setPreview] = useState({ bannerImage: '' });
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ open: false, message: '', type: '' });
 
+  // Management team states
+  const [team, setTeam] = useState([]);
+  const [newMember, setNewMember] = useState({ name: '', role: '', image: null });
+  const [previewMemberImage, setPreviewMemberImage] = useState(null);
+
+  // Fetch About data
   const fetchAbout = useCallback(async () => {
     setLoading(true);
     try {
       const res = await axios.get(`${BASE_URL}/about`, { withCredentials: true });
       const serverData = res.data.data || {};
-
       const normalizedData = {
         ourMission: serverData.ourMission || '',
         ourVision: serverData.ourVision || '',
-        aboutFounder: serverData.aboutFounder || '',
         description: serverData.description || '',
         bannerImage: serverData.bannerImage || '',
-        founderImage: serverData.founderImage || '',
       };
-
       setFormData(normalizedData);
       setInitialServerData(normalizedData);
-      setPreview({
-        bannerImage: normalizedData.bannerImage,
-        founderImage: normalizedData.founderImage,
-      });
+      setPreview({ bannerImage: normalizedData.bannerImage });
       setEditMode(false);
     } catch (err) {
       const message = err.response?.data?.message || `Fetch failed: ${err.message}`;
@@ -53,28 +51,36 @@ const AdminAbout = () => {
     }
   }, []);
 
+  // Fetch management team
+  const fetchManagementTeam = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/management`);
+      setTeam(res.data.data || []);
+    } catch {
+      setToast({ open: true, message: 'Failed to fetch management team', type: 'error' });
+    }
+  };
+
   useEffect(() => {
     fetchAbout();
+    fetchManagementTeam();
   }, [fetchAbout]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e, field) => {
     const file = e.target.files[0];
     if (!file) return;
-    setFormData(prev => ({ ...prev, [field]: file }));
-    setPreview(prev => ({ ...prev, [field]: URL.createObjectURL(file) }));
+    setFormData((prev) => ({ ...prev, [field]: file }));
+    setPreview((prev) => ({ ...prev, [field]: URL.createObjectURL(file) }));
   };
 
   const handleCancel = () => {
     setFormData(initialServerData);
-    setPreview({
-      bannerImage: initialServerData.bannerImage || '',
-      founderImage: initialServerData.founderImage || '',
-    });
+    setPreview({ bannerImage: initialServerData.bannerImage || '' });
     setEditMode(false);
   };
 
@@ -97,14 +103,8 @@ const AdminAbout = () => {
     }
 
     const payload = new FormData();
-
-    // Append text fields
-    TEXT_FIELDS_KEYS.forEach(key => {
-      payload.append(key, formData[key]);
-    });
-
-    // Append image files if they are File objects
-    IMAGE_FIELDS_KEYS.forEach(key => {
+    TEXT_FIELDS_KEYS.forEach((key) => payload.append(key, formData[key]));
+    IMAGE_FIELDS_KEYS.forEach((key) => {
       if (formData[key] instanceof File) {
         payload.append(key, formData[key]);
       }
@@ -126,10 +126,58 @@ const AdminAbout = () => {
     }
   };
 
-  const hasActualChanges = checkForChanges();
+  // Management team handlers
+  const handleTeamInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewMember((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleTeamImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewMember((prev) => ({ ...prev, image: file }));
+      setPreviewMemberImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleAddTeamMember = async () => {
+    if (!newMember.name || !newMember.role || !newMember.image) {
+      return setToast({ open: true, message: 'All fields required', type: 'warning' });
+    }
+
+    const form = new FormData();
+    form.append('name', newMember.name);
+    form.append('role', newMember.role);
+    form.append('image', newMember.image);
+
+    try {
+      await axios.post(`${BASE_URL}/management/create`, form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
+      });
+      setToast({ open: true, message: 'Member added!', type: 'success' });
+      setNewMember({ name: '', role: '', image: null });
+      setPreviewMemberImage(null);
+      fetchManagementTeam();
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Failed to add member';
+      setToast({ open: true, message: msg, type: 'error' });
+    }
+  };
+
+  const handleDeleteMember = async (id) => {
+    try {
+      await axios.delete(`${BASE_URL}/management/delete/${id}`,{withCredentials: true});
+      setToast({ open: true, message: 'Member deleted!', type: 'success' });
+      fetchManagementTeam();
+    } catch {
+      setToast({ open: true, message: 'Failed to delete member', type: 'error' });
+    }
+  };
 
   return (
-    <div className="w-full  mx-auto px-4 py-6">
+    <div className="w-full mx-auto px-4 py-6">
+      {/* About Section */}
       <div className="bg-white p-6 rounded-xl shadow-lg mb-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl sm:text-2xl font-bold">About Section</h2>
@@ -138,15 +186,14 @@ const AdminAbout = () => {
               <>
                 <Button
                   onClick={handleSaveToServer}
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 text-sm"
-                  disabled={loading || !hasActualChanges}
-                  title={!hasActualChanges ? "No changes made to save" : "Save changes to server"}
+                  className="bg-orange-500 hover:bg-orange-600 text-white text-sm"
+                  disabled={loading || !checkForChanges()}
                 >
                   {loading ? 'Saving...' : 'Save'}
                 </Button>
                 <Button
                   onClick={handleCancel}
-                  className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 text-sm"
+                  className="bg-gray-300 hover:bg-gray-400 text-black text-sm"
                   disabled={loading}
                 >
                   Cancel
@@ -155,8 +202,7 @@ const AdminAbout = () => {
             ) : (
               <Button
                 onClick={() => setEditMode(true)}
-                className="bg-black hover:bg-gray-800 text-white px-4 py-2 text-sm"
-                disabled={loading}
+                className="bg-black hover:bg-gray-800 text-white text-sm"
               >
                 Edit
               </Button>
@@ -173,7 +219,7 @@ const AdminAbout = () => {
               <textarea
                 name={field}
                 rows={3}
-                className="w-full border px-4 py-2 rounded text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="w-full border px-4 py-2 rounded text-sm disabled:bg-gray-100"
                 value={formData[field]}
                 onChange={handleChange}
                 disabled={!editMode || loading}
@@ -188,13 +234,7 @@ const AdminAbout = () => {
               </label>
 
               {preview[field] && (
-                <div className="mt-2 mb-2">
-                  <img
-                    src={preview[field]}
-                    alt={`${field} preview`}
-                    className="w-32 h-32 object-cover rounded"
-                  />
-                </div>
+                <img src={preview[field]} alt="Preview" className="w-32 h-32 object-cover rounded mb-2" />
               )}
 
               {editMode && (
@@ -202,19 +242,82 @@ const AdminAbout = () => {
                   type="file"
                   accept="image/*"
                   onChange={(e) => handleImageChange(e, field)}
-                  className="w-full text-sm mb-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 disabled:opacity-50"
-                  disabled={!editMode || loading}
+                  className="text-sm"
                 />
-              )}
-
-              {!preview[field] && !editMode && (
-                <p className="text-sm text-gray-500 mt-1">No image uploaded.</p>
               )}
             </div>
           ))}
         </div>
       </div>
 
+      {/* Management Team Section */}
+      <div className="bg-white p-6 rounded-xl shadow-lg mb-8">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4">Management Team</h2>
+
+        {/* Team list */}
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+          {team.map((member) => (
+            <div
+              key={member._id}
+              className="border rounded-lg p-3 text-center relative shadow-sm"
+            >
+              <img
+                src={member.image}
+                alt={member.name}
+                className="w-20 h-20 rounded-full mx-auto object-cover mb-2"
+              />
+              <h4 className="text-sm font-medium">{member.name}</h4>
+              <p className="text-xs text-gray-500">{member.role}</p>
+              <Button
+                onClick={() => handleDeleteMember(member._id)}
+                className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-full"
+                variant="ghost"
+              >
+                <Trash2 size={16} />
+              </Button>
+            </div>
+          ))}
+        </div>
+
+        {/* Add new member form */}
+        <div className="grid gap-4 mt-4">
+          <input
+            name="name"
+            placeholder="Name"
+            value={newMember.name}
+            onChange={handleTeamInputChange}
+            className="border px-3 py-2 rounded text-sm"
+          />
+          <input
+            name="role"
+            placeholder="Role"
+            value={newMember.role}
+            onChange={handleTeamInputChange}
+            className="border px-3 py-2 rounded text-sm"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleTeamImageChange}
+            className="text-sm"
+          />
+          {previewMemberImage && (
+            <img
+              src={previewMemberImage}
+              alt="Preview"
+              className="w-20 h-20 rounded-full object-cover"
+            />
+          )}
+          <Button
+            onClick={handleAddTeamMember}
+            className="bg-green-600 hover:bg-green-700 text-white text-sm"
+          >
+            Add Member
+          </Button>
+        </div>
+      </div>
+
+      {/* Toast Notification */}
       {toast.open && (
         <CustomToast
           open={toast.open}
