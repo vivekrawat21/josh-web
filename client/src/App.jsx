@@ -127,7 +127,7 @@ function App() {
               <Route path="/joinus" element={<JoinUs />} />
               <Route path="/disclaimer" element={<Disclaimer />} />
               <Route path="/terms" element={<Terms />} />
-              <Route path="/licenseAndAgreement" element={<LicenseAndAgreement/>} />
+              <Route path="/privacy&policy" element={<LicenseAndAgreement/>} />
               <Route path="/refund" element={<RefundAndPolicy />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/webinars" element={<Webinars />} />
