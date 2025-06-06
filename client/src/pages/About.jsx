@@ -115,7 +115,7 @@ const About = () => {
         </motion.div>
 
         {/* Founder Section */}
-        <div className="w-full max-w-6xl flex flex-col md:flex-row items-center gap-8">
+        <div className="w-full max-w-6xl flex flex-col  items-center gap-8">
           <motion.div
             className="md:w-1/2 text-center"
             initial={{ opacity: 0, x: -50 }}
@@ -124,17 +124,37 @@ const About = () => {
           >
             <h2 className="text-4xl lg:text-5xl font-bold mb-4">
               <span className="text-black">Our </span>
-              <span className="text-orange-500">Founder</span>
+              <span className="text-orange-500">Management Team</span>
             </h2>
-            <div className="overflow-hidden rounded-xl shadow-2xl hover:scale-105 transition duration-300">
+            {/* <div className="overflow-hidden rounded-xl shadow-2xl hover:scale-105 transition duration-300">
               <img src={aboutData.founderImage} alt="Founder" className="h-96 w-full object-cover" />
-            </div>
+            </div> */}
           </motion.div>
-          <div className="text-gray-700 md:w-1/2 text-justify">
-            <p className="leading-relaxed">
-              {aboutData.aboutFounder}
-            </p>
-          </div>
+          <div className="sm:flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-auto sm:overflow-x-visible scrollbar-thin scrollbar-thumb-orange-300 pb-2 sm:pb-0">
+    {mentors.map((member, index) => (
+      <motion.div
+        key={member?._id}
+        className="min-w-[260px] sm:min-w-[300px] bg-gradient-to-tr from-white/80 to-orange-50/80 backdrop-blur-lg rounded-2xl border border-orange-100 shadow-md hover:shadow-lg hover:scale-[1.02] hover:-rotate-1 transition-all duration-300 flex-shrink-0 p-6 mx-auto flex flex-col items-center text-center"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.1, duration: 0.6 }}
+        onClick={() => setSelected(member)}
+      >
+        <img
+          src={member?.profileImage || "/placeholder.svg"}
+          alt={member.name}
+          className="w-28 h-28 sm:w-32 sm:h-32 mb-5 rounded-full object-cover border-4 border-orange-400 shadow-lg"
+        />
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
+          {member?.name}
+        </h3>
+        <p className="text-sm sm:text-base text-orange-600 font-medium mt-1">
+          {member?.position}
+        </p>
+      </motion.div>
+    ))}
+  </div>
+
         </div>
 
         {/* Mission Section */}
