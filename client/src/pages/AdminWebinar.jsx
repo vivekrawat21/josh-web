@@ -15,6 +15,7 @@ import {
   Mail,
   Upload,
   Link,
+  Loader2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -57,7 +58,7 @@ const statusNames = {
   cancelled: "Cancelled",
 }
 
-const AdminWebinar = () =>{
+const AdminWebinar = () => {
   const [webinars, setWebinars] = useState([])
   const [selectedWebinar, setSelectedWebinar] = useState(null)
   const [isViewingDetails, setIsViewingDetails] = useState(false)
@@ -76,6 +77,13 @@ const AdminWebinar = () =>{
   const fileInputRefPresenter = useRef(null)
 
   const [isLoading, setIsLoading] = useState(false)
+
+  // Add these new loading states for individual form actions
+  const [isRescheduling, setIsRescheduling] = useState(false)
+  const [isAddingWebinar, setIsAddingWebinar] = useState(false)
+  const [isEditingWebinar, setIsEditingWebinar] = useState(false)
+  const [isSendingEmail, setIsSendingEmail] = useState(false)
+  const [isSettingLink, setIsSettingLink] = useState(false)
 
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false)
   const [webinarLink, setWebinarLink] = useState("")
@@ -184,19 +192,19 @@ const AdminWebinar = () =>{
 
   const fetchWebinars = async () => {
     try {
-      setIsLoading(true);
-      const response = await axios.get(`${BASE_URL}/webinar/`);
-      setWebinars(response.data.data.webinars);
+      setIsLoading(true)
+      const response = await axios.get(`${BASE_URL}/webinar/`)
+      setWebinars(response.data.data.webinars)
     } catch (error) {
       toast({
         title: "Failed to load webinars",
         description: error.message,
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
     fetchWebinars()
@@ -304,7 +312,7 @@ const AdminWebinar = () =>{
 
   const handleSetLink = async () => {
     try {
-      setIsLoading(true)
+      setIsSettingLink(true)
 
       // API call to update webinar link
       const response = await axios.post(
@@ -336,13 +344,13 @@ const AdminWebinar = () =>{
         variant: "destructive",
       })
     } finally {
-      setIsLoading(false)
+      setIsSettingLink(false)
     }
   }
 
   const handleSendEmail = async () => {
     try {
-      setIsLoading(true)
+      setIsSendingEmail(true)
 
       // Prepare the email data
       const emailData = {
@@ -372,7 +380,7 @@ const AdminWebinar = () =>{
         variant: "destructive",
       })
     } finally {
-      setIsLoading(false)
+      setIsSendingEmail(false)
     }
   }
 
@@ -460,7 +468,7 @@ const AdminWebinar = () =>{
   // Handle rescheduling a webinar
   const handleReschedule = async () => {
     try {
-      setIsLoading(true)
+      setIsRescheduling(true)
       const formData = new FormData()
       formData.append("date", rescheduleDate)
       formData.append("time", rescheduleTime)
@@ -492,7 +500,7 @@ const AdminWebinar = () =>{
         variant: "destructive",
       })
     } finally {
-      setIsLoading(false)
+      setIsRescheduling(false)
     }
   }
 
@@ -583,13 +591,13 @@ const AdminWebinar = () =>{
 
   // Add this function to handle adding a new webinar
   const handleAddWebinar = async () => {
-    setIsLoading(true)
+    setIsAddingWebinar(true)
     setGeneralErrors([])
 
     // Validate agenda items
     const isAgendaValid = validateAgendaItems()
     if (!isAgendaValid) {
-      setIsLoading(false)
+      setIsAddingWebinar(false)
       setGeneralErrors(["Please fix the errors in the agenda section"])
       return
     }
@@ -667,19 +675,19 @@ const AdminWebinar = () =>{
         variant: "destructive",
       })
     } finally {
-      setIsLoading(false)
+      setIsAddingWebinar(false)
     }
   }
 
   // Add this function to handle editing a webinar
   const handleEditWebinar = async () => {
-    setIsLoading(true)
+    setIsEditingWebinar(true)
     setGeneralErrors([])
 
     // Validate agenda items
     const isAgendaValid = validateAgendaItems()
     if (!isAgendaValid) {
-      setIsLoading(false)
+      setIsEditingWebinar(false)
       setGeneralErrors(["Please fix the errors in the agenda section"])
       return
     }
@@ -734,7 +742,7 @@ const AdminWebinar = () =>{
         variant: "destructive",
       })
     } finally {
-      setIsLoading(false)
+      setIsEditingWebinar(false)
     }
   }
 
@@ -1380,11 +1388,23 @@ const AdminWebinar = () =>{
               variant="outline"
               onClick={() => setIsRescheduleModalOpen(false)}
               className="border-orange-200 text-orange-600"
+              disabled={isRescheduling}
             >
               Cancel
             </Button>
-            <Button onClick={handleReschedule} className="bg-orange-600 hover:bg-orange-700 text-white">
-              Save Changes
+            <Button
+              onClick={handleReschedule}
+              className="bg-orange-600 hover:bg-orange-700 text-white"
+              disabled={isRescheduling}
+            >
+              {isRescheduling ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Save Changes"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1653,11 +1673,23 @@ const AdminWebinar = () =>{
               variant="outline"
               onClick={() => setIsAddWebinarModalOpen(false)}
               className="border-orange-200 text-orange-600"
+              disabled={isAddingWebinar}
             >
               Cancel
             </Button>
-            <Button onClick={handleAddWebinar} className="bg-orange-600 hover:bg-orange-700 text-white">
-              Create Webinar
+            <Button
+              onClick={handleAddWebinar}
+              className="bg-orange-600 hover:bg-orange-700 text-white"
+              disabled={isAddingWebinar}
+            >
+              {isAddingWebinar ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                "Create Webinar"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1926,11 +1958,23 @@ const AdminWebinar = () =>{
               variant="outline"
               onClick={() => setIsEditWebinarModalOpen(false)}
               className="border-orange-200 text-orange-600"
+              disabled={isEditingWebinar}
             >
               Cancel
             </Button>
-            <Button onClick={handleEditWebinar} className="bg-orange-600 hover:bg-orange-700 text-white">
-              Save Changes
+            <Button
+              onClick={handleEditWebinar}
+              className="bg-orange-600 hover:bg-orange-700 text-white"
+              disabled={isEditingWebinar}
+            >
+              {isEditingWebinar ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Save Changes"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -2002,16 +2046,28 @@ const AdminWebinar = () =>{
               variant="outline"
               onClick={() => setIsEmailModalOpen(false)}
               className="border-orange-200 text-orange-600"
+              disabled={isSendingEmail}
             >
               Cancel
             </Button>
             <Button
               onClick={handleSendEmail}
               className="bg-orange-600 hover:bg-orange-700 text-white"
-              disabled={!emailSubject || !emailBody || (!selectAllUsers && selectedUsers.length === 0)}
+              disabled={
+                !emailSubject || !emailBody || (!selectAllUsers && selectedUsers.length === 0) || isSendingEmail
+              }
             >
-              <Send className="h-4 w-4 mr-2" />
-              Send Email
+              {isSendingEmail ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <Send className="h-4 w-4 mr-2" />
+                  Send Email
+                </>
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -2044,15 +2100,23 @@ const AdminWebinar = () =>{
               variant="outline"
               onClick={() => setIsLinkModalOpen(false)}
               className="border-orange-200 text-orange-600"
+              disabled={isSettingLink}
             >
               Cancel
             </Button>
             <Button
               onClick={handleSetLink}
               className="bg-orange-600 hover:bg-orange-700 text-white"
-              disabled={!webinarLink}
+              disabled={!webinarLink || isSettingLink}
             >
-              Save Link
+              {isSettingLink ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Save Link"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -2065,7 +2129,7 @@ const AdminWebinar = () =>{
       {isLoading && (
         <div className="fixed bottom-8 right-8 z-50">
           <div className="bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-lg">
-            <CubeLoader size="md" color="#f97316" className="z-50"/>
+            <CubeLoader size="md" color="#f97316" className="z-50" />
           </div>
         </div>
       )}
