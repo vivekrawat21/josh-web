@@ -49,6 +49,7 @@ const Navbar = () => {
   const [trendingCourses, setTrendingCourses] = useState([]);
   const [allCourses, setAllCourses] = useState([]);
   const [isRotating, setIsRotating] = useState(false);
+  const [chooseSkill , setChooseSkill] = useState([]);
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -124,6 +125,7 @@ const Navbar = () => {
           withCredentials: true,
         });
         const all = res?.data?.data.courses;
+        setChooseSkill(all.filter((course) => !course.isTrending));
         setAllCourses(all);
         setTrendingCourses(all.filter((course) => course.isTrending));
         dispatch(addCourse(all));
@@ -189,7 +191,7 @@ const Navbar = () => {
                       { title: "SPECIAL BUNDLES", items: bundles, type: "bundle" },
                       { title: "TRENDING COURSES", items: trendingCourses, type: "course" }, 
                       { title: "DIGITAL LEARNING BUNDLES", items: specialBundles, type: "specialBundle" },
-                      { title: "CHOOSE YOUR SKILL", items: allCourses, type: "course" },
+                      { title: "CHOOSE YOUR SKILL", items: chooseSkill, type: "course" },
                     ].map((section, idx) => (
                       <div className="pr-6" key={idx}>
                         <h3 className="text-orange-500 text-xl font-bold mb-7">{section.title}</h3>

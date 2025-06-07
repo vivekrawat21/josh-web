@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   ChevronLeft,
   ChevronRight,
@@ -8,8 +9,9 @@ import {
   BookOpen,
   TrendingUp,
 } from "lucide-react";
+import { BASE_URL } from "@/utils/utils";
 
-const testimonials = [
+const mockTestimonials = [
   {
     id: 1,
     name: "Westfield High School",
@@ -61,9 +63,44 @@ const testimonials = [
 ];
 
 const EducationalInstituteTestimonial = () => {
+  const [testimonials, setTestimonials] = useState(mockTestimonials);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showIframe, setShowIframe] = useState(false);
   const [iframeVisible, setIframeVisible] = useState({});
+
+  useEffect(() => {
+    // Fetch testimonials from API
+    axios
+      .get(`${BASE_URL}/testimonials`)
+      .then((res) => {
+        if (res.data && Array.isArray(res.data?.data?.testimonials) && res.data?.data?.testimonials.length > 0) {
+          // Map API data to the format your component expects
+          const apiTestimonials = res.data?.data?.testimonials.map((t, index) => ({
+            id: t._id || index,
+            name: t.name,
+            representative: t.representative,
+            representativeImage: t.representativeImage || "/freelancing_2lakh.png",
+            title: t.designation,
+            location: t.location,
+            videoUrl: t.video,
+            thumbnail: t.thumbnail,
+            quote: t.quote,
+            studentsImpacted: t.studentsImpacted,
+            teachersUsing: t.teachersUsing,
+            improvementMetric: t.improvementMetric,
+          }));
+          setTestimonials(apiTestimonials);
+          setCurrentIndex(0);
+          setShowIframe(false);
+          setIframeVisible({});
+        }
+        // else keep mockTestimonials
+      })
+      .catch((error) => {
+        console.error("Error fetching testimonials:", error);
+        // Keep mockTestimonials on error
+      });
+  }, []);
 
   const current = testimonials[currentIndex];
 
@@ -85,7 +122,8 @@ const EducationalInstituteTestimonial = () => {
           <span className="text-orange-500">Educational Institutions</span>
         </h2>
         <p className="text-gray-600 mt-2 hidden lg:block">
-          See how schools and educational institutions are using our content to transform their classrooms
+          See how schools and educational institutions are using our content to
+          transform their classrooms
         </p>
       </div>
 
@@ -136,7 +174,9 @@ const EducationalInstituteTestimonial = () => {
                 <span className="inline-block text-xs font-semibold text-orange-600 uppercase bg-orange-100 py-0.5 px-2 rounded-full">
                   Success Story
                 </span>
-                <blockquote className="text-gray-700 text-base">{testimonial.quote}</blockquote>
+                <blockquote className="text-gray-700 text-base">
+                  {testimonial.quote}
+                </blockquote>
                 <div className="flex gap-2 items-center">
                   <img
                     src={testimonial.representativeImage}
@@ -146,7 +186,9 @@ const EducationalInstituteTestimonial = () => {
                     className="border-2 rounded-full border-orange-600"
                   />
                   <div>
-                    <h3 className="text-base font-bold">{testimonial.representative}</h3>
+                    <h3 className="text-base font-bold">
+                      {testimonial.representative}
+                    </h3>
                     <p className="text-xs text-gray-500">{testimonial.title}</p>
                     <p className="text-xs text-gray-500">{testimonial.name}</p>
                   </div>
@@ -157,14 +199,18 @@ const EducationalInstituteTestimonial = () => {
                     <Users size={16} className="text-orange-600" />
                     <div>
                       <p className="text-xs text-gray-500">Students</p>
-                      <p className="text-base font-semibold">{testimonial.studentsImpacted.toLocaleString()}</p>
+                      <p className="text-base font-semibold">
+                        {testimonial.studentsImpacted.toLocaleString()}
+                      </p>
                     </div>
                   </div>
                   <div className="flex gap-1 items-start">
                     <BookOpen size={16} className="text-orange-600" />
                     <div>
                       <p className="text-xs text-gray-500">Teachers</p>
-                      <p className="text-base font-semibold">{testimonial.teachersUsing}</p>
+                      <p className="text-base font-semibold">
+                        {testimonial.teachersUsing}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -173,7 +219,9 @@ const EducationalInstituteTestimonial = () => {
                   <TrendingUp size={18} className="text-orange-600" />
                   <div>
                     <p className="text-xs text-gray-500">Improvement</p>
-                    <p className="font-semibold text-orange-700 text-sm">{testimonial.improvementMetric}</p>
+                    <p className="font-semibold text-orange-700 text-sm">
+                      {testimonial.improvementMetric}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -223,7 +271,13 @@ const EducationalInstituteTestimonial = () => {
             </span>
             <blockquote className="text-gray-700 text-lg">{current.quote}</blockquote>
             <div className="flex gap-2 items-center">
-              <img src={current.representativeImage} alt="rep" width={40} height={40} className="border-2 rounded-full border-orange-600" />
+              <img
+                src={current.representativeImage}
+                alt="rep"
+                width={40}
+                height={40}
+                className="border-2 rounded-full border-orange-600"
+              />
               <div>
                 <h3 className="text-lg font-bold">{current.representative}</h3>
                 <p className="text-sm text-gray-500">{current.title}</p>
@@ -236,7 +290,9 @@ const EducationalInstituteTestimonial = () => {
                 <Users size={20} className="text-orange-600" />
                 <div>
                   <p className="text-sm text-gray-500">Students Impacted</p>
-                  <p className="text-lg font-semibold">{current.studentsImpacted.toLocaleString()}</p>
+                  <p className="text-lg font-semibold">
+                    {current.studentsImpacted.toLocaleString()}
+                  </p>
                 </div>
               </div>
               <div className="flex gap-2 items-start">
@@ -252,7 +308,9 @@ const EducationalInstituteTestimonial = () => {
               <TrendingUp size={20} className="text-orange-600" />
               <div>
                 <p className="text-sm text-gray-500">Improvement</p>
-                <p className="font-semibold text-orange-700 text-base">{current.improvementMetric}</p>
+                <p className="font-semibold text-orange-700 text-base">
+                  {current.improvementMetric}
+                </p>
               </div>
             </div>
           </div>

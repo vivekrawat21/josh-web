@@ -30,7 +30,9 @@ import AdminLogin from "./components/AdminLogin";
 import AdminMentor from "./components/AdminMentor";
 import Students from "./components/Students";
 import AdminLayout from "./components/AdminLayout";
+import AdminPrivacy from "./components/AdminPrivacy";
 import AdminDashboard from "./components/AdminDashboard";
+
 import AdminOffers from "./components/AdminOffers.jsx";
 import AdminGallery from "./components/AdminGallery";
 import Blog from "./pages/Blog";
@@ -54,6 +56,8 @@ import AdminAssignMentor from "./components/AdminAssignMentor";
 import AdminTestimonials from "./components/AdminTestimonials";
 import AdminInstitutionalTestimonial from "./components/AdminInstitutionalTestimonial";
 import AdminDigitalBundle from "./pages/AdminDigitalBundle";
+import ResetPassword from "./components/ResetPassword";
+import AdminAbout from "./components/AdminAbout";
 
 function App() {
   return (
@@ -76,11 +80,13 @@ function App() {
           <Route path="/admin/mentors" element={<AdminMentor />} />
           <Route path="/admin/students" element={<Students />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/privacy" element={<AdminPrivacy />} />
           <Route path="/admin/offers" element={<AdminOffers />} />
           <Route path="/admin/webinars" element={<AdminWebinar />} />
           <Route path="/admin/gallery" element={<AdminGallery />} />
           <Route path="/admin/testimonials" element={<AdminTestimonials />} />
           <Route path="/admin/institutiontestimonials" element={<AdminInstitutionalTestimonial />} />
+          <Route path="/admin/about" element={<AdminAbout />} />
           </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
         <Route index element={<PersonalInformation />} />
@@ -117,6 +123,7 @@ function App() {
               <Route path="/course/:courseId/learn" element={<CoursePlayer />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/coursePlayer" element={<CoursePlayer />} />
+              
 
               {/* <Route path="/course/:videoIndex" element={<CoursePlayer />} /> */}
 
@@ -125,23 +132,18 @@ function App() {
               <Route path="/joinus" element={<JoinUs />} />
               <Route path="/disclaimer" element={<Disclaimer />} />
               <Route path="/terms" element={<Terms />} />
-              <Route path="/licenseAndAgreement" element={<LicenseAndAgreement/>} />
-
+              <Route path="/privacy&policy" element={<LicenseAndAgreement/>} />
               <Route path="/refund" element={<RefundAndPolicy />} />
-
-
               <Route path="/blogs" element={<Blogs />} />
-          
               <Route path="/webinars" element={<Webinars />} />
               <Route path="/digital-marketing/:webinarId" element={<DigitalMarketingWebinar />} />
               <Route path="/full-stack/:webinarId" element={<WebDevelopmentWebinar />} />
               <Route path="/microsoft-dynamic/:webinarId" element={<MicrosoftDynamicsWebinar />} />
               <Route path="/odoo-erp/:webinarId" element={<OdooERPWebinar />} />
-              
               <Route path="/goal/:id" element={<Goals />} />
               {/* <Route path="/specialBundle/:id" element={<BasicBundle />} /> */}
               <Route path="/gallery/:category" element={<Gallery />} />
-
+              <Route path="reset-password/:token" element={<ResetPassword />} />
               <Route path="/blogs/:id" element={<Blog />} />
 
 

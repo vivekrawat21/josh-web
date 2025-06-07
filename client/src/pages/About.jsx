@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { addMentors } from "@/features/mentors/mentorSlice";
@@ -10,6 +10,20 @@ const About = () => {
   const dispatch = useDispatch();
   const mentors = useSelector((state) => state.mentor?.mentors[0] || []);
   const [selected, setSelected] = useState(null);
+
+  const [aboutData, setAboutData] = useState({
+    description:
+      "Joshguru Technologies Private Limited is a new-age EdTech company dedicated to empowering youth with in-demand skills and guaranteed career growth. We offer offline and online Monday to Friday industry-relevant courses like: Digital Marketing, Full Stack Development, Microsoft 365, Odoo ERP. With placement assistance, internships, and international job support, our goal is to make every student job-ready. Whether you’re a fresher, working professional, or business owner, Joshguru is your trusted partner for skill development and success. We have more courses but all those courses for affiliates and that courses in recorded format only.",
+      
+    bannerImage: "/aboutus.jpeg",
+    ourMission:
+      "Joshguru’s mission is to provide skills development education to youth in every village and corner of India. Joshguru helps all capable youth to change their skills, their presence of mind and the lives of their families. We are here to provide skill-based learning to every interested student, professional, entrepreneur, or a person of any background at a very affordable price.",
+    ourVision:
+      "Our Vision is to make more and more youth independent so that they do not bother for jobs after 12th, and can live their life in a better way and to upskill 10 lakh+ learners by 2030 through high-quality, practical education.",
+    founderImage: "/founder.jpeg",
+    aboutFounder:
+      "Kamal Joshi, the Founder and Managing Director of Joshguru Pvt. Ltd, has 10+ years of experience in the marketing industry. A professional networker who began his journey in direct selling at age 24, Kamal has empowered youth to become independent and successful through education and entrepreneurship.",
+  });
 
   const fetchMentors = async () => {
     try {
@@ -23,10 +37,33 @@ const About = () => {
     }
   };
 
+  const fetchAboutData = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/about`, {
+        withCredentials: true,
+      });
+      const data = res.data?.data;
+      if (data) {
+        setAboutData((prev) => ({
+          ...prev,
+          description: data?.description || prev.description,
+          bannerImage: data?.bannerImage || prev.bannerImage,
+          ourMission: data?.ourMission || prev.ourMission,
+          ourVision: data?.ourVision || prev.ourVision,
+          founderImage: data?.founderImage || prev.founderImage,
+          aboutFounder: data?.aboutFounder || prev.aboutFounder,
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching about data:", error);
+    }
+  };
+
   useEffect(() => {
     if (mentors.length === 0) {
       fetchMentors();
     }
+    fetchAboutData();
   }, []);
 
   const galleryData = [
@@ -59,7 +96,7 @@ const About = () => {
           transition={{ duration: 0.8 }}
         >
           <img
-            src="/aboutus.jpeg"
+            src={aboutData.bannerImage}
             alt="About us"
             className="w-full h-[400px] object-cover rounded-2xl shadow-2xl"
           />
@@ -72,17 +109,13 @@ const About = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <p className="leading-relaxed text-gray-600">
-            Joshguru Technologies Private Limited is a new-age EdTech company dedicated to empowering youth with in-demand skills and guaranteed career growth.
-            We offer offline and online Monday to Friday industry-relevant courses like: <strong>Digital Marketing, Full Stack Development, Microsoft 365, Odoo ERP</strong>.
-            With placement assistance, internships, and international job support, our goal is to make every student job-ready.
-            Whether you’re a fresher, working professional, or business owner, Joshguru is your trusted partner for skill development and success.
-            We have more courses but all those courses for affiliates and that courses in recorded format only.
+          <p className="text-gray-700 leading-relaxed">
+            {aboutData.description}
           </p>
         </motion.div>
 
         {/* Founder Section */}
-        <div className="w-full max-w-6xl flex flex-col md:flex-row items-center gap-8">
+        <div className="w-full max-w-6xl flex flex-col  items-center gap-8">
           <motion.div
             className="md:w-1/2 text-center"
             initial={{ opacity: 0, x: -50 }}
@@ -91,17 +124,37 @@ const About = () => {
           >
             <h2 className="text-4xl lg:text-5xl font-bold mb-4">
               <span className="text-black">Our </span>
-              <span className="text-orange-500">Founder</span>
+              <span className="text-orange-500">Management Team</span>
             </h2>
-            <div className="overflow-hidden rounded-xl shadow-2xl hover:scale-105 transition duration-300">
-              <img src="/founder.jpeg" alt="Founder" className="h-96 w-full object-cover" />
-            </div>
+            {/* <div className="overflow-hidden rounded-xl shadow-2xl hover:scale-105 transition duration-300">
+              <img src={aboutData.founderImage} alt="Founder" className="h-96 w-full object-cover" />
+            </div> */}
           </motion.div>
-          <div className="text-gray-700 md:w-1/2 text-justify">
-            <p className="leading-relaxed">
-              Kamal Joshi, the Founder and Managing Director of Joshguru Pvt. Ltd, has 10+ years of experience in the marketing industry. A professional networker who began his journey in direct selling at age 24, Kamal has empowered youth to become independent and successful through education and entrepreneurship.
-            </p>
-          </div>
+          <div className="sm:flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-auto sm:overflow-x-visible scrollbar-thin scrollbar-thumb-orange-300 pb-2 sm:pb-0">
+    {mentors.map((member, index) => (
+      <motion.div
+        key={member?._id}
+        className="min-w-[260px] sm:min-w-[300px] bg-gradient-to-tr from-white/80 to-orange-50/80 backdrop-blur-lg rounded-2xl border border-orange-100 shadow-md hover:shadow-lg hover:scale-[1.02] hover:-rotate-1 transition-all duration-300 flex-shrink-0 p-6 mx-auto flex flex-col items-center text-center"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.1, duration: 0.6 }}
+        onClick={() => setSelected(member)}
+      >
+        <img
+          src={member?.profileImage || "/placeholder.svg"}
+          alt={member.name}
+          className="w-28 h-28 sm:w-32 sm:h-32 mb-5 rounded-full object-cover border-4 border-orange-400 shadow-lg"
+        />
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
+          {member?.name}
+        </h3>
+        <p className="text-sm sm:text-base text-orange-600 font-medium mt-1">
+          {member?.position}
+        </p>
+      </motion.div>
+    ))}
+  </div>
+
         </div>
 
         {/* Mission Section */}
@@ -116,7 +169,7 @@ const About = () => {
             <span className="text-orange-500">Mission</span>
           </h2>
           <p className="text-gray-700 text-justify text-base md:text-lg leading-relaxed">
-            Joshguru’s mission is to provide skills development education to youth in every village and corner of India. Joshguru helps all capable youth to change their skills, their presence of mind and the lives of their families. We are here to provide skill-based learning to every interested student, professional, entrepreneur, or a person of any background at a very affordable price.
+            {aboutData.ourMission}
           </p>
         </motion.div>
 
@@ -130,9 +183,7 @@ const About = () => {
           <div className="bg-white shadow-md rounded-xl p-6 mt-4 relative">
             <p className="text-gray-600 text-base md:text-lg leading-relaxed italic relative">
               <span className="text-6xl text-orange-400 absolute -top-6 -left-4">“</span>
-              <span className="mx-6 block">
-                Our Vision is to make more and more youth independent so that they do not bother for jobs after 12th, and can live their life in a better way and to upskill <strong>10 lakh+ learners</strong> by 2030 through high-quality, practical education.
-              </span>
+              <span className="mx-6 block">{aboutData.ourVision}</span>
               <span className="text-6xl text-orange-400 absolute -bottom-6 right-4 rotate-180">“</span>
             </p>
           </div>
@@ -140,72 +191,68 @@ const About = () => {
 
         {/* Team Section */}
         <motion.div
-      className="w-full max-w-6xl mx-auto"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-    >
-      <h2 className="text-4xl lg:text-5xl font-bold text-center mb-6">
-        <span className="text-black">Meet Our </span>
-        <span className="text-orange-500">Team</span>
-      </h2>
-
-      {/* Horizontal scrollable grid */}
-      <div className="flex gap-6 px-2 overflow-x-auto scrollbar-thin scrollbar-thumb-orange-300 pb-4">
-        {mentors.map((member, index) => (
-          <motion.div
-            key={member?._id}
-            className="min-w-[260px] max-w-[280px] bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 flex-shrink-0 cursor-pointer flex flex-col items-center text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.6 }}
-            onClick={() => setSelected(member)}
-          >
-            <img
-              src={member?.profileImage || "/placeholder.svg"}
-              alt={member.name}
-              className="w-24 h-24 mb-4 rounded-full object-cover border-4 border-orange-400"
-            />
-            <h3 className="text-lg font-bold text-gray-800">{member?.name}</h3>
-            <p className="text-orange-500 font-medium">{member?.position}</p>
-            {/* Hide about/description here */}
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Modal for mentor details */}
-      {selected && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-          onClick={() => setSelected(null)}
+          className="w-full max-w-6xl mx-auto"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          <motion.div
-            className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-[90vw] relative text-center"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            onClick={e => e.stopPropagation()}
-          >
-            <button
-              className="absolute top-3 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold"
+          <h2 className="text-4xl lg:text-5xl font-bold text-center mb-6">
+            <span className="text-black">Meet Our </span>
+            <span className="text-orange-500">Team</span>
+          </h2>
+
+          <div className="flex gap-6 px-2 overflow-x-auto scrollbar-thin scrollbar-thumb-orange-300 pb-4">
+            {mentors.map((member, index) => (
+              <motion.div
+                key={member?._id}
+                className="min-w-[260px] max-w-[280px] bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 flex-shrink-0 cursor-pointer flex flex-col items-center text-center"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.6 }}
+                onClick={() => setSelected(member)}
+              >
+                <img
+                  src={member?.profileImage || "/placeholder.svg"}
+                  alt={member.name}
+                  className="w-24 h-24 mb-4 rounded-full object-cover border-4 border-orange-400"
+                />
+                <h3 className="text-lg font-bold text-gray-800">{member?.name}</h3>
+                <p className="text-orange-500 font-medium">{member?.position}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {selected && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
               onClick={() => setSelected(null)}
-              aria-label="Close"
             >
-              &times;
-            </button>
-            <img
-              src={selected?.profileImage || "/placeholder.svg"}
-              alt={selected.name}
-              className="w-28 h-28 mb-4 rounded-full object-cover border-4 border-orange-400 mx-auto"
-            />
-            <h3 className="text-2xl font-bold text-gray-800">{selected?.name}</h3>
-            <p className="text-orange-500 font-medium mb-2">{selected?.position}</p>
-            <p className="text-gray-700 mt-4">{selected?.about}</p>
-            {/* Add more details if needed */}
-          </motion.div>
-        </div>
-      )}
-    </motion.div>
+              <motion.div
+                className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-[90vw] relative text-center"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                onClick={e => e.stopPropagation()}
+              >
+                <button
+                  className="absolute top-3 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold"
+                  onClick={() => setSelected(null)}
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+                <img
+                  src={selected?.profileImage || "/placeholder.svg"}
+                  alt={selected.name}
+                  className="w-28 h-28 mb-4 rounded-full object-cover border-4 border-orange-400 mx-auto"
+                />
+                <h3 className="text-2xl font-bold text-gray-800">{selected?.name}</h3>
+                <p className="text-orange-500 font-medium mb-2">{selected?.position}</p>
+                <p className="text-gray-700 mt-4">{selected?.about}</p>
+              </motion.div>
+            </div>
+          )}
+        </motion.div>
 
         {/* Gallery Section */}
         <section className="w-full max-w-7xl">
@@ -223,7 +270,8 @@ const About = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="relative group overflow-hidden rounded-xl shadow-xl hover:shadow-2xl bg-white"
-              ><Link to={`/gallery${item.path}`}>
+              >
+                <Link to={`/gallery${item.path}`}>
                   <img
                     src={item.image}
                     alt={item.title}

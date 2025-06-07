@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 // import CustomToast from '@/components/CustomToast';
-
+import CustomToast from './CustomToast';
 const Students = () => {
   const [students, setStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,7 +27,15 @@ const Students = () => {
   const [password, setPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const closeDialogRef = useRef(null);
+  const [toast, setToast] = useState({ message: '', type: '', visible: false });
 
+  const showToast = (type, message) => {
+    setToast({ type, message, visible: true });
+    setTimeout(() => {
+      setToast((prev) => ({ ...prev, visible: false }));
+    }, 2000);
+  };
+  
   const fetchStudents = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/user/getUsers`, {
@@ -44,44 +52,32 @@ const Students = () => {
   }, []);
 
   const createStudent = async () => {
-    const userInfo = { name, mobilenumber, email, password, referralCode };
-
+    let adminGeneratedPassword = password;
+    const userInfo = { name, mobilenumber, email, password, referralCode, adminGeneratedPassword };
+  
     try {
-      const checkRes = await axios.post(`${BASE_URL}/auth/checkuserexist`, {
-        mobilenumber,
-        email,
-      });
-
-      if (
-        checkRes?.data?.statusCode === 200 &&
-        checkRes?.data?.data == null
-      ) {
-        const res = await axios.post(`${BASE_URL}/auth/register`, userInfo);
-        if (res.status === 200) {
-          fetchStudents();
-          setName('');
-          setEmail('');
-          setMobileNumber('');
-          setPassword('');
-          setReferralCode('');
-          setSuccessMessage('Student created successfully!');
-          // Close the dialog after a short delay
-          setTimeout(() => {
-            setSuccessMessage('');
-            closeDialogRef.current?.click();
-          }, 1500);
-        }
-      } else {
-        alert('User already exists!');
+      const res = await axios.post(`${BASE_URL}/auth/adminuserregister`, userInfo, { withCredentials: true });
+  
+      if (res.status === 200 || res.status === 201) {
+        showToast('success', 'Student created successfully!');
+  
+        // Reset form fields
+        setName('');
+        setEmail('');
+        setMobileNumber('');
+        setPassword('');
+        setReferralCode('');
+  
+        fetchStudents();
+        closeDialogRef.current?.click();
       }
     } catch (error) {
       console.error('Error creating student:', error);
-      alert(
-        error.response?.data?.message ||
-          'Error occurred during student creation'
-      );
+      showToast('error', error.response?.data?.message || 'Error occurred during student creation');
     }
   };
+  
+  
 
   const filteredStudents = students.filter((student) =>
     student.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -94,6 +90,7 @@ const Students = () => {
     ReferralCode: item.sharableReferralCode || '',
     BundleEnrolled: item.bundles.length || 0,
     CourseEnrolled: item.courses.length || 0,
+    adminGeneratedPassword: item.adminGeneratedPassword || '',
     CreatedAt: new Date(item.createdAt).toISOString().split('T')[0] ||  '',
 
     ID: item._id,
@@ -129,6 +126,14 @@ const Students = () => {
    }
   return (
     <div className="container mx-auto px-4 py-8">
+      {toast.visible && (
+  <CustomToast
+    type={toast.type}
+    message={toast.message}
+    onClose={() => setToast({ ...toast, visible: false })}
+  />
+)}
+
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
 
         <h2 className="text-3xl font-bold text-gray-900 tracking-tight text-center md:text-left sm:text-4xl">
@@ -207,7 +212,10 @@ const Students = () => {
             </h3>
             <p className="text-sm md:text-base text-gray-600 mb-1">Email: {student.email}</p>
             <p className="text-sm md:text-base text-gray-600 mb-1">ReferralCode: {student.sharableReferralCode}</p>
-            <p className="text-sm md:text-base text-gray-600 mb-4">Mobile: {student.mobilenumber}</p>
+            <p className="text-sm md:text-base text-gray-600 mb-1">Mobile: {student.mobilenumber}</p>
+            {student.adminGeneratedPassword && 
+            <p className="text-sm md:text-base text-gray-600 mb-4">Password: {student.adminGeneratedPassword}</p>}
+            
             <div className="flex flex-col  gap-2 w-full">
               <div className='flex flex-col  lg:flex-row gap-2 w-full'>
               <AssignCourse assignType="course" studentId={student._id} />
