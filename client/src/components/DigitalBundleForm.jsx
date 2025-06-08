@@ -118,7 +118,18 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
     },
   }
 
-  const config = themeConfig[theme]
+  const config = themeConfig[theme] || themeConfig.orange
+
+  // Safe property access helper
+  const safeGet = (obj, path, defaultValue = "") => {
+    try {
+      return path.split(".").reduce((current, key) => {
+        return current && current[key] !== undefined ? current[key] : defaultValue
+      }, obj)
+    } catch {
+      return defaultValue
+    }
+  }
 
   // File upload handler - stores actual files
   const handleFileUpload = async (file, fieldPath, index = null) => {
@@ -241,7 +252,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       // Handle array updates
       if (index !== null && Array.isArray(current[lastKey])) {
         const newArray = [...current[lastKey]]
-        if (typeof newArray[index] === "object") {
+        if (typeof newArray[index] === "object" && newArray[index] !== null) {
           // For objects in arrays (like highlights)
           newArray[index] = { ...newArray[index], images: value }
         } else {
@@ -314,27 +325,28 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                   className="max-w-full max-h-[70vh] object-contain mx-auto"
                   onError={(e) => {
                     console.error("Preview image error:", e)
+                    e.target.onerror = null
+                    e.target.src =
+                      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Crect width='600' height='400' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' dominantBaseline='middle' textAnchor='middle' fontFamily='sans-serif' fontSize='18' fill='%23999'%3EImage preview unavailable%3C/text%3E%3C/svg%3E"
                   }}
                 />
-                {previewModal.url.startsWith("blob:") && (
+                {previewModal.url && previewModal.url.startsWith("blob:") && (
                   <p className="text-sm text-gray-600 mt-2">Local file preview</p>
                 )}
               </div>
             ) : previewModal.type === "video" ? (
               <div className="text-center">
                 <video
-                  key={previewModal.url} // Add key to force re-render when URL changes
+                  key={previewModal.url}
                   src={previewModal.url}
                   controls
                   autoPlay={false}
                   playsInline
                   className="max-w-full max-h-[70vh] mx-auto"
-                  poster="/placeholder.svg?height=400&width=600"
                   onLoadedMetadata={(e) => {
-                    // Try to show the first frame
                     try {
                       const video = e.target
-                      video.currentTime = 0.1 // Set to a small value to get the first frame
+                      video.currentTime = 0.1
                     } catch (err) {
                       console.error("Error setting video time:", err)
                     }
@@ -346,7 +358,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                   Your browser does not support the video tag.
                 </video>
                 <div className="flex justify-center mt-2 space-x-2">
-                  {previewModal.url.startsWith("blob:") ? (
+                  {previewModal.url && previewModal.url.startsWith("blob:") ? (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                       Local file preview - ready for upload
                     </span>
@@ -380,11 +392,14 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
     type = "both", // "image", "video", or "both"
   }) => {
     const uploadKey = `${fieldPath}_${index || 0}`
-    const isUploading = uploadingFiles[uploadKey]
+    const isUploading = uploadingFiles[uploadKey] || false
     const inputRef = useRef()
 
+    // Safe current value handling
+    const safeCurrentValue = currentValue || ""
+
     // Enhanced file type detection
-    let fileType = getFileType(currentValue)
+    let fileType = getFileType(safeCurrentValue)
 
     // If we can't determine from URL, use the component type
     if (fileType === "unknown" || !fileType) {
@@ -410,7 +425,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
     }
 
     const handleFileSelect = (e) => {
-      const file = e.target.files[0]
+      const file = e.target.files?.[0]
       if (file) {
         handleFileUpload(file, fieldPath, index)
       }
@@ -419,8 +434,8 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
     }
 
     const openPreview = () => {
-      if (currentValue) {
-        const detectedType = currentValue.startsWith("blob:")
+      if (safeCurrentValue) {
+        const detectedType = safeCurrentValue.startsWith("blob:")
           ? type === "image"
             ? "image"
             : type === "video"
@@ -430,7 +445,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
 
         setPreviewModal({
           open: true,
-          url: currentValue,
+          url: safeCurrentValue,
           type: detectedType,
         })
       }
@@ -438,8 +453,12 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
 
     const removeFile = () => {
       // Clean up blob URL and file storage
-      if (currentValue.startsWith("blob:")) {
-        URL.revokeObjectURL(currentValue)
+      if (safeCurrentValue && safeCurrentValue.startsWith("blob:")) {
+        try {
+          URL.revokeObjectURL(safeCurrentValue)
+        } catch (err) {
+          console.warn("Error revoking blob URL:", err)
+        }
       }
       setFileStorage((prev) => {
         const newStorage = { ...prev }
@@ -472,7 +491,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
             )}
           </Button>
 
-          {currentValue && (
+          {safeCurrentValue && (
             <Button type="button" variant="outline" size="sm" onClick={openPreview}>
               <Eye className="w-4 h-4" />
             </Button>
@@ -481,7 +500,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
 
         <input ref={inputRef} type="file" accept={acceptTypes[type]} onChange={handleFileSelect} className="hidden" />
 
-        {currentValue && (
+        {safeCurrentValue && (
           <div className="mt-2 p-3 bg-gray-50 rounded border">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -501,9 +520,9 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     {fileType === "unknown" && <span className="text-gray-600 text-sm font-medium">File</span>}
                   </div>
                   <p className="text-sm text-gray-600 truncate max-w-xs">
-                    {currentValue.startsWith("blob:")
+                    {safeCurrentValue.startsWith("blob:")
                       ? "Local file selected"
-                      : currentValue.split("/").pop() || "Uploaded file"}
+                      : safeCurrentValue.split("/").pop() || "Uploaded file"}
                   </p>
                 </div>
                 <div className="flex items-center space-x-1">
@@ -530,44 +549,55 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
             </div>
 
             {/* Inline preview for images */}
-            {(fileType === "image" || type === "image") && currentValue && (
+            {(fileType === "image" || type === "image") && safeCurrentValue && (
               <div className="mt-3">
-                <img
-                  src={currentValue || "/placeholder.svg"}
-                  alt="Preview"
-                  className="max-w-full h-20 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={openPreview}
-                  onError={(e) => {
-                    console.error("Image preview error:", e)
-                  }}
-                />
+                <div className="relative bg-gray-100 rounded border overflow-hidden">
+                  <img
+                    src={safeCurrentValue || "/placeholder.svg"}
+                    alt="Preview"
+                    className="max-w-full h-20 object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={openPreview}
+                    onError={(e) => {
+                      e.target.onerror = null
+                      e.target.src =
+                        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='80' viewBox='0 0 160 80'%3E%3Crect width='160' height='80' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' dominantBaseline='middle' textAnchor='middle' fontFamily='sans-serif' fontSize='12' fill='%23999'%3EImage%3C/text%3E%3C/svg%3E"
+                    }}
+                  />
+                </div>
               </div>
             )}
 
             {/* Inline preview for videos */}
-            {(fileType === "video" || type === "video") && currentValue && (
+            {(fileType === "video" || type === "video") && safeCurrentValue && (
               <div className="mt-3">
                 <div className="relative bg-gray-100 rounded border overflow-hidden">
                   <video
-                    key={currentValue} // Add key to force re-render when URL changes
-                    src={currentValue}
+                    key={safeCurrentValue}
+                    src={safeCurrentValue}
                     className="max-w-full h-20 object-cover cursor-pointer hover:opacity-80 transition-opacity"
                     onClick={openPreview}
                     muted
                     playsInline
                     preload="metadata"
-                    poster="/placeholder.svg?height=80&width=320"
                     onLoadedMetadata={(e) => {
-                      // Try to show the first frame as poster
                       try {
                         const video = e.target
-                        video.currentTime = 0.1 // Set to a small value to get the first frame
+                        video.currentTime = 0.1
                       } catch (err) {
                         console.error("Error setting video time:", err)
                       }
                     }}
                     onError={(e) => {
                       console.error("Video preview error:", e.target.error)
+                      e.target.style.display = "none"
+                      const parent = e.target.parentElement
+                      if (parent && !parent.querySelector(".video-fallback")) {
+                        const fallback = document.createElement("div")
+                        fallback.className =
+                          "absolute inset-0 flex items-center justify-center bg-gray-100 video-fallback"
+                        fallback.innerHTML = '<span class="text-gray-500 text-xs">Video preview unavailable</span>'
+                        parent.appendChild(fallback)
+                      }
                     }}
                   >
                     Your browser does not support the video tag.
@@ -581,7 +611,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
             )}
 
             {/* Show info for blob URLs */}
-            {currentValue.startsWith("blob:") && (
+            {safeCurrentValue.startsWith("blob:") && (
               <div className="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-700">✓ File ready for upload to server</div>
             )}
           </div>
@@ -598,12 +628,103 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
         if (bundleId && apiService) {
           const response = await apiService.getBundleById(bundleId)
           if (response && response.data) {
-            setFormData(response.data)
+            // Safely merge the fetched data with default structure
+            const safeData = {
+              title: response.data.title || "",
+              description: response.data.description || "",
+              features: {
+                coursesIncluded: safeGet(response.data, "features.coursesIncluded", 0),
+                accessType: safeGet(response.data, "features.accessType", "lifetime"),
+                availableLanguages: safeGet(response.data, "features.availableLanguages", ""),
+              },
+              video:
+                Array.isArray(response.data.video) && response.data.video.length > 0
+                  ? response.data.video.map((v) => ({
+                      title: v?.title || "",
+                      videoFile: v?.videoFile || "",
+                    }))
+                  : [{ title: "", videoFile: "" }],
+              bonusSkills: {
+                title: safeGet(response.data, "bonusSkills.title", ""),
+                images: Array.isArray(safeGet(response.data, "bonusSkills.images"))
+                  ? response.data.bonusSkills.images.filter((img) => img)
+                  : [""],
+              },
+              sectionOne: {
+                title: safeGet(response.data, "sectionOne.title", ""),
+                images: safeGet(response.data, "sectionOne.images", ""),
+                highlights: Array.isArray(safeGet(response.data, "sectionOne.highlights"))
+                  ? response.data.sectionOne.highlights.map((h) => ({
+                      title: h?.title || "",
+                      description: h?.description || "",
+                    }))
+                  : [{ title: "", description: "" }],
+              },
+              sectionTwo: {
+                title: safeGet(response.data, "sectionTwo.title", ""),
+                highlights: Array.isArray(safeGet(response.data, "sectionTwo.highlights"))
+                  ? response.data.sectionTwo.highlights.map((h) => ({
+                      title: h?.title || "",
+                      description: h?.description || "",
+                      images: h?.images || "",
+                    }))
+                  : [{ title: "", description: "", images: "" }],
+              },
+              sectionThree: {
+                title: safeGet(response.data, "sectionThree.title", ""),
+                highlights: Array.isArray(safeGet(response.data, "sectionThree.highlights"))
+                  ? response.data.sectionThree.highlights.map((h) => ({
+                      title: h?.title || "",
+                      description: h?.description || "",
+                      images: h?.images || "",
+                    }))
+                  : [{ title: "", description: "", images: "" }],
+              },
+              courses: {
+                title: safeGet(response.data, "courses.title", ""),
+                description: safeGet(response.data, "courses.description", ""),
+                steps: Array.isArray(safeGet(response.data, "courses.steps"))
+                  ? response.data.courses.steps.map((s, i) => ({
+                      stepNumber: s?.stepNumber || i + 1,
+                      title: s?.title || "",
+                      subtitle: s?.subtitle || "",
+                      description: s?.description || "",
+                    }))
+                  : [{ stepNumber: 1, title: "", subtitle: "", description: "" }],
+              },
+              mentor: {
+                image: safeGet(response.data, "mentor.image", ""),
+                title: safeGet(response.data, "mentor.title", ""),
+                name: safeGet(response.data, "mentor.name", ""),
+                description: safeGet(response.data, "mentor.description", ""),
+              },
+              CertificationSection: {
+                title: safeGet(response.data, "CertificationSection.title", ""),
+                description: safeGet(response.data, "CertificationSection.description", ""),
+                image: safeGet(response.data, "CertificationSection.image", ""),
+                points: Array.isArray(safeGet(response.data, "CertificationSection.points"))
+                  ? response.data.CertificationSection.points.filter((p) => p)
+                  : [""],
+              },
+              FAQSchema: {
+                title: safeGet(response.data, "FAQSchema.title", ""),
+                questions: Array.isArray(safeGet(response.data, "FAQSchema.questions"))
+                  ? response.data.FAQSchema.questions.map((q) => ({
+                      question: q?.question || "",
+                      answer: q?.answer || "",
+                    }))
+                  : [{ question: "", answer: "" }],
+              },
+              price: response.data.price || 0,
+              discountPrice: response.data.discountPrice || 0,
+            }
+            setFormData(safeData)
           }
         } else if (data && Object.keys(data).length > 0) {
           setFormData(data)
         }
       } catch (error) {
+        console.error("Fetch error:", error)
         toast({
           title: "Error",
           description: `Failed to load bundle data: ${error.message}`,
@@ -621,72 +742,74 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
     const newErrors = {}
 
     // Basic Information validation
-    if (!formData.title.trim()) {
+    if (!formData.title?.trim()) {
       newErrors.title = "Title is required"
     }
-    if (!formData.description.trim()) {
+    if (!formData.description?.trim()) {
       newErrors.description = "Description is required"
     }
 
     // Features validation
-    if (formData.features.coursesIncluded <= 0) {
+    if (!formData.features?.coursesIncluded || formData.features.coursesIncluded <= 0) {
       newErrors.coursesIncluded = "Number of courses must be greater than 0"
     }
-    if (!formData.features.availableLanguages.trim()) {
+    if (!formData.features?.availableLanguages?.trim()) {
       newErrors.availableLanguages = "Available languages is required"
     }
 
     // Videos validation
-    formData.video.forEach((video, index) => {
-      const videoKey = "video.videoFile_" + index
-      if (!video.title.trim()) newErrors["video_" + index + "_title"] = "Video " + (index + 1) + " title is required"
-      if (!video.videoFile && !fileStorage[videoKey])
-        newErrors["video_" + index + "_url"] = "Video " + (index + 1) + " is required"
-    })
+    if (Array.isArray(formData.video)) {
+      formData.video.forEach((video, index) => {
+        const videoKey = "video.videoFile_" + index
+        if (!video?.title?.trim())
+          newErrors["video_" + index + "_title"] = "Video " + (index + 1) + " title is required"
+        if (!video?.videoFile && !fileStorage[videoKey])
+          newErrors["video_" + index + "_url"] = "Video " + (index + 1) + " is required"
+      })
+    }
 
-    // Bonus images validation
-    formData.bonusSkills.images.forEach((image, index) => {
-      const imageKey = "bonusSkills.images_" + index
-      if (!image && !fileStorage[imageKey])
-        newErrors["bonusImage_" + index] = "Bonus image " + (index + 1) + " is required"
-    })
+    if (Array.isArray(formData.bonusSkills?.images)) {
+      formData.bonusSkills.images.forEach((image, index) => {
+        const imageKey = "bonusSkills.images_" + index
+        if (!image && !fileStorage[imageKey])
+          newErrors["bonusImage_" + index] = "Bonus image " + (index + 1) + " is required"
+      })
+    }
 
-    // Section One image validation
-    if (!formData.sectionOne.images && !fileStorage["sectionOne.images"])
+    if (!formData.sectionOne?.images && !fileStorage["sectionOne.images_0"])
       newErrors.sectionOneImage = "Section One image is required"
 
-    // Section Two highlights validation
-    formData.sectionTwo.highlights.forEach((highlight, index) => {
-      const key = `sectionTwo.highlights.images_${index}`
-      if (!highlight.images && !fileStorage[key])
-        newErrors["sectionTwo_highlight_" + index + "_image"] = "Image required"
-    })
+    if (Array.isArray(formData.sectionTwo?.highlights)) {
+      formData.sectionTwo.highlights.forEach((highlight, index) => {
+        const key = "sectionTwo.highlights_" + index
+        if (!highlight?.images && !fileStorage[key])
+          newErrors["sectionTwo_highlight_" + index + "_image"] = "Image required"
+      })
+    }
 
-    // Section Three highlights validation
-    formData.sectionThree.highlights.forEach((highlight, index) => {
-      const key = `sectionThree.highlights.images_${index}`
-      if (!highlight.images && !fileStorage[key])
-        newErrors["sectionThree_highlight_" + index + "_image"] = "Image required"
-    })
+    if (Array.isArray(formData.sectionThree?.highlights)) {
+      formData.sectionThree.highlights.forEach((highlight, index) => {
+        const key = "sectionThree.highlights_" + index
+        if (!highlight?.images && !fileStorage[key])
+          newErrors["sectionThree_highlight_" + index + "_image"] = "Image required"
+      })
+    }
 
-    // Mentor image validation
-    if (!formData.mentor.image && !fileStorage["mentor.image"])
-      newErrors.mentorImage = "Mentor image is required"
+    if (!formData.mentor?.image && !fileStorage["mentor.image_0"]) newErrors.mentorImage = "Mentor image is required"
 
-    // Certification image validation
-    if (!formData.CertificationSection.image && !fileStorage["CertificationSection.image"])
+    if (!formData.CertificationSection?.image && !fileStorage["CertificationSection.image_0"])
       newErrors.certificationImage = "Certification image is required"
 
     // FAQ validation
-    if (!formData.FAQSchema.title.trim()) {
+    if (!formData.FAQSchema?.title?.trim()) {
       newErrors.faqTitle = "FAQ title is required"
     }
 
     // Pricing validation
-    if (formData.price <= 0) {
+    if (!formData.price || formData.price <= 0) {
       newErrors.price = "Price must be greater than 0"
     }
-    if (formData.discountPrice <= 0) {
+    if (!formData.discountPrice || formData.discountPrice <= 0) {
       newErrors.discountPrice = "Discount price must be greater than 0"
     }
     if (formData.discountPrice >= formData.price) {
@@ -697,123 +820,137 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
   }
 
   // Create FormData with files for backend submission
-  function createFormDataForSubmission() {
-    const formDataToSend = new FormData();
+function createFormDataForSubmission() {
+  const formDataToSend = new FormData();
 
-    // Append basic fields
-    formDataToSend.append("title", formData.title);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("price", formData.price);
-    formDataToSend.append("discountPrice", formData.discountPrice);
-    formDataToSend.append("features", JSON.stringify(formData.features));
-    formDataToSend.append("courses", JSON.stringify(formData.courses));
-    formDataToSend.append("FAQSchema", JSON.stringify(formData.FAQSchema));
+  // Append basic fields
+  formDataToSend.append("title", formData.title || "");
+  formDataToSend.append("description", formData.description || "");
+  formDataToSend.append("price", formData.price || 0);
+  formDataToSend.append("discountPrice", formData.discountPrice || 0);
+  formDataToSend.append("features", JSON.stringify(formData.features || {}));
+  formDataToSend.append("courses", JSON.stringify(formData.courses || {}));
+  formDataToSend.append("FAQSchema", JSON.stringify(formData.FAQSchema || {}));
 
-    // Video data - preserve existing URLs
-    const videoData = formData.video.map((video, index) => {
-      const key = `video.videoFile_${index}`;
-      return { 
-        title: video.title,
-        videoFile: fileStorage[key] ? "" : video.videoFile || ""
-      };
-    });
-    formDataToSend.append("video", JSON.stringify(videoData));
-
-    // Append new video files
-    formData.video.forEach((_, index) => {
-      const key = `video.videoFile_${index}`;
-      if (fileStorage[key]) formDataToSend.append("videoFiles", fileStorage[key]);
-    });
-
-    // Bonus skills
-    const bonusData = {
-      title: formData.bonusSkills.title,
-      images: formData.bonusSkills.images.map((img, i) => 
-        fileStorage[`bonusSkills.images_${i}`] ? "" : img || ""
-      ),
+  // Video data - preserve existing URLs
+  const videoData = (formData.video || []).map((video, index) => {
+    const key = `video.videoFile_${index}`;
+    return {
+      title: video?.title || "",
+      // Preserve existing URL unless new file exists
+      videoFile: fileStorage[key] ? "" : video?.videoFile || "",
     };
-    formDataToSend.append("bonusSkills", JSON.stringify(bonusData));
-    formData.bonusSkills.images.forEach((_, index) => {
-      const key = `bonusSkills.images_${index}`;
-      if (fileStorage[key]) formDataToSend.append("bonusSkillsImages", fileStorage[key]);
-    });
+  });
+  formDataToSend.append("video", JSON.stringify(videoData));
 
-    // Section One
-    formDataToSend.append(
-      "sectionOne",
-      JSON.stringify({
-        ...formData.sectionOne,
-        images: fileStorage["sectionOne.images"] ? "" : formData.sectionOne.images || "",
-      }),
-    );
-    if (fileStorage["sectionOne.images"]) {
-      formDataToSend.append("sectionOneImage", fileStorage["sectionOne.images"]);
+  // Append new video files with indexed field names
+  (formData.video || []).forEach((_, index) => {
+    const key = `video.videoFile_${index}`;
+    if (fileStorage[key]) {
+      formDataToSend.append(`videoFile_${index}`, fileStorage[key]);
     }
+  });
 
-    // Section Two
-    const sectionTwoData = {
-      ...formData.sectionTwo,
-      highlights: formData.sectionTwo.highlights.map((highlight, index) => {
-        const key = `sectionTwo.highlights.images_${index}`;
-        return {
-          ...highlight,
-          images: fileStorage[key] ? "" : highlight.images || ""
-        };
-      })
-    };
-    formDataToSend.append("sectionTwo", JSON.stringify(sectionTwoData));
+  // Bonus skills
+  const bonusData = {
+    title: formData.bonusSkills?.title || "",
+    images: (formData.bonusSkills?.images || []).map((img, index) => 
+      fileStorage[`bonusSkills.images_${index}`] ? "" : img || ""
+    ),
+  };
+  formDataToSend.append("bonusSkills", JSON.stringify(bonusData));
 
-    // Append section two images
-    formData.sectionTwo.highlights.forEach((_, index) => {
-      const key = `sectionTwo.highlights.images_${index}`;
-      if (fileStorage[key]) formDataToSend.append("sectionTwoImages", fileStorage[key]);
-    });
-
-    // Section Three
-    const sectionThreeData = {
-      ...formData.sectionThree,
-      highlights: formData.sectionThree.highlights.map((highlight, index) => {
-        const key = `sectionThree.highlights.images_${index}`;
-        return {
-          ...highlight,
-          images: fileStorage[key] ? "" : highlight.images || ""
-        };
-      })
-    };
-    formDataToSend.append("sectionThree", JSON.stringify(sectionThreeData));
-
-    // Append section three images
-    formData.sectionThree.highlights.forEach((_, index) => {
-      const key = `sectionThree.highlights.images_${index}`;
-      if (fileStorage[key]) formDataToSend.append("sectionThreeImages", fileStorage[key]);
-    });
-
-    // Mentor
-    formDataToSend.append(
-      "mentor",
-      JSON.stringify({
-        ...formData.mentor,
-        image: fileStorage["mentor.image"] ? "" : formData.mentor.image || "",
-      }),
-    );
-    if (fileStorage["mentor.image"]) {
-      formDataToSend.append("mentorImage", fileStorage["mentor.image"]);
+  // Append bonus skills images with indexed field names
+  (formData.bonusSkills?.images || []).forEach((_, index) => {
+    const key = `bonusSkills.images_${index}`;
+    if (fileStorage[key]) {
+      formDataToSend.append(`bonusSkillsImage_${index}`, fileStorage[key]);
     }
+  });
 
-    // CertificationSection
-    formDataToSend.append(
-      "CertificationSection",
-      JSON.stringify({
-        ...formData.CertificationSection,
-        image: fileStorage["CertificationSection.image"] ? "" : formData.CertificationSection.image || "",
-      }),
-    );
-    if (fileStorage["CertificationSection.image"]) {
-      formDataToSend.append("certificationSectionImage", fileStorage["CertificationSection.image"]);
-    }
-
-    return formDataToSend;
+  // Section One
+  formDataToSend.append(
+    "sectionOne",
+    JSON.stringify({
+      ...formData.sectionOne,
+      images: fileStorage["sectionOne.images_0"] ? "" : formData.sectionOne?.images || "",
+    })
+  );
+  if (fileStorage["sectionOne.images_0"]) {
+    formDataToSend.append("sectionOneImage", fileStorage["sectionOne.images_0"]);
   }
+
+  // Section Two
+  formDataToSend.append(
+    "sectionTwo",
+    JSON.stringify({
+      ...formData.sectionTwo,
+      highlights: (formData.sectionTwo?.highlights || []).map(highlight => ({
+        title: highlight.title,
+        description: highlight.description,
+        images: highlight.images || ""
+      }))
+    })
+  );
+
+  // Append section two highlight images with indexed field names
+  (formData.sectionTwo?.highlights || []).forEach((_, index) => {
+    const key = `sectionTwo.highlights_${index}`;
+    if (fileStorage[key]) {
+      formDataToSend.append(`sectionTwoImage_${index}`, fileStorage[key]);
+    }
+  });
+
+
+  // Section Three
+  formDataToSend.append(
+    "sectionThree",
+    JSON.stringify({
+      title: formData.sectionThree?.title || "",
+      description: formData.sectionThree?.description || "",
+      highlights: (formData.sectionThree?.highlights || []).map((highlight, index) => ({
+        title: highlight.title || "",
+        description: highlight.description || "",
+        // Preserve existing URL unless new file exists
+        images: fileStorage[`sectionThree.highlights_${index}`] ? "" : highlight.images || ""
+      }))
+    })
+  );
+
+  // Append section three highlight images with underscore in field name
+  (formData.sectionThree?.highlights || []).forEach((_, index) => {
+    const key = `sectionThree.highlights_${index}`;
+    if (fileStorage[key]) {
+      formDataToSend.append(`sectionThreeImage_${index}`, fileStorage[key]);
+    }
+  });
+
+  // Mentor
+  formDataToSend.append(
+    "mentor",
+    JSON.stringify({
+      ...formData.mentor,
+      image: fileStorage["mentor.image_0"] ? "" : formData.mentor?.image || "",
+    })
+  );
+  if (fileStorage["mentor.image_0"]) {
+    formDataToSend.append("mentorImage", fileStorage["mentor.image_0"]);
+  }
+
+  // Certification Section
+  formDataToSend.append(
+    "CertificationSection",
+    JSON.stringify({
+      ...formData.CertificationSection,
+      image: fileStorage["CertificationSection.image_0"] ? "" : formData.CertificationSection?.image || "",
+    })
+  );
+  if (fileStorage["CertificationSection.image_0"]) {
+    formDataToSend.append("certificationSectionImage", fileStorage["CertificationSection.image_0"]);
+  }
+
+  return formDataToSend;
+}
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -891,7 +1028,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
   const addVideoItem = () => {
     setFormData((prev) => ({
       ...prev,
-      video: [...prev.video, { title: "", videoFile: "" }],
+      video: [...(prev.video || []), { title: "", videoFile: "" }],
     }))
   }
 
@@ -908,7 +1045,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
 
     setFormData((prev) => ({
       ...prev,
-      video: prev.video.filter((_, i) => i !== index),
+      video: (prev.video || []).filter((_, i) => i !== index),
     }))
   }
 
@@ -917,7 +1054,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       ...prev,
       bonusSkills: {
         ...prev.bonusSkills,
-        images: [...prev.bonusSkills.images, ""],
+        images: [...(prev.bonusSkills?.images || []), ""],
       },
     }))
   }
@@ -937,7 +1074,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       ...prev,
       bonusSkills: {
         ...prev.bonusSkills,
-        images: prev.bonusSkills.images.filter((_, i) => i !== index),
+        images: (prev.bonusSkills?.images || []).filter((_, i) => i !== index),
       },
     }))
   }
@@ -948,7 +1085,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       [section]: {
         ...prev[section],
         highlights: [
-          ...prev[section].highlights,
+          ...(prev[section]?.highlights || []),
           section === "sectionOne" ? { title: "", description: "" } : { title: "", description: "", images: "" },
         ],
       },
@@ -957,7 +1094,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
 
   const removeHighlight = (section, index) => {
     // Clean up file storage for removed highlight
-    const uploadKey = `${section}.highlights.images_${index}`
+    const uploadKey = `${section}.highlights_${index}`
     if (fileStorage[uploadKey]) {
       setFileStorage((prev) => {
         const newStorage = { ...prev }
@@ -970,18 +1107,21 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       ...prev,
       [section]: {
         ...prev[section],
-        highlights: prev[section].highlights.filter((_, i) => i !== index),
+        highlights: (prev[section]?.highlights || []).filter((_, i) => i !== index),
       },
     }))
   }
 
   const addCourseStep = () => {
-    const nextStepNumber = formData.courses.steps.length + 1
+    const nextStepNumber = (formData.courses?.steps?.length || 0) + 1
     setFormData((prev) => ({
       ...prev,
       courses: {
         ...prev.courses,
-        steps: [...prev.courses.steps, { stepNumber: nextStepNumber, title: "", subtitle: "", description: "" }],
+        steps: [
+          ...(prev.courses?.steps || []),
+          { stepNumber: nextStepNumber, title: "", subtitle: "", description: "" },
+        ],
       },
     }))
   }
@@ -991,7 +1131,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       ...prev,
       courses: {
         ...prev.courses,
-        steps: prev.courses.steps.filter((_, i) => i !== index),
+        steps: (prev.courses?.steps || []).filter((_, i) => i !== index),
       },
     }))
   }
@@ -1001,7 +1141,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       ...prev,
       CertificationSection: {
         ...prev.CertificationSection,
-        points: [...prev.CertificationSection.points, ""],
+        points: [...(prev.CertificationSection?.points || []), ""],
       },
     }))
   }
@@ -1011,7 +1151,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       ...prev,
       CertificationSection: {
         ...prev.CertificationSection,
-        points: prev.CertificationSection.points.filter((_, i) => i !== index),
+        points: (prev.CertificationSection?.points || []).filter((_, i) => i !== index),
       },
     }))
   }
@@ -1021,7 +1161,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       ...prev,
       FAQSchema: {
         ...prev.FAQSchema,
-        questions: [...prev.FAQSchema.questions, { question: "", answer: "" }],
+        questions: [...(prev.FAQSchema?.questions || []), { question: "", answer: "" }],
       },
     }))
   }
@@ -1031,7 +1171,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       ...prev,
       FAQSchema: {
         ...prev.FAQSchema,
-        questions: prev.FAQSchema.questions.filter((_, i) => i !== index),
+        questions: (prev.FAQSchema?.questions || []).filter((_, i) => i !== index),
       },
     }))
   }
@@ -1042,7 +1182,11 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
       // Clean up any blob URLs when component unmounts to prevent memory leaks
       const cleanupBlobUrls = (obj) => {
         if (typeof obj === "string" && obj.startsWith("blob:")) {
-          URL.revokeObjectURL(obj)
+          try {
+            URL.revokeObjectURL(obj)
+          } catch (err) {
+            console.warn("Error revoking blob URL:", err)
+          }
         } else if (typeof obj === "object" && obj !== null) {
           Object.values(obj).forEach(cleanupBlobUrls)
         }
@@ -1091,10 +1235,11 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     </Label>
                     <Input
                       id="title"
-                      value={formData.title}
+                      value={formData.title || ""}
                       onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
                       className={getInputClassName("title")}
                       required
+                      readOnly
                     />
                     {getErrorMessage("title")}
                   </div>
@@ -1104,7 +1249,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     </Label>
                     <Textarea
                       id="description"
-                      value={formData.description}
+                      value={formData.description || ""}
                       onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
                       className={getInputClassName("description")}
                       rows={3}
@@ -1129,7 +1274,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                       <Input
                         id="coursesIncluded"
                         type="number"
-                        value={formData.features.coursesIncluded}
+                        value={formData.features?.coursesIncluded || 0}
                         onChange={(e) =>
                           setFormData((prev) => ({
                             ...prev,
@@ -1146,7 +1291,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         Access Type
                       </Label>
                       <Select
-                        value={formData.features.accessType}
+                        value={formData.features?.accessType || "lifetime"}
                         onValueChange={(value) =>
                           setFormData((prev) => ({
                             ...prev,
@@ -1169,7 +1314,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                       </Label>
                       <Input
                         id="availableLanguages"
-                        value={formData.features.availableLanguages}
+                        value={formData.features?.availableLanguages || ""}
                         onChange={(e) =>
                           setFormData((prev) => ({
                             ...prev,
@@ -1196,11 +1341,11 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 space-y-4">
-                  {formData.video.map((video, index) => (
+                  {(formData.video || []).map((video, index) => (
                     <div key={index} className={`border ${config.border} rounded-lg p-4 space-y-3`}>
                       <div className="flex justify-between items-center">
                         <h4 className={`font-medium ${config.label}`}>Video {index + 1}</h4>
-                        {formData.video.length > 1 && (
+                        {(formData.video || []).length > 1 && (
                           <Button
                             type="button"
                             onClick={() => removeVideoItem(index)}
@@ -1216,10 +1361,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         <div>
                           <Label className={config.label}>Title *</Label>
                           <Input
-                            value={video.title}
+                            value={video?.title || ""}
                             onChange={(e) => {
-                              const newVideos = [...formData.video]
-                              newVideos[index].title = e.target.value
+                              const newVideos = [...(formData.video || [])]
+                              newVideos[index] = { ...newVideos[index], title: e.target.value }
                               setFormData((prev) => ({ ...prev, video: newVideos }))
                             }}
                             className={getInputClassName(`video_${index}_title`)}
@@ -1231,7 +1376,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                           <Label className={config.label}>Video *</Label>
                           <FileUploadInput
                             fieldPath="video.videoFile"
-                            currentValue={video.videoFile}
+                            currentValue={video?.videoFile || ""}
                             index={index}
                             type="video"
                             label="Upload Video"
@@ -1253,7 +1398,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                   <div>
                     <Label className={config.label}>Title *</Label>
                     <Input
-                      value={formData.bonusSkills.title}
+                      value={formData.bonusSkills?.title || ""}
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
@@ -1272,11 +1417,11 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         <Plus className="w-4 h-4" />
                       </Button>
                     </div>
-                    {formData.bonusSkills.images.map((image, index) => (
+                    {(formData.bonusSkills?.images || []).map((image, index) => (
                       <div key={index} className="space-y-2 mb-4">
                         <div className="flex justify-between items-center">
                           <Label className={config.label}>Image {index + 1}</Label>
-                          {formData.bonusSkills.images.length > 1 && (
+                          {(formData.bonusSkills?.images || []).length > 1 && (
                             <Button
                               type="button"
                               onClick={() => removeBonusImage(index)}
@@ -1290,7 +1435,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         </div>
                         <FileUploadInput
                           fieldPath="bonusSkills.images"
-                          currentValue={image}
+                          currentValue={image || ""}
                           index={index}
                           type="image"
                           label="Upload Image"
@@ -1311,7 +1456,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                   <div>
                     <Label className={config.label}>Title *</Label>
                     <Input
-                      value={formData.sectionOne.title}
+                      value={formData.sectionOne?.title || ""}
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
@@ -1327,7 +1472,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     <Label className={config.label}>Image *</Label>
                     <FileUploadInput
                       fieldPath="sectionOne.images"
-                      currentValue={formData.sectionOne.images}
+                      currentValue={formData.sectionOne?.images || ""}
                       type="image"
                       label="Upload Image"
                     />
@@ -1345,11 +1490,11 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         <Plus className="w-4 h-4" />
                       </Button>
                     </div>
-                    {formData.sectionOne.highlights.map((highlight, index) => (
+                    {(formData.sectionOne?.highlights || []).map((highlight, index) => (
                       <div key={index} className={`border ${config.border} rounded-lg p-3 mb-3`}>
                         <div className="flex justify-between items-center mb-2">
                           <h5 className={`font-medium ${config.label}`}>Highlight {index + 1}</h5>
-                          {formData.sectionOne.highlights.length > 1 && (
+                          {(formData.sectionOne?.highlights || []).length > 1 && (
                             <Button
                               type="button"
                               onClick={() => removeHighlight("sectionOne", index)}
@@ -1363,10 +1508,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         </div>
                         <div className="space-y-2">
                           <Input
-                            value={highlight.title}
+                            value={highlight?.title || ""}
                             onChange={(e) => {
-                              const newHighlights = [...formData.sectionOne.highlights]
-                              newHighlights[index].title = e.target.value
+                              const newHighlights = [...(formData.sectionOne?.highlights || [])]
+                              newHighlights[index] = { ...newHighlights[index], title: e.target.value }
                               setFormData((prev) => ({
                                 ...prev,
                                 sectionOne: { ...prev.sectionOne, highlights: newHighlights },
@@ -1376,10 +1521,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                             required
                           />
                           <Textarea
-                            value={highlight.description}
+                            value={highlight?.description || ""}
                             onChange={(e) => {
-                              const newHighlights = [...formData.sectionOne.highlights]
-                              newHighlights[index].description = e.target.value
+                              const newHighlights = [...(formData.sectionOne?.highlights || [])]
+                              newHighlights[index] = { ...newHighlights[index], description: e.target.value }
                               setFormData((prev) => ({
                                 ...prev,
                                 sectionOne: { ...prev.sectionOne, highlights: newHighlights },
@@ -1404,7 +1549,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                   <div>
                     <Label className={config.label}>Title *</Label>
                     <Input
-                      value={formData.sectionTwo.title}
+                      value={formData.sectionTwo?.title || ""}
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
@@ -1428,11 +1573,11 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         <Plus className="w-4 h-4" />
                       </Button>
                     </div>
-                    {formData.sectionTwo.highlights.map((highlight, index) => (
+                    {(formData.sectionTwo?.highlights || []).map((highlight, index) => (
                       <div key={index} className={`border ${config.border} rounded-lg p-3 mb-3`}>
                         <div className="flex justify-between items-center mb-2">
                           <h5 className={`font-medium ${config.label}`}>Highlight {index + 1}</h5>
-                          {formData.sectionTwo.highlights.length > 1 && (
+                          {(formData.sectionTwo?.highlights || []).length > 1 && (
                             <Button
                               type="button"
                               onClick={() => removeHighlight("sectionTwo", index)}
@@ -1446,10 +1591,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         </div>
                         <div className="space-y-2">
                           <Input
-                            value={highlight.title}
+                            value={highlight?.title || ""}
                             onChange={(e) => {
-                              const newHighlights = [...formData.sectionTwo.highlights]
-                              newHighlights[index].title = e.target.value
+                              const newHighlights = [...(formData.sectionTwo?.highlights || [])]
+                              newHighlights[index] = { ...newHighlights[index], title: e.target.value }
                               setFormData((prev) => ({
                                 ...prev,
                                 sectionTwo: { ...prev.sectionTwo, highlights: newHighlights },
@@ -1459,10 +1604,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                             required
                           />
                           <Textarea
-                            value={highlight.description}
+                            value={highlight?.description || ""}
                             onChange={(e) => {
-                              const newHighlights = [...formData.sectionTwo.highlights]
-                              newHighlights[index].description = e.target.value
+                              const newHighlights = [...(formData.sectionTwo?.highlights || [])]
+                              newHighlights[index] = { ...newHighlights[index], description: e.target.value }
                               setFormData((prev) => ({
                                 ...prev,
                                 sectionTwo: { ...prev.sectionTwo, highlights: newHighlights },
@@ -1474,8 +1619,8 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                           <div>
                             <Label className={config.label}>Image *</Label>
                             <FileUploadInput
-                              fieldPath="sectionTwo.highlights.images"
-                              currentValue={highlight.images || ""}
+                              fieldPath="sectionTwo.highlights"
+                              currentValue={highlight?.images || ""}
                               index={index}
                               type="image"
                               label="Upload Image"
@@ -1497,7 +1642,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                   <div>
                     <Label className={config.label}>Title *</Label>
                     <Input
-                      value={formData.sectionThree.title}
+                      value={formData.sectionThree?.title || ""}
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
@@ -1521,11 +1666,11 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         <Plus className="w-4 h-4" />
                       </Button>
                     </div>
-                    {formData.sectionThree.highlights.map((highlight, index) => (
+                    {(formData.sectionThree?.highlights || []).map((highlight, index) => (
                       <div key={index} className={`border ${config.border} rounded-lg p-3 mb-3`}>
                         <div className="flex justify-between items-center mb-2">
                           <h5 className={`font-medium ${config.label}`}>Highlight {index + 1}</h5>
-                          {formData.sectionThree.highlights.length > 1 && (
+                          {(formData.sectionThree?.highlights || []).length > 1 && (
                             <Button
                               type="button"
                               onClick={() => removeHighlight("sectionThree", index)}
@@ -1539,10 +1684,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         </div>
                         <div className="space-y-2">
                           <Input
-                            value={highlight.title}
+                            value={highlight?.title || ""}
                             onChange={(e) => {
-                              const newHighlights = [...formData.sectionThree.highlights]
-                              newHighlights[index].title = e.target.value
+                              const newHighlights = [...(formData.sectionThree?.highlights || [])]
+                              newHighlights[index] = { ...newHighlights[index], title: e.target.value }
                               setFormData((prev) => ({
                                 ...prev,
                                 sectionThree: { ...prev.sectionThree, highlights: newHighlights },
@@ -1552,10 +1697,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                             required
                           />
                           <Textarea
-                            value={highlight.description}
+                            value={highlight?.description || ""}
                             onChange={(e) => {
-                              const newHighlights = [...formData.sectionThree.highlights]
-                              newHighlights[index].description = e.target.value
+                              const newHighlights = [...(formData.sectionThree?.highlights || [])]
+                              newHighlights[index] = { ...newHighlights[index], description: e.target.value }
                               setFormData((prev) => ({
                                 ...prev,
                                 sectionThree: { ...prev.sectionThree, highlights: newHighlights },
@@ -1567,8 +1712,8 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                           <div>
                             <Label className={config.label}>Image *</Label>
                             <FileUploadInput
-                              fieldPath="sectionThree.highlights.images"
-                              currentValue={highlight.images || ""}
+                              fieldPath="sectionThree.highlights"
+                              currentValue={highlight?.images || ""}
                               index={index}
                               type="image"
                               label="Upload Image"
@@ -1591,7 +1736,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     <div>
                       <Label className={config.label}>Title *</Label>
                       <Input
-                        value={formData.courses.title}
+                        value={formData.courses?.title || ""}
                         onChange={(e) =>
                           setFormData((prev) => ({
                             ...prev,
@@ -1606,7 +1751,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     <div>
                       <Label className={config.label}>Description *</Label>
                       <Textarea
-                        value={formData.courses.description}
+                        value={formData.courses?.description || ""}
                         onChange={(e) =>
                           setFormData((prev) => ({
                             ...prev,
@@ -1626,11 +1771,11 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         <Plus className="w-4 h-4" />
                       </Button>
                     </div>
-                    {formData.courses.steps.map((step, index) => (
+                    {(formData.courses?.steps || []).map((step, index) => (
                       <div key={index} className={`border ${config.border} rounded-lg p-3 mb-3`}>
                         <div className="flex justify-between items-center mb-2">
-                          <h5 className={`font-medium ${config.label}`}>Step {step.stepNumber}</h5>
-                          {formData.courses.steps.length > 1 && (
+                          <h5 className={`font-medium ${config.label}`}>Step {step?.stepNumber || index + 1}</h5>
+                          {(formData.courses?.steps || []).length > 1 && (
                             <Button
                               type="button"
                               onClick={() => removeCourseStep(index)}
@@ -1644,10 +1789,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
                           <Input
-                            value={step.title}
+                            value={step?.title || ""}
                             onChange={(e) => {
-                              const newSteps = [...formData.courses.steps]
-                              newSteps[index].title = e.target.value
+                              const newSteps = [...(formData.courses?.steps || [])]
+                              newSteps[index] = { ...newSteps[index], title: e.target.value }
                               setFormData((prev) => ({
                                 ...prev,
                                 courses: { ...prev.courses, steps: newSteps },
@@ -1657,10 +1802,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                             required
                           />
                           <Input
-                            value={step.subtitle}
+                            value={step?.subtitle || ""}
                             onChange={(e) => {
-                              const newSteps = [...formData.courses.steps]
-                              newSteps[index].subtitle = e.target.value
+                              const newSteps = [...(formData.courses?.steps || [])]
+                              newSteps[index] = { ...newSteps[index], subtitle: e.target.value }
                               setFormData((prev) => ({
                                 ...prev,
                                 courses: { ...prev.courses, steps: newSteps },
@@ -1671,10 +1816,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                           />
                         </div>
                         <Textarea
-                          value={step.description}
+                          value={step?.description || ""}
                           onChange={(e) => {
-                            const newSteps = [...formData.courses.steps]
-                            newSteps[index].description = e.target.value
+                            const newSteps = [...(formData.courses?.steps || [])]
+                            newSteps[index] = { ...newSteps[index], description: e.target.value }
                             setFormData((prev) => ({
                               ...prev,
                               courses: { ...prev.courses, steps: newSteps },
@@ -1699,7 +1844,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     <Label className={config.label}>Mentor Image *</Label>
                     <FileUploadInput
                       fieldPath="mentor.image"
-                      currentValue={formData.mentor.image}
+                      currentValue={formData.mentor?.image || ""}
                       type="image"
                       label="Upload Mentor Image"
                     />
@@ -1709,7 +1854,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     <div>
                       <Label className={config.label}>Name *</Label>
                       <Input
-                        value={formData.mentor.name}
+                        value={formData.mentor?.name || ""}
                         onChange={(e) =>
                           setFormData((prev) => ({
                             ...prev,
@@ -1724,7 +1869,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     <div>
                       <Label className={config.label}>Title *</Label>
                       <Input
-                        value={formData.mentor.title}
+                        value={formData.mentor?.title || ""}
                         onChange={(e) =>
                           setFormData((prev) => ({
                             ...prev,
@@ -1740,7 +1885,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                   <div>
                     <Label className={config.label}>Description *</Label>
                     <Textarea
-                      value={formData.mentor.description}
+                      value={formData.mentor?.description || ""}
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
@@ -1766,7 +1911,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     <div>
                       <Label className={config.label}>Title *</Label>
                       <Input
-                        value={formData.CertificationSection.title}
+                        value={formData.CertificationSection?.title || ""}
                         onChange={(e) =>
                           setFormData((prev) => ({
                             ...prev,
@@ -1781,7 +1926,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     <div>
                       <Label className={config.label}>Description *</Label>
                       <Textarea
-                        value={formData.CertificationSection.description}
+                        value={formData.CertificationSection?.description || ""}
                         onChange={(e) =>
                           setFormData((prev) => ({
                             ...prev,
@@ -1799,7 +1944,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                     <Label className={config.label}>Certification Image *</Label>
                     <FileUploadInput
                       fieldPath="CertificationSection.image"
-                      currentValue={formData.CertificationSection.image}
+                      currentValue={formData.CertificationSection?.image || ""}
                       type="image"
                       label="Upload Certification Image"
                     />
@@ -1812,12 +1957,12 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         <Plus className="w-4 h-4" />
                       </Button>
                     </div>
-                    {formData.CertificationSection.points.map((point, index) => (
+                    {(formData.CertificationSection?.points || []).map((point, index) => (
                       <div key={index} className="flex gap-2 mb-2">
                         <Input
-                          value={point}
+                          value={point || ""}
                           onChange={(e) => {
-                            const newPoints = [...formData.CertificationSection.points]
+                            const newPoints = [...(formData.CertificationSection?.points || [])]
                             newPoints[index] = e.target.value
                             setFormData((prev) => ({
                               ...prev,
@@ -1827,7 +1972,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                           placeholder="Certification point"
                           required
                         />
-                        {formData.CertificationSection.points.length > 1 && (
+                        {(formData.CertificationSection?.points || []).length > 1 && (
                           <Button
                             type="button"
                             onClick={() => removeCertificationPoint(index)}
@@ -1853,7 +1998,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                   <div>
                     <Label className={config.label}>FAQ Title *</Label>
                     <Input
-                      value={formData.FAQSchema.title}
+                      value={formData.FAQSchema?.title || ""}
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
@@ -1872,11 +2017,11 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         <Plus className="w-4 h-4" />
                       </Button>
                     </div>
-                    {formData.FAQSchema.questions.map((faq, index) => (
+                    {(formData.FAQSchema?.questions || []).map((faq, index) => (
                       <div key={index} className={`border ${config.border} rounded-lg p-3 mb-3`}>
                         <div className="flex justify-between items-center mb-2">
                           <h5 className={`font-medium ${config.label}`}>FAQ {index + 1}</h5>
-                          {formData.FAQSchema.questions.length > 1 && (
+                          {(formData.FAQSchema?.questions || []).length > 1 && (
                             <Button
                               type="button"
                               onClick={() => removeFAQItem(index)}
@@ -1890,10 +2035,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                         </div>
                         <div className="space-y-2">
                           <Input
-                            value={faq.question}
+                            value={faq?.question || ""}
                             onChange={(e) => {
-                              const newFAQs = [...formData.FAQSchema.questions]
-                              newFAQs[index].question = e.target.value
+                              const newFAQs = [...(formData.FAQSchema?.questions || [])]
+                              newFAQs[index] = { ...newFAQs[index], question: e.target.value }
                               setFormData((prev) => ({
                                 ...prev,
                                 FAQSchema: { ...prev.FAQSchema, questions: newFAQs },
@@ -1903,10 +2048,10 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                             required
                           />
                           <Textarea
-                            value={faq.answer}
+                            value={faq?.answer || ""}
                             onChange={(e) => {
-                              const newFAQs = [...formData.FAQSchema.questions]
-                              newFAQs[index].answer = e.target.value
+                              const newFAQs = [...(formData.FAQSchema?.questions || [])]
+                              newFAQs[index] = { ...newFAQs[index], answer: e.target.value }
                               setFormData((prev) => ({
                                 ...prev,
                                 FAQSchema: { ...prev.FAQSchema, questions: newFAQs },
@@ -1934,7 +2079,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                       <Input
                         type="number"
                         step="0.01"
-                        value={formData.price}
+                        value={formData.price || 0}
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, price: Number.parseFloat(e.target.value) || 0 }))
                         }
@@ -1948,7 +2093,7 @@ const DigitalBundleForm = ({ theme, data, bundleId = null, onSaveSuccess, apiSer
                       <Input
                         type="number"
                         step="0.01"
-                        value={formData.discountPrice}
+                        value={formData.discountPrice || 0}
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, discountPrice: Number.parseFloat(e.target.value) || 0 }))
                         }
