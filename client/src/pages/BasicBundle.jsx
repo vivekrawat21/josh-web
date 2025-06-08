@@ -8,25 +8,20 @@ import Certificate from "/fileStore/certificate.png"
 
 import { useParams } from "react-router-dom";
 const BasicBundle = ({ page = "page2" }) => {
-  const [bundle, setBundle] = React.useState([])
+  const [bundle, setBundle] = useState(null)
   const user = useSelector((state) => state.user);
 
   const { id } = useParams()
   console.log(id)
   const fetchBundle = async () => {
-    const res = await axios.get(`${BASE_URL}/course/getBundle/${id}`, { withCredentials: true })
-    // console.log(res.data.data)
-    setBundle(res.data.data.bundle)
-    console.log(res.data.data)
-
-
+    const response = await axios.get(`${BASE_URL}/digitalBundle/getDigitalBundleById/${id}`)
+    console.log(response.data.data)
+    setBundle(response.data.data)
+     console.log(response.data.data)
+    
   }
   useEffect(() => {
-    if (bundle.length === 0) {
-
       fetchBundle()
-    }
-    // console.log("Bundle",bundle[0])
   }, [id])
 
   const [openIndex, setOpenIndex] = useState(0)
@@ -379,12 +374,12 @@ const BasicBundle = ({ page = "page2" }) => {
 
         {/* Main Heading */}
         <h1 className="w-full max-w-[893.39px] text-2xl md:text-3xl lg:text-[44.38px] font-black text-white text-center leading-tight md:leading-[55px] mb-2 md:mb-4">
-          {heroSectionData[0].title}
+          {bundle?.title}
         </h1>
 
         {/* Subtitle */}
         <p className="w-full max-w-[720.34px] text-sm md:text-[14.87px] text-white text-center mb-6 md:mb-10">
-          {heroSectionData[0].subtitle}
+          {bundle?.description}
         </p>
 
         {/* Language Tabs */}
@@ -426,7 +421,7 @@ const BasicBundle = ({ page = "page2" }) => {
           <div className="flex items-center gap-2 py-2 md:py-0 w-full md:w-auto">
             <img src="/all_course.svg" alt="courses" className="w-[34px] h-[34px]" />
             <p className="text-[#333333] text-sm md:text-[15px] font-medium text-left md:text-center">
-              {heroSectionData[0].numberOfCourses}
+              {bundle?.features?.coursesIncluded + ` `}Skilled Courses
             </p>
           </div>
 
@@ -435,7 +430,7 @@ const BasicBundle = ({ page = "page2" }) => {
           <div className="flex items-center gap-2 py-2 md:py-0 w-full md:w-auto">
             <img src="/lifetime_access.svg" alt="access" className="w-[34px] h-[34px]" />
             <p className="text-[#333333] text-sm md:text-[14.63px] font-medium text-left md:text-center">
-              Lifetime Access
+              {bundle?.features?.accessType + ` `} Access
             </p>
           </div>
 
@@ -444,7 +439,7 @@ const BasicBundle = ({ page = "page2" }) => {
           <div className="flex items-center gap-2 py-2 md:py-0 w-full md:w-auto">
             <img src="/english_hindi.svg" alt="language" className="w-[34px] h-[34px]" />
             <p className="text-[#333333] text-sm md:text-[15.12px] font-medium text-left md:text-center">
-              English/Hindi
+              {bundle?.features?.availableLanguages + ` `}
             </p>
           </div>
         </div>
@@ -461,8 +456,8 @@ const BasicBundle = ({ page = "page2" }) => {
               <video
                 src={
                   selected === "english"
-                    ? bundle?.videoUrlEnglish || "https://www.w3schools.com/html/mov_bbb.mp4"
-                    : bundle?.videoUrlHindi || "https://www.w3schools.com/html/mov_bbb.mp4"
+                    ? bundle?.video?.[0]?.videoFile || "https://www.w3schools.com/html/mov_bbb.mp4"
+                    : bundle?.video?.[1]?.videoFile || "https://www.w3schools.com/html/mov_bbb.mp4"
                 }
                 controls
                 className="w-full h-full object-cover rounded-[10px]"
@@ -488,8 +483,7 @@ const BasicBundle = ({ page = "page2" }) => {
       {/*Bonus Skills */}
       <div className="relative w-full py-2 md:py-2">
         <p className="text-center text-xl md:text-2xl lg:text-[30px] font-bold mb-8 md:mb-16 px-4">
-          Level Up With These Exclusive{" "}
-          <span style={{ borderBottom: `4px solid ${colors.primaryDark}` }}>Bonus Skills</span>
+          {bundle?.bonusSkills?.title}
         </p>
         <div className="relative flex overflow-hidden rounded-lg group">
           {/* Left blurred gradient */}
@@ -502,23 +496,23 @@ const BasicBundle = ({ page = "page2" }) => {
 
           {/* Scrolling content */}
           <div className="flex space-x-8 md:space-x-16 animate-loop-scroll h-16 md:h-28 my-4">
-            {bonusSkills.map((bonusSkill) => (
+            {bundle?.bonusSkills?.images.map((imageUrl, index) => (
               <img
-                src={bonusSkill.imageUrl || "/placeholder.svg"}
-                alt={bonusSkill.name}
-                key={bonusSkill.id}
+                src={imageUrl || "/placeholder.svg"}
+                alt={`Bonus Skill ${index + 1}`}
+                key={index}
                 className="w-12 h-8 md:w-16 md:h-10 lg:w-24 lg:h-10 mx-4 md:mx-8 max-w-32 object-contain"
               />
             ))}
           </div>
 
           {/* Duplicate scrolling content */}
-          <div className="flex space-x-8 md:space-x-16 animate-loop-scroll my-6" aria-hidden="true">
-            {bonusSkills.map((bonusSkill) => (
+          <div className="flex space-x-8 md:space-x-16 animate-loop-scroll h-16 md:h-28 my-4" aria-hidden="true">
+            {bundle?.bonusSkills?.images.map((imageUrl, index) => (
               <img
-                src={bonusSkill.imageUrl || "/placeholder.svg"}
-                alt={bonusSkill.name}
-                key={bonusSkill.id}
+                src={imageUrl || "/placeholder.svg"}
+                alt={`Bonus Skill ${index + 1}`}
+                key={index}
                 className="w-12 h-8 md:w-16 md:h-10 lg:w-24 lg:h-10 mx-4 md:mx-8 max-w-32 object-contain"
               />
             ))}
@@ -555,7 +549,7 @@ const BasicBundle = ({ page = "page2" }) => {
                   }}
                 ></span>
               </span>
-              <span>Golden Age To Freelancing Is Here!</span>
+              <span>{bundle?.sectionOne?.title}</span>
             </h2>
           </div>
 
@@ -563,7 +557,7 @@ const BasicBundle = ({ page = "page2" }) => {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Info Cards Container */}
             <div className="flex flex-col gap-4 md:gap-5 lg:w-1/2">
-              {goldenAgeData.map((item, index) => (
+              {bundle?.sectionOne?.highlights.map((item, index) => (
                 <div
                   key={index}
                   style={{
@@ -594,7 +588,7 @@ const BasicBundle = ({ page = "page2" }) => {
 
             {/* Image on right */}
             <div className="lg:w-1/2 flex justify-center items-center mt-6 lg:mt-0">
-              <img src="/golden_age.png" alt="Golden Age" className="max-w-full h-auto max-h-[480px] object-contain" />
+              <img src={bundle?.sectionOne?.images} alt="Golden Age" className="max-w-full h-auto max-h-[480px] object-contain" />
             </div>
           </div>
         </div>
@@ -620,63 +614,33 @@ const BasicBundle = ({ page = "page2" }) => {
                   }}
                 ></span>
               </span>
-              <span>India Ranks #2 in the Freelance Market</span>
+              <span>{bundle?.sectionTwo?.title}</span>
             </h2>
           </div>
 
           {/* Cards Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            <div
-              style={{
-                backgroundColor: colors.background,
-                borderColor: colors.textLight,
-              }}
-              className="border rounded-[12px] shadow-[0px_4px_30px_rgba(0,0,0,0.15)] p-5"
-            >
+          {bundle?.sectionTwo?.highlights.map((item, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10" key={index}>
               <div
-                className="w-[80px] h-[80px] bg-cover mb-5"
-                style={{ backgroundImage: `url(${colors.fifteenMImage})` }}
-              ></div>
-              <h3 className="font-bold text-lg mb-3">Freelancers</h3>
-              <p className="text-sm md:text-base">
-                India is the second-largest freelance market, with over 15 million working independently.
-              </p>
+                style={{
+                  backgroundColor: colors.background,
+                  borderColor: colors.textLight,
+                }}
+                className="border rounded-[12px] shadow-[0px_4px_30px_rgba(0,0,0,0.15)] p-5"
+              >
+                <img
+                  src={item.images || "/placeholder.svg"}
+                  alt={item.title}
+                  className="w-[80px] h-[80px] bg-cover mb-5"
+                ></img>
+                <h3 className="font-bold text-lg mb-3">{item.title}</h3>
+                <p className="text-sm md:text-base">
+                  {item.description}
+                </p>
+              </div>
             </div>
-
-            <div
-              style={{
-                backgroundColor: colors.background,
-                borderColor: colors.textLight,
-              }}
-              className="border rounded-[12px] shadow-[0px_4px_30px_rgba(0,0,0,0.15)] p-5"
-            >
-              <div
-                className="w-[80px] h-[80px] bg-cover mb-5"
-                style={{ backgroundImage: `url(${colors.oneBImage})` }}
-              ></div>
-              <h3 className="font-bold text-lg mb-3">Market</h3>
-              <p className="text-sm md:text-base">
-                Freelancers in India contribute over $1 billion to the global economy across multiple industries.
-              </p>
-            </div>
-
-            <div
-              style={{
-                backgroundColor: colors.background,
-                borderColor: colors.textLight,
-              }}
-              className="border rounded-[12px] shadow-[0px_4px_30px_rgba(0,0,0,0.15)] p-5 md:col-span-2 lg:col-span-1 md:max-w-md md:mx-auto lg:mx-0 lg:max-w-none"
-            >
-              <div
-                className="w-[80px] h-[80px] bg-cover mb-5"
-                style={{ backgroundImage: `url(${colors.twentyLImage})` }}
-              ></div>
-              <h3 className="font-bold text-lg mb-3">Earners</h3>
-              <p className="text-sm md:text-base">
-                23% of Indian freelancers earn over ₹20 lakh a year, making freelancing a rewarding career.
-              </p>
-            </div>
-          </div>
+          ))}
+          
 
           {/* CTA Button */}
           <div className="flex justify-center">
@@ -703,23 +667,19 @@ const BasicBundle = ({ page = "page2" }) => {
         {/* Heading Container */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-2xl md:text-3xl font-bold text-white">
-            <span>You Can Also</span>
-            <span style={{ borderBottom: `4px solid ${colors.primaryLight}` }} className="pb-0 ml-2">
-              Add Up
-            </span>
-            <span className="ml-2">To This With</span>
+            <span>{bundle?.sectionThree?.title}</span>
           </h2>
         </div>
 
         {/* Cards Container */}
         <div className="relative w-full lg:w-[850px] h-[300px] md:h-[900px] overflow-y-auto mx-auto px-4 hide-scrollbar">
           <div className="space-y-4 md:space-y-6 lg:space-y-8">
-            {cards.map((card, index) => (
+            {bundle?.sectionThree?.highlights.map((card, index) => (
               <div
                 key={index}
                 className="sticky top-0 w-full max-w-[1100px] mx-auto border-[3px] rounded-[12px] p-4 md:p-8 shadow-xl transition-all duration-300"
                 style={{
-                  zIndex: cards.length + index,
+                  zIndex: bundle?.sectionThree?.highlights.length + index,
                   opacity: 1,
                   backgroundColor: colors.background,
                   borderColor: colors.cardBorder,
@@ -728,7 +688,7 @@ const BasicBundle = ({ page = "page2" }) => {
               >
                 <div className="flex flex-col md:flex-row gap-4 md:gap-6">
                   <img
-                    src={card.img || "/placeholder.svg"}
+                    src={card.images || "/placeholder.svg"}
                     alt="card-img"
                     className="w-full md:w-[300px] h-[200px] object-cover rounded"
                   />
@@ -777,11 +737,10 @@ const BasicBundle = ({ page = "page2" }) => {
             {/* Left side with heading */}
             <div className="lg:col-span-4 w-full lg:sticky lg:top-24 self-start">
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-gray-900 mb-6">
-                Your Framework For Freelance Success Is Here!
+                {bundle?.courses?.title}
               </h2>
               <p className="text-base md:text-lg text-gray-700 mb-8">
-                Follow this proven roadmap to build a thriving freelance business that gives you the freedom, income,
-                and impact you desire.
+                {bundle?.courses?.description}
               </p>
               <div className="hidden lg:block">
               <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}>  <button
@@ -807,7 +766,7 @@ const BasicBundle = ({ page = "page2" }) => {
                 ></div>
 
                 {/* Timeline dots */}
-                {ModulesData.map((_, index) => (
+                {bundle?.courses?.steps.map((_, index) => (
                   <div
                     key={`dot-${index}`}
                     style={{
@@ -822,7 +781,7 @@ const BasicBundle = ({ page = "page2" }) => {
 
             {/* Right side with modules */}
             <div className="lg:col-span-7 space-y-10 md:space-y-16 relative">
-              {ModulesData.map((module, index) => (
+              {bundle?.courses?.steps.map((module, index) => (
                 <div
                   key={module.id}
                   style={{ backgroundColor: colors.background }}
@@ -836,7 +795,7 @@ const BasicBundle = ({ page = "page2" }) => {
                       }}
                       className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg"
                     >
-                      <span className="text-white font-bold text-base md:text-lg">{module.id}</span>
+                      <span className="text-white font-bold text-base md:text-lg">{module.stepNumber}</span>
                     </div>
                     <div
                       style={{ backgroundColor: colors.background }}
@@ -849,7 +808,7 @@ const BasicBundle = ({ page = "page2" }) => {
                   {/* Module Content */}
                   <div className="p-4 md:p-6 pt-6 md:pt-8 mt-4">
                     <h4 className="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3">
-                      {module.descriptionTitle}
+                      {module.subtitle}
                     </h4>
                     <p className="text-sm md:text-base text-gray-700 leading-relaxed">{module.description}</p>
                   </div>
@@ -861,7 +820,7 @@ const BasicBundle = ({ page = "page2" }) => {
                     }}
                     className="lg:hidden absolute left-4 top-full w-0.5 h-8 md:h-12"
                   >
-                    {index !== ModulesData.length - 1 && (
+                    {index !== bundle?.courses?.steps.length - 1 && (
                       <div
                         style={{ backgroundColor: colors.secondaryLight }}
                         className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full"
@@ -898,12 +857,12 @@ const BasicBundle = ({ page = "page2" }) => {
         <div className="container mx-auto max-w-[1140px] px-4">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10">
             {/* Mentor Image */}
-            <img src="/member2.jpg" alt="Mentor" className="w-[200px] md:w-[250px] h-auto object-cover" />
+            <img src={bundle?.mentor?.image} alt="Mentor" className="w-[200px] md:w-[250px] h-auto object-cover" />
 
             {/* Text Content */}
             <div className="text-white">
               {/* Heading */}
-              <h3 className="font-bold text-2xl md:text-[28.48px] mb-4 md:mb-5">Meet Your Mentor</h3>
+              <h3 className="font-bold text-2xl md:text-[28.48px] mb-4 md:mb-5">{bundle?.mentor?.title}</h3>
 
               {/* Highlight background and name */}
               <div className="relative">
@@ -911,7 +870,7 @@ const BasicBundle = ({ page = "page2" }) => {
 
                 {/* Inline text after name */}
                 <span className="ml-1 text-white text-sm md:text-[14.75px]">
-              Lakshita Sethiya, the founder of Social Sellar Academy, is a seasoned freelancer and social media marketing expert who has helped thousands of freelancers transform their businesses. Starting from scratch, Lakshit built a thriving freelance career by mastering the art of driving revenue through strategic digital marketing. With his freelancing experience, Lakshit has developed a proven system that enables freelancers to leverage social media to build profitable personal brands, attract high paying clients, and generate sustainable income.
+                  {bundle?.mentor?.name + `, `}{bundle?.mentor?.description}
                 </span>
               </div>
             </div>
@@ -925,11 +884,11 @@ const BasicBundle = ({ page = "page2" }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h2 className="text-3xl font-bold mb-6">
-                Before You Ask!
+                {bundle?.CertificationSection?.title}
                 <span className="block w-32 h-1 bg- mt-2" style={{ backgroundColor: colors.primaryLight }}></span>
               </h2>
               <p className="text-lg mb-6 sm:mb-8">
-                Yes, you'll be certified for each course after passing the tests.
+                {bundle?.CertificationSection?.description}
               </p>
 
               <div className="space-y-6">
@@ -939,7 +898,7 @@ const BasicBundle = ({ page = "page2" }) => {
                     <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
                   <p className="font-medium text-sm sm:text-base">
-                    Official certificate from us to verify your achievements and increase your job prospects.
+                    {bundle?.CertificationSection?.points?.[0]}
                   </p>
                 </div>
 
@@ -949,7 +908,7 @@ const BasicBundle = ({ page = "page2" }) => {
                     <Users className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
                   <p className="font-medium text-sm sm:text-base">
-                    Easily shareable certificate for your portfolio to post on all platforms available.
+                    {bundle?.CertificationSection?.points?.[1]}
                   </p>
                 </div>
 
@@ -959,7 +918,7 @@ const BasicBundle = ({ page = "page2" }) => {
                     <Award className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
                   <p className="font-medium text-sm sm:text-base">
-                    Use your certificate to enhance your professional credibility and stand out among your peers.
+                    {bundle?.CertificationSection?.points?.[2]}
                   </p>
                 </div>
               </div>
@@ -971,7 +930,7 @@ const BasicBundle = ({ page = "page2" }) => {
                 style={{ borderColor: colors.primary }}
               >
                 <img
-                  src={Certificate}
+                  src={bundle?.CertificationSection?.image || "/certificate-placeholder.png"}
                   alt="Certificate"
                   className="rounded"
                 />
@@ -985,7 +944,7 @@ const BasicBundle = ({ page = "page2" }) => {
       <div className="w-full py-12 md:py-16 lg:py-20 mb-16">
         <div className="w-full max-w-4xl mx-auto px-4">
           <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">Questions? We've got you covered</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">{bundle?.FAQSchema?.title}</h2>
             <div
               style={{ backgroundColor: colors.primaryLight }}
               className="w-[100px] md:w-[200px] h-[3px] rounded mx-auto"
@@ -993,7 +952,7 @@ const BasicBundle = ({ page = "page2" }) => {
           </div>
 
           <div className="space-y-3 md:space-y-4">
-            {questions.map((item, index) => (
+            {bundle?.FAQSchema?.questions.map((item, index) => (
               <div
                 key={index}
                 style={{ borderColor: colors.primary }}
@@ -1039,8 +998,8 @@ const BasicBundle = ({ page = "page2" }) => {
               Hurry Up! Seats are filling in fast
             </div>
             <div className="flex items-center justify-center md:justify-start gap-2 mt-1 md:mt-2">
-              <span className="text-white text-base md:text-[18.5938px] font-bold line-through">₹74,999</span>
-              <span className="text-white text-base md:text-[18.5938px] font-bold">₹49,999</span>
+              <span className="text-white text-base md:text-[18.5938px] font-bold line-through">{bundle?.price}</span>
+              <span className="text-white text-base md:text-[18.5938px] font-bold">{bundle?.discountPrice}</span>
             </div>
           </div>
           <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}>

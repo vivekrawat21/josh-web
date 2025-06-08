@@ -56,6 +56,7 @@ const AdminSidebar = ({ isLoggedIn, setIsLoggedIn }) => {
     { path: '/admin/courses', icon: <FaBook />, text: 'Courses' },
     { path: '/admin/about', icon: <TiGroup />, text: 'About Us' },
     { path: '/admin/bundles', icon: <FaBook />, text: 'Bundles' },
+    { path: '/admin/digitalBundles', icon: <FaBook />, text: 'Digital Bundles' },
     { path: '/admin/students', icon: <FaGift />, text: 'Students' },
     { path: '/admin/mentors', icon: <FaChalkboardTeacher />, text: 'Mentor' },
     { path: '/admin/offers', icon: <BiSolidOffer />, text: 'Offers' },

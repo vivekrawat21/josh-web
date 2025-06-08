@@ -1,16 +1,22 @@
 import React from "react";
 import BasicBundle from "./BasicBundle";
+import IntermediateBundle from "./IntermediateBundle";
+import AdvanceBundle from "./AdvanceBundle";
 import { useParams } from "react-router-dom";
 
 const BundleRouter = () => {
   const { id } = useParams();
+  const { level } = useParams();
 
   // Assign page theme based on ID
-  let page = "page1"; // default
-  if (id === "2") page = "page2"; // Intermediate
-  else if (id === "3") page = "page3"; // Pro
 
-  return <BasicBundle page={page} />;
-};
+  if (level === "basicBundle") {
+    return <BasicBundle page="page1" id={id} />;
+  } else if (level === "intermediateBundle") {
+    return <IntermediateBundle page="page2" id={id} />; // Intermediate
+  } else if (level === "advanceBundle") {
+    return <AdvanceBundle page="page3" id={id} />; // Advance
+  } 
+}
 
 export default BundleRouter;

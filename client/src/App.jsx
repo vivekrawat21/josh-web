@@ -55,12 +55,14 @@ import OdooERPWebinar from "./pages/OdooErpWebinar";
 import AdminAssignMentor from "./components/AdminAssignMentor";
 import AdminTestimonials from "./components/AdminTestimonials";
 import AdminInstitutionalTestimonial from "./components/AdminInstitutionalTestimonial";
+import AdminDigitalBundle from "./pages/AdminDigitalBundle";
 import ResetPassword from "./components/ResetPassword";
 import AdminAbout from "./components/AdminAbout";
 
 function App() {
   return (
     <>
+      {/* <AdminDigitalBundle/> */}
       {/* <WebinarLanding/> */}
       <BrowserRouter basename="/">
         <Scroll />
@@ -69,6 +71,7 @@ function App() {
           <Route index element={<AdminLogin  />} />
           <Route path="/admin/courses" element={<AdminCourses />} />
           <Route path="/admin/bundles" element={<AdminBundles />} />
+          <Route path="/admin/digitalBundles" element={<AdminDigitalBundle />} />
           <Route path="/admin/editBundle/:id" element={<EditBundle />} />
           <Route path="/admin/editCourse/:id" element={<EditCourse />} />
           <Route path="/admin/bundleCourse/:id" element={<BundleCourse />} />
@@ -99,7 +102,7 @@ function App() {
       </Route>
 
       
-      <Route path="/specialBundle/:id" element={<BundleRouter />} />
+      <Route path="/digitallearningbundles/:level/:id" element={<BundleRouter />} />
       
           <Route
             path="/"
@@ -158,7 +161,7 @@ function App() {
             </Route>
           </Route>
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> 
     </>
   );
 }
