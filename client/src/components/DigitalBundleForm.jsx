@@ -1239,7 +1239,7 @@ function createFormDataForSubmission() {
                       onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
                       className={getInputClassName("title")}
                       required
-                      readOnly
+                      readOnly={!!bundleId} // Make title read-only if editing
                     />
                     {getErrorMessage("title")}
                   </div>

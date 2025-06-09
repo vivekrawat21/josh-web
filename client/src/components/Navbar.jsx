@@ -25,21 +25,26 @@ import { addCourse } from "@/features/courses/courseSlice";
 
 const special = [
   {
-    _id: "1",
-    bundleName: "Freelancing Road To 1 lakhs",
-    link: "/basicBundle",
-  },
-  {
-    _id: "2",
-    bundleName: "Freelancing Road To 3 Lakhs",
-    link: "/intermediateBundle",
-  },
-  {
-    _id: "3",
-    bundleName: "Freelancing Road To 5 Lakhs",
-    link: "/advanceBundle",
-  },
+      title: "Freelancing Road To 1 lakhs",
+      image: "/specialBundle1.png",
+      titleColor: "#F2B46F",
+      link: "basicBundle",
+    },
+    {
+      title: "Freelancing Road To 3 Lakhs",
+      image: "/specialBundle2.png",
+      titleColor: "#88BD9F",
+      link: "intermediateBundle",
+    },
+    {
+      title: "Freelancing Road To 5 Lakhs",
+      image: "/specialBundle3.png",
+      titleColor: "#7C42B0",
+      link: "advanceBundle",
+    },
 ];
+
+
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -143,6 +148,35 @@ const Navbar = () => {
     setSpecialBundles(special);
   }, [bundles]);
 
+  const [digitalBundles, setDigitalBundles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchBundles = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${BASE_URL}/digitalBundle/getDigitalBundles`);
+        console.log("digital bundles response:", response.data.data.bundles);
+        
+        setDigitalBundles(response.data.data.bundles); // pick first 3 bundles only
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        setError(error.message);
+        console.error("Error fetching bundles:", error);
+      }
+    };
+    fetchBundles();
+  }, []);
+
+  const mergedBundles = [...digitalBundles].reverse().map((digitalBundles, index) => ({
+    ...special[index],
+    ...digitalBundles,
+    _id: digitalBundles._id || `fallback-${index}`,
+    title: special[index].title || digitalBundles.title,
+  }));
+
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm rounded-xl z-50 py-1 px-auto">
       <div className="flex justify-between items-center font-['Fugaz One'] mx-auto max-w-[90%]">
@@ -190,7 +224,7 @@ const Navbar = () => {
                     {[
                       { title: "SPECIAL BUNDLES", items: bundles, type: "bundle" },
                       { title: "TRENDING COURSES", items: trendingCourses, type: "course" }, 
-                      { title: "DIGITAL LEARNING BUNDLES", items: specialBundles, type: "specialBundle" },
+                      { title: "DIGITAL LEARNING BUNDLES", items: mergedBundles, type: "digitallearningbundles" },
                       { title: "CHOOSE YOUR SKILL", items: chooseSkill, type: "course" },
                     ].map((section, idx) => (
                       <div className="pr-6" key={idx}>
@@ -199,7 +233,12 @@ const Navbar = () => {
                           {section.items.slice(0, 6).map((item) => (
                             <li key={item._id}>
                               <Link
-                                to={`/${section.type}/${item._id}`}
+                                to={
+                                  section.type === "digitallearningbundles"
+                                    ? `/${section.type}/${item.link}/${item._id}`
+                                    : `/${section.type}/${item._id}`
+                                }
+
                                 className="relative group transition-colors duration-300 hover:text-orange-500"
                               >
                                 {item?.title || item?.bundleName}
