@@ -304,7 +304,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center text-white">
                     <FaGraduationCap className="w-4 h-4" />
                   </div>
-                  <span className="font-semibold text-gray-800">Josh Guru</span>
+                  <span className="font-semibold text-gray-800">JoshGuru</span>
                 </div>
               )}
               <button onClick={() => onClose(false)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-600 transition-colors duration-200">

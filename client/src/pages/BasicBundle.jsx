@@ -4,7 +4,6 @@ import { ChevronDown, CheckCircle, Users, Award } from "lucide-react"
 import { Link } from "react-router-dom";
 import { BASE_URL } from "@/utils/utils";
 import axios from "axios";
-import Certificate from "/fileStore/certificate.png"
 
 import { useParams } from "react-router-dom";
 const BasicBundle = ({ page = "page2" }) => {
