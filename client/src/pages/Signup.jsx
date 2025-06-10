@@ -112,10 +112,20 @@ const Signup = () => {
     setLoading(false);
   };
 
-  const handleFinalSubmit = async (res) => {
+  const handleFinalSubmit = async () => {
     setErrorMsgs([]);
     setLoading(true);
-try{
+
+    const userInfo = {
+      name,
+      mobilenumber,
+      email,
+      password,
+      referralCode,
+    };
+
+    try {
+      const res = await axios.post(`${BASE_URL}/auth/register`, userInfo);
       if (res?.data?.data?.user) {
         dispatch(setUser(res.data.data.user));
         navigate('/dashboard');
@@ -233,8 +243,6 @@ try{
               name={name}
               mobilenumber={mobilenumber}
               email={email}
-              password={password}
-              referralCode= {referralCode}
               data={selectedCourse}
               type={typeParam}
               setStep={setStep}

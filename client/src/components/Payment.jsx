@@ -11,17 +11,7 @@ const formatPrice = (price) => {
   }).format(price);
 };
 
-const Payment = ({
-  name,
-  mobilenumber,
-  email,
-  password,
-  referralCode,
-  data,
-  type = 'bundle',
-  setStep,
-  handleFinalSubmit,
-}) => {
+const Payment = ({ name, mobilenumber, email, data, type = 'bundle', setStep, handleFinalSubmit }) => {
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
@@ -42,28 +32,7 @@ const Payment = ({
     setLoading(true);
 
     try {
-      // ✅ STEP 1: Register user before payment
-      const userInfo = {
-        name,
-        mobilenumber,
-        email,
-        password,
-        referralCode,
-      };
-
-      try {
-        await axios.post(`${BASE_URL}/auth/register`, userInfo);
-        console.log('User registered');
-      } catch (err) {
-        if (err?.response?.status === 409) {
-          // 409 Conflict: user already exists — safe to continue
-          console.warn('User already exists. Continuing to payment.');
-        } else {
-          throw new Error('User registration failed');
-        }
-      }
-
-      // ✅ STEP 2: Create Razorpay order
+      // The amount sent to the backend must be in the smallest currency unit (paise).
       const res = await axios.post(`${BASE_URL}/payment/create`, {
         currency: 'INR',
         id: itemIds,
@@ -71,12 +40,11 @@ const Payment = ({
         phoneNo: mobilenumber,
         email,
       });
-
       const order = res.data.message;
-
+      console.log(order)
       const options = {
-        key: 'rzp_test_faQqIMZ9VW1OTO',
-        amount: order.amount,
+        key: 'rzp_test_faQqIMZ9VW1OTO', 
+        amount: order.amount, 
         currency: order.currency,
         name: 'Joshguru Pvt Ltd',
         description: 'Payment for selected item(s)',
@@ -84,9 +52,11 @@ const Payment = ({
         handler: async function (response) {
           try {
             setPaymentSuccess(true);
-            await handleFinalSubmit(); // ✅ Submit any final backend call after payment success
+            await handleFinalSubmit();
           } catch (err) {
-            console.error('Error in post-payment processing:', err);
+            console.error('Error after payment success:', err);
+          } finally {
+            setLoading(false);
           }
         },
         prefill: {
@@ -102,9 +72,8 @@ const Payment = ({
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (error) {
-      console.error('Payment process failed:', error);
-      alert(error?.response?.data?.message || 'Something went wrong. Please try again.');
-    } finally {
+      console.error('Payment creation failed:', error);
+      alert(error?.response?.data?.message || 'Payment failed. Try again.');
       setLoading(false);
     }
   };
@@ -123,7 +92,10 @@ const Payment = ({
 
       <div className={`grid ${items.length === 1 ? 'justify-center' : 'grid-cols-1 sm:grid-cols-2 gap-6 mb-6'}`}>
         {items.map((item, idx) => (
-          <div key={idx} className="border rounded-xl bg-blue-50 overflow-hidden flex flex-col items-center p-4">
+          <div
+            key={idx}
+            className="border rounded-xl bg-blue-50 overflow-hidden flex flex-col items-center p-4"
+          >
             {item?.image || item?.bundleImage ? (
               <img
                 src={item.image || item.bundleImage}
