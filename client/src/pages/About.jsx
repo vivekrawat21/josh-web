@@ -10,7 +10,7 @@ const About = () => {
   const dispatch = useDispatch();
   const mentors = useSelector((state) => state.mentor?.mentors[0] || []);
   const [selected, setSelected] = useState(null);
-
+  const [team,setTeam]= useState([])
   const [aboutData, setAboutData] = useState({
     description:
       "Joshguru Technologies Private Limited is a new-age EdTech company dedicated to empowering youth with in-demand skills and guaranteed career growth. We offer offline and online Monday to Friday industry-relevant courses like: Digital Marketing, Full Stack Development, Microsoft 365, Odoo ERP. With placement assistance, internships, and international job support, our goal is to make every student job-ready. Whether you’re a fresher, working professional, or business owner, Joshguru is your trusted partner for skill development and success. We have more courses but all those courses for affiliates and that courses in recorded format only.",
@@ -58,11 +58,28 @@ const About = () => {
       console.error("Error fetching about data:", error);
     }
   };
+  const fetchManagement = async () => {
 
+    try {
+      const response = await axios.get(`${BASE_URL}/management/getTeam`, {
+        withCredentials: true,
+      });
+      const teamList = response.data.data;
+      console.log(teamList)
+      setTeam(teamList)
+      // dispatch(addMentors(teamList));
+    } catch (error) {
+      console.error("Error fetching management team:", error);
+    }
+  };
   useEffect(() => {
     if (mentors.length === 0) {
       fetchMentors();
     }
+    if(team.length ===0){
+      fetchManagement()
+    }
+    fetchManagement()
     fetchAboutData();
   }, []);
 
@@ -131,7 +148,7 @@ const About = () => {
             </div> */}
           </motion.div>
           <div className="sm:flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-auto sm:overflow-x-visible scrollbar-thin scrollbar-thumb-orange-300 pb-2 sm:pb-0">
-    {mentors.map((member, index) => (
+    {team.map((member, index) => (
       <motion.div
         key={member?._id}
         className="min-w-[260px] sm:min-w-[300px] bg-gradient-to-tr from-white/80 to-orange-50/80 backdrop-blur-lg rounded-2xl border border-orange-100 shadow-md hover:shadow-lg hover:scale-[1.02] hover:-rotate-1 transition-all duration-300 flex-shrink-0 p-6 mx-auto flex flex-col items-center text-center"
@@ -141,7 +158,7 @@ const About = () => {
         onClick={() => setSelected(member)}
       >
         <img
-          src={member?.profileImage || "/placeholder.svg"}
+          src={member?.image || "/placeholder.svg"}
           alt={member.name}
           className="w-28 h-28 sm:w-32 sm:h-32 mb-5 rounded-full object-cover border-4 border-orange-400 shadow-lg"
         />
@@ -149,7 +166,7 @@ const About = () => {
           {member?.name}
         </h3>
         <p className="text-sm sm:text-base text-orange-600 font-medium mt-1">
-          {member?.position}
+          {member?.role}
         </p>
       </motion.div>
     ))}
