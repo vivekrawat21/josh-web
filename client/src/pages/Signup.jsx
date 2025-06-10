@@ -44,7 +44,7 @@ const Signup = () => {
   const [errorMsgs, setErrorMsgs] = useState([]);
   const [referralCode, setReferralCode] = useState(queryParams.get('referralCode') || '');
 
-  const steps = ['Info', 'Course', 'Payment'];
+  const steps = ['Info', 'Course', 'PayU'];
 
   const getSpecialBundleData = (level) => {
     switch (level) {
@@ -112,20 +112,11 @@ const Signup = () => {
     setLoading(false);
   };
 
-  const handleFinalSubmit = async () => {
+  const handleFinalSubmit = async (res) => {
     setErrorMsgs([]);
     setLoading(true);
 
-    const userInfo = {
-      name,
-      mobilenumber,
-      email,
-      password,
-      referralCode,
-    };
-
-    try {
-      const res = await axios.post(`${BASE_URL}/auth/register`, userInfo);
+    try{
       if (res?.data?.data?.user) {
         dispatch(setUser(res.data.data.user));
         navigate('/dashboard');
@@ -243,6 +234,8 @@ const Signup = () => {
               name={name}
               mobilenumber={mobilenumber}
               email={email}
+              password={password}
+              referralCode={referralCode}
               data={selectedCourse}
               type={typeParam}
               setStep={setStep}

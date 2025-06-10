@@ -11,7 +11,7 @@ const formatPrice = (price) => {
   }).format(price);
 };
 
-const Payment = ({ name, mobilenumber, email, data, type = 'bundle', setStep, handleFinalSubmit }) => {
+const Payment = ({ name, mobilenumber, email,password,referralCode, data, type = 'bundle', setStep, handleFinalSubmit }) => {
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
@@ -24,6 +24,7 @@ const Payment = ({ name, mobilenumber, email, data, type = 'bundle', setStep, ha
   }, []);
 
   const handlePayment = async () => {
+
     if (!window.Razorpay) {
       alert('Razorpay SDK not loaded. Please try again.');
       return;
@@ -31,8 +32,18 @@ const Payment = ({ name, mobilenumber, email, data, type = 'bundle', setStep, ha
 
     setLoading(true);
 
+
     try {
-      // The amount sent to the backend must be in the smallest currency unit (paise).
+      const userInfo = {
+            name,
+            mobilenumber,
+            email,
+            password,
+            referralCode,
+          };
+      
+        
+      const response = await axios.post(`${BASE_URL}/auth/register`, userInfo);
       const res = await axios.post(`${BASE_URL}/payment/create`, {
         currency: 'INR',
         id: itemIds,
