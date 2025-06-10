@@ -112,10 +112,10 @@ const Signup = () => {
     setLoading(false);
   };
 
-  const handleFinalSubmit = async (res) => {
+  const handleFinalSubmit=(res) => {
     setErrorMsgs([]);
     setLoading(true);
-
+    console.log("response"+res);
     try{
       if (res?.data?.data?.user) {
         dispatch(setUser(res.data.data.user));
