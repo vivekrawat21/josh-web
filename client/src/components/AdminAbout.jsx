@@ -3,7 +3,7 @@ import axios from 'axios';
 import { BASE_URL } from '@/utils/utils';
 import CustomToast from '@/components/CustomToast';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Loader2 } from 'lucide-react';
 
 const TEXT_FIELDS_KEYS = ['description', 'ourMission', 'ourVision'];
 const IMAGE_FIELDS_KEYS = ['bannerImage'];
@@ -20,12 +20,15 @@ const AdminAbout = () => {
   const [preview, setPreview] = useState({ bannerImage: '' });
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState({}); // Track loading state for each image field
   const [toast, setToast] = useState({ open: false, message: '', type: '' });
 
   // Management team states
   const [team, setTeam] = useState([]);
   const [newMember, setNewMember] = useState({ name: '', role: '', image: null });
   const [previewMemberImage, setPreviewMemberImage] = useState(null);
+  const [memberImageLoading, setMemberImageLoading] = useState(false); // Loading state for member image
+  const [deletingMemberId, setDeletingMemberId] = useState(null);
 
   // Fetch About data
   const fetchAbout = useCallback(async () => {
@@ -54,34 +57,49 @@ const AdminAbout = () => {
   // Fetch management team
   const fetchManagementTeam = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/management`);
+      const res = await axios.get(`${BASE_URL}/management/getTeam`);
       setTeam(res.data.data || []);
     } catch {
       setToast({ open: true, message: 'Failed to fetch management team', type: 'error' });
     }
   };
-
+ console.log(team)
   useEffect(() => {
     fetchAbout();
     fetchManagementTeam();
   }, [fetchAbout]);
 
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e, field) => {
+  const handleImageChange = async (e, field) => {
     const file = e.target.files[0];
     if (!file) return;
-    setFormData((prev) => ({ ...prev, [field]: file }));
-    setPreview((prev) => ({ ...prev, [field]: URL.createObjectURL(file) }));
+
+    // Set loading state for this specific field
+    setImageLoading((prev) => ({ ...prev, [field]: true }));
+
+    try {
+      // Simulate processing time for better UX
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setFormData((prev) => ({ ...prev, [field]: file }));
+      setPreview((prev) => ({ ...prev, [field]: URL.createObjectURL(file) }));
+    } catch (error) {
+      setToast({ open: true, message: 'Failed to process image', type: 'error' });
+    } finally {
+      setImageLoading((prev) => ({ ...prev, [field]: false }));
+    }
   };
 
   const handleCancel = () => {
     setFormData(initialServerData);
     setPreview({ bannerImage: initialServerData.bannerImage || '' });
     setEditMode(false);
+    setImageLoading({}); // Reset image loading states
   };
 
   const checkForChanges = useCallback(() => {
@@ -132,11 +150,22 @@ const AdminAbout = () => {
     setNewMember((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleTeamImageChange = (e) => {
+  const handleTeamImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
+    if (!file) return;
+
+    setMemberImageLoading(true);
+
+    try {
+      // Simulate processing time for better UX
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       setNewMember((prev) => ({ ...prev, image: file }));
       setPreviewMemberImage(URL.createObjectURL(file));
+    } catch (error) {
+      setToast({ open: true, message: 'Failed to process member image', type: 'error' });
+    } finally {
+      setMemberImageLoading(false);
     }
   };
 
@@ -151,6 +180,7 @@ const AdminAbout = () => {
     form.append('image', newMember.image);
 
     try {
+      setLoading(true);
       await axios.post(`${BASE_URL}/management/create`, form, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
@@ -158,22 +188,29 @@ const AdminAbout = () => {
       setToast({ open: true, message: 'Member added!', type: 'success' });
       setNewMember({ name: '', role: '', image: null });
       setPreviewMemberImage(null);
+      setMemberImageLoading(false);
       fetchManagementTeam();
     } catch (err) {
       const msg = err.response?.data?.message || 'Failed to add member';
       setToast({ open: true, message: msg, type: 'error' });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDeleteMember = async (id) => {
     try {
-      await axios.delete(`${BASE_URL}/management/delete/${id}`,{withCredentials: true});
+      setDeletingMemberId(id);
+      await axios.delete(`${BASE_URL}/management/delete/${id}`, { withCredentials: true });
       setToast({ open: true, message: 'Member deleted!', type: 'success' });
       fetchManagementTeam();
     } catch {
       setToast({ open: true, message: 'Failed to delete member', type: 'error' });
+    } finally {
+      setDeletingMemberId(null);
     }
   };
+  
 
   return (
     <div className="w-full mx-auto px-4 py-6">
@@ -187,14 +224,21 @@ const AdminAbout = () => {
                 <Button
                   onClick={handleSaveToServer}
                   className="bg-orange-500 hover:bg-orange-600 text-white text-sm"
-                  disabled={loading || !checkForChanges()}
+                  disabled={loading || !checkForChanges() || Object.values(imageLoading).some(Boolean)}
                 >
-                  {loading ? 'Saving...' : 'Save'}
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    'Save'
+                  )}
                 </Button>
                 <Button
                   onClick={handleCancel}
                   className="bg-gray-300 hover:bg-gray-400 text-black text-sm"
-                  disabled={loading}
+                  disabled={loading || Object.values(imageLoading).some(Boolean)}
                 >
                   Cancel
                 </Button>
@@ -203,6 +247,7 @@ const AdminAbout = () => {
               <Button
                 onClick={() => setEditMode(true)}
                 className="bg-black hover:bg-gray-800 text-white text-sm"
+                disabled={loading}
               >
                 Edit
               </Button>
@@ -222,7 +267,7 @@ const AdminAbout = () => {
                 className="w-full border px-4 py-2 rounded text-sm disabled:bg-gray-100"
                 value={formData[field]}
                 onChange={handleChange}
-                disabled={!editMode || loading}
+                disabled={!editMode || loading || Object.values(imageLoading).some(Boolean)}
               />
             </div>
           ))}
@@ -233,9 +278,15 @@ const AdminAbout = () => {
                 {field.replace(/([A-Z])/g, ' $1').trim()}
               </label>
 
-              {preview[field] && (
-                <img src={preview[field]} alt="Preview" className="w-32 h-32 object-cover rounded mb-2" />
-              )}
+              <div className="relative">
+                {imageLoading[field] ? (
+                  <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded flex items-center justify-center mb-2">
+                    <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+                  </div>
+                ) : preview[field] ? (
+                  <img src={preview[field]} alt="Preview" className="w-32 h-32 object-cover rounded mb-2" />
+                ) : null}
+              </div>
 
               {editMode && (
                 <input
@@ -243,6 +294,7 @@ const AdminAbout = () => {
                   accept="image/*"
                   onChange={(e) => handleImageChange(e, field)}
                   className="text-sm"
+                  disabled={imageLoading[field] || loading}
                 />
               )}
             </div>
@@ -262,19 +314,25 @@ const AdminAbout = () => {
               className="border rounded-lg p-3 text-center relative shadow-sm"
             >
               <img
-                src={member.image}
-                alt={member.name}
+                src={member?.image}
+                alt={member?.name}
                 className="w-20 h-20 rounded-full mx-auto object-cover mb-2"
               />
-              <h4 className="text-sm font-medium">{member.name}</h4>
-              <p className="text-xs text-gray-500">{member.role}</p>
+              <h4 className="text-sm font-medium">{member?.name}</h4>
+              <p className="text-xs text-gray-500">{member?.role}</p>
               <Button
-                onClick={() => handleDeleteMember(member._id)}
-                className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-full"
-                variant="ghost"
-              >
-                <Trash2 size={16} />
-              </Button>
+  onClick={() => handleDeleteMember(member._id)}
+  className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-full"
+  variant="ghost"
+  disabled={deletingMemberId === member._id}
+>
+  {deletingMemberId === member._id ? (
+    <Loader2 size={16} className="animate-spin" />
+  ) : (
+    <Trash2 size={16} />
+  )}
+</Button>
+
             </div>
           ))}
         </div>
@@ -286,33 +344,52 @@ const AdminAbout = () => {
             placeholder="Name"
             value={newMember.name}
             onChange={handleTeamInputChange}
-            className="border px-3 py-2 rounded text-sm"
+            className="border px-3 py-2 rounded text-sm disabled:bg-gray-50"
+            disabled={loading || memberImageLoading}
           />
           <input
             name="role"
             placeholder="Role"
             value={newMember.role}
             onChange={handleTeamInputChange}
-            className="border px-3 py-2 rounded text-sm"
+            className="border px-3 py-2 rounded text-sm disabled:bg-gray-50"
+            disabled={loading || memberImageLoading}
           />
           <input
             type="file"
             accept="image/*"
             onChange={handleTeamImageChange}
             className="text-sm"
+            disabled={loading || memberImageLoading}
           />
-          {previewMemberImage && (
-            <img
-              src={previewMemberImage}
-              alt="Preview"
-              className="w-20 h-20 rounded-full object-cover"
-            />
-          )}
+          
+          <div className="relative">
+            {memberImageLoading ? (
+              <div className="w-20 h-20 border-2 border-dashed border-gray-300 rounded-full flex items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+              </div>
+            ) : previewMemberImage ? (
+              <img
+                src={previewMemberImage}
+                alt="Preview"
+                className="w-20 h-20 rounded-full object-cover"
+              />
+            ) : null}
+          </div>
+
           <Button
             onClick={handleAddTeamMember}
             className="bg-green-600 hover:bg-green-700 text-white text-sm"
+            disabled={loading || memberImageLoading || !newMember.name || !newMember.role || !newMember.image}
           >
-            Add Member
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Adding...
+              </>
+            ) : (
+              'Add Member'
+            )}
           </Button>
         </div>
       </div>
