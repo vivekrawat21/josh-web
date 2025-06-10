@@ -63,7 +63,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
         handler: async function (response) {
           try {
             setPaymentSuccess(true);
-            await handleFinalSubmit();
+            await handleFinalSubmit(response);
           } catch (err) {
             console.error('Error after payment success:', err);
           } finally {
