@@ -26,7 +26,7 @@ const Webinars = () => {
     const fetchWebinars = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/webinar/`)
-            console.log(response.data.data.webinars)
+            // console.log(response.data.data.webinars)
             setWebinars(response.data.data.webinars)
         } catch (error) {
             console.error("Error fetching webinars:", error)
@@ -89,11 +89,12 @@ const Webinars = () => {
                 setFormSubmitted(false);
                 }, 3000);
             }
+            // console.log(response.data)
             } catch (error) {
             console.error("Registration failed:", error);
             toast({
                 title: "Registration Failed",
-                description: error.message || "An error occurred. Please try again.",
+                description: error.response.data.message || "An error occurred. Please try again.",
                 variant: "destructive",
             });
             }
@@ -115,7 +116,7 @@ const Webinars = () => {
     const currentWebinar = selectedWebinar !== null ? webinars.find((w) => w._id === selectedWebinar) : null
     return (
         <main className="min-h-screen bg-orange-50">
-        <div className="container mx-auto py-8 px-4 mt-12">
+        <div className="container mx-auto py-8 px-4 ">
             <header className="mb-10 text-center">
             <h1 className="text-4xl font-bold text-orange-600 mb-2">Upcoming Webinars</h1>
             <p className="text-gray-600 max-w-4xl mx-auto">
