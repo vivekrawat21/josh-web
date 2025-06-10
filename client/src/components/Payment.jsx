@@ -37,7 +37,7 @@ const Payment = ({ name, mobilenumber, email, data, type = 'bundle', setStep, ha
         currency: 'INR',
         id: itemIds,
         name,
-        phoneNo: mobileNumber,
+        phoneNo: mobilenumber,
         email,
       });
       const order = res.data.message;
