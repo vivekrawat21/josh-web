@@ -11,7 +11,7 @@ const formatPrice = (price) => {
   }).format(price);
 };
 
-const Payment = ({ name, mobileNumber, email, data, type = 'bundle', setStep, handleFinalSubmit }) => {
+const Payment = ({ name, mobilenumber, email, data, type = 'bundle', setStep, handleFinalSubmit }) => {
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
@@ -58,12 +58,11 @@ const Payment = ({ name, mobileNumber, email, data, type = 'bundle', setStep, ha
           } finally {
             setLoading(false);
           }
-          // added comment
         },
         prefill: {
           name,
           email,
-          contact: mobileNumber,
+          contact: mobilenumber,
         },
         theme: {
           color: '#FFA500',
