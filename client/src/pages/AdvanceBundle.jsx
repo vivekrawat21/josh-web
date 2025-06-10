@@ -619,14 +619,15 @@ const AdvanceBundle = ({ page = "page3" }) => {
           </div>
 
           {/* Cards Section */}
-          {bundle?.sectionTwo?.highlights.map((item, index) => (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10" key={index}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            {bundle?.sectionTwo?.highlights.map((item, index) => (
               <div
                 style={{
                   backgroundColor: colors.background,
                   borderColor: colors.textLight,
                 }}
                 className="border rounded-[12px] shadow-[0px_4px_30px_rgba(0,0,0,0.15)] p-5"
+                key={index}
               >
                 <img
                   src={item.images || "/placeholder.svg"}
@@ -638,8 +639,8 @@ const AdvanceBundle = ({ page = "page3" }) => {
                   {item.description}
                 </p>
               </div>
+            ))}
             </div>
-          ))}
           
 
           {/* CTA Button */}
