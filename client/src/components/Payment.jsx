@@ -43,7 +43,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
          };
      
        const res1 = await axios.post(`${BASE_URL}/auth/register`, userInfo); 
-       if(res1.data.status == 200){
+
 
       // ✅ STEP 2: Create Razorpay order
       const res = await axios.post(`${BASE_URL}/payment/create`, {
@@ -84,7 +84,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
       const rzp = new window.Razorpay(options);
       rzp.open();
     }
-    } catch (error) {
+    catch (error) {
       console.error('Payment creation failed:', error);
       alert(error?.response?.data?.message || 'Payment failed. Try again.');
     } finally {
