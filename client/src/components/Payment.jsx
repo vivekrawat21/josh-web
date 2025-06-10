@@ -11,7 +11,7 @@ const formatPrice = (price) => {
   }).format(price);
 };
 
-const Payment = ({ name, mobilenumber, email, data, type = 'bundle', setStep, handleFinalSubmit }) => {
+const Payment = ({ name, mobilenumber, email,password,referralCode, data, type = 'bundle', setStep, handleFinalSubmit }) => {
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
@@ -33,7 +33,17 @@ const Payment = ({ name, mobilenumber, email, data, type = 'bundle', setStep, ha
 
     try {
       // ✅ STEP 1: Ensure user is created BEFORE starting payment
-      await handleFinalSubmit(); // This should create the user or save form data
+     
+         const userInfo = {
+           name,
+           mobilenumber,
+           email,
+           password,
+           referralCode,
+         };
+     
+       const res1 = await axios.post(`${BASE_URL}/auth/register`, userInfo); 
+       if(res1.data.status == 200){
 
       // ✅ STEP 2: Create Razorpay order
       const res = await axios.post(`${BASE_URL}/payment/create`, {
@@ -56,6 +66,7 @@ const Payment = ({ name, mobilenumber, email, data, type = 'bundle', setStep, ha
         order_id: order.id,
         handler: function (response) {
           // ✅ STEP 3: On payment success
+          handleFinalSubmit(res1)
           setPaymentSuccess(true);
           console.log('Payment successful!', response);
           // If needed, send response to backend here
@@ -72,6 +83,7 @@ const Payment = ({ name, mobilenumber, email, data, type = 'bundle', setStep, ha
 
       const rzp = new window.Razorpay(options);
       rzp.open();
+    }
     } catch (error) {
       console.error('Payment creation failed:', error);
       alert(error?.response?.data?.message || 'Payment failed. Try again.');
