@@ -240,6 +240,9 @@ const Signup = () => {
         {step === 3 && (
           <div className="text-center">
             <Payment
+              name={name}
+              mobilenumber={mobilenumber}
+              email={email}
               data={selectedCourse}
               type={typeParam}
               setStep={setStep}
