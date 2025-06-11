@@ -46,14 +46,43 @@ const Signup = () => {
 
   const steps = ['Info', 'Course', 'Payment'];
 
-  const getSpecialBundleData = (level) => {
+  const [digitalBundles, setDigitalBundles] = useState([]);
+
+  useEffect(() => {
+    const fetchBundles = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${BASE_URL}/digitalBundle/getDigitalBundles`);
+        console.log("digital bundles response:", response.data.data.bundles);
+        console.log("Digital Bundles:", response.data.data.bundles);
+        
+        
+        setDigitalBundles(response.data.data.bundles); // pick first 3 bundles only
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        setErrorMsgs(error.message);
+        console.error("Error fetching bundles:", error);
+      }
+    };
+    fetchBundles();
+  }, []);
+
+  console.log("Digital Bundles:", digitalBundles);
+  
+  const specialBundles = digitalBundles.slice().reverse();
+
+  console.log("Special Bundles:", specialBundles);
+  
+
+  const getSpecialBundleData = (level, specialBundles) => {
     switch (level) {
       case 'basic':
-        return { title: 'Basic Bundle', image: '/specialBundle1.jpg', price: 49999 };
+        return { title: 'Basic Bundle', image: '/specialBundle1.png', price: specialBundles[0]?.discountPrice || 49999 };
       case 'intermediate':
-        return { title: 'Intermediate Bundle', image: '/specialBundle2.jpg', price: 79999 };
+        return { title: 'Intermediate Bundle', image: '/specialBundle2.png', price: specialBundles[1]?.discountPrice || 79999 };
       case 'advance':
-        return { title: 'Advance Bundle', image: '/specialBundle3.jpg', price: 99999 };
+        return { title: 'Advance Bundle', image: '/specialBundle3.png', price: specialBundles[2]?.discountPrice || 99999 };
       default:
         return null;
     }
