@@ -456,7 +456,7 @@ const AddNewCourse = ({ addCourse, setAddCourse }) => {
         <div className="flex flex-col sm:flex-row gap-4">
           <Button
             type="submit"
-            className="bg-black hover:bg-gray-900 text-white px-6 py-2 rounded-md flex items-center justify-center gap-2 w-full sm:w-auto"
+            className="bg-orange-600 hover:bg-orange-800 text-white px-6 py-2 rounded-md flex items-center justify-center gap-2 w-full sm:w-auto"
             disabled={loading}
           >
             {loading ? (

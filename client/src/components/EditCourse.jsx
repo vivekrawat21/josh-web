@@ -103,7 +103,7 @@ const EditCourse = () => {
     e.preventDefault();
 
     const formData = new FormData();
-
+    setLoading(true)
     // Add all regular fields
     for (const key in course) {
       if (
@@ -158,6 +158,7 @@ const EditCourse = () => {
 
       setToastMessage({ type: 'success', message: 'Course updated successfully!' });
       setShowToast(true);
+      setLoading(false)
       setTimeout(() => setShowToast(false), 3000);
       setTimeout(() => navigate('/admin/courses'), 2000);
     } catch (error) {
@@ -555,7 +556,7 @@ const EditCourse = () => {
           <button
             type="submit"
             disabled={loading}
-            className="text-sm px-4 py-1.5 bg-black text-white rounded hover:bg-gray-800 disabled:opacity-50 flex items-center gap-2"
+            className="text-sm px-4 py-1.5 bg-orange-600 text-white rounded hover:bg-orange-800 disabled:opacity-50 flex items-center gap-2"
           >
             {loading ? (
               <div className="animate-spin h-4 w-4 border-t-2 border-b-2 border-white rounded-full"></div>

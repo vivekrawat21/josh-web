@@ -58,7 +58,7 @@ const CustomCheckbox = ({ checked, onChange, id }) => (
     <span
       className={`ml-2 ${getFontSize("input")} ${checked ? "font-semibold text-black" : "text-gray-700"}`}
     >
-      {checked ? "Yes" : "No"}
+      {checked ? "No" : "Yes"}
     </span>
     {checked && (
       <span className="absolute left-1 top-0.5 text-white text-xs pointer-events-none select-none">
@@ -251,7 +251,7 @@ const AdminTestimonials = () => {
         <h2 className={`${getFontSize("heading")} font-bold`}>Admin Testimonials</h2>
         {!adding ? (
           <button
-            className={`flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg ${getFontSize("button")} hover:bg-gray-800 transition-all`}
+            className={`flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg ${getFontSize("button")} hover:bg-orange-700 transition-all`}
             onClick={() => {
               setAdding(true);
               setEditing(null);
@@ -372,7 +372,7 @@ const AdminTestimonials = () => {
           <div className="md:col-span-2 flex gap-3 mt-2">
             <button
               type="submit"
-              className={`bg-black text-white rounded-lg px-6 py-2 ${getFontSize("button")} hover:bg-gray-800 disabled:opacity-50 transition-all`}
+              className={`bg-orange-500 text-white rounded-lg px-6 py-2 ${getFontSize("button")} hover:bg-orange-700 disabled:opacity-50 transition-all`}
               disabled={loading}
             >
               {loading ? (editing ? "Updating..." : "Adding...") : (editing ? "Update" : "Add")}
