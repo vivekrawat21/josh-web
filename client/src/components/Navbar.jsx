@@ -215,7 +215,7 @@ const Navbar = () => {
                 {isOpenCourse && (
                   <motion.div
                     ref={coursesDropdownRef}
-                    className="absolute lg:left-[-370%]   transform -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-8 w-[80vw] h-[50vh] grid grid-cols-4 gap-8 border bg-white border-gray-200 overflow-y-auto z-50"
+                    className="absolute lg:left-[-370%]   transform -translate-x-1/2 mt-2 shadow-2xl rounded-2xl px-8 py-4 w-[90vw] h-[44vh] grid grid-cols-4 gap-8 border bg-white border-gray-200 overflow-y-auto z-50"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
@@ -228,7 +228,7 @@ const Navbar = () => {
                       { title: "CHOOSE YOUR SKILL", items: chooseSkill, type: "course" },
                     ].map((section, idx) => (
                       <div className="pr-6" key={idx}>
-                        <h3 className="text-orange-500 text-xl font-bold mb-7">{section.title}</h3>
+                        <h2 className="text-orange-500 text-lg font-bold mb-2">{section.title}</h2>
                         <ul className="space-y-2 text-md">
                           {section.items.slice(0, 6).map((item) => (
                             <li key={item._id}>

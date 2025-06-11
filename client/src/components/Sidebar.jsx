@@ -101,7 +101,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
       try {
         setLoading(true);
         const response = await axios.get(`${BASE_URL}/digitalBundle/getDigitalBundles`);
-        console.log("digital bundles response:", response.data.data.bundles);
+        
         
         setDigitalBundles(response.data.data.bundles); // pick first 3 bundles only
         setLoading(false);
@@ -114,7 +114,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
     fetchBundles();
   }, []);
 
-  console.log("digitalBundles:", digitalBundles);
+  
 
   const mergedBundles = [...digitalBundles].reverse().map((digitalBundles, index) => ({
     ...bookDetails[index],
@@ -125,7 +125,7 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
 
   }));
 
-  console.log("mergedBundles:", mergedBundles);
+  
   
 
 

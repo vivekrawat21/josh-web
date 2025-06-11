@@ -53,7 +53,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
         route:"signup"
       });
       const order = res.data.message;
-      console.log(order)
+      // console.log(order)
       const options = {
         key: 'rzp_test_faQqIMZ9VW1OTO', 
         amount: order.amount, 
@@ -91,7 +91,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
       setLoading(false);
     }
   };
-
+console.log(items)
   return (
     <div className="w-full mt-6 p-4 sm:p-6 lg:p-8 bg-white lg:shadow-xl lg:rounded-2xl">
       <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center">
