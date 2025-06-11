@@ -21,7 +21,7 @@ import { Link } from 'react-router-dom';
 const ReferAndEarn = () => {
   const user = useSelector((state) => state.user);
   const [incomeHistory, setIncomeHistory] = useState([]);
-  const [copy,setCopy] = useState("false");
+  const [copy,setCopy] = useState(false);
 
   const handleCopyReferralLink = () => {
     navigator.clipboard.writeText(referralHeader + user?.sharableReferralCode);
