@@ -116,6 +116,7 @@ const Signup = () => {
     setErrorMsgs([]);
     setLoading(true);
     try{
+          console.log(user)
           dispatch(setUser(user));
           setLoading(false);
           navigate('/dashboard');
