@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiEye, FiEyeOff, FiXCircle } from 'react-icons/fi';
 import { Loader } from 'lucide-react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link, redirect } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../utils/utils';
 import { motion } from 'framer-motion';
@@ -144,19 +144,11 @@ const Signup = () => {
   const handleFinalSubmit=(res) => {
     setErrorMsgs([]);
     setLoading(true);
-    const user = res.data.data.user
-    console.log("response"+res);
-    try{
-          dispatch(setUser(user));
-          navigate('/dashboard');
-          setLoading(false)
-        
-    } catch (error) {
-      const backendError = error.response?.data?.message;
-      setErrorMsgs(Array.isArray(backendError) ? backendError : [backendError || 'Something went wrong. Please try again.']);
-    } finally {
-      setLoading(false);
-    }
+    const u = res.data.data.user
+    console.log(user)
+    dispatch(setUser(u));
+    redirect('/dashboard');
+    setLoading(false);
   };
 
   const itemsToShow = typeParam === 'cart'
