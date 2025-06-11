@@ -44,7 +44,7 @@ const Signup = () => {
   const [errorMsgs, setErrorMsgs] = useState([]);
   const [referralCode, setReferralCode] = useState(queryParams.get('referralCode') || '');
 
-  const steps = ['Info', 'Course', 'PayU'];
+  const steps = ['Info', 'Course', 'Payment'];
 
   const getSpecialBundleData = (level) => {
     switch (level) {
