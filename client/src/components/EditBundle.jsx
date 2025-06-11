@@ -304,7 +304,7 @@ const EditBundle = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="text-sm px-4 py-1.5 bg-black text-white rounded hover:bg-gray-800 disabled:opacity-50 flex items-center gap-2"
+            className="text-sm px-4 py-1.5 bg-orange-600 hover:bg-orange-700 text-white rounded disabled:opacity-50 flex items-center gap-2"
           >
             {isLoading ? (
               <div className="animate-spin h-4 w-4 border-t-2 border-b-2 border-white rounded-full"></div>

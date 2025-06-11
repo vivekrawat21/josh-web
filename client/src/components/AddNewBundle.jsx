@@ -214,7 +214,7 @@ const AddNewBundle = ({ addBundle, setAddBundle }) => {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 items-center">
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading} className="bg-orange-600 text-white hover:bg-orange-700">
           {loading ? (
             <div className="flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />

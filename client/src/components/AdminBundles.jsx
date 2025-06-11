@@ -50,7 +50,7 @@ const AdminBundles = () => {
         setBundles(bundle);
       }
     } catch (error) {
-      console.error("Error fetching bundles:", error);
+      // console.error("Error fetching bundles:", error);
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +67,7 @@ const AdminBundles = () => {
         setShowToast(true);
       }
     } catch (error) {
-      console.error("Error deleting bundle:", error);
+      // console.error("Error deleting bundle:", error);
       setToastMessage({ type: 'error', message: "Failed to delete the bundle." });
       setShowToast(true);
     }
