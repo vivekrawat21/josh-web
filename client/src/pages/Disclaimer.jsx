@@ -26,7 +26,7 @@ const Disclaimer = () => {
   }, []);
 
   return (
-    <div className="bg-white min-h-screen px-4 py-12 sm:px-6 lg:px-8">
+    <div className="bg-white min-h-screen px-4 py-16 sm:px-6 lg:px-8">
       <div className=" mx-auto">
         {/* <h1 className="text-4xl sm:text-5xl font-serif font-semibold text-black mb-12 text-center">
           Disclaimer

@@ -25,7 +25,7 @@ const RefundAndPolicy = () => {
   }, []);
 
   return (
-    <div className="bg-white min-h-screen px-4 py-12 sm:px-6 lg:px-8">
+    <div className="bg-white min-h-screen px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto ">
         {/* Optional Title */}
         {/* <h1 className="text-3xl font-bold mb-4 text-orange-600">Refund Policy</h1> */}

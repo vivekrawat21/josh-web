@@ -243,11 +243,14 @@ const TestimonialBento = () => {
                 </div>
               </div>
               {testimonial.isVideo ? (
-                <video
-                  src={testimonial.videoUrl}
-                  controls
-                  className="w-full h-40 rounded-md object-cover"
-                />
+                <iframe
+                src={testimonial.videoUrl}
+                className="w-full h-40 rounded-md object-cover"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="testimoial video Video"
+              ></iframe>
+                
               ) : (
                 <>
                   <p className="text-gray-700 italic mt-2">"{testimonial.testimonialText}"</p>

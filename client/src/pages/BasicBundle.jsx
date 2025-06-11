@@ -941,7 +941,7 @@ const BasicBundle = ({ page = "page2" }) => {
       </section>
 
       {/* Question */}
-      <div className="w-full py-12 md:py-16 lg:py-20 mb-16">
+      <div className="w-full py-12 md:py-16 lg:py-20 mb-20">
         <div className="w-full max-w-4xl mx-auto px-4">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">{bundle?.FAQSchema?.title}</h2>
@@ -951,7 +951,7 @@ const BasicBundle = ({ page = "page2" }) => {
             />
           </div>
 
-          <div className="space-y-3 md:space-y-4">
+          <div className="space-y-3  md:space-y-4">
             {bundle?.FAQSchema?.questions.map((item, index) => (
               <div
                 key={index}
