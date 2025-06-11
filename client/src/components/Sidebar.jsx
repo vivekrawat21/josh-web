@@ -21,6 +21,8 @@ import {
 import { MdHome, MdExplore } from "react-icons/md"
 import { Link } from "react-router-dom"
 import { FaArrowTrendUp } from "react-icons/fa6"
+import axios from "axios";
+import { BASE_URL } from "../utils/utils";
 
 // Animation variants
 const slideIn = {
@@ -62,12 +64,70 @@ const itemVariants = {
   },
 }
 
+  const bookDetails = [
+    {
+      title: "Freelancing Road To 1 lakhs",
+      image: "/specialBundle1.png",
+      titleColor: "#F2B46F",
+      link: "basicBundle",
+    },
+    {
+      title: "Freelancing Road To 3 Lakhs",
+      image: "/specialBundle2.png",
+      titleColor: "#88BD9F",
+      link: "intermediateBundle",
+    },
+    {
+      title: "Freelancing Road To 5 Lakhs",
+      image: "/specialBundle3.png",
+      titleColor: "#7C42B0",
+      link: "advanceBundle",
+    },
+  ];
+
 const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendingCourses, allCourses, logout }) => {
   const [view, setView] = useState("main")
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [selectedCourse, setSelectedCourse] = useState(null)
   const [breadcrumbs, setBreadcrumbs] = useState([])
   const [activeItem, setActiveItem] = useState("")
+
+  const [digitalBundles, setDigitalBundles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchBundles = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${BASE_URL}/digitalBundle/getDigitalBundles`);
+        console.log("digital bundles response:", response.data.data.bundles);
+        
+        setDigitalBundles(response.data.data.bundles); // pick first 3 bundles only
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        setError(error.message);
+        console.error("Error fetching bundles:", error);
+      }
+    };
+    fetchBundles();
+  }, []);
+
+  console.log("digitalBundles:", digitalBundles);
+
+  const mergedBundles = [...digitalBundles].reverse().map((digitalBundles, index) => ({
+    ...bookDetails[index],
+    ...digitalBundles,
+    _id: digitalBundles._id || `fallback-${index}`,
+    title: bookDetails[index].title || digitalBundles.bundleName,
+    link: bookDetails[index]?.link || "fallback-link"
+
+  }));
+
+  console.log("mergedBundles:", mergedBundles);
+  
+
 
   const coursesData = [
     {
@@ -96,11 +156,11 @@ const Sidebar = ({ isOpen, onClose, isLoggedIn, bundles, specialBundles, trendin
       category: "DIGITAL LEARNING BUNDLES",
       id: "digital",
       icon: <FaStar />,
-      courses: specialBundles?.map((bundle) => ({
+      courses: mergedBundles?.map((bundle) => ({
         key: bundle?._id,
         id: bundle?._id,
-        title: bundle?.bundleName,
-        link: `/specialBundle/${bundle?._id}`,
+        title: bundle?.title,
+        link: `/digitallearningbundles/${bundle.link}/${bundle._id}`,
       }))
     },
     {
