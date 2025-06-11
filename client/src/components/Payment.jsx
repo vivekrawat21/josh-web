@@ -33,16 +33,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
 
 
     try {
-      const userInfo = {
-            name,
-            mobilenumber,
-            email,
-            password,
-            referralCode,
-          };
-      
-        
-      const response = await axios.post(`${BASE_URL}/auth/register`, userInfo);
+     
       console.log("helllooo"+response)
       const res = await axios.post(`${BASE_URL}/payment/create`, {
         currency: 'INR',
@@ -63,6 +54,14 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
         order_id: order.id,
         handler: async function () {
           try {
+            const userInfo = {
+              name,
+              mobilenumber,
+              email,
+              password,
+              referralCode,
+            };
+          await axios.post(`${BASE_URL}/auth/register`, userInfo);
             setPaymentSuccess(true);
              handleFinalSubmit();
              } catch (err) {
