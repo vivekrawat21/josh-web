@@ -34,7 +34,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
 
     try {
      
-      console.log("helllooo"+response)
+      
       const res = await axios.post(`${BASE_URL}/payment/create`, {
         currency: 'INR',
         id: itemIds,
@@ -45,39 +45,46 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
       });
       const order = res.data.message;
       // console.log(order)
-      const options = {
-        key: 'rzp_test_faQqIMZ9VW1OTO', 
-        amount: order.amount, 
-        currency: order.currency,
-        name: 'Joshguru Pvt Ltd',
-        description: 'Payment for selected item(s)',
-        order_id: order.id,
-        handler: async function () {
-          try {
-            const userInfo = {
-              name,
-              mobilenumber,
-              email,
-              password,
-              referralCode,
-            };
-            await axios.post(`${BASE_URL}/auth/register`, userInfo);
-             handleFinalSubmit();
-             } catch (err) {
-            console.error('Error after payment success:', err);
-          } finally {
-            setLoading(false);
-          }
-        },
-        prefill: {
-          name,
-          email,
-          contact: mobilenumber,
-        },
-        theme: {
-          color: '#FFA500',
-        },
-      };
+        const options = {
+          key: 'rzp_test_faQqIMZ9VW1OTO',
+          amount: order.amount,
+          currency: order.currency,
+          name: 'Joshguru Pvt Ltd',
+          description: 'Payment for selected item(s)',
+          order_id: order.id,
+          handler: async function () {
+            try {
+              const userInfo = {
+                name,
+                mobilenumber,
+                email,
+                password,
+                referralCode,
+              };
+              await axios.post(`${BASE_URL}/auth/register`, userInfo);
+              handleFinalSubmit();
+            } catch (err) {
+              console.error('Error after payment success:', err);
+            } finally {
+              setLoading(false);
+            }
+          },
+          prefill: {
+            name,
+            email,
+            contact: mobilenumber,
+          },
+          theme: {
+            color: '#FFA500',
+          },
+          modal: {
+            ondismiss: function () {
+              // Cancel loading if payment popup is closed
+              setLoading(false);
+            },
+          },
+        };
+        
 
       const rzp = new window.Razorpay(options);
       rzp.open();
