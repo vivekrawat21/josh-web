@@ -43,6 +43,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
       
         
       const response = await axios.post(`${BASE_URL}/auth/register`, userInfo);
+      console.log("helllooo"+response)
       const res = await axios.post(`${BASE_URL}/payment/create`, {
         currency: 'INR',
         id: itemIds,
