@@ -112,15 +112,14 @@ const Signup = () => {
     setLoading(false);
   };
 
-  const handleFinalSubmit=(res) => {
+  const handleFinalSubmit=(user) => {
     setErrorMsgs([]);
     setLoading(true);
-    console.log("response"+res);
     try{
-      if (res?.data?.data?.user) {
-        dispatch(setUser(res.data.data.user));
-        navigate('/dashboard');
-      }
+          dispatch(setUser(user));
+          setLoading(false);
+          navigate('/dashboard');
+        
     } catch (error) {
       const backendError = error.response?.data?.message;
       setErrorMsgs(Array.isArray(backendError) ? backendError : [backendError || 'Something went wrong. Please try again.']);

@@ -10,7 +10,6 @@ const formatPrice = (price) => {
     maximumFractionDigits: 0,
   }).format(price);
 };
-
 const Payment = ({ name, mobilenumber, email,password,referralCode, data, type = 'bundle', setStep, handleFinalSubmit }) => {
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -44,6 +43,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
       
         
       const response = await axios.post(`${BASE_URL}/auth/register`, userInfo);
+      const user = response.data?.data?.user;
       const res = await axios.post(`${BASE_URL}/payment/create`, {
         currency: 'INR',
         id: itemIds,
@@ -60,10 +60,10 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
         name: 'Joshguru Pvt Ltd',
         description: 'Payment for selected item(s)',
         order_id: order.id,
-        handler: async function (response) {
+        handler: async function () {
           try {
             setPaymentSuccess(true);
-            await handleFinalSubmit(response);
+            handleFinalSubmit(user);
           } catch (err) {
             console.error('Error after payment success:', err);
           } finally {
