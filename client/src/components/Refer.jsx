@@ -172,7 +172,7 @@ const ReferAndEarn = () => {
            >
              {
               copy ? (
-                <span className="text-green-600">Copied!</span>
+                <span className="text-gray-50">Copied!</span>
               ) : (
                 <Copy size={16} />
               )
