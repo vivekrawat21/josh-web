@@ -63,11 +63,9 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
         order_id: order.id,
         handler: async function () {
           try {
-            console.log("helllloooo"+ response)
-            await handleFinalSubmit(response);
             setPaymentSuccess(true);
-            
-          } catch (err) {
+             handleFinalSubmit();
+             } catch (err) {
             console.error('Error after payment success:', err);
           } finally {
             setLoading(false);

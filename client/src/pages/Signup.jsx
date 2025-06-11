@@ -174,26 +174,12 @@ const Signup = () => {
     setLoading(false);
   };
 
-  const handleFinalSubmit=(res) => {
+  const handleFinalSubmit=() => {
     setErrorMsgs([]);
     setLoading(true);
-    const u = res.data.data.user
-    console.log(user)
-    // dispatch(setUser(u));
     redirect('/login');
     setLoading(false);
-    // Fixed: Removed undefined 'res' variable
-    // console.log("user data:", user);
-    // try {
-    //   dispatch(setUser(user));
-    //   navigate('/dashboard');
-    //   setLoading(false);
-    // } catch (error) {
-    //   const backendError = error.response?.data?.message;
-    //   setErrorMsgs(Array.isArray(backendError) ? backendError : [backendError || 'Something went wrong. Please try again.']);
-    // } finally {
-    //   setLoading(false);
-    // }
+
   };
 
   const itemsToShow = typeParam === 'cart'
