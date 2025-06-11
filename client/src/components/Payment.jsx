@@ -62,7 +62,6 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
               referralCode,
             };
             await axios.post(`${BASE_URL}/auth/register`, userInfo);
-            setPaymentSuccess(true);
              handleFinalSubmit();
              } catch (err) {
             console.error('Error after payment success:', err);
