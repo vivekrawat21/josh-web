@@ -148,6 +148,7 @@ const Signup = () => {
     try{
           dispatch(setUser(user));
           navigate('/dashboard');
+          setLoading(false)
         
     } catch (error) {
       const backendError = error.response?.data?.message;

@@ -348,7 +348,7 @@ const IntermediateBundle = ({ page = "page2" }) => {
         <Link to="/">
           <img src="/logo1.png" alt="joshguru" className="w-[60px] md:w-[90px] h-[60px] object-cover" />
         </Link>
-        <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}><button className="px-4 md:px-6 py-2 bg-transparent text-white font-semibold border-2 border-white shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] transition-all duration-200 hover:bg-white hover:text-blue-600 text-sm md:text-base">
+        <Link to={!user ? `/signup?type=specialbundle&level=${link}` : `/payment?type=specialbundle&level=${link}`}><button className="px-4 md:px-6 py-2 bg-transparent text-white font-semibold border-2 border-white shadow-[0_4px_4px_-2px_rgba(0,0,0,0.1)] transition-all duration-200 hover:bg-white hover:text-blue-600 text-sm md:text-base">
           Enroll Now
         </button>
         </Link>
@@ -464,7 +464,7 @@ const IntermediateBundle = ({ page = "page2" }) => {
           </div>
         </div>
         <div className="mt-8 md:mt-12">
-          <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}>  <button
+          <Link to={!user ? `/signup?type=specialbundle&level=${link}` : `/payment?type=specialbundle&level=${link}`}>  <button
             className="h-[51px] rounded px-6 md:px-10 text-white text-base md:text-[16.7344px] leading-[27px] font-medium w-[250px] md:w-[350px] flex items-center justify-center"
             style={{
               background: `linear-gradient(to right, ${colors.buttonGradientFrom}, ${colors.buttonGradientTo})`,
@@ -643,7 +643,7 @@ const IntermediateBundle = ({ page = "page2" }) => {
 
           {/* CTA Button */}
           <div className="flex justify-center">
-            <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}> <button
+            <Link to={!user ? `/signup?type=specialbundle&level=${link}` : `/payment?type=specialbundle&level=${link}`}> <button
               style={{
                 background: `linear-gradient(to right, ${colors.buttonGradientFrom}, ${colors.buttonGradientTo})`,
               }}
@@ -742,7 +742,7 @@ const IntermediateBundle = ({ page = "page2" }) => {
                 {bundle?.courses?.description}
               </p>
               <div className="hidden lg:block">
-              <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}>  <button
+              <Link to={!user ? `/signup?type=specialbundle&level=${link}` : `/payment?type=specialbundle&level=${link}`}>  <button
                   style={{
                     background: `linear-gradient(to right, ${colors.ctaGradientStart}, ${colors.ctaGradientEnd})`,
                   }}
@@ -1001,7 +1001,7 @@ const IntermediateBundle = ({ page = "page2" }) => {
               <span className="text-white text-base md:text-[18.5938px] font-bold">{bundle?.discountPrice}</span>
             </div>
           </div>
-          <Link to={!user ? `/signup?type=specialbundle&level=${link}` : "/payment"}>
+          <Link to={!user ? `/signup?type=specialbundle&level=${link}` : `/payment?type=specialbundle&level=${link}`}>
             <button className="w-full md:w-auto px-4 py-2 md:px-6 md:py-3 bg-white/10 border border-white rounded-[4px] mt-3 md:mt-0">
               <span className="text-white text-sm md:text-[15.125px]">
                 Enroll Now

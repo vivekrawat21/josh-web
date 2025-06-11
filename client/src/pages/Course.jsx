@@ -217,7 +217,7 @@ const handleVideoSelection = (video) => {
                           to={
                             !user
                               ? `/signup?courseId=${courseId}&type=course`
-                              : "/payment"
+                              : `/payment?type=course&courseId=${courseId}`
                           }
                           className={`${
                             cartContainsCourse ? "w-full" : "w-full sm:w-1/2"
@@ -380,7 +380,7 @@ const handleVideoSelection = (video) => {
           to={
             !user
               ? `/signup?courseId=${courseId}&type=course`
-              : "/payment"
+              : `/payment?type=course&courseId=${courseId}`
           }
           className="w-full"
         >
@@ -704,7 +704,7 @@ const handleVideoSelection = (video) => {
                       to={
                         !user
                           ? `/signup?courseId=${courseId}&type=course`
-                          : "/payment"
+                          : `/payment?type=course&courseId=${courseId}`
                       }
                       className={`${
                         cartContainsCourse ? "w-full" : "w-full sm:w-1/2"

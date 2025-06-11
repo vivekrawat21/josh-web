@@ -155,7 +155,8 @@ const Bundle = () => {
           className="px-6 py-2 sm:px-8 sm:py-2 text-xs sm:text-sm md:text-base border-2 border-black font-semibold rounded-xl text-black hover:bg-orange-500 hover:text-white transition-all duration-300 mb-8"
           whileHover={{ scale: 1.05 }}
         >
-          <Link to={!user ? `/signup?courseId=${bundle._id}&type=bundle` : '/payment'}>
+          <Link to={!user ? `/signup?courseId=${bundle._id}&type=bundle` : `/payment?type=bundle&courseId=${bundleId}`
+}>
             Buy Bundle
           </Link>
         </motion.button>

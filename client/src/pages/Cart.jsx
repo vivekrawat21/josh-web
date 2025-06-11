@@ -3,7 +3,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { removeFromCart } from "../features/cart/cartSlice";
+import { clearCart, removeFromCart } from "../features/cart/cartSlice";
 import { Link } from "react-router-dom";
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cart);
@@ -15,8 +15,11 @@ const Cart = () => {
   console.log(total);
   console.log(cartItems);
   const removeItem = (id) => {
-    dispatch(removeFromCart(id));
+    dispatch(removeFromCart);
     console.log("Item removed from cart");
+  }
+  const handleDispatch = ()=>{
+    dispatch(clearCart);
   }
   return (
     <section className="w-full min-h-screen px-4 md:px-8 lg:px-12 py-8 bg-gray-100 mt-20">
@@ -101,10 +104,11 @@ const Cart = () => {
           </div>
           
           <div className="mt-4">
-            <Link to={!user?"/signup?type=cart":"/payment"} >
+            <Link to={!user?"/signup?type=cart":"/payment?type=cart"} >
             <motion.button
               whileTap={{ scale: 0.95 }}
               className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-4 py-3 rounded-lg w-full"
+              onClick={handleDispatch}
             >
               Proceed to Checkout
             </motion.button>

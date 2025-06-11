@@ -50,6 +50,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
         name,
         phoneNo: mobilenumber,
         email,
+        route:"signup"
       });
       const order = res.data.message;
       console.log(order)

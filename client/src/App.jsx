@@ -58,6 +58,7 @@ import AdminInstitutionalTestimonial from "./components/AdminInstitutionalTestim
 import AdminDigitalBundle from "./pages/AdminDigitalBundle";
 import ResetPassword from "./components/ResetPassword";
 import AdminAbout from "./components/AdminAbout";
+import Payment  from  "./pages/Payment"
 
 function App() {
   return (
@@ -145,8 +146,7 @@ function App() {
               <Route path="/gallery/:category" element={<Gallery />} />
               <Route path="reset-password/:token" element={<ResetPassword />} />
               <Route path="/blogs/:id" element={<Blog />} />
-
-
+              <Route path="/payment" element={<Payment/>} />
 
               <Route path="/contactus" element={<ContactUs />} />
               <Route path="/refundandpolicy" element={<RefundAndPolicy />} />
