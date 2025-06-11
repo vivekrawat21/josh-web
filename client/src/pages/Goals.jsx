@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import emailjs from "@emailjs/browser"
+import emailjs from "@emailjs/browser";
+import CustomToast from "@/components/CustomToast";
+
 const goalsData = [
   {
     id: 1,
@@ -104,43 +106,54 @@ const Goals = () => {
   const [subject, setSubject] = useState("");
   const [mobile, setMobile] = useState("");
   const [open, setOpen] = useState(false);
-  const formData = {
-    userName: userName,
-    subject: subject,
-    mobile: mobile,
-  }
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState({ message: "", type: "", visible: false });
+
   const goal = goalsData.find((g) => g.id === goalId);
 
-  if (!goal) {
-    return <div>Goal not found</div>;
-  }
-
-  const handleSubmit = () => {
-    // e.preventDefault();
-
- const serviceID = 'service_qtx181t';
-    const templateID = 'template_t3xhl2x';
-    const publicKey = 'TnKE0lnl_xvNEe4ds';
-
-    emailjs.send(serviceID, templateID, formData, publicKey)
-      .then((response) => {
-        console.log('SUCCESS!', response.status, response.text);
-        alert('Message sent to your mail!');
-      }, (err) => {
-        console.error('FAILED...', err);
-        alert('Failed to send message.');
-      });
-
-
-    setOpen(false);
-    setuserName("");
-    setSubject("");
-    setMobile("");
-
+  const showToast = (type, message) => {
+    setToast({ message, type, visible: true });
+    setTimeout(() => setToast({ ...toast, visible: false }), 3000);
   };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    const formData = {
+      from_name: userName,
+      message: subject,
+      mobile_number: mobile,
+    };
+
+    const serviceID = 'service_1ef07sc';
+    const templateID = 'template_p9alpnj';
+    const publicKey = 'q-S0GAqSPXqyt9G70';
+
+    try {
+      await emailjs.send(serviceID, templateID, formData, publicKey);
+      showToast("success", "Request recorded successfully!");
+    } catch (err) {
+      console.error("FAILED...", err);
+      showToast("error", "Failed to send message.");
+    } finally {
+      setLoading(false);
+      setOpen(false);
+      setuserName("");
+      setSubject("");
+      setMobile("");
+    }
+  };
+
+  if (!goal) return <div>Goal not found</div>;
 
   return (
     <div className="w-full max-w-6xl mx-auto p-4 mt-4">
+      {toast.visible && (
+        <CustomToast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast({ ...toast, visible: false })}
+        />
+      )}
       <div className="bg-gray-50 rounded-3xl p-6 md:p-12 flex flex-col md:flex-row gap-8 relative overflow-hidden">
         <div className="flex flex-col gap-6 md:w-3/5 w-full mt-4">
           <div>
@@ -197,8 +210,8 @@ const Goals = () => {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button onClick={handleSubmit} className="bg-red-500 hover:bg-red-600 text-white">
-                    Send
+                  <Button onClick={handleSubmit} disabled={loading} className="bg-red-500 hover:bg-red-600 text-white">
+                    {loading ? "Sending..." : "Send"}
                   </Button>
                 </DialogFooter>
               </DialogContent>
