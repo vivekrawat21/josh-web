@@ -85,7 +85,7 @@ const MyCourses = () => {
                       </div>
                       <div className="p-4">
                         <Link to={`/bundle/${bundle._id}`}>
-                          <button className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors text-base font-medium">
+                          <button className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition-colors text-base font-medium">
                             View Bundle
                           </button>
                         </Link>

@@ -14,7 +14,10 @@ const Bundle = () => {
 
   const bundles = useSelector((state) => state.bundle.bundles[0]);
   const user = useSelector((state) => state.user);
+  const isEnrolled = user?.bundles?.some(bundle => bundle._id === bundleId);
 
+  console.log(user)
+  console.log(bundleId,isEnrolled)
   useEffect(() => {
     if (bundles?.length > 0) {
       const selected = bundles.find((bundle) => bundle?._id === bundleId);
@@ -22,7 +25,18 @@ const Bundle = () => {
       setLoading(false);
     }
   }, [bundles, bundleId]);
-
+  const handleCourseClick = (courseId)=>{
+    if(!user){
+      navigate(`/course/${courseId}`);
+      return;
+    }
+    const isEnrolled = user?.courses?.some(course => course._id === courseId);
+    if (isEnrolled) {
+      navigate(`/course/${courseId}/learn`);
+    } else {
+      navigate(`/course/${courseId}`);
+    }
+  }
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center text-gray-700">
@@ -139,9 +153,9 @@ const Bundle = () => {
                   <motion.button
                     className="px-4 py-1 sm:px-5 sm:py-2 border border-black rounded-md font-medium text-black hover:bg-orange-500 hover:text-white transition-all duration-300 text-xs sm:text-sm md:text-base"
                     whileHover={{ scale: 1.05 }}
-                    onClick={() => navigate(`/course/${course._id}`)}
+                    onClick={() => {handleCourseClick(course._id)}}
                   >
-                    Explore
+                    {isEnrolled ? "Resume Course " : "Explore"}
                   </motion.button>
                 </div>
               </motion.div>
@@ -150,6 +164,9 @@ const Bundle = () => {
       </div>
 
       {/* Buy Bundle Button */}
+      {!isEnrolled && (
+
+    
       <div className="text-center mt-16 mb-10">
         <motion.button
           className="px-6 py-2 sm:px-8 sm:py-2 text-xs sm:text-sm md:text-base border-2 border-black font-semibold rounded-xl text-black hover:bg-orange-500 hover:text-white transition-all duration-300 mb-8"
@@ -161,7 +178,9 @@ const Bundle = () => {
           </Link>
         </motion.button>
       </div>
+      )}
     </motion.div>
+
   );
 };
 
