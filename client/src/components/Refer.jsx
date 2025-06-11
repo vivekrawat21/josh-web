@@ -21,9 +21,11 @@ import { Link } from 'react-router-dom';
 const ReferAndEarn = () => {
   const user = useSelector((state) => state.user);
   const [incomeHistory, setIncomeHistory] = useState([]);
+  const [copy,setCopy] = useState("false");
 
   const handleCopyReferralLink = () => {
     navigator.clipboard.writeText(referralHeader + user?.sharableReferralCode);
+    setCopy(true);
 
   };
 
@@ -168,7 +170,13 @@ const ReferAndEarn = () => {
              className="px-3 sm:w-auto"
              onClick={handleCopyReferralLink}
            >
-             <Copy size={16} />
+             {
+              copy ? (
+                <span className="text-green-600">Copied!</span>
+              ) : (
+                <Copy size={16} />
+              )
+             }
            </Button>
          </div>
        </div>
