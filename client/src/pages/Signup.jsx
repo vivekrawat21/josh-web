@@ -115,8 +115,9 @@ const Signup = () => {
   const handleFinalSubmit=(user) => {
     setErrorMsgs([]);
     setLoading(true);
+    console.log("response"+res);
     try{
-          setLoading(false);
+          dispatch(setUser(user));
           navigate('/dashboard');
         
     } catch (error) {

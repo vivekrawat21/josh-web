@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Loader, CheckCircle2 } from 'lucide-react';
 import axios from 'axios';
 import { BASE_URL } from '@/utils/utils';
-import { useDispatch } from 'react-redux';
-import { setUser } from '@/features/user/userSlice';
+
 const formatPrice = (price) => {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -11,11 +10,9 @@ const formatPrice = (price) => {
     maximumFractionDigits: 0,
   }).format(price);
 };
-
 const Payment = ({ name, mobilenumber, email,password,referralCode, data, type = 'bundle', setStep, handleFinalSubmit }) => {
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const dispatch = useDispatch();
 
   const items = Array.isArray(data) ? data : [data];
   const totalPrice = items.reduce((sum, item) => sum + (item.price || 0), 0);
@@ -46,7 +43,6 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
       
         
       const response = await axios.post(`${BASE_URL}/auth/register`, userInfo);
-      
       const user = response.data?.data?.user;
       const res = await axios.post(`${BASE_URL}/payment/create`, {
         currency: 'INR',
@@ -67,8 +63,6 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
         handler: async function () {
           try {
             setPaymentSuccess(true);
-            console.log(user)
-            dispatch(setUser(user));
             handleFinalSubmit(user);
           } catch (err) {
             console.error('Error after payment success:', err);
