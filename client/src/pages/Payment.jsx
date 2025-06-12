@@ -98,7 +98,7 @@ const Payment = () => {
       const order = data.message;
       
       const options = {
-        key: 'rzp_test_faQqIMZ9VW1OTO', // IMPORTANT: Replace with your LIVE key in production
+        key: 'rzp_live_0PGQR1M150mFWE', // IMPORTANT: Replace with your LIVE key in production
         amount: order.amount,
         currency: order.currency,
         name: 'Joshguru Pvt Ltd',
