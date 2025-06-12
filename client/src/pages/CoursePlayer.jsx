@@ -182,61 +182,62 @@ const CoursePlayer = () => {
             </button>
           </div>
 
-          <div className="p-4">
-            {course.videos.length > 0 ? (
-              course.videos.slice(0, visibleCount).map((video) => (
-                <div key={video._id} className="mb-3">
-                  <div
-                    className={`flex justify-between items-center p-3 rounded cursor-pointer transition-all duration-300 border-2 ${
-                      openModule === video._id
-                        ? "border-orange-400 bg-orange-50 shadow-sm"
-                        : video.isPreview
-                        ? "bg-gray-50 border-transparent hover:border-gray-300"
-                        : "bg-gray-100 border-transparent hover:border-gray-300"
-                    }`}
-                    onClick={() => {
-                      toggleModule(video._id);
-                      playLesson(video.url, video.title);
-                    }}
-                  >
-                    <span className="text-sm font-medium text-black truncate w-full pr-2">
-                      {video.title}
-                    </span>
-                    {openModule === video._id ? (
-                      <CircleDot size={18} className="animate-pulse text-orange-400" />
-                    ) : (
-                      <Circle size={18} className="text-orange-500" />
-                    )}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-500 py-4">
-                No videos available.
-              </p>
-            )}
-          </div>
-
-          {course.videos.length > 0 && (
-            <div className="flex justify-center gap-2 flex-wrap px-4 pb-4">
-              {visibleCount < course.videos.length && (
-                <button
-                  className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white"
-                  onClick={loadMore}
-                >
-                  Load More
-                </button>
-              )}
-              {visibleCount > 5 && (
-                <button
-                  className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white"
-                  onClick={loadLess}
-                >
-                  Load Less
-                </button>
-              )}
-            </div>
+          {/* Scrollable Video List */}
+<div className="p-4 h-[70vh] overflow-auto">
+  {course.videos.length > 0 ? (
+    course.videos.slice(0, visibleCount).map((video) => (
+      <div key={video._id} className="mb-3">
+        <div
+          className={`flex justify-between items-center p-3 rounded cursor-pointer transition-all duration-300 border-2 ${
+            openModule === video._id
+              ? "border-orange-400 bg-orange-50 shadow-sm"
+              : video.isPreview
+              ? "bg-gray-50 border-transparent hover:border-gray-300"
+              : "bg-gray-100 border-transparent hover:border-gray-300"
+          }`}
+          onClick={() => {
+            toggleModule(video._id);
+            playLesson(video.url, video.title);
+          }}
+        >
+          <span className="text-sm font-medium text-black truncate w-full pr-2">
+            {video.title}
+          </span>
+          {openModule === video._id ? (
+            <CircleDot size={18} className="animate-pulse text-orange-400" />
+          ) : (
+            <Circle size={18} className="text-orange-500" />
           )}
+        </div>
+      </div>
+    ))
+  ) : (
+    <p className="text-center text-gray-500 py-4">No videos available.</p>
+  )}
+</div>
+
+{/* Buttons OUTSIDE the scrollable div */}
+{course.videos.length > 0 && (
+  <div className="flex justify-center gap-2 flex-wrap px-4 py-3 border-t border-gray-200 bg-white sticky bottom-0 md:static">
+    {visibleCount < course.videos.length && (
+      <button
+        className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white"
+        onClick={loadMore}
+      >
+        Load More
+      </button>
+    )}
+    {visibleCount > 5 && (
+      <button
+        className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white"
+        onClick={loadLess}
+      >
+        Load Less
+      </button>
+    )}
+  </div>
+)}
+
         </div>
       </div>
     </div>
