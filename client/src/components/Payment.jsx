@@ -67,7 +67,7 @@ const Payment = ({ name, mobilenumber, email, password, referralCode, data, type
       // STEP 3: CONFIGURE AND OPEN THE RAZORPAY PAYMENT POPUP.
       // ===================================================================
       const options = {
-        key: "rzp_test_faQqIMZ9VW1OTO", 
+        key: "rzp_live_0PGQR1M150mFWE", 
         amount: order.amount,
         currency: order.currency,
         name: 'Joshguru Pvt Ltd',
