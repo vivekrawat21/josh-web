@@ -54,9 +54,7 @@ const Signup = () => {
       try {
         setLoading(true);
         const response = await axios.get(`${BASE_URL}/digitalBundle/getDigitalBundles`);
-        // console.log("on digit bundle use effect")
-        // console.log("digital bundles response:", response.data.data.bundles);
-        // console.log("Digital Bundles:", response.data.data.bundles);
+
         
         setDigitalBundles(response.data.data.bundles);
         setLoading(false);
@@ -84,7 +82,6 @@ const Signup = () => {
   useEffect(() => {
     if (typeParam === 'specialbundle' && specialBundles.length >= 3) {
       const data = getSpecialBundleData(levelParam, specialBundles);
-      
       setSelectedCourse(data);
     }
   
@@ -120,12 +117,6 @@ const Signup = () => {
     }
   };
 
-  // Fixed: Added selectedCourse state declaration
-  // const [selectedCourse, setSelectedCourse] = useState(() => {
-  //   if (typeParam === 'cart') return cartItems;
-  //   if (typeParam === 'specialbundle') return getSpecialBundleData(levelParam, specialBundles);
-  //   return {};
-  // });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -177,8 +168,9 @@ const Signup = () => {
   const handleFinalSubmit=() => {
     setErrorMsgs([]);
     setLoading(true);
-    redirect('/login');
+    
     setLoading(false);
+    navigate('/login')
 
   };
 
