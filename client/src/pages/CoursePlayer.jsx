@@ -84,7 +84,7 @@ const CoursePlayer = () => {
       {/* Content Button at Top */}
       {!showSidebar && (
         <button
-          className="md:hidden fixed top-16 right-4 flex items-center p-2 rounded-md bg-white shadow z-50"
+          className="md:hidden absolute top-16 right-4 flex items-center p-2 rounded-md bg-white shadow z-50"
           onClick={() => setShowSidebar(true)}
         >
           <Menu size={20} />
