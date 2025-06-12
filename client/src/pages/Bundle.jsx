@@ -1,10 +1,32 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { FaBook, FaClock, FaUsers, FaCertificate } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { LoaderCircle } from "lucide-react"; // <-- Lucide loading icon
+import { FaBook, FaClock, FaUsers, FaCertificate, FaExclamationCircle } from "react-icons/fa";
+import { LoaderCircle } from "lucide-react";
+
+// Animation Variants for orchestration
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
 
 const Bundle = () => {
   const { bundleId } = useParams();
@@ -12,175 +34,181 @@ const Bundle = () => {
   const [bundle, setBundle] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const bundles = useSelector((state) => state.bundle.bundles[0]);
+  // Assuming the user's Redux state for bundles is an array containing one array of bundles.
+  // A safer approach might be state.bundle.bundles if it's just a flat array.
+  const allBundles = useSelector((state) => state.bundle.bundles[0]);
   const user = useSelector((state) => state.user);
-  const isEnrolled = user?.bundles?.some(bundle => bundle._id === bundleId);
+  
+  const isEnrolled = user?.bundles?.some(b => b._id === bundleId);
 
-  console.log(user)
-  console.log(bundleId,isEnrolled)
   useEffect(() => {
-    if (bundles?.length > 0) {
-      const selected = bundles.find((bundle) => bundle?._id === bundleId);
+    if (allBundles && allBundles.length > 0) {
+      const selected = allBundles.find((b) => b?._id === bundleId);
       setBundle(selected || null);
-      setLoading(false);
     }
-  }, [bundles, bundleId]);
-  const handleCourseClick = (courseId)=>{
-    if(!user){
+    // A small delay to prevent flash of loading content
+    const timer = setTimeout(() => setLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, [allBundles, bundleId]);
+
+  const handleCourseClick = (courseId) => {
+    if (!user) {
       navigate(`/course/${courseId}`);
       return;
     }
-    const isEnrolled = user?.courses?.some(course => course._id === courseId);
-    if (isEnrolled) {
+    const isCourseEnrolled = user?.courses?.some(course => course._id === courseId);
+    if (isCourseEnrolled) {
       navigate(`/course/${courseId}/learn`);
     } else {
       navigate(`/course/${courseId}`);
     }
-  }
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center text-gray-700">
-        <LoaderCircle className="animate-spin w-12 h-12 text-blue-500 mb-4" />
-        <p className="text-lg font-semibold">Loading Bundle...</p>
+      <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center">
+        <LoaderCircle className="animate-spin w-12 h-12 text-orange-500 mb-4" />
+        <p className="text-lg font-semibold text-slate-600">Loading Bundle Details...</p>
       </div>
     );
   }
 
   if (!bundle) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center text-gray-600">
-        <p className="text-2xl font-bold">Bundle not found</p>
+      <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center text-center p-4">
+        <FaExclamationCircle className="w-16 h-16 text-red-500 mb-4" />
+        <p className="text-2xl font-bold text-slate-700">Bundle Not Found</p>
+        <p className="text-slate-500 mt-2">The bundle you are looking for does not exist or has been moved.</p>
         <Link
           to="/"
-          className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition"
+          className="mt-6 px-5 py-2.5 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
         >
-          Go Home
+          Go Back to Home
         </Link>
       </div>
     );
   }
 
   return (
-    <motion.div
-      className="max-w-7xl mx-auto px-4 md:px-6 py-4 bg-gradient-to-b te space-y-8 mt-20"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
-      {/* Bundle Name */}
-      <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-center text-gray-800 mb-6">
-        {bundle?.bundleName}
-      </h1>
-
-      {/* Banner */}
+    <div className="bg-slate-50 mt-20">
       <motion.div
-        className="w-full h-[160px] sm:h-[240px] md:h-[400px] overflow-hidden rounded-3xl shadow-md"
-        initial={{ scale: 0.95 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.5 }}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  "
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
       >
-        <img
-          src={bundle?.bundleImage || "https://via.placeholder.com/900x450?text=Bundle+Image"}
-          alt={bundle?.bundleName}
-          className="w-full h-full object-cover"
-        />
-      </motion.div>
+        <motion.h1
+          className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-center text-slate-800 mb-8"
+          variants={itemVariants}
+        >
+          {bundle?.bundleName}
+        </motion.h1>
 
-      {/* Highlights */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-10 text-center py-6">
-        <div>
-          <FaBook className="text-blue-500 text-2xl sm:text-3xl md:text-4xl mb-2 mx-auto" />
-          <p className="text-xs sm:text-sm md:text-base font-semibold">
-            {
-              bundle?.courses?.length > 0
-                ? `${bundle?.courses?.length} Courses`
-                : "No courses available"
-            }
-          </p>
-        </div>
-        <div>
-          <FaClock className="text-blue-500 text-2xl sm:text-3xl md:text-4xl mb-2 mx-auto" />
-          <p className="text-xs sm:text-sm md:text-base font-semibold">{
-            bundle?.totalDuration
-              ? `${bundle?.totalDuration.slice(0,1)} months`
-              : "Duration not available"
-}</p>
-        </div>
-        <div>
-          <FaUsers className="text-blue-500 text-2xl sm:text-3xl md:text-4xl mb-2 mx-auto" />
-          <p className="text-xs sm:text-sm md:text-base font-semibold">2 Lakh+ Students</p>
-        </div>
-        <div>
-          <FaCertificate className="text-blue-500 text-2xl sm:text-3xl md:text-4xl mb-2 mx-auto" />
-          <p className="text-xs sm:text-sm md:text-base font-semibold">
-            Joshguru Certificate
-          </p>
-        </div>
-      </div>
+        <motion.div
+          className="w-full h-[200px] sm:h-[300px] md:h-[450px] overflow-hidden rounded-3xl shadow-xl border-4 border-white"
+          variants={itemVariants}
+        >
+          <img
+            src={bundle?.bundleImage || "https://via.placeholder.com/1200x500?text=Bundle+Image"}
+            alt={bundle?.bundleName}
+            className="w-full h-full object-cover"
+          />
+        </motion.div>
 
-      {/* Courses */}
-      <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center text-gray-800">Courses Included</h2>
-      <div className="space-y-10 mt-6">
-        {bundle?.courses
-          ?.filter((course) => course.title !== "Advanced Personality Development")
-          .map((course, index) => {
-            const isEven = index % 2 === 0;
-            return (
+        <motion.div
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center py-10 md:py-16"
+          variants={itemVariants}
+        >
+          {[
+            { icon: FaBook, value: `${bundle?.courses?.length || 0}`, label: "Courses" },
+            { icon: FaClock, value: `${bundle?.duration?.slice(0, 1) || 'N/A'}`, label: "Months" },
+            { icon: FaUsers, value: "2 Lakh+", label: "Students" },
+            { icon: FaCertificate, value: "Verified", label: "Certificate" },
+          ].map((item, index) => (
+            <div key={index} className="bg-white p-4 rounded-2xl shadow-md border border-slate-100 flex flex-col items-center justify-center">
+              <item.icon className="text-orange-500 text-3xl sm:text-4xl mb-2" />
+              <p className="text-xl sm:text-2xl font-bold text-slate-800">{item.value}</p>
+              <p className="text-sm text-slate-500">{item.label}</p>
+            </div>
+          ))}
+        </motion.div>
+
+        <motion.h2
+          className="text-3xl sm:text-4xl font-bold text-center text-slate-800 mb-12"
+          variants={itemVariants}
+        >
+          Courses Included
+        </motion.h2>
+        
+        <div className="space-y-12">
+          {bundle?.courses
+            ?.filter((course) => course.title !== "Advanced Personality Development")
+            .map((course, index) => (
               <motion.div
-                key={index}
-                className={`border border-black rounded-2xl bg-white transition-all duration-300 hover:bg-orange-100 flex flex-col md:flex-row ${
-                  isEven ? "" : "md:flex-row-reverse"
-                } items-center overflow-hidden shadow-lg`}
-                whileHover={{ scale: 1.01 }}
+                key={course._id || index}
+                className={`bg-white rounded-2xl flex flex-col md:flex-row ${
+                  index % 2 === 0 ? "" : "md:flex-row-reverse"
+                } items-center overflow-hidden shadow-lg border border-slate-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1`}
+                variants={itemVariants}
               >
-                {/* Image */}
-                <div className="w-full md:w-1/2 flex justify-center items-center p-4">
+                <div className="w-full md:w-5/12 p-4">
                   <img
                     src={course.image || "https://via.placeholder.com/500x300?text=Course+Image"}
                     alt={course.title}
-                    className="w-full sm:w-[85%] h-[180px] sm:h-[220px] md:h-[300px] object-cover rounded-xl"
+                    className="w-full h-auto aspect-video object-cover rounded-xl"
                   />
                 </div>
 
-                {/* Text */}
-                <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-4 sm:p-6 text-center space-y-4">
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900">
+                <div className="w-full md:w-7/12 flex flex-col justify-center p-6 md:p-8 text-center md:text-left space-y-4">
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800">
                     {course.title}
                   </h3>
-                  <p className="text-xs sm:text-sm md:text-base text-gray-700 px-4 sm:px-6 leading-relaxed tracking-wide">
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                     {course.description || "No description available for this course yet. Stay tuned!"}
                   </p>
-                  <motion.button
-                    className="px-4 py-1 sm:px-5 sm:py-2 border border-black rounded-md font-medium text-black hover:bg-orange-500 hover:text-white transition-all duration-300 text-xs sm:text-sm md:text-base"
-                    whileHover={{ scale: 1.05 }}
-                    onClick={() => {handleCourseClick(course._id)}}
-                  >
-                    {isEnrolled ? "Resume Course " : "Explore"}
-                  </motion.button>
+                  <div className="pt-2">
+                    <motion.button
+                      className="px-6 py-2.5 bg-orange-500 text-white font-semibold rounded-lg shadow-sm hover:bg-orange-600 transition-all duration-300"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleCourseClick(course._id)}
+                    >
+                      {isEnrolled ? "Resume Course" : "Explore Course"}
+                    </motion.button>
+                  </div>
                 </div>
               </motion.div>
-            );
-          })}
-      </div>
+            ))}
+        </div>
+      </motion.div>
 
-      {/* Buy Bundle Button */}
       {!isEnrolled && (
-
-    
-      <div className="text-center mt-16 mb-10">
-        <motion.button
-          className="px-6 py-2 sm:px-8 sm:py-2 text-xs sm:text-sm md:text-base border-2 border-black font-semibold rounded-xl text-black hover:bg-orange-500 hover:text-white transition-all duration-300 mb-8"
-          whileHover={{ scale: 1.05 }}
-        >
-          <Link to={!user ? `/signup?courseId=${bundle._id}&type=bundle` : `/payment?type=bundle&courseId=${bundleId}`
-}>
-            Buy Bundle
-          </Link>
-        </motion.button>
-      </div>
+        <div className="sticky bottom-0 bg-white/80 backdrop-blur-sm shadow-t-lg border-t border-slate-200 py-4">
+          <motion.div
+            className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-center sm:justify-between"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            <div className="text-center sm:text-left mb-3 sm:mb-0">
+                <h3 className="text-xl font-bold text-slate-800">Ready to start learning?</h3>
+                <p className="text-slate-500">Get access to all {bundle?.courses?.length} courses.</p>
+            </div>
+            <Link
+              to={!user ? `/signup?courseId=${bundle._id}&type=bundle` : `/payment?type=bundle&courseId=${bundleId}`}
+            >
+              <motion.button
+                className="w-full sm:w-auto px-10 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Buy Bundle Now
+              </motion.button>
+            </Link>
+          </motion.div>
+        </div>
       )}
-    </motion.div>
-
+    </div>
   );
 };
 

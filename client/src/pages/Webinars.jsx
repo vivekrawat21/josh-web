@@ -115,10 +115,10 @@ const Webinars = () => {
 
     const currentWebinar = selectedWebinar !== null ? webinars.find((w) => w._id === selectedWebinar) : null
     return (
-        <main className="min-h-screen bg-orange-50">
+        <main className="min-h-screen bg-orange-50  mt-11">
         <div className="container mx-auto py-8 px-4 ">
             <header className="mb-10 text-center">
-            <h1 className="text-4xl font-bold text-orange-600 mb-2">Upcoming Webinars</h1>
+            <h1 className="text-4xl font-bold mb-2">Upcoming Webinars</h1>
             <p className="text-gray-600 max-w-4xl mx-auto">
                 Join our expert-led webinars to enhance your skills and stay updated with the latest industry trends.
             </p>

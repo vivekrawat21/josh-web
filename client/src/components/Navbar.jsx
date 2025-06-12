@@ -190,26 +190,27 @@ const Navbar = () => {
                 className="w-[60px] h-[60px] object-cover"
               />
             
-            <p className="absolute text-[6px] md:text-[8px] top-[63.5%] text-gray-900 md:w-[130px] md:top-[63%] text-center font-bold">
+            <p className="absolute text-[6px] md:text-[8px] top-[63.5%] text-gray-900  md:w-[130px] md:top-[63%] text-center font-bold">
               Powered by <span className="text-gray-900">NIITF</span>
             </p>
           </div>
           </Link>
           <ul className="hidden md:flex items-center space-x-10 text-[16px] pt-4">
-            <li><Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="hover:text-orange-400 transition">Home</Link></li>
-            <li><Link to="/about" className="hover:text-orange-400 transition">About</Link></li>
-            <li className="relative">
+            <li><Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="hover:text-orange-400  transition font-semibold">Home</Link></li>
+            <li><Link to="/about" className="hover:text-orange-400 transition font-semibold">About</Link></li>
+            <li className="relative ">
               <button
                 ref={coursesButtonRef}
-                className="flex items-center space-x-2 hover:text-orange-500"
+                className="flex items-center  gap-1 hover:text-orange-500"
                 onClick={() => {
                   setIsOpenCourse(!isOpenCourse);
                   setIsRotating(!isRotating);
                 }}
               >
-                Courses
-                <motion.div animate={{ rotate: isRotating ? 180 : 0 }}>
-                  <FaChevronDown className="text-base" />
+                <span className="font-semibold">Courses</span>
+                <motion.div animate={{ rotate: isRotating ? 180 : 0 }} className="mt-[0.17rem]">
+                  <FaChevronDown className="text-base" /
+                  >
                 </motion.div>
               </button>
 
@@ -264,7 +265,7 @@ const Navbar = () => {
                 )}
               </AnimatePresence>
             </li>
-            <li><Link to="/webinars" className="hover:text-orange-400 transition">Webinars</Link></li>
+            <li><Link to="/webinars" className="hover:text-orange-400 transition font-semibold">Webinars</Link></li>
           </ul>
         </div>
 
