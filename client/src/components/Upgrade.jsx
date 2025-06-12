@@ -18,12 +18,19 @@ const formatPrice = (price) => {
 const Upgrade = () => {
   // --- Data from Redux ---
   const allBundles = useSelector((state) => state.bundle.bundles[0]) || [];
-  const user = useSelector((state) => state.user?.user); // Gracefully access user
-
+  const user = useSelector((state) => state.user); // Gracefully access user
+  // console.log(user)
+  const bundleCount= user?.bundles?.length;
+  // console.log(bundles)
   // --- Component State ---
   const [selectedBundleId, setSelectedBundleId] = useState(null);
-  const [enrolledBundleIds, setEnrolledBundleIds] = useState([]);
+  // const [enrolledBundleIds, setEnrolledBundleIds] = useState([]);
+  let enrolledBundleId = null;
   const [loading, setLoading] = useState(true);
+  if(user && bundleCount > 0){
+    enrolledBundleId = user?.bundles?.[bundleCount-1]._id
+  }
+  // const allBundles = useSelector((state) => state.bundle.bundles[0]) || [];
 
   // --- Fetch enrolled bundles ONLY if the user is logged in ---
   useEffect(() => {
@@ -36,8 +43,8 @@ const Upgrade = () => {
     const fetchEnrolledBundles = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/user/${user._id}/getBundles`);
-        const enrolled = response.data?.data?.user?.bundles || [];
-        setEnrolledBundleIds(enrolled.map(b => b._id));
+        // const enrolled = response.data?.data?.user?.bundles || [];
+        // setEnrolledBundleIds(enrolled.map(b => b._id));
       } catch (error) {
         console.error("Failed to fetch enrolled bundles:", error);
       } finally {
@@ -56,10 +63,19 @@ const Upgrade = () => {
 
   // Filter bundles to show available upgrades.
   // If the user is logged out, enrolledBundleIds is empty, so all bundles are shown.
-  const availableUpgrades = allBundles.filter(
-    (bundle) => !enrolledBundleIds.includes(bundle._id)
-  );
+  const enrolledBundle = enrolledBundleId
+  ? allBundles.find(bundle => bundle._id.toString() === enrolledBundleId.toString())
+  : null;
 
+  
+  const availableUpgrades = enrolledBundle
+    ? allBundles.filter(
+        (bundle) =>
+          bundle._id.toString() !== enrolledBundleId.toString() &&
+          bundle.price > enrolledBundle.price
+      )
+    : [];
+  
   // Sort the upgrades by price for a consistent display order
   const sortedUpgrades = availableUpgrades.sort((a, b) => a.price - b.price);
 

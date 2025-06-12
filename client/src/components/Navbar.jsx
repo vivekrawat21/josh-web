@@ -228,7 +228,8 @@ const Navbar = () => {
                       { title: "CHOOSE YOUR SKILL", items: chooseSkill, type: "course" },
                     ].map((section, idx) => (
                       <div className="pr-6" key={idx}>
-                        <h2 className="text-orange-500 text-lg font-bold mb-2">{section.title}</h2>
+                        <h2 className="text-orange-500 text-sm font-bold mb-2 whitespace-nowrap">{section.title}</h2>
+
                         <ul className="space-y-2 text-md">
                           {section.items.slice(0, 6).map((item) => (
                             <li key={item._id}>
