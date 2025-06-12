@@ -168,8 +168,9 @@ const Signup = () => {
   const handleFinalSubmit=() => {
     setErrorMsgs([]);
     setLoading(true);
-    redirect('/login');
+    
     setLoading(false);
+    navigate('/login')
 
   };
 
