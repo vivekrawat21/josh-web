@@ -13,44 +13,47 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BASE_URL } from "@/utils/utils";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 
 const AssignCourse = ({ assignType, studentId }) => {
-  const [list, setList] = useState([]); // Store fetched courses or bundles
-  const [name, setName] = useState(""); // Search term
-  const [filteredList, setFilteredList] = useState([]); // Filtered list based on search term
-  const [selectedCourse, setSelectedCourse] = useState(null); // Selected course or bundle
-  const [open, setOpen] = useState(false); // Track dialog open/close state
+  const [list, setList] = useState([]);
+  const [name, setName] = useState("");
+  const [filteredList, setFilteredList] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [statusMessage, setStatusMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // Fetch courses or bundles when the dialog is opened
   useEffect(() => {
     if (open) {
-      fetchData(); // Fetch data only when dialog is opened
+      fetchData();
     }
   }, [open]);
 
-  // Reset selected course and search on dialog close
   const resetDialog = () => {
     setSelectedCourse(null);
     setName("");
     setFilteredList([]);
+    setStatusMessage(null);
     setOpen(false);
   };
 
   const fetchData = async () => {
     try {
-      if (assignType === "course") {
-        const res = await axios.get(`${BASE_URL}/course/getCourses`, {
-          withCredentials: true,
-        });
-        setList(res.data.data.courses); // Save all fetched courses in state
-      } else {
-        const res = await axios.get(`${BASE_URL}/bundle/getAllBundles`, {
-          withCredentials: true,
-        });
-        setList(res.data.data.bundles); // Save all fetched bundles in state
-      }
+      const endpoint =
+        assignType === "course"
+          ? `${BASE_URL}/course/getCourses`
+          : `${BASE_URL}/bundle/getAllBundles`;
+
+      const response = await axios.get(endpoint, { withCredentials: true });
+
+      setList(
+        assignType === "course"
+          ? response.data.data.courses
+          : response.data.data.bundles
+      );
     } catch (error) {
-      console.error("Error fetching courses or bundles:", error);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -58,77 +61,71 @@ const AssignCourse = ({ assignType, studentId }) => {
     const searchValue = e.target.value.toLowerCase();
     setName(searchValue);
 
-    // Standardize the list to check against both bundleName and title
-    let standardizedList = [];
-    if(assignType === "course") {
-      standardizedList = list.map((item) => ({
-        ...item,
-        displayName: item.title   || "",
-      }));
-    }
-    else {
-      standardizedList = list.map((item) => ({
-        ...item,
-        displayName: item.bundleName   || "",
-      }));
-    }
-  //  console.log("standardizedList")
-    // standardizedList.forEach(item => {
-    //   console.log("Course Title:", item.title,  item._id);
-    // });
-    // If searchValue is at least 3 characters long, filter the list
-    if (searchValue.length > 2) {
-      if(assignType === "course") {
-        const results = standardizedList.filter((item) =>
-          item.title.toLowerCase().includes(searchValue)
-        );
-        setFilteredList(results);
-      }
-      else {
-        const results = standardizedList.filter((item) =>
-          item.displayName.toLowerCase().includes(searchValue)
-        );
-        setFilteredList(results);
-      }
-     
-    } else {
-      setFilteredList([]); // Clear filtered list if search term is too short
-    }
-  };
-//  console.log("courses list", list);
+    let standardizedList = list.map((item) => ({
+      ...item,
+      displayName:
+        assignType === "course" ? item.title || "" : item.bundleName || "",
+    }));
 
+    setFilteredList(
+      searchValue.length > 2
+        ? standardizedList.filter((item) =>
+            item.displayName.toLowerCase().includes(searchValue)
+          )
+        : []
+    );
+  };
 
   const handleCourseSelect = (course) => {
-    setSelectedCourse(course); // Set the selected course
-    setFilteredList([]); // Clear the filtered list after selection
+    setSelectedCourse(course);
+    setFilteredList([]);
   };
 
   const handleRequest = async () => {
+    setLoading(true);
+    setStatusMessage(null);
+
     try {
       const endpoint =
         assignType === "course"
           ? `${BASE_URL}/course/assignCourse`
           : `${BASE_URL}/bundle/assignBundle`;
-       let field = assignType === "course" ? "courseId" : "bundleId";
+
+      const field = assignType === "course" ? "courseId" : "bundleId";
+
       const response = await axios.patch(
         endpoint,
         {
           studentId,
           [field]: selectedCourse?._id,
         },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
-
+  console.log("loggin response",response)
       if (response.status === 200) {
-        alert(`${assignType} assigned successfully!`);
-        resetDialog(); // Close the dialog and reset the form on success
+        setStatusMessage({
+          type: "success",
+          message: `${assignType} assigned successfully!`,
+        });
+        setTimeout(() => {
+          resetDialog();
+        }, 2000);
       } else {
-        console.error(`Error assigning ${assignType}`);
+        setStatusMessage({
+          type: "error",
+          message: `Failed to assign ${assignType}.`,
+        });
       }
     } catch (error) {
-      console.error(`Error assigning ${assignType}:`, error);
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message ||
+        "Something went wrong";
+
+      setStatusMessage({ type: "error", message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -143,7 +140,7 @@ const AssignCourse = ({ assignType, studentId }) => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px] rounded-xl shadow-lg border border-gray-200">
+      <DialogContent className="sm:max-w-[425px] rounded-xl shadow-lg border border-gray-200 z-[1000]">
         <DialogHeader>
           <DialogTitle className="text-lg md:text-2xl font-semibold text-gray-800">
             Assign {assignType}
@@ -155,28 +152,22 @@ const AssignCourse = ({ assignType, studentId }) => {
 
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
-            <Label
-              htmlFor="search"
-              className="text-right font-medium text-sm md:text-base"
-            >
-              {assignType} Name
-            </Label>
+            <Label htmlFor="search">{assignType} Name</Label>
             <Input
               id="search"
               value={name}
               onChange={handleSearch}
               placeholder={`Search ${assignType}...`}
-              className="col-span-3 text-sm md:text-base"
+              className="col-span-3"
             />
           </div>
 
-          {/* Display Search Results */}
           {filteredList.length > 0 && (
             <div className="mt-2 border border-gray-300 p-2 rounded-md max-h-40 overflow-y-auto">
               {filteredList.map((course) => (
                 <div
                   key={course._id}
-                  className="p-2 text-sm md:text-base hover:bg-gray-100 cursor-pointer rounded transition"
+                  className="p-2 hover:bg-gray-100 cursor-pointer rounded transition"
                   onClick={() => handleCourseSelect(course)}
                 >
                   {course.displayName}
@@ -185,7 +176,6 @@ const AssignCourse = ({ assignType, studentId }) => {
             </div>
           )}
 
-          {/* Display Selected Course/Bundle */}
           {selectedCourse && (
             <div className="mt-4 border border-green-300 p-3 rounded-md bg-green-50 text-green-700 text-sm md:text-base">
               Selected {assignType}:{" "}
@@ -194,13 +184,26 @@ const AssignCourse = ({ assignType, studentId }) => {
           )}
         </div>
 
+        {statusMessage && (
+          <div
+            className={`text-sm md:text-base text-center mb-2 ${
+              statusMessage.type === "success"
+                ? "text-green-600"
+                : "text-red-600"
+            }`}
+          >
+            {statusMessage.message}
+          </div>
+        )}
+
         <DialogFooter>
           <Button
             type="button"
             onClick={handleRequest}
-            disabled={!selectedCourse}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-base"
+            disabled={!selectedCourse || loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
+            {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
             Assign {assignType}
           </Button>
         </DialogFooter>

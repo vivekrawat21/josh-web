@@ -27,6 +27,7 @@ const Students = () => {
   const [password, setPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const closeDialogRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [toast, setToast] = useState({ message: '', type: '', visible: false });
 
   const showToast = (type, message) => {
@@ -42,6 +43,7 @@ const Students = () => {
         withCredentials: true,
       });
       setStudents(res.data.data.users);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching students:', error);
     }
@@ -200,8 +202,11 @@ const Students = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2  lg:grid-cols-3">
+      {isLoading ? (
+        <div className="flex justify-center py-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+      ):(<div className="grid gap-6 grid-cols-1 sm:grid-cols-2  lg:grid-cols-3">
         {filteredStudents.map((student) => (
           <div
             key={student._id}
@@ -225,7 +230,9 @@ const Students = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div>)}
+  
+      
     </div>
   );
 };
