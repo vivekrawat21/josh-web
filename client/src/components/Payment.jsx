@@ -17,7 +17,6 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
   const items = Array.isArray(data) ? data : [data];
   const totalPrice = items.reduce((sum, item) => sum + (item.price || 0), 0);
   const itemIds = items.map((item) => item._id);
-  console.log(itemIds)
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -35,14 +34,7 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
 
     try {
      
-      const userInfo = {
-        name,
-        mobilenumber,
-        email,
-        password,
-        referralCode,
-      };
-      await axios.post(`${BASE_URL}/auth/register`, userInfo);
+      
       const res = await axios.post(`${BASE_URL}/payment/create`, {
         currency: 'INR',
         id: itemIds,
@@ -62,7 +54,14 @@ const Payment = ({ name, mobilenumber, email,password,referralCode, data, type =
           order_id: order.id,
           handler: async function () {
             try {
-              
+              const userInfo = {
+                name,
+                mobilenumber,
+                email,
+                password,
+                referralCode,
+              };
+              await axios.post(`${BASE_URL}/auth/register`, userInfo);
               handleFinalSubmit();
             } catch (err) {
               console.error('Error after payment success:', err);
