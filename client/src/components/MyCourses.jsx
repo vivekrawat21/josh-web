@@ -20,7 +20,8 @@ const MyCourses = () => {
   const [loading, setLoading] = useState(true);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [enrolledBundle, setEnrolledBundle] = useState([]);
-
+  console.log(user);
+  
   useEffect(() => {
     if (!user?._id) return;
     const fetchEnrolledCourses = async () => {
