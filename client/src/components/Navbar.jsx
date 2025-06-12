@@ -181,18 +181,20 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm rounded-xl z-50 py-1 px-auto">
       <div className="flex justify-between items-center font-['Fugaz One'] mx-auto max-w-[90%]">
         <div className="flex items-center space-x-20 relative">
+        <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
           <div className="flex flex-col items-center">
-            <Link to="/">
+           
               <img
                 src="/logo1.png"
                 alt="joshguru"
                 className="w-[60px] h-[60px] object-cover"
               />
-            </Link>
+            
             <p className="absolute text-[6px] md:text-[8px] top-[63.5%] text-gray-900 md:w-[130px] md:top-[63%] text-center font-bold">
               Powered by <span className="text-gray-900">NIITF</span>
             </p>
           </div>
+          </Link>
           <ul className="hidden md:flex items-center space-x-10 text-[16px] pt-4">
             <li><Link to="/" className="hover:text-orange-400 transition">Home</Link></li>
             <li><Link to="/about" className="hover:text-orange-400 transition">About</Link></li>
