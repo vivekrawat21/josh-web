@@ -126,7 +126,7 @@ const OdooERPWebinar = () => {
           console.error("Error during registration:", error)
           toast({
               title: "Registration Failed",
-              description:error.message || "An error occurred while registering. Please try again later.",
+              description:error.response.data.message || "An error occurred while registering. Please try again later.",
               variant: "destructive",
           })
           }
@@ -157,7 +157,7 @@ const OdooERPWebinar = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-500 to-white">
       {/* Hero Section */}
-      <section className="relative pt-20 pb-20 md:pb-56 overflow-hidden">
+      <section className="relative pt-24 pb-20 md:pb-56 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-green-600 to-green-500 -z-10"></div>
         <div className="absolute inset-0 bg-[url('/placeholder.svg?height=100&width=100')] bg-repeat opacity-10 -z-10"></div>
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>

@@ -8,15 +8,22 @@ import { Link, useParams } from "react-router-dom";
 const IntermediateBundle = ({ page = "page2" }) => {
   const [bundle, setBundle] = useState(null)
   const user = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(true)
 
   const { id } = useParams()
   console.log(id)
   const fetchBundle = async () => {
-    const response = await axios.get(`${BASE_URL}/digitalBundle/getDigitalBundleById/${id}`)
-    console.log(response.data.data)
-    setBundle(response.data.data)
-     console.log(response.data.data)
-    
+    try {
+      setLoading(true)
+      const response = await axios.get(`${BASE_URL}/digitalBundle/getDigitalBundleById/${id}`)
+      console.log(response.data.data)
+      setBundle(response.data.data)
+      console.log(response.data.data)
+    } catch (error) {
+      console.error("Error fetching bundle:", error)
+    } finally {
+      setLoading(false)
+    }
   }
   useEffect(() => {
       fetchBundle()
@@ -340,6 +347,20 @@ const IntermediateBundle = ({ page = "page2" }) => {
     },
   ]
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+          <p className="mt-4 text-lg text-gray-700">Loading bundle...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!bundle) {
+    return <div>Bundle not found</div>
+  }
 
   return (
     <div className="relative w-full overflow-x-hidden">
