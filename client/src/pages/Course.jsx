@@ -92,7 +92,7 @@ const playLesson = (videoLink, title) => {
 
 useEffect(() => {
   if (courseData?.certificatePath?.trim()) {
-    console.log("Certificate path is set to:", courseData.certificatePath);
+  console.log("Certificate path is set to:", courseData.certificatePath);
     setCertificatePath(courseData?.certificatePath);
   }
 }, [courseData]);

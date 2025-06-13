@@ -33,6 +33,21 @@ const Payment = () => {
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
+  const matchingPrices = user?.bundles
+  .map((item) => {
+    // Find matching bundle by id
+    const matchingBundle = bundles.find((bundle) => bundle._id === item._id);
+
+    return matchingBundle ? matchingBundle.price : 0;
+  })
+  .filter((price) => price > 0);
+// Find the highest price in matchingPrices]
+const highestPricedBundle = Math.max(...matchingPrices);
+
+
+
+
+
   // --- 3. Authentication Check ---
   useEffect(() => {
     if (!user || !user.email) {
@@ -93,7 +108,8 @@ const Payment = () => {
         name:user?.name,
         phoneNo: user?.mobilenumber,
         email:user?.email,
-        route:"loggedIn"
+        route:"loggedIn",
+        highestPricedBundle:highestPricedBundle || 0
       });
       const order = data.message;
       
@@ -189,7 +205,7 @@ const Payment = () => {
                   <div className="flex-1">
                     <h3 className="text-base sm:text-lg font-semibold text-gray-800">{item.title || item.bundleName}</h3>
                   </div>
-                  <p className="font-semibold text-gray-900 text-lg">{formatPrice(item.price)}</p>
+                  <p className="font-semibold text-gray-900 text-lg">{formatPrice(item.price-highestPricedBundle)}</p>
                 </div>
               ))}
             </div>
@@ -197,11 +213,11 @@ const Payment = () => {
             <div className="space-y-4 mb-8">
                <div className="flex justify-between text-gray-600">
                 <span>Subtotal</span>
-                <span>{formatPrice(totalPrice)}</span>
+                <span>{formatPrice(totalPrice-highestPricedBundle)}</span>
               </div>
                <div className="border-t border-gray-200 pt-4 flex justify-between font-bold text-xl text-gray-900">
                 <span>Total Amount</span>
-                <span>{formatPrice(totalPrice)}</span>
+                <span>{formatPrice(totalPrice-highestPricedBundle)}</span>
               </div>
             </div>
 
