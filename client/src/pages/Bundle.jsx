@@ -50,7 +50,7 @@ const Bundle = () => {
     // A small delay to prevent flash of loading content
     const timer = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(timer);
-  }, [allBundles, bundleId]);
+  }, [allBundles, bundleId, user]);
 
   const handleCourseClick = (courseId) => {
     if (!user) {

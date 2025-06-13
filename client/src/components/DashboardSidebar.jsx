@@ -125,14 +125,6 @@ const DashboardSidebar = () => {
         </Link>
       </nav>
 
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="mt-8 flex items-center gap-3 w-full py-3 px-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow hover:from-orange-600 hover:to-orange-700 transition"
-      >
-        <FaSignOutAlt className="text-lg" />
-        Logout
-      </button>
     </motion.aside>
   );
 };

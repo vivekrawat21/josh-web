@@ -116,20 +116,20 @@ const PersonalInformation = () => {
   }
 
   return (
-    <div className="min-h-[60vh] bg-orange-50 flex items-start sm:items-center justify-center p-4">
-      <div className="max-w-[35rem] w-full mx-auto rounded-xl shadow-xl border border-orange-100 bg-white p-6 sm:p-8">
+    <div className="min-h-screen bg-orange-50 flex items-start sm:items-center justify-center p-4">
+      <div className="max-w-[36rem] w-full mx-auto rounded-xl shadow-xl border border-orange-100 bg-white p-6 sm:p-8">
         <div className="flex flex-col items-center mb-8">
           <div
-            className="flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 text-white text-4xl font-bold select-none shadow-lg"
+            className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 text-white text-4xl font-bold select-none shadow-lg"
           >
             {getInitials(formData?.name)}
           </div>
-          <h2 className="mt-4 text-2xl font-bold text-gray-800">
+          <h2 className="mt-2 text-2xl font-bold text-gray-800">
             {formData?.name || "User Profile"}
           </h2>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-3">
           {infoFields.map((field, index) => (
             <div
               key={index}

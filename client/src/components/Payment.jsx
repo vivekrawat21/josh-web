@@ -152,7 +152,7 @@ const Payment = ({ name, mobilenumber, email, password, referralCode, data, type
       ) : (
         <div className="flex flex-col items-center gap-4">
           <button onClick={handlePayment} disabled={loading} className="w-full sm:w-1/2 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:bg-gray-400">
-            {loading ? <Loader size={20} className="animate-spin mx-auto" /> : 'Complete Registration & Pay'}
+            {loading ? <Loader size={20} className="animate-spin mx-auto" /> : <p className='text-xl'>'Complete Registration & Pay'</p>}
           </button>
           <button onClick={() => setStep(2)} disabled={loading} className="text-sm text-gray-600 hover:text-gray-800 underline">← Back to Selection</button>
         </div>

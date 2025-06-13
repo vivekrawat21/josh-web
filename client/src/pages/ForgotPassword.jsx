@@ -127,11 +127,15 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
-      <CustomToast
-        message={toastMessage}
-        type={toastType}
-        onClose={handleToastClose}
-      />
+     
+    {toastMessage && (
+  <CustomToast
+    message={toastMessage}
+    type={toastType}
+    onClose={handleToastClose}
+  />
+    )
+    }
     </>
   );
 };
