@@ -67,6 +67,9 @@ const Navbar = () => {
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
+  const isEnrolled = (courseId) => {
+    return user?.courses?.some((course) => course._id === courseId);
+  }
   // Close on route change
   useEffect(() => {
     setIsOpenCourse(false);
@@ -151,7 +154,7 @@ const Navbar = () => {
   const [digitalBundles, setDigitalBundles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  
   useEffect(() => {
     const fetchBundles = async () => {
       try {
@@ -240,7 +243,7 @@ const Navbar = () => {
                                 to={
                                   section.type === "digitallearningbundles"
                                     ? `/${section.type}/${item.link}/${item._id}`
-                                    : `/${section.type}/${item._id}`
+                                    : (!isEnrolled(item._id)?`/${section.type}/${item._id}`:`/course/${item._id}/learn`)
                                 }
 
                                 className="relative group transition-colors duration-300 hover:text-orange-500"

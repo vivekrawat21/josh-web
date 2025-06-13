@@ -24,7 +24,7 @@ const SelectionBundleCourse = ({
   const handleBackToSelection = () => setStep(1);
 
   const getTitle = (item) =>
-    item?.bundleName || item?.title || item?.name || 'Untitled';
+    item?.title || item?.bundleName|| item?.name || 'Untitled';
 
   const getImage = (item) =>
     item?.bundleImage || item?.image || '/placeholder.png';

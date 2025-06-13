@@ -41,6 +41,7 @@ const Bundle = () => {
   
   const isEnrolled = user?.bundles?.some(b => b._id === bundleId);
 
+
   useEffect(() => {
     if (allBundles && allBundles.length > 0) {
       const selected = allBundles.find((b) => b?._id === bundleId);
@@ -53,7 +54,12 @@ const Bundle = () => {
 
   const handleCourseClick = (courseId) => {
     if (!user) {
+      if(isEnrolled){
+        navigate(`/course/${courseId}/learn`)
+      }
+      else{
       navigate(`/course/${courseId}`);
+      }
       return;
     }
     const isCourseEnrolled = user?.courses?.some(course => course._id === courseId);
