@@ -10,7 +10,12 @@ const SkillUpCourses = () => {
   const [direction, setDirection] = useState(1);
   const containerRef = useRef(null);
   const cours = useSelector((state) => state.course);
+  const user = useSelector((state) => state.user);
 
+
+  const isEnrolled = (courseId)=>{
+    return user?.courses?.some((course) => course._id === courseId);
+  }
   // Fallback in case API data isn't ready
   const courses =
  cours.courses[0]?.filter((c)=>!c.isTrending).map((course) => ({
@@ -95,7 +100,7 @@ const SkillUpCourses = () => {
                 key={course.id}
                 className="bg-gray-100 shadow-sm flex flex-col items-center rounded-sm"
               >
-                <Link to={`/course/${course.id}`}>
+                <Link to={ !isEnrolled(course.id)?`/course/${course.id}`:`/course/${course.id}/learn`} >
                   <div className="w-5/6 h-60 overflow-hidden bg-gray-100 rounded-r-full rounded-l-[30px] mt-3">
                     <img
                       src={course.image}

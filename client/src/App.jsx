@@ -59,6 +59,7 @@ import AdminDigitalBundle from "./pages/AdminDigitalBundle";
 import ResetPassword from "./components/ResetPassword";
 import AdminAbout from "./components/AdminAbout";
 import Payment  from  "./pages/Payment"
+import DigitalOfflineComponent from "./components/DigitalOfflineComponent";
 
 function App() {
   return (
@@ -153,6 +154,7 @@ function App() {
               <Route path="/licenceandagreement" element={<LicenseAndAgreement />} />
 
               <Route path="/forgotpassword" element={<ForgotPassword/>} />
+              <Route path="/offline" element={<DigitalOfflineComponent/>} />
 
 
               <Route path="/cart" element={<Cart />} />

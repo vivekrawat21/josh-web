@@ -5,9 +5,8 @@ import { motion } from 'framer-motion';
 import { FiCreditCard, FiAlertTriangle, FiCheckCircle } from 'react-icons/fi';
 import { Loader } from 'lucide-react';
 import axios from 'axios';
-import { BASE_URL } from '../utils/utils'; // Ensure this path is correct
+import { BASE_URL } from '../utils/utils'; 
 
-// Helper to format currency
 const formatPrice = (price) => {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -99,7 +98,7 @@ const Payment = () => {
       const order = data.message;
       
       const options = {
-        key: 'rzp_test_faQqIMZ9VW1OTO', // IMPORTANT: Replace with your LIVE key in production
+        key: 'rzp_live_0PGQR1M150mFWE', // IMPORTANT: Replace with your LIVE key in production
         amount: order.amount,
         currency: order.currency,
         name: 'Joshguru Pvt Ltd',
@@ -115,11 +114,11 @@ const Payment = () => {
           contact: user.mobilenumber,
         },
         theme: {
-          color: '#F97316', // Orange theme for Razorpay modal
+          color: '#F97316', 
         },
         modal: {
           ondismiss: function() {
-            setPaymentProcessing(false); // Re-enable button if user closes modal
+            setPaymentProcessing(false); 
           }
         }
       };

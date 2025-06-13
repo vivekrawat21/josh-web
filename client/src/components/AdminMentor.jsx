@@ -44,7 +44,7 @@ const AdminMentor = () => {
         setMentors(res.data.data.mentors || []);
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       toast.error("Failed to fetch mentors");
     } finally {
       setLoading(false);

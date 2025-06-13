@@ -152,7 +152,10 @@ const EducationalInstituteTestimonial = () => {
                       }
                       className="absolute inset-0 flex items-center justify-center bg-black/50 hover:bg-black/70 transition"
                     >
+                      {testimonial.video && (
                       <Play className="text-white w-8 h-8" />
+
+                      )}
                     </button>
                   </>
                 ) : (

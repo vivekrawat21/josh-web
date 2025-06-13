@@ -1,24 +1,58 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, ChevronUp, Menu, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Menu, X, PlayCircle, CheckCircle, Info, MessageSquare } from "lucide-react";
 import { useParams } from "react-router-dom";
-import { Circle, CircleDot } from "lucide-react";
-import { PlayCircle } from "lucide-react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../utils/utils";
+import { motion, AnimatePresence } from "framer-motion";
+
+// --- Skeleton Loader Component ---
+const PlayerSkeleton = () => (
+  <div className="flex flex-col md:flex-row w-full min-h-screen bg-white">
+    {/* Shimmer background definition */}
+    <style jsx>{`
+      .shimmer-bg {
+        background-image: linear-gradient(to right, transparent 0%, #e5e7eb 50%, transparent 100%);
+        background-size: 200% 100%;
+      }
+    `}</style>
+
+    {/* Main Content Skeleton */}
+    <div className="w-full md:flex-1 p-3 sm:p-4 animate-shimmer shimmer-bg">
+      <div className="h-10 w-3/4 bg-slate-200 rounded-md mb-4"></div>
+      <div className="aspect-video w-full bg-slate-200 rounded-xl mb-4"></div>
+      <div className="flex gap-4 mb-6">
+        <div className="h-10 w-24 bg-slate-200 rounded-md"></div>
+        <div className="h-10 w-24 bg-slate-200 rounded-md"></div>
+      </div>
+      <div className="h-8 w-1/2 bg-slate-200 rounded-md mb-3"></div>
+      <div className="space-y-2">
+        <div className="h-4 w-full bg-slate-200 rounded-md"></div>
+        <div className="h-4 w-full bg-slate-200 rounded-md"></div>
+        <div className="h-4 w-3/4 bg-slate-200 rounded-md"></div>
+      </div>
+    </div>
+
+    {/* Sidebar Skeleton */}
+    <div className="w-full md:w-80 lg:w-96 border-l border-slate-200 p-4 animate-shimmer shimmer-bg">
+      <div className="h-8 w-1/2 bg-slate-200 rounded-md mb-6"></div>
+      <div className="space-y-3">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className="h-16 w-full bg-slate-200 rounded-lg"></div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
 
 const CoursePlayer = () => {
   const [activeTab, setActiveTab] = useState("ABOUT");
-  const [showTitle, setShowTitle] = useState(false);
-  const [openModule, setOpenModule] = useState(1);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [currentLessonTitle, setCurrentLessonTitle] = useState("");
-  const [visibleCount, setVisibleCount] = useState(5);
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(10);
+  const [showSidebar, setShowSidebar] = useState(true);
 
   const { courseId } = useParams();
-  const user = useSelector((state) => state.user);
-
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -27,308 +61,213 @@ const CoursePlayer = () => {
     const fetchCourse = async () => {
       try {
         setLoading(true);
-        setError("");
-
-        console.log("Making API call...");
-        const res = await axios.get(`${BASE_URL}/course/${courseId}`, {
-          withCredentials: true,
-        });
-
-        setCourse(res.data.data.course || null);
+        const res = await axios.get(`${BASE_URL}/course/${courseId}`, { withCredentials: true });
+        const fetchedCourse = res.data.data.course;
+        setCourse(fetchedCourse || null);
+        if (fetchedCourse?.videos?.length > 0) {
+          const firstVideo = fetchedCourse.videos[0];
+          setCurrentVideo(getEmbedUrl(firstVideo.url));
+          setCurrentLessonTitle(firstVideo.title);
+        }
       } catch (err) {
-        console.error(err);
-        setError(err.response?.data?.message || "Failed to fetch course.");
+        setError(err.response?.data?.message || "Failed to fetch course data.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchCourse();
   }, [courseId]);
 
-  useEffect(() => {
-    if (course && course.videos && course.videos.length > 0) {
-      setCurrentVideo(course.videos[0].url);
-      setCurrentLessonTitle(course.videos[0].title);
+  const getEmbedUrl = (url) => {
+    if (!url) return "";
+    if (url.includes("youtube.com/watch?v=")) {
+      const videoId = url.split("v=")[1].split("&")[0];
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
     }
-  }, [course]);
+    return url;
+  };
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setShowSidebar(false);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const playLesson = (videoLink, title) => {
-    setCurrentVideo(videoLink);
-    setCurrentLessonTitle(title);
-    setShowTitle(true);
-
-    setTimeout(() => setShowTitle(false), 3000);
-
+  const playLesson = (video) => {
+    setCurrentVideo(getEmbedUrl(video.url));
+    setCurrentLessonTitle(video.title);
     if (window.innerWidth < 768) {
       setShowSidebar(false);
     }
   };
 
-  const toggleModule = (videoId) => {
-    setOpenModule(openModule === videoId ? -1 : videoId);
-  };
+  const loadMore = () => setVisibleCount((prev) => prev + 10);
 
-  const loadMore = () => setVisibleCount((prev) => prev + 5);
-  const loadLess = () => setVisibleCount((prev) => Math.max(5, prev - 5));
+  if (loading) return <PlayerSkeleton />;
+  if (error) return <div className="min-h-screen flex items-center justify-center text-red-500 font-semibold p-4">{error}</div>;
+  if (!course) return <div className="min-h-screen flex items-center justify-center text-slate-600 font-semibold p-4">Course not found.</div>;
 
-  if (loading) {
-    return (
-      <div className="p-4 sm:p-6 lg:p-10 w-full">
-        <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-300 rounded w-1/3"></div>
-          <div className="aspect-video bg-gray-200 rounded-lg"></div>
-          <div className="h-4 bg-gray-300 rounded w-1/2 mt-4"></div>
-          <div className="h-4 bg-gray-300 rounded w-1/4"></div>
-          <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-        </div>
-      </div>
-    );
-  }
+  const tabs = [
+    { id: "ABOUT", label: "About", icon: Info },
+    { id: "DISCUSSIONS", label: "Discussions", icon: MessageSquare },
+  ];
 
-  if (error) {
-    return (
-      <div className="p-4 flex justify-center items-center min-h-[50vh]">
-        <p className="text-red-500 text-center p-4 max-w-md">
-          Error loading course: {error}
-        </p>
-      </div>
-    );
-  }
-
-  if (!course) {
-    return (
-      <div className="p-4 flex justify-center items-center min-h-[50vh]">
-        <p className="text-center p-4 max-w-md">Course not found.</p>
-      </div>
-    );
-  }
-  
   return (
-    <div className="flex flex-col bg-white min-h-screen">
-      {course ? (
-        <div className="flex flex-col md:flex-row w-full relative">
-          {/* Main Content Area */}
-          <div className="w-full md:w-2/3 bg-white text-black shadow-md flex flex-col">
-            {/* Course Title Bar with Mobile Sidebar Toggle */}
-            <div className="flex items-center justify-between px-3 border-b border-gray-300 sticky top-0 bg-white z-20 border-r ">
-              <h1 className="text-base sm:text-lg font-semibold truncate pr-2 pt-2 pb-3">
-                {course.title}
-              </h1>
+    <div className="flex flex-col md:flex-row bg-slate-50 min-h-screen text-slate-800 mt-16 md:mt-0">
+      <AnimatePresence>
+        {!showSidebar && (
+          <motion.button
+            className="md:hidden fixed top-20 right-4 flex items-center p-2.5 rounded-full bg-white shadow-lg z-30"
+            onClick={() => setShowSidebar(true)}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <Menu size={20} className="text-orange-500" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Main Content */}
+      <main className="w-full md:flex-1 flex flex-col transition-all duration-300">
+        <div className="w-full p-2 sm:p-4 bg-white border-b border-slate-200">
+          <div className="aspect-video bg-black rounded-xl overflow-hidden shadow-2xl">
+            {currentVideo ? (
+              <iframe
+                key={currentVideo}
+                src={currentVideo}
+                className="w-full h-full"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                title={currentLessonTitle}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-white">Select a lesson to begin.</div>
+            )}
+          </div>
+        </div>
+        <h1 className="text-xl sm:text-2xl font-bold px-4 pt-3 truncate">{currentLessonTitle || course.title}</h1>
+        
+        <div className="px-4 border-b border-slate-200">
+          <div className="flex space-x-1">
+            {tabs.map((tab) => (
               <button
-                className="md:hidden flex items-center justify-center p-2 rounded-md hover:bg-gray-100"
-                onClick={() => setShowSidebar(!showSidebar)}
-                aria-label="Toggle course content"
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`${activeTab === tab.id ? "" : "hover:text-orange-600/80"} relative rounded-t-md px-3 py-3 text-sm font-medium transition-colors`}
               >
-                {showSidebar ? <X size={20} /> : <Menu size={20} />}
-                <span className="ml-2 text-sm">Content</span>
+                <span className="flex items-center gap-2">
+                  <tab.icon size={16} /> {tab.label}
+                </span>
+                {activeTab === tab.id && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-orange-500"
+                    layoutId="underline"
+                  />
+                )}
               </button>
-            </div>
+            ))}
+          </div>
+        </div>
 
-            {/* Video Player */}
-            <div className="p-2 sm:p-4">
-              <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-md relative">
-                {currentVideo ? (
-                  <iframe
-                    src={currentVideo}
-                    className="w-full h-full rounded-lg"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    title="Course Video"
-                  ></iframe>
+        <div className="p-4 sm:p-6 flex-grow overflow-y-auto">
+          {activeTab === "ABOUT" ? (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <h3 className="text-xl font-bold mb-3">About This Course</h3>
+              <p className="text-slate-600 leading-relaxed">{course.description}</p>
+              <div className="mt-6">
+                <h3 className="text-xl font-bold">What you'll learn:</h3>
+                <ul className="list-none mt-3 space-y-2">
+                  {course.whatYouWillLearn.map((point, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-slate-600">{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <h3 className="text-xl font-bold">Lesson Feedback</h3>
+              <textarea
+                placeholder="Share your thoughts or ask a question..."
+                className="w-full bg-white outline-none resize-none h-28 border border-slate-300 rounded-lg p-3 mt-4 focus:ring-2 focus:ring-orange-400 transition"
+              />
+              <div className="flex justify-end mt-3">
+                <button className="px-5 py-2 bg-orange-500 text-white font-semibold rounded-lg text-sm hover:bg-orange-600 transition shadow-sm">
+                  Post Feedback
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </main>
+
+      {/* Sidebar */}
+      <AnimatePresence>
+        {showSidebar && (
+          <>
+            <motion.div
+              className="fixed inset-0 bg-black/60 z-40 md:hidden"
+              onClick={() => setShowSidebar(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+            <motion.aside
+              className="fixed top-0 left-0 z-50 w-80 h-full bg-white border-r border-slate-200 flex flex-col
+                         md:static md:w-80 lg:w-96 md:translate-x-0"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+            >
+              <div className="px-4 pt-4 pb-3 border-b border-slate-200 flex justify-between items-center flex-shrink-0">
+                <h3 className="font-bold text-lg">Course Content</h3>
+                <button className="md:hidden p-2 rounded-full hover:bg-slate-100" onClick={() => setShowSidebar(false)}>
+                  <X className="text-slate-600" size={20} />
+                </button>
+              </div>
+
+              <div className="flex-grow overflow-y-auto p-2">
+                {course.videos.length > 0 ? (
+                  course.videos.slice(0, visibleCount).map((video, index) => {
+                    const isActive = getEmbedUrl(video.url) === currentVideo;
+                    return (
+                      <div
+                        key={video._id}
+                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 border-2 mb-2
+                                  ${isActive
+                                    ? "border-orange-500 bg-orange-50 font-semibold text-orange-700"
+                                    : "border-transparent hover:bg-slate-100"
+                                  }`}
+                        onClick={() => playLesson(video)}
+                      >
+                        {isActive ? (
+                            <PlayCircle size={20} className="text-orange-500 flex-shrink-0 animate-pulse" />
+                        ) : (
+                            <span className="text-sm font-medium text-slate-400 w-5 text-center flex-shrink-0">{index + 1}</span>
+                        )}
+                        <span className="text-sm truncate flex-grow">{video.title}</span>
+                        <span className="text-xs text-slate-400 flex-shrink-0">{video.duration}</span>
+                      </div>
+                    );
+                  })
                 ) : (
-                  <div className="animate-pulse w-full h-full bg-gray-300 rounded-lg" />
+                  <p className="text-center text-slate-500 py-10">No videos available in this course.</p>
                 )}
-                {showTitle && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2 md:p-3 transition-opacity">
-                    <h3 className="text-sm md:text-lg font-medium line-clamp-2">
-                      {currentLessonTitle}
-                    </h3>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Tabs */}
-            <div className="border-b border-gray-300">
-              <div className="flex overflow-x-auto">
-                {["ABOUT", "DISCUSSIONS"].map((tab) => (
-                  <button
-                    key={tab}
-                    className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-300 ${
-                      activeTab === tab
-                        ? "border-b-2 border-orange-500 text-orange-600"
-                        : "text-gray-500 hover:text-orange-600"
-                    }`}
-                    onClick={() => setActiveTab(tab)}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Tab Content */}
-            <div className="p-3 sm:p-4 flex-grow">
-              {activeTab === "DISCUSSIONS" ? (
-                <>
-                  <h3 className="text-lg sm:text-xl font-bold">
-                    Lesson Feedback
-                  </h3>
-                  <textarea
-                    placeholder="Give a feedback"
-                    className="w-full bg-gray-100 outline-none resize-none h-24 border border-gray-300 rounded-lg p-3 mt-4"
-                  ></textarea>
-                  <div className="flex gap-4 mt-3">
-                    <button className="px-4 py-2 bg-orange-500 text-white rounded-md text-sm hover:bg-orange-600 transition">
-                      Post Feedback
+                {visibleCount < course.videos.length && (
+                  <div className="text-center mt-2">
+                    <button
+                      className="w-full px-4 py-2.5 text-sm border-2 border-orange-200 text-orange-600 font-semibold rounded-lg hover:bg-orange-100 transition"
+                      onClick={loadMore}
+                    >
+                      Load More
                     </button>
                   </div>
-                </>
-              ) : (
-                <div className="mt-2 sm:mt-2">
-                  <h3 className="text-lg sm:text-xl font-bold mb-3">
-                    About This Course
-                  </h3>
-                  <p className="text-gray-700 text-sm md:text-base leading-relaxed">
-                    {course.description}
-                  </p>
-                  <div className="mt-4">
-                    <h3 className="text-lg sm:text-xl font-bold">
-                      What you'll learn:
-                    </h3>
-                    <ul className="list-disc pl-5 mt-2 text-sm text-gray-700 space-y-1 md:text-base">
-                      {course.whatYouWillLearn.map((point, index) => (
-                        <li key={index}>{point}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Mobile Sidebar Overlay */}
-          {showSidebar && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setShowSidebar(false)}></div>
-          )}
-
-          {/* Course Content Sidebar - Mobile Slide-in / Desktop Side Panel */}
-          <div 
-            className={`
-              fixed md:static 
-              top-0 right-0 bottom-0
-              w-3/4 md:w-1/3
-              ${showSidebar ? 'translate-x-0' : 'translate-x-full md:translate-x-0'} 
-              transition-transform duration-300 ease-in-out
-              bg-white 
-              overflow-y-auto
-              shadow-lg
-              z-50
-            `}
-          >
-            <div className="h-full flex flex-col md:h-[calc(100vh-80px)]">
-  {/* Sidebar Header with Close Button */}
-  <div className="flex items-center justify-between border-b border-gray-300 px-4 pb-3 pt-2 ">
-    <h2 className="text-lg font-bold">Course Content</h2>
-    <button 
-      className="md:hidden p-2 rounded-full hover:bg-gray-100"
-      onClick={() => setShowSidebar(false)}
-    >
-      <X size={20} />
-    </button>
-  </div>
-
-  {/* Sidebar Content and Buttons Wrapper */}
-  <div className="flex-1 flex flex-col overflow-hidden ">
-    {/* Scrollable Video List */}
-    <div className="flex-1 overflow-y-auto p-4">
-      {course.videos.length > 0 ? (
-        <div className="flex flex-col gap-3">
-          {course.videos.slice(0, visibleCount).map((video) => (
-            <div key={video._id}>
-              <div
-                className={`
-                  flex justify-between items-center p-3 rounded cursor-pointer transition-all duration-300 border-2 
-                  ${
-                    openModule === video._id
-                      ? "border-orange-400 bg-orange-50 shadow-sm"
-                      
-                      : "bg-gray-100 border hover:border-gray-300"
-                  }
-                `}
-                onClick={() => {
-                  toggleModule(video._id);
-                  playLesson(video.url, video.title);
-                }}
-              >
-                <span className="text-sm font-medium text-black truncate w-full pr-2">
-                  {video.title}
-                </span>
-                {openModule === video._id ? (
-                  <CircleDot size={18} className="animate-pulse text-orange-400" />
-                ) : (
-                  <Circle size={18} className="text-orange-500" />
                 )}
               </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center text-gray-500 py-4">
-          Currently, no videos available for this course.
-        </div>
-      )}
-    </div>
-
-    {/* Sticky Load More/Less Buttons */}
-    {course.videos.length > 0 && (
-      <div className="p-4 border-t border-gray-300 bg-white flex justify-center gap-2 flex-wrap">
-        {visibleCount < course.videos.length && (
-          <button
-            className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
-            onClick={loadMore}
-          >
-            Load More
-          </button>
+            </motion.aside>
+          </>
         )}
-        {visibleCount > 5 && (
-          <button
-            className="px-4 py-2 text-sm border border-orange-500 text-orange-500 font-medium rounded-md hover:bg-orange-500 hover:text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
-            onClick={loadLess}
-          >
-            Load Less
-          </button>
-        )}
-      </div>
-    )}
-  </div>
-</div>
-
-          </div>
-        </div>
-      ) : (
-        <div className="w-full flex items-center justify-center bg-white text-center p-6 min-h-[50vh]">
-          <div className="max-w-md p-6 bg-gray-50 rounded-lg shadow-sm">
-            <p className="text-xl text-gray-700 font-semibold">
-              🚫 You have not purchased this course.
-            </p>
-            <p className="mt-2 text-gray-600">
-              Please enroll in this course to access the content.
-            </p>
-          </div>
-        </div>
-      )}
+      </AnimatePresence>
     </div>
   );
 };

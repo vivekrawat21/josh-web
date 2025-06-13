@@ -2,132 +2,154 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "@/utils/utils";
-import CustomToast from "@/components/CustomToast"; // Adjust path as needed
-// import { setUser, logoutUser } from "@/store/userSlice"; // Uncomment and adjust if you want to update Redux
+import CustomToast from "@/components/CustomToast";
+import { Mail, User, Phone, Share2 } from "lucide-react";
+
+const PersonalInformationShimmer = () => (
+  <div className="min-h-[60vh] bg-orange-50/40 flex items-center justify-center p-4">
+    <div className="max-w-lg w-full mx-auto rounded-xl shadow-lg bg-white p-6 sm:p-8 animate-pulse">
+      <div className="flex flex-col items-center mb-8">
+        <div className="w-24 h-24 rounded-full bg-gray-300"></div>
+        <div className="mt-4 h-6 w-32 bg-gray-300 rounded-md"></div>
+      </div>
+      <div className="space-y-5">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="flex items-center gap-4">
+            <div className="w-7 h-7 bg-gray-200 rounded-md"></div>
+            <div className="flex-1 space-y-2">
+              <div className="h-3 w-1/4 bg-gray-200 rounded-md"></div>
+              <div className="h-5 w-3/4 bg-gray-300 rounded-md"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
 
 function getInitials(name = "") {
   if (!name) return "";
-  const words = name.trim().split(" ");
+  const words = name.trim().split(/\s+/);
   if (words.length === 1) {
     return words[0][0]?.toUpperCase() || "";
   }
   return (
-    (words[0][0] || "") +
-    (words[words.length - 1][0] || "")
+    (words[0][0] || "") + (words[words.length - 1][0] || "")
   ).toUpperCase();
 }
 
 const PersonalInformation = () => {
   const user = useSelector((state) => state?.user);
-  // const dispatch = useDispatch(); // Uncomment if you want to update Redux state
-
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
     mobilenumber: user?.mobilenumber || "",
     sharableReferralCode: user?.sharableReferralCode || user?.referalcode || "",
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!user);
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    // If name is missing, fetch user info from backend using your logic
-    if (!formData.name) {
+    if (!user?._id) {
       setLoading(true);
       const fetchUser = async () => {
         try {
           const res = await axios.get(`${BASE_URL}/user`, {
             withCredentials: true,
           });
-          const u = res.data.data.user;
+          const fetchedUser = res.data.data.user;
           setFormData({
-            name: u.name || "",
-            email: u.email || "",
-            mobilenumber: u.mobilenumber || "",
-            sharableReferralCode: u.sharableReferralCode || u.referalcode || "",
+            name: fetchedUser.name || "",
+            email: fetchedUser.email || "",
+            mobilenumber: fetchedUser.mobilenumber || "",
+            sharableReferralCode: fetchedUser.sharableReferralCode || fetchedUser.referalcode || "",
           });
-          // dispatch(setUser(u)); // Uncomment if you want to update Redux
-        } catch {
+        } catch (err) {
           setError("Failed to fetch user information.");
           setShowToast(true);
-          // dispatch(logoutUser && logoutUser()); // Uncomment if you want to update Redux
         } finally {
           setLoading(false);
         }
       };
       fetchUser();
+    } else {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        mobilenumber: user.mobilenumber || "",
+        sharableReferralCode: user.sharableReferralCode || user.referalcode || "",
+      });
+      setLoading(false);
     }
-  }, [formData.name]);
+  }, [user, dispatch]);
+
+  const infoFields = [
+    {
+      label: "Full Name",
+      value: formData.name,
+      icon: <User className="text-orange-500 w-6 h-6" />,
+    },
+    {
+      label: "Email Address",
+      value: formData.email,
+      icon: <Mail className="text-orange-500 w-6 h-6" />,
+    },
+    {
+      label: "Mobile Number",
+      value: formData.mobilenumber,
+      icon: <Phone className="text-orange-500 w-6 h-6" />,
+    },
+  ];
+
+  if (user?.canRefer) {
+    infoFields.push({
+      label: "Referral Code",
+      value: formData.sharableReferralCode,
+      icon: <Share2 className="text-orange-500 w-6 h-6" />,
+    });
+  }
+
+  if (loading) {
+    return <PersonalInformationShimmer />;
+  }
 
   return (
-    <div className="min-h-[75vh] px-2">
-      <div
-        className="
-           max-w-2xl mx-auto 
-          rounded-2xl shadow-xl border border-orange-200 
-          bg-white 
-          px-6 py-8
-          relative
-          mt-8
-          md:mt-12
-        "
-      >
+    <div className="min-h-[60vh] bg-orange-50 flex items-start sm:items-center justify-center p-4">
+      <div className="max-w-[35rem] w-full mx-auto rounded-xl shadow-xl border border-orange-100 bg-white p-6 sm:p-8">
         <div className="flex flex-col items-center mb-8">
           <div
-            className="flex items-center justify-center w-20 h-20 rounded-full bg-orange-500 shadow text-white text-3xl font-bold select-none"
-            style={{
-              userSelect: "none",
-              letterSpacing: "2px",
-            }}
+            className="flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 text-white text-4xl font-bold select-none shadow-lg"
           >
             {getInitials(formData?.name)}
           </div>
-          <div className="mt-3 text-lg font-semibold text-orange-700">
-            {loading ? (
-              <span className="text-gray-400">Loading...</span>
-            ) : (
-              formData?.name || <span className="text-gray-400">Not set</span>
-            )}
-          </div>
+          <h2 className="mt-4 text-2xl font-bold text-gray-800">
+            {formData?.name || "User Profile"}
+          </h2>
         </div>
 
-        <div className="space-y-7">
-          <div>
-            <label className="block text-base font-semibold text-orange-700 mb-1">Name</label>
-            <div className="text-base text-gray-900 px-2 py-1">
-              {loading
-                ? <span className="text-gray-400">Loading...</span>
-                : formData?.name || <span className="text-gray-400">Not set</span>}
+        <div className="space-y-5">
+          {infoFields.map((field, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-4 p-4 border-b border-gray-100 last:border-b-0"
+            >
+              <div className="flex-shrink-0">{field.icon}</div>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-500">
+                  {field.label}
+                </label>
+                <div className="text-lg font-semibold text-gray-800">
+                  {field.value || (
+                    <span className="text-gray-400 text-base font-normal">
+                      Not set
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-          <div>
-            <label className="block text-base font-semibold text-orange-700 mb-1">Email</label>
-            <div className="text-base text-gray-900 px-2 py-1">
-              {loading
-                ? <span className="text-gray-400">Loading...</span>
-                : formData?.email || <span className="text-gray-400">Not set</span>}
-            </div>
-          </div>
-          <div>
-            <label className="block text-base font-semibold text-orange-700 mb-1">Mobile Number</label>
-            <div className="text-base text-gray-900 px-2 py-1">
-              {loading
-                ? <span className="text-gray-400">Loading...</span>
-                : formData?.mobilenumber|| <span className="text-gray-400">Not set</span>}
-            </div>
-          </div>
-          {user?.canRefer && (
-               <div>
-               <label className="block text-base font-semibold text-orange-700 mb-1">Referral Code</label>
-               <div className="text-base text-gray-900 px-2 py-1">
-                 {loading
-                   ? <span className="text-gray-400">Loading...</span>
-                   : formData.sharableReferralCode || <span className="text-gray-400">Not set</span>}
-               </div>
-             </div>
-            )}
-       
+          ))}
         </div>
 
         {showToast && error && (
