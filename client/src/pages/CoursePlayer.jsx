@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, ChevronUp, Menu, X, PlayCircle, CheckCircle, Info, MessageSquare } from "lucide-react";
-import { useParams } from "react-router-dom";
+// Import ArrowLeft for the back button and useNavigate for navigation
+import { ArrowLeft, ChevronDown, ChevronUp, Menu, X, PlayCircle, CheckCircle, Info, MessageSquare } from "lucide-react";
+import { useParams, useNavigate,Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../utils/utils";
@@ -56,6 +57,9 @@ const CoursePlayer = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Initialize the navigate function from React Router
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -126,7 +130,23 @@ const CoursePlayer = () => {
 
       {/* Main Content */}
       <main className="w-full md:flex-1 flex flex-col transition-all duration-300">
-        <div className="w-full p-2 sm:p-4 bg-white border-b border-slate-200">
+        <div className="w-full p-3 sm:p-4 bg-white border-b border-slate-200">
+          {/* --- NEW: Back Button and Lesson Title Header --- */}
+          <div className="flex items-center gap-4 mb-4">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 rounded-full hover:bg-slate-100 transition-colors"
+              aria-label="Go back"
+              title="Go back"
+            >
+              <ArrowLeft size={22} className="text-slate-700" />
+            </button>
+            <h1 className="text-xl sm:text-2xl font-bold truncate">
+              {currentLessonTitle || course.title}
+            </h1>
+          </div>
+          {/* --- END: New Header --- */}
+
           <div className="aspect-video bg-black rounded-xl overflow-hidden shadow-2xl">
             {currentVideo ? (
               <iframe
@@ -142,7 +162,8 @@ const CoursePlayer = () => {
             )}
           </div>
         </div>
-        <h1 className="text-xl sm:text-2xl font-bold px-4 pt-3 truncate">{currentLessonTitle || course.title}</h1>
+
+        {/* The old H1 tag is removed from here as it's now above the video */}
         
         <div className="px-4 border-b border-slate-200">
           <div className="flex space-x-1">
@@ -219,8 +240,10 @@ const CoursePlayer = () => {
               exit={{ x: "-100%" }}
               transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
             >
-              <div className="px-4 pt-4 pb-3 border-b border-slate-200 flex justify-between items-center flex-shrink-0">
-                <h3 className="font-bold text-lg">Course Content</h3>
+              <div className="px-2 pt-4 pb-3 border-b border-slate-200 flex justify-between items-center flex-shrink-0">
+                <Link to={"/dashboard/courses"}>
+                <h3 className=" text-sm p-[0.35rem] bg-gray-200 font-semibold flex items-center rounded-md hover:shadow-md hover:bg-slate-20 cursor-pointer "> <ArrowLeft />Course Dashboard</h3>
+                </Link>
                 <button className="md:hidden p-2 rounded-full hover:bg-slate-100" onClick={() => setShowSidebar(false)}>
                   <X className="text-slate-600" size={20} />
                 </button>

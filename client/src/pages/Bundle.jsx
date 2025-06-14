@@ -53,10 +53,11 @@ const Bundle = () => {
   }, [allBundles, bundleId, user]);
 
   const handleCourseClick = (courseId) => {
-    if (!user) {
+  {
       if(isEnrolled){
         navigate(`/course/${courseId}/learn`)
       }
+      
       else{
       navigate(`/course/${courseId}`);
       }
