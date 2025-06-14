@@ -241,8 +241,8 @@ const CoursePlayer = () => {
               transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
             >
               <div className="px-2 pt-4 pb-3 border-b border-slate-200 flex justify-between items-center flex-shrink-0">
-                <Link to={"/dashboard/courses"}>
-                <h3 className=" text-sm p-[0.35rem] bg-gray-200 font-semibold flex items-center rounded-md hover:shadow-md hover:bg-slate-20 cursor-pointer "> <ArrowLeft />Course Dashboard</h3>
+                <Link to={"/dashboard/mycourses"}>
+                <h3 className=" text-sm p-[0.35rem] bg-gray-200 font-semibold flex items-center rounded-md hover:shadow-md hover:bg-slate-20 cursor-pointer "> <ArrowLeft /> Course Dashboard</h3>
                 </Link>
                 <button className="md:hidden p-2 rounded-full hover:bg-slate-100" onClick={() => setShowSidebar(false)}>
                   <X className="text-slate-600" size={20} />
