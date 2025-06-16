@@ -58,7 +58,8 @@ const Payment = ({ name, mobilenumber, email, password, referralCode, data, type
         name,
         phoneNo: mobilenumber,
         email,
-        route: "signup"
+        route: "signup",
+        highestPricedBundle: 0
       });
       const order = res.data.message;
       console.log("Step 2 Complete: Payment order created:", order.id);
