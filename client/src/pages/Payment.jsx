@@ -19,6 +19,7 @@ const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
+  let types = queryParams.get('type') || 'cart';
 
   // --- 1. Get Data from Redux ---
   const  user = useSelector((state) => state.user);
@@ -42,8 +43,7 @@ const Payment = () => {
   })
   .filter((price) => price > 0);
 // Find the highest price in matchingPrices]
-const highestPricedBundle = Math.max(...matchingPrices);
-
+const highestPricedBundle =types=="bundle"? Math.max(...matchingPrices):0;
 
 
 
