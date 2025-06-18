@@ -181,7 +181,7 @@ const Goals = () => {
           <div className="mt-4">
             <div className="flex items-center gap-2 mt-6 text-gray-600">
               <Phone className="h-4 w-4" />
-              <span>For enquiries call: 1800 210 2020</span>
+              <span>For enquiries call: 8191980334</span>
             </div>
 
             <Dialog open={open} onOpenChange={setOpen}>

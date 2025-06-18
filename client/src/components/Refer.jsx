@@ -16,6 +16,7 @@ import {
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useSelector } from 'react-redux';
+import Course from '@/pages/Course';
 
 const Refer = () => {
   const user = useSelector((state) => state.user);
@@ -30,18 +31,24 @@ const Refer = () => {
     setCopy(true);
     setTimeout(() => setCopy(false), 2000);
   };
-
+  console.log(user)
+  // let updatedIncome = [];
   useEffect(() => {
     if (user?.incomeHistory && Array.isArray(user?.incomeHistory)) {
       const updatedIncome = user.incomeHistory.map((item) => ({
+        
         id: item._id,
         amount: item.amount,
-        person: item.from?.name || 'Unknown',
+    
+        name: item.name || 'Unknown',
+        course: item.courseName|| 'Unknown',
+        isCourse: item.isCourse || false,
       }));
+      console.log(updatedIncome)
       setIncomeHistory(updatedIncome);
     }
   }, [user]);
-
+  // console.log(updatedIncome)
   return (
     <div className="min-h-screen bg-orange-50 flex flex-col items-center py-8 px-2 sm:px-4">
       <motion.div
@@ -146,29 +153,42 @@ const Refer = () => {
         <div className="w-full">
           <h2 className="text-lg font-semibold text-orange-700 mb-3">Your Rewards</h2>
           <ul className="space-y-3">
-            {incomeHistory.length === 0 ? (
-              <li className="text-gray-400 text-base italic text-center">
-                No rewards yet. Start referring!
-              </li>
-            ) : (
-              incomeHistory.map((reward, index) => (
-                <motion.li
-                  key={reward.id || index}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className="flex justify-between items-center bg-orange-50 border border-orange-200 p-4 rounded-xl shadow hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center gap-3 text-sm sm:text-base text-gray-700">
-                    <FaGift className="text-orange-500 text-lg" />
-                    <span className="truncate">{reward?.person} joined</span>
-                  </div>
-                  <span className="text-green-600 font-bold text-sm sm:text-base whitespace-nowrap">
-                    ₹{parseFloat(reward?.amount).toFixed(2)}
-                  </span>
-                </motion.li>
-              ))
-            )}
+          {incomeHistory.length === 0 ? (
+  <li className="text-gray-400 text-base italic text-center">
+    No rewards yet. Start referring!
+  </li>
+) : (
+  incomeHistory.map((reward, index) => (
+    <motion.li
+      key={reward.id || index}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.1 }}
+      className="flex justify-between items-center bg-orange-50 border border-orange-200 p-4 rounded-xl shadow hover:shadow-md transition-shadow"
+    >
+      <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3 text-sm sm:text-base text-gray-700 w-full">
+        <div className="flex items-center gap-2">
+          <FaGift className="text-orange-500 text-lg" />
+          <span className="font-medium ">{reward?.name} <span className='text-green-600 font-medium'>Bought</span></span>
+        </div>
+        <div className="flex gap-2 flex-wrap sm:ml-auto">
+          {reward?.course && (
+            <span className="text-gray-600 font-semibold truncate">
+               {reward.course}
+            </span>
+          )}
+          <span className="text-xs bg-orange-200 text-orange-800 px-2 py-0.5 rounded-full">
+            {reward.isCourse ? "Course" : "Bundle"}
+          </span>
+        </div>
+      </div>
+      <span className="ml-4 text-green-600 font-bold text-sm sm:text-base whitespace-nowrap">
+        ₹{parseFloat(reward?.amount).toFixed(2)}
+      </span>
+    </motion.li>
+  ))
+)}
+
           </ul>
         </div>
       </motion.div>
