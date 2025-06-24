@@ -57,7 +57,7 @@ const CoursePlayer = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const [notAccessible, setNotAccessible] = useState(false);
   // Initialize the navigate function from React Router
   const navigate = useNavigate();
 
@@ -65,23 +65,41 @@ const CoursePlayer = () => {
     const fetchCourse = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${BASE_URL}/course/${courseId}`, { withCredentials: true });
+        // First check access
+        await axios.get(`${BASE_URL}/course/checkAccess/${courseId}`, {
+          withCredentials: true,
+        });
+  
+        // If access granted, fetch course data
+        const res = await axios.get(`${BASE_URL}/course/${courseId}`, {
+          withCredentials: true,
+        });
+  
         const fetchedCourse = res.data.data.course;
         setCourse(fetchedCourse || null);
+  
         if (fetchedCourse?.videos?.length > 0) {
           const firstVideo = fetchedCourse.videos[0];
           setCurrentVideo(getEmbedUrl(firstVideo.url));
           setCurrentLessonTitle(firstVideo.title);
         }
+  
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch course data.");
+        
+
+        if (err.response?.status === 403) {
+          setNotAccessible(true);
+        } else {
+          setError( "Failed to fetch course data.");
+        }
       } finally {
         setLoading(false);
       }
     };
+  
     fetchCourse();
   }, [courseId]);
-
+  
   const getEmbedUrl = (url) => {
     if (!url) return "";
     if (url.includes("youtube.com/watch?v=")) {
@@ -109,7 +127,13 @@ const CoursePlayer = () => {
     { id: "ABOUT", label: "About", icon: Info },
     { id: "DISCUSSIONS", label: "Discussions", icon: MessageSquare },
   ];
-
+ if (notAccessible) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500 font-semibold p-4">
+        You do not have access to this course.
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col md:flex-row bg-slate-50 min-h-screen text-slate-800 mt-16 md:mt-0">
       <AnimatePresence>

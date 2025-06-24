@@ -12,11 +12,10 @@ const Cart = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const total = subtotal - discount;
-  console.log(total);
-  console.log(cartItems);
+  
   const removeItem = (id) => {
-    dispatch(removeFromCart);
-    console.log("Item removed from cart");
+    dispatch(removeFromCart(id));
+    // console.log("Item removed from cart");
   }
   const handleDispatch = ()=>{
     dispatch(clearCart);
@@ -54,6 +53,7 @@ const Cart = () => {
                 <p className="text-md md:text-lg font-semibold">₹{item.price}</p>
                 <motion.button
                 onClick={ () =>{
+                  
                   removeItem(item._id);
                 }}
                   whileTap={{ scale: 0.9 }}
