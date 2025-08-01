@@ -75,24 +75,24 @@ function App() {
     }
   });
 
-  // Save requests to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('withdrawalRequests', JSON.stringify(requests));
-    } catch (e) {
-      console.error("Failed to save withdrawal requests to localStorage", e);
-    }
-  }, [requests]);
+  // // Save requests to localStorage
+  // useEffect(() => {
+  //   try {
+  //     localStorage.setItem('withdrawalRequests', JSON.stringify(requests));
+  //   } catch (e) {
+  //     console.error("Failed to save withdrawal requests to localStorage", e);
+  //   }
+  // }, [requests]);
 
-  const handleNewRequest = (newRequest) => {
-    setRequests(prev => [newRequest, ...prev]);
-  };
+  // const handleNewRequest = (newRequest) => {
+  //   setRequests(prev => [newRequest, ...prev]);
+  // };
 
-  const handleUpdateRequestStatus = (id, status) => {
-    setRequests(prev =>
-      prev.map(req => (req.id === id ? { ...req, status } : req))
-    );
-  };
+  // const handleUpdateRequestStatus = (id, status) => {
+  //   setRequests(prev =>
+  //     prev.map(req => (req.id === id ? { ...req, status } : req))
+  //   );
+  // };
 
   return (
     <BrowserRouter basename="/">
@@ -119,7 +119,7 @@ function App() {
           <Route path="testimonials" element={<AdminTestimonials />} />
           <Route path="institutiontestimonials" element={<AdminInstitutionalTestimonial />} />
           <Route path="about" element={<AdminAbout />} />
-          <Route path="withdrawrequest" element={<WithdrawRequest />} />
+{/*           <Route path="withdrawrequest" element={<WithdrawRequest />} /> */}
         </Route>
 
         {/* User Dashboard Routes */}
@@ -134,7 +134,7 @@ function App() {
           <Route path="refer&earn" element={<Refer />} />
           <Route path="webinars" element={<Webinars />} />
           <Route path="help&support" element={<Help />} />
-          <Route path="withdraw" element={<Withdraw onNewRequest={handleNewRequest} requests={requests} />} />
+{/*           <Route path="withdraw" element={<Withdraw onNewRequest={handleNewRequest} requests={requests} />} /> */}
           
         </Route>
 
