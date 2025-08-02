@@ -14,7 +14,7 @@ import Cart from "./pages/Cart";
 import Refer from "./components/Refer";
 import Help from "./components/Help";
 import MyCourses from "./components/MyCourses";
-import PersonalInformation from "./components/PersonalInformation"
+import PersonalInformation from "./components/PersonalInformation";
 import Invoices from "./components/Invoices";
 import PrivacyAndSecurity from "./components/PrivacyAndSecurity";
 import DashboardLayout from "./components/DashboardLayout";
@@ -36,8 +36,6 @@ import AdminLayout from "./components/AdminLayout";
 import AdminPrivacy from "./components/AdminPrivacy";
 import AdminDashboard from "./components/AdminDashboard";
 import VisitorCounter from "./components/VisitorCounter";
-// import Withdraw from "./components/Withdraw";
-// import WithdrawRequest from "./components/WithdrawRequest";
 import AdminOffers from "./components/AdminOffers.jsx";
 import AdminGallery from "./components/AdminGallery";
 import Blog from "./pages/Blog";
@@ -69,34 +67,17 @@ import DigitalOfflineComponent from "./components/DigitalOfflineComponent";
 function App() {
   const [requests, setRequests] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem('withdrawalRequests')) || [];
+      return JSON.parse(localStorage.getItem("withdrawalRequests")) || [];
     } catch {
       return [];
     }
   });
 
-  // // Save requests to localStorage
-  // useEffect(() => {
-  //   try {
-  //     localStorage.setItem('withdrawalRequests', JSON.stringify(requests));
-  //   } catch (e) {
-  //     console.error("Failed to save withdrawal requests to localStorage", e);
-  //   }
-  // }, [requests]);
-
-  // const handleNewRequest = (newRequest) => {
-  //   setRequests(prev => [newRequest, ...prev]);
-  // };
-
-  // const handleUpdateRequestStatus = (id, status) => {
-  //   setRequests(prev =>
-  //     prev.map(req => (req.id === id ? { ...req, status } : req))
-  //   );
-  // };
-
   return (
     <BrowserRouter basename="/">
       <Scroll />
+      <VisitorCounter /> {/* ✅ Shows on all pages */}
+
       <Routes>
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
@@ -119,7 +100,7 @@ function App() {
           <Route path="testimonials" element={<AdminTestimonials />} />
           <Route path="institutiontestimonials" element={<AdminInstitutionalTestimonial />} />
           <Route path="about" element={<AdminAbout />} />
-{/*           <Route path="withdrawrequest" element={<WithdrawRequest />} /> */}
+          {/* <Route path="withdrawrequest" element={<WithdrawRequest />} /> */}
         </Route>
 
         {/* User Dashboard Routes */}
@@ -134,8 +115,7 @@ function App() {
           <Route path="refer&earn" element={<Refer />} />
           <Route path="webinars" element={<Webinars />} />
           <Route path="help&support" element={<Help />} />
-{/*           <Route path="withdraw" element={<Withdraw onNewRequest={handleNewRequest} requests={requests} />} /> */}
-          
+          {/* <Route path="withdraw" element={<Withdraw onNewRequest={handleNewRequest} requests={requests} />} /> */}
         </Route>
 
         {/* General Website Routes */}
@@ -182,5 +162,4 @@ function App() {
     </BrowserRouter>
   );
 }
-
 export default App;
