@@ -80,4 +80,31 @@
     @apply bg-background text-foreground;
   }
 }
+@layer base {
+  body {
+    @apply font-sans text-gray-800 text-base md:text-lg leading-relaxed;
+  }
+
+  h1 {
+    @apply text-3xl md:text-5xl font-bold text-gray-900;
+  }
+
+  h2 {
+    @apply text-2xl md:text-4xl font-bold text-gray-800;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl font-semibold text-gray-700;
+  }
+
+  p {
+    @apply text-sm md:text-base lg:text-lg text-gray-600;
+  }
+}
+/* In global.css or tailwind layer */
+/* .btn {
+  @apply px-3 py-1 bg-gray-200 hover:bg-gray-300 text-sm rounded;
+} */
+
+
 

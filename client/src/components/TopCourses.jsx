@@ -1,65 +1,148 @@
-import { motion } from 'framer-motion';
-import { FaCheckCircle } from 'react-icons/fa';
-import { Button } from '@/components/ui/button';
-import { SiReact, SiNextdotjs, SiTailwindcss, SiNodedotjs, SiMongodb, SiGooglemarketingplatform, SiSocialblade, SiMarketo, SiGoogletagmanager, SiAppian } from 'react-icons/si';
+import React from "react";
+import { Card } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { useInView } from "react-intersection-observer";
+import { Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
-const courses = [
-  {
-    title: 'Full Stack Development',
-    description: 'Master frontend and backend development with the latest technologies and build real-world applications.',
-    image: 'https://www.cdmi.in/courses@2x/full-stack.webp',
-    topics: [
-      { name: 'React, Next.js & TailwindCSS', icon: <SiReact className="text-blue-500 text-xl" /> },
-      { name: 'Node.js, Express & MongoDB', icon: <SiNodedotjs className="text-green-600 text-xl" /> },
-      { name: 'Authentication & Security', icon: <SiMongodb className="text-green-500 text-xl" /> },
-      { name: 'Deploying Full Stack Apps', icon: <SiNextdotjs className="text-black text-xl" /> },
-    ],
-  },
-  {
-    title: 'Digital Marketing Mastery',
-    description: 'Learn SEO, Social Media Marketing, and advanced digital marketing strategies to grow your brand.',
-    image: 'https://theincmagazine.com/wp-content/uploads/2023/11/Digital-Marketing-Strategies-Unlocking-Success-in-the-Online-Realm.jpg',
-    topics: [
-      { name: 'SEO & Content Marketing', icon: <SiGooglemarketingplatform className="text-orange-500 text-xl" /> },
-      { name: 'Social Media & Ads', icon: <SiSocialblade className="text-red-500 text-xl" /> },
-      { name: 'Email & Affiliate Marketing', icon: <SiMarketo className="text-purple-600 text-xl" /> },
-      { name: 'Marketing Analytics & Strategies', icon: <SiGoogletagmanager className="text-blue-600 text-xl" /> },
-    ],
-  },
-];
+import { useNavigate } from "react-router-dom";
 
-export default function TopCourses() {
+const TopCourses = () => {
+  const { courses, loading, error } = useSelector((state) => state.course);
+  const trendingCourses = courses[0]?.filter((course) => course.isTrending) || [];
+
+  const user = useSelector((state) => state.user);
+ 
+  const navigate = useNavigate();
+
+  // Check if the user is enrolled
+ 
+  const handleClick = (course) => {
+    // const isEnrolled = user?.courses?.includes(course._id);
+    const isEnrolled = user?.courses?.some(
+      (enrolledCourse) => enrolledCourse._id === course._id
+  );
+
+   
+    if(isEnrolled){
+      navigate(`/course/${course._id}/learn`);
+    }
+    else {
+ navigate(`/course/${course._id}`);
+    }
+  }
+
   return (
-    <section className=" px-10 w-full  ">
-      <h2 className="text-[2.70rem] font-semibold text-center mb-5  text-gray-900">Explore<span className='text-orange-500 text-[2.70rem] font-sans font-semibold'>Top Courses</span>  </h2>
-      {courses.map((course, index) => (
-        <motion.div
-          key={index}
-          className={`flex flex-col md:flex-row items-center gap-12 mb-16 bg-gradient-to-r from-orange-100 to-white shadow-xl rounded-2xl overflow-hidden p-8 w-full ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-          <motion.img
-            src={course.image}
-            alt={course.title}
-            className="w-full md:w-1/2 rounded-lg shadow-lg transform hover:scale-105 transition duration-500 border-4 border-white"
-          />
-          <div className="w-full md:w-1/2 text-gray-800">
-            <h3 className="text-3xl font-bold mb-4 text-gray-900">{course.title}</h3>
-            <p className="text-lg mb-6 text-gray-700">{course.description}</p>
-            <ul className="grid grid-cols-2 gap-4 mb-6">
-              {course.topics.map((topic, idx) => (
-                <li key={idx} className="flex items-center gap-3  text-base lg:text-lg font-medium bg-white p-3  rounded-lg shadow overflow-hidden">
-                  {topic.icon}
-                  {topic.name}
-                </li>
-              ))}
-            </ul>
-            <Button className="bg-orange-500 text-white text-lg px-8 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300">Enroll Now</Button>
-          </div>
-        </motion.div>
-      ))}
+    <section className=" pb-6 px-4 md:px-10 w-full mx-auto text-center relative overflow-hidden mb-4  ">
+      <h2 className="text-[1.80rem] lg:text-5xl font-semibold text-center  my-6 text-gray-900">
+        Trending <span className="text-orange-500">Courses</span>
+      </h2>
+
+      <div className="relative">
+        {loading ? (
+          <p className="text-center text-gray-500 w-full">Loading courses...</p>
+        ) : error ? (
+          <p className="text-center text-red-500 w-full">Error: {error}</p>
+        ) : trendingCourses.length === 0 ? (
+          <p className="text-center text-gray-500 w-full">No trending courses available.</p>
+        ) : (
+          <Carousel className="relative flex items-center justify-center w-full">
+
+          <CarouselPrevious
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-gray-100 rounded-full shadow-lg hover:bg-gray-300 focus:outline-none p-2 md:left-[-1rem]"
+          >
+            &#8592;
+          </CarouselPrevious>
+        
+          <CarouselContent>
+            {trendingCourses.map((course) => (
+              <CarouselItem
+                className="md:basis-1/3 lg:basis-1/4 flex justify-center "
+                key={course._id}
+              >
+                <Card className="w-[95%] md:w-[85%] lg:w-[90%] flex flex-col ">
+                  <CourseCard course={course} handleClick = {handleClick} />
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        
+          <CarouselNext
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-gray-100 rounded-full shadow-lg hover:bg-gray-300 focus:outline-none p-2 md:right-[-1rem]"
+          >
+            &#8594;
+          </CarouselNext>
+        
+        </Carousel>
+        
+        )}
+      </div>
     </section>
   );
+};
+
+function CourseCard({ course, handleClick }) {
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
+  const defaultImage = "https://via.placeholder.com/300x200.png?text=No+Image";
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="relative flex-shrink-0 w-full flex flex-col h-full"
+    >
+      <div className="relative overflow-hidden rounded-lg shadow-md flex flex-col items-center h-full px-2 py-2">
+        {/* Image */}
+        <img
+          src={course.image || defaultImage}
+          alt={course.title}
+          className="h-36 md:h-40 w-full object-cover rounded-lg"
+        />
+
+        {/* Content Section */}
+        <div className="p-4 md:px-3 flex flex-col text-center w-full">
+          <h3 className="text-lg md:text-xl font-semibold text-gray-800 truncate">
+            {course?.title}
+          </h3>
+
+          <p className="mt-2 text-sm md:text-base text-gray-600 italic line-clamp-3">
+            {course?.description  || "No description available"}
+          </p>
+
+          {/* Duration and Button (moved here) */}
+          <div className="mt-4 flex flex-col items-center space-y-2">
+            <div className="flex items-center justify-center space-x-2 text-gray-700 font-medium">
+              <Clock size={18} className="text-orange-500" />
+              <span className="text-sm md:text-base">
+              {course?.duration
+  ? `${course.duration.charAt(0)} Months`
+  : "No description available"}
+
+              </span>
+            </div>
+
+            {/* <Link to={courseLink} className="w-full"> */}
+              <Button onClick={() => handleClick(course)}
+className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white px-4 rounded-lg shadow-md">
+                View Program
+              </Button>
+            {/* </Link> */}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
 }
+
+
+export default TopCourses;

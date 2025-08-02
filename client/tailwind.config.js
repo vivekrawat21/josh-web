@@ -5,6 +5,9 @@ export default {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+		fontFamily: {
+			sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+		  },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -50,21 +53,56 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+			  basic: {
+				DEFAULT: '#E53935', // Bold Red (Text)
+				hover: '#B71C1C', // Darker Red (Hover)
+				bg: '#FFEBEE', // Light Red Background
+			  },
+			  intermediate: {
+				DEFAULT: '#FB8C00', // Deep Orange (Text)
+				hover: '#E65100', // Darker Orange (Hover)
+				bg: '#FFF3E0', // Light Orange Background
+			  },
+			  advanced: {
+				DEFAULT: '#1E88E5', // Deep Blue (Text)
+				hover: '#0D47A1', // Darker Blue (Hover)
+				bg: '#E3F2FD', // Light Blue Background
+			  },
   		},
 		animation:{
-			"loop-scroll": "loop-scroll 8s linear infinite",
+			"loop-scroll": "loop-scroll 10s linear infinite",
+			slideLeft: 'slideLeft 1s ease-out forwards',
+			slideRight: 'slideRight 1s ease-out forwards',
+			scaleUp: 'scaleUp 0.8s ease-out forwards',
 		},
 		keyframes:{
 			"loop-scroll": {
 				from: { transform: "translateX(0)" },
 				to: { transform: "translateX(-100%)" }
-		}
+			},
+
+			slideLeft: {
+				'0%': { transform: 'translateX(-100%) scale(0)' },
+				'100%': { transform: 'translateX(0) scale(1)' },
+			},
+			slideRight: {
+				'0%': { transform: 'translateX(100%) scale(0)' },
+				'100%': { transform: 'translateX(0) scale(1)' },
+			},
+			scaleUp: {
+				'0%': { transform: 'scale(0)' },
+				'100%': { transform: 'scale(1)' },
+			},
   	}
   },
+  
+
+  
 },
   plugins: [
-      require("tailwindcss-animate")
+      require("tailwindcss-animate"),
+	 
 ],
 }
 
